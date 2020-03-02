@@ -1,0 +1,20 @@
+.SubTitle {
+  font-size: 28px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.21;
+  letter-spacing: 0.3px;
+}
+
+@media only screen and (max-width: 767px) {
+  .SubTitle {
+    font-size: 28px;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .SubTitle {
+    font-size: 21px;
+  }
+}

@@ -1,0 +1,21 @@
+.MainTitle {
+  color: var(--text);
+  font-size: 64px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.13;
+  letter-spacing: normal;
+}
+
+@media only screen and (max-width: 767px) {
+  .MainTitle {
+    font-size: 64px;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .MainTitle {
+    font-size: 48px;
+  }
+}

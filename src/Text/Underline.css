@@ -1,0 +1,11 @@
+.Underline {
+  text-decoration: underline;
+}
+
+.Underline.Underline--primary {
+  color: var(--primary);
+}
+
+.Underline.Underline--secondary {
+  color: var(--secondary-text);
+}

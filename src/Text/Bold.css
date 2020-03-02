@@ -1,0 +1,11 @@
+.Bold {
+  font-weight: bold;
+}
+
+.Bold.Bold--primary {
+  color: var(--primary);
+}
+
+.Bold.Bold--secondary {
+  color: var(--secondary-text);
+}
