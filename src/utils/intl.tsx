@@ -51,25 +51,25 @@ export function createFormatMessage(intl: IntlShape) {
     return message
   };
 
-  return Object.assign(l, {
-    iter: (base: string, items: number, iterator: (formatter: Formatter, data: IterationData) => JSX.Element | undefined | null) => {
-      const result = [] as JSX.Element[]
-      for (let current = 0; current < items; current++) {
-        const formatter = (id: string, values?: any) => l([base, current, id].join('.'), values)
-        const message = iterator(formatter, {
-          index: current,
-          isFirst: current === 0,
-          isLast: current === items - 1,
-        })
+  const iter = (base: string, items: number, iterator: (formatter: Formatter, data: IterationData) => JSX.Element | undefined | null) => {
+    const result = [] as JSX.Element[]
+    for (let current = 0; current < items; current++) {
+      const formatter = (id: string, values?: any) => l([base, current, id].join('.'), values)
+      const message = iterator(formatter, {
+        index: current,
+        isFirst: current === 0,
+        isLast: current === items - 1,
+      })
 
-        if (message) {
-          result.push(message)
-        }
+      if (message) {
+        result.push(message)
       }
-
-      return result
     }
-  })
+
+    return result
+  }
+
+  return Object.assign(l, { iter })
 }
 
 export function useFormatMessage() {
