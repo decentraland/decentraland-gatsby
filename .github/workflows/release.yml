@@ -1,10 +1,7 @@
-name: test
+name: release
 
 on:
   push:
-    branches:
-      - master
-  pull_request:
     branches:
       - master
 

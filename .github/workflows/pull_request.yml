@@ -1,0 +1,21 @@
+name: pull request
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: node.js 12
+        uses: actions/setup-node@v1
+        with:
+          node-version: 12
+      - name: installing
+        run: npm ci
+      - name: testing
+        run: npm test
