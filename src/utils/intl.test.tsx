@@ -3,10 +3,11 @@ import ReactDOM from 'react-dom/server'
 import { createIntl } from 'react-intl';
 import { createFormatMessage, Formatter } from './intl'
 import flat from 'flat'
-import Paragraph from '../Text/Paragraph'
-import Italic from '../Text/Italic'
-import Bold from '../Text/Bold'
-import Link from '../Text/Link'
+import Paragraph from '../components/Text/Paragraph'
+import Italic from '../components/Text/Italic'
+import Bold from '../components/Text/Bold'
+import Link from '../components/Text/Link'
+import Code from '../components/Text/Code';
 
 describe(__filename, () => {
   const intl = createIntl({
@@ -18,7 +19,10 @@ describe(__filename, () => {
         { text: 'item 1 ({index}, {isFirst}, {isLast}).' },
         { text: 'item 2 ({index}, {isFirst}, {isLast}).' },
         { text: 'item 3 ({index}, {isFirst}, {isLast}).' },
-      ]
+      ],
+      code: 'code block:\n\n```\n  const variable = "value";\n```\n\nthis is and example.',
+      inlineCode: 'inline `code` example.',
+      highlightCode: 'code block:\n\n```typescript\n  const variable = "value";\n```\n\nthis is and example.'
     })
   })
 
@@ -63,4 +67,15 @@ describe(__filename, () => {
       <Paragraph>item 3 (2, false, false).</Paragraph>
     </>
   ))
+  test(`l("code")`, () => expectRender(l('code'), <>
+    <Paragraph>code block:</Paragraph>
+    <Code>{`  const variable = "value";`}</Code>
+    <Paragraph>this is and example.</Paragraph>
+  </>))
+  test(`l("inlineCode")`, () => expectRender(l('inlineCode'), <Paragraph>inline <Code inline>code</Code> example.</Paragraph>))
+  test(`l("highlightCode")`, () => expectRender(l('highlightCode'), <>
+    <Paragraph>code block:</Paragraph>
+    <Code language="typescript">{`  const variable = "value";`}</Code>
+    <Paragraph>this is and example.</Paragraph>
+  </>))
 })

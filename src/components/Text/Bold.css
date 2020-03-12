@@ -1,0 +1,11 @@
+.dg.Bold {
+  font-weight: bold;
+}
+
+.dg.Bold.Bold--primary {
+  color: var(--primary);
+}
+
+.dg.Bold.Bold--secondary {
+  color: var(--secondary-text);
+}

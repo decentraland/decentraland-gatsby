@@ -1,0 +1,53 @@
+.dg.Paragraph {
+  color: var(--text);
+  font-size: 21px;
+  font-weight: 300;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.81;
+  letter-spacing: 0.3px;
+}
+
+.dg.Paragraph.Paragraph--small {
+  font-size: 17px;
+}
+
+.dg.Paragraph.Paragraph--primary {
+  color: var(--primary);
+}
+
+.dg.Paragraph.Paragraph--secondary {
+  color: var(--secondary-text);
+}
+
+.dg.Paragraph.Paragraph--bold {
+  font-weight: bold;
+}
+
+.dg.Paragraph.Paragraph--italic {
+  font-style: italic;
+}
+
+.dg.Paragraph.Paragraph--underline {
+  text-decoration: underline;
+}
+
+@media only screen and (max-width: var(--table)) {
+  .dg.Paragraph {
+    font-size: 21px;
+  }
+
+  .dg.Paragraph.Paragraph--small {
+    font-size: 17px;
+  }
+}
+
+@media only screen and (max-width: var(--mobile)) {
+  .dg.Paragraph {
+    font-size: 17px;
+  }
+
+  .dg.Paragraph.Paragraph--small {
+    font-size: 17px;
+  }
+}

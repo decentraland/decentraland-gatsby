@@ -1,0 +1,43 @@
+.dg.Divider {
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+
+.dg.Divider.Divider--mini {
+  margin: 1rem 0;
+}
+
+.dg.Divider.Divider--tiny {
+  margin: 2rem 0;
+}
+
+.dg.Divider.Divider--small {
+  margin: 3rem 0;
+}
+
+.dg.Divider,
+.dg.Divider.Divider--medium {
+  margin: 5rem 0;
+}
+
+.dg.Divider.Divider--large {
+  margin: 8rem 0;
+}
+
+.dg.Divider.Divider--big {
+  margin: 13rem 0;
+}
+
+.dg.Divider.Divider--huge {
+  margin: 21rem 0;
+}
+
+.dg.Divider.Divider--massive {
+  margin: 34rem 0;
+}
+
+.dg.Divider.Divider--line {
+  border-top: 1px solid var(--divider);
+  border-bottom: 1px solid white;
+  opacity: 0.9;
+}

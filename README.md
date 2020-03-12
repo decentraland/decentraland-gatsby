@@ -1,2 +1,3 @@
-# decentraland-growth-ui
-Common Gastby components
+# decentraland-gatsby
+
+Common Gatsby components

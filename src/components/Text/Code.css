@@ -1,0 +1,65 @@
+pre.dg.Code {
+  position: relative;
+  border: 1px solid var(--divider);
+  border-radius: 8px;
+  color: var(--text);
+  overflow: auto;
+}
+
+pre.dg.Code pre,
+pre.dg.Code code {
+  margin: 0;
+  padding: 0;
+}
+
+pre.dg.Code,
+pre.dg.Code pre,
+pre.dg.Code code {
+  font-family: sf mono, Menlo, Monaco, Consolas, Lucida Console, Liberation Mono,
+    DejaVu Sans Mono, Bitstream Vera Sans Mono, Courier New, monospace, serif;
+}
+
+pre.dg.Code.Code--block {
+  margin: 1.45em 0;
+}
+pre.dg.Code.Code--block pre {
+  padding: 1.45em;
+  /* background: white; */
+  font-size: 14px;
+  line-height: 19px;
+}
+
+pre.dg.Code.Code--block.Code--with-note pre {
+  padding-top: 3.25em;
+}
+
+pre.dg.Code.Code--block .Code__Note {
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  padding: 0.5em 1em;
+  background: var(--background);
+  border-radius: 8px 0 8px 0;
+  border: 1px solid var(--divider);
+  border-top: 0;
+  border-left: 0;
+}
+
+pre.dg.Code.Code--inline {
+  margin: 0;
+  padding: 0.1em 0.2em 0.2em;
+  background: #fafafa;
+  display: initial;
+  font-size: 0.9em;
+  line-height: inherit;
+}
+
+pre.dg.Code.Code--inline pre,
+pre.dg.Code.Code--inline code.hljs {
+  display: inline;
+}
+
+pre.dg.Code.Code--inline .Code__Note {
+  display: none;
+}

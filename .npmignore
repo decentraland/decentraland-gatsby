@@ -1,0 +1,10 @@
+node_modules
+storybook-static
+coverage/*
+src/*
+.circleci
+.storybook
+.github
+.vscode
+test
+tsconfig.json

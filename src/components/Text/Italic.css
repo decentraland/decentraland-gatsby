@@ -1,0 +1,11 @@
+.dg.Italic {
+  font-style: italic;
+}
+
+.dg.Italic.Italic--primary {
+  color: var(--primary);
+}
+
+.dg.Italic.Italic--secondary {
+  color: var(--secondary-text);
+}

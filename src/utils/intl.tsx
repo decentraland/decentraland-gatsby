@@ -1,10 +1,11 @@
 import React, { useMemo } from "react"
 import ReactMarkdown, { NodeType } from 'react-markdown'
 import { useIntl, IntlShape } from "gatsby-plugin-intl"
-import Paragraph from "../Text/Paragraph"
-import Italic from "../Text/Italic"
-import Bold from "../Text/Bold"
-import Link from "../Text/Link"
+import Paragraph from "../components/Text/Paragraph"
+import Italic from "../components/Text/Italic"
+import Bold from "../components/Text/Bold"
+import Link from "../components/Text/Link"
+import Code from "../components/Text/Code"
 
 export type Formatter = (id: string, values?: any) => JSX.Element | undefined | null
 
@@ -19,6 +20,8 @@ export const renderers = {
   emphasis: Italic,
   strong: Bold,
   link: Link,
+  code: Code,
+  inlineCode: Code,
 }
 
 export const allowedTypes = ['root', 'text'].concat(Object.keys(renderers)) as NodeType[]
