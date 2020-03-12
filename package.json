@@ -17,6 +17,9 @@
   },
   "jest": {
     "preset": "ts-jest",
+    "roots": [
+      "<rootDir>/src/"
+    ],
     "moduleNameMapper": {
       "\\.(css|less|sass|scss|gif|ttf|eot|svg)$": "<rootDir>/src/__mocks__/files.ts"
     }
