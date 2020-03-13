@@ -1,3 +1,7 @@
 module.exports = {
-  plugins: [require("autoprefixer"), require("postcss-svg")],
+  plugins: [
+    require('autoprefixer'),
+    require('cssnano'),
+    require('postcss-svg'),
+  ],
 }

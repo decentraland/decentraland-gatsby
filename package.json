@@ -63,6 +63,7 @@
   },
   "dependencies": {
     "autoprefix": "^1.0.1",
+    "cssnano": "^4.1.10",
     "dcl-crypto": "^2.0.0",
     "decentraland-commons": "^5.1.0",
     "decentraland-dapps": "^7.3.0",
