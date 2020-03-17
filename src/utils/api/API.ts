@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch'
 import FetchError from '../errors/FetchError'
 import RequestError from '../errors/RequestError'
+import Options from './Options'
 
 export default class API {
 
@@ -11,7 +12,7 @@ export default class API {
     })
   }
 
-  constructor(public readonly baseUrl: string, public readonly defaultOptions: RequestInit = {}) { }
+  constructor(public readonly baseUrl: string, public readonly defaultOptions: Options = new Options({})) { }
 
   url(path: string) {
     let baseUrl = this.baseUrl
@@ -27,38 +28,27 @@ export default class API {
     return baseUrl + path
   }
 
-  options(options: RequestInit = {}): RequestInit {
-    return {
-      ...this.defaultOptions,
-      ...options,
-      headers: {
-        ...(this.defaultOptions.headers || {}),
-        ...(options.headers || {})
-      }
-    }
-  }
-
-  async fetch<T extends object>(path: string, options: RequestInit = {}): Promise<T> {
+  async fetch<T extends object>(path: string, options: Options = new Options({})): Promise<T> {
 
     let res: Response;
     let json: T;
     const url = this.url(path);
-    const opt = this.options(options);
+    const opt = this.defaultOptions.merge(options);
 
     try {
-      res = await fetch(url, opt)
+      res = await fetch(url, opt.toObject())
     } catch (error) {
-      throw new FetchError(url, opt, error.message)
+      throw new FetchError(url, opt.toObject(), error.message)
     }
 
     try {
       json = await res.json() as T
     } catch (error) {
-      throw new FetchError(url, opt, error.message)
+      throw new FetchError(url, opt.toObject(), error.message)
     }
 
     if (res.status >= 400) {
-      throw new RequestError(url, opt, res, json)
+      throw new RequestError(url, opt.toObject(), res, json)
     }
 
     return json
