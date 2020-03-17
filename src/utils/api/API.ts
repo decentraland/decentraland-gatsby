@@ -4,6 +4,13 @@ import RequestError from '../errors/RequestError'
 
 export default class API {
 
+  static catch<T>(prom: Promise<T>) {
+    return prom.catch((err) => {
+      console.error(err)
+      return null
+    })
+  }
+
   constructor(public readonly baseUrl: string, public readonly defaultOptions: RequestInit = {}) { }
 
   url(path: string) {
