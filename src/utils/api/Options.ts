@@ -65,6 +65,7 @@ export default class Options {
 
   method(method: string) {
     this.options.method = method
+    return this
   }
 
   json(data: any) {
