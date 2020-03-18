@@ -82,12 +82,12 @@ function handleProfileChange(event: StorageEvent) {
 
 function getListener() {
   if (!STORE_LISTENER) {
-    STORE_LISTENER = new SingletonListener(window)
+    STORE_LISTENER = SingletonListener.from(window)
     STORE_LISTENER.addEventListener('storage' as any, handleProfileChange)
   }
 
   if (!PROFILE_LISTENER) {
-    PROFILE_LISTENER = new SingletonListener(STORE_LISTENER)
+    PROFILE_LISTENER = SingletonListener.from(STORE_LISTENER)
   }
 
   return PROFILE_LISTENER!
