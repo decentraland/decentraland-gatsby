@@ -109,8 +109,8 @@ export default class SingletonListener<T extends TargetListener> {
    * @param event 
    * @param data 
    */
-  dispatch(event: Event, data: any) {
-    const callback = this.callbacks.get(event)
+  dispatch(event: Event | string, data: any) {
+    const callback = this.callbacks.get(event as Event)
     if (callback) {
       callback.call(this.target, data)
     }
