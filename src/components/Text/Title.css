@@ -8,9 +8,16 @@
   letter-spacing: normal;
 }
 
+.dg.Title.Title--small {
+  font-size: 34px;
+}
+
 @media only screen and (max-width: 767px) {
   .dg.Title {
     font-size: 40px;
+  }
+  .dg.Title.Title--small {
+    font-size: 34px;
   }
 }
 
