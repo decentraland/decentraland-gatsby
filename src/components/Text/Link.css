@@ -4,6 +4,10 @@
   color: var(--primary);
 }
 
+.dg.Link.Link--actionable {
+  cursor: pointer;
+}
+
 .dg.Link .icon {
   font-size: 19px;
   vertical-align: middle;
