@@ -122,15 +122,15 @@ export default class SingletonListener<T extends TargetListener> {
    * @param event 
    * @param listener 
    */
-  addEventListener<K extends Event>(event: K, listener: Listener<K>) {
-    const listeners = this.listeners.get(event) || []
+  addEventListener<K extends Event>(event: K | string, listener: Listener<K>) {
+    const listeners = this.listeners.get(event as K) || []
     listeners.push(listener)
 
     if (listeners.length === 1) {
-      this.subscribe(event)
+      this.subscribe(event as K)
     }
 
-    this.listeners.set(event, listeners)
+    this.listeners.set(event as K, listeners)
 
     return this
   }
@@ -140,20 +140,20 @@ export default class SingletonListener<T extends TargetListener> {
    * @param event 
    * @param listener 
    */
-  removeEventListener<K extends Event>(event: K, listener: Listener<K>) {
-    const listeners = this.listeners.get(event)
+  removeEventListener<K extends Event>(event: K | string, listener: Listener<K>) {
+    const listeners = this.listeners.get(event as K)
 
     if (!listeners || listeners.length === 0) {
-      return this.unsubscribe(event)
+      return this.unsubscribe(event as K)
     }
 
     const newListeners = listeners.filter(l => l !== listener)
 
     if (newListeners.length === 0) {
-      return this.unsubscribe(event)
+      return this.unsubscribe(event as K)
     }
 
-    this.listeners.set(event, newListeners)
+    this.listeners.set(event as K, newListeners)
 
     return this
   }
