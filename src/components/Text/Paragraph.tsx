@@ -12,9 +12,10 @@ export type ParagraphProps = React.Props<HTMLParagraphElement> &
     italic?: boolean
     bold?: boolean
     underline?: boolean
+    uppercase?: boolean
   }
 
-export default function Paragraph({ primary, secondary, small, tiny, bold, italic, underline, ...props }: ParagraphProps) {
+export default function Paragraph({ primary, secondary, small, tiny, bold, italic, underline, uppercase, ...props }: ParagraphProps) {
   return (
     <p
       {...props}
@@ -28,6 +29,7 @@ export default function Paragraph({ primary, secondary, small, tiny, bold, itali
         underline && "Paragraph--underline",
         small && "Paragraph--small",
         tiny && "Paragraph--tiny",
+        uppercase && "Paragraph--uppercase",
         props.className,
       ])}
     />
