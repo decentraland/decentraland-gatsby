@@ -9,12 +9,11 @@ export type LinkProps = React.Props<HTMLAnchorElement> &
     secondary?: boolean
   }
 
-export default function Link({ secondary, onClick, href, ...props }: LinkProps) {
+export default function Link({ secondary, ...props }: LinkProps) {
   return (
     <a
       {...props}
-      href={href}
-      className={classname([StyleNamespace, "Link", (onClick || href) && 'Link--actionable', props.className])}
+      className={classname([StyleNamespace, "Link", (props.onClick || props.href) && 'Link--actionable', props.className])}
     />
   )
 }
