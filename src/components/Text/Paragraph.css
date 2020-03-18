@@ -12,6 +12,10 @@
   font-size: 17px;
 }
 
+.dg.Paragraph.Paragraph--tiny {
+  font-size: 11px;
+}
+
 .dg.Paragraph.Paragraph--primary {
   color: var(--primary);
 }
@@ -40,6 +44,10 @@
   .dg.Paragraph.Paragraph--small {
     font-size: 17px;
   }
+
+  .dg.Paragraph.Paragraph--tiny {
+    font-size: 11px;
+  }
 }
 
 @media only screen and (max-width: var(--mobile)) {
@@ -49,5 +57,9 @@
 
   .dg.Paragraph.Paragraph--small {
     font-size: 17px;
+  }
+
+  .dg.Paragraph.Paragraph--tiny {
+    font-size: 11px;
   }
 }
