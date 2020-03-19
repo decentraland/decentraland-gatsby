@@ -1,12 +1,12 @@
 import { useState } from 'react'
 import { hash } from 'immutable'
 
-const cache = new Map<number, Map<string, any>>()
+const cache = new Map<number, Map<string | undefined, any>>()
 
-export default function useLoader<R>(loader: (id: string) => Promise<R>) {
+export default function useLoader<R>(loader: (id?: string) => Promise<R>) {
   const [value, setValue] = useState<R | null>(null)
 
-  async function load(id: string): Promise<R> {
+  async function load(id?: string): Promise<R> {
     setValue(null)
     const key = hash(loader)
     if (!cache.has(key)) {
