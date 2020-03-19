@@ -25,5 +25,5 @@ export default function useLoader<R>(loader: (id?: string) => Promise<R>) {
     return newValue
   }
 
-  return [value, load]
+  return [value, load] as const
 }
