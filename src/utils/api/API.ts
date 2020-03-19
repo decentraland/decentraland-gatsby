@@ -28,6 +28,28 @@ export default class API {
     return baseUrl + path
   }
 
+  query<T extends {} = {}>(qs?: T) {
+    if (!qs) {
+      return ''
+    }
+
+    const params = new URLSearchParams()
+    for (const key of Object.keys(qs)) {
+      if (qs[key] === null) {
+        params.set(key, '')
+      } else if (qs[key] !== undefined) {
+        params.set(key, qs[key])
+      }
+    }
+
+    const queryString = params.toString()
+    if (!queryString) {
+      return ''
+    }
+
+    return '?' + queryString
+  }
+
   async fetch<T extends object>(path: string, options: Options = new Options({})): Promise<T> {
 
     let res: Response;
