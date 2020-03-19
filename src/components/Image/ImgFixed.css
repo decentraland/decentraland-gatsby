@@ -1,0 +1,8 @@
+.dg.ImgFixed {
+  width: 100%;
+}
+
+.dg.ImgFixed img {
+  width: 100%;
+  height: auto;
+}
