@@ -9,7 +9,7 @@ export default class Options {
     const raw = options.toObject()
     const newOptions = {
       ...this.options,
-      raw
+      ...raw
     }
 
     if (this.options.headers || raw.headers) {
