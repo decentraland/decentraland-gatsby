@@ -8,7 +8,6 @@ import SubTitle from '../Text/SubTitle';
 import Code from '../Text/Code';
 import { Container } from 'decentraland-ui/dist/components/Container/Container';
 import Paragraph from '../Text/Paragraph';
-import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid'
 import { Button } from 'decentraland-ui/dist/components/Button/Button';
 
 storiesOf('Profile', module)
@@ -21,22 +20,22 @@ storiesOf('Profile', module)
       <Divider line />
       <SubTitle>Automatic colors</SubTitle>
       <Paragraph>Background colors are automatically defined using the address </Paragraph>
-      <ImgAvatar style={{ marginRight: '1rem' }} profile={{ address: '0x0...' } as any} />
-      <ImgAvatar style={{ marginRight: '1rem' }} profile={{ address: '0x1...' } as any} />
-      <ImgAvatar style={{ marginRight: '1rem' }} profile={{ address: '0x2...' } as any} />
-      <ImgAvatar style={{ marginRight: '1rem' }} profile={{ address: '0x3...' } as any} />
-      <ImgAvatar style={{ marginRight: '1rem' }} profile={{ address: '0x4...' } as any} />
-      <ImgAvatar style={{ marginRight: '1rem' }} profile={{ address: '0x5..' } as any} />
-      <ImgAvatar style={{ marginRight: '1rem' }} profile={{ address: '0x6..' } as any} />
-      <ImgAvatar style={{ marginRight: '1rem' }} profile={{ address: '0x7..' } as any} />
-      <ImgAvatar style={{ marginRight: '1rem' }} profile={{ address: '0x8..' } as any} />
-      <ImgAvatar style={{ marginRight: '1rem' }} profile={{ address: '0x9..' } as any} />
-      <ImgAvatar style={{ marginRight: '1rem' }} profile={{ address: '0xa..' } as any} />
-      <ImgAvatar style={{ marginRight: '1rem' }} profile={{ address: '0xb..' } as any} />
-      <ImgAvatar style={{ marginRight: '1rem' }} profile={{ address: '0xc..' } as any} />
-      <ImgAvatar style={{ marginRight: '1rem' }} profile={{ address: '0xd..' } as any} />
-      <ImgAvatar style={{ marginRight: '1rem' }} profile={{ address: '0xe..' } as any} />
-      <ImgAvatar style={{ marginRight: '1rem' }} profile={{ address: '0xf..' } as any} />
+      <ImgAvatar style={{ marginRight: '1rem' }} address={'0x0...'} />
+      <ImgAvatar style={{ marginRight: '1rem' }} address={'0x1...'} />
+      <ImgAvatar style={{ marginRight: '1rem' }} address={'0x2...'} />
+      <ImgAvatar style={{ marginRight: '1rem' }} address={'0x3...'} />
+      <ImgAvatar style={{ marginRight: '1rem' }} address={'0x4...'} />
+      <ImgAvatar style={{ marginRight: '1rem' }} address={'0x5..'} />
+      <ImgAvatar style={{ marginRight: '1rem' }} address={'0x6..'} />
+      <ImgAvatar style={{ marginRight: '1rem' }} address={'0x7..'} />
+      <ImgAvatar style={{ marginRight: '1rem' }} address={'0x8..'} />
+      <ImgAvatar style={{ marginRight: '1rem' }} address={'0x9..'} />
+      <ImgAvatar style={{ marginRight: '1rem' }} address={'0xa..'} />
+      <ImgAvatar style={{ marginRight: '1rem' }} address={'0xb..'} />
+      <ImgAvatar style={{ marginRight: '1rem' }} address={'0xc..'} />
+      <ImgAvatar style={{ marginRight: '1rem' }} address={'0xd..'} />
+      <ImgAvatar style={{ marginRight: '1rem' }} address={'0xe..'} />
+      <ImgAvatar style={{ marginRight: '1rem' }} address={'0xf..'} />
       <Divider line />
       <SubTitle>Sizes</SubTitle>
       <Paragraph>There are a few size you can use:</Paragraph>
