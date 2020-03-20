@@ -18,5 +18,5 @@ export default function useLocation() {
     }
   }, [])
 
-  return [location]
+  return location
 }
