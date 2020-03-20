@@ -7,9 +7,9 @@
     "test": "jest",
     "build": "rm -rf dist && tsc -p . -outDir dist --sourceMap false --skipLibCheck && postcss --base src --dir dist 'src/**/*.css'",
     "start": "npm run storybook",
-    "storybook": "start-storybook -p 6006",
+    "storybook": "start-storybook -s static -p 6006",
     "semantic-release": "semantic-release",
-    "build-storybook": "build-storybook"
+    "build-storybook": "build-storybook && cp ./static/* ./storybook-static && mv ./storybook-static ./public"
   },
   "repository": {
     "type": "git",
