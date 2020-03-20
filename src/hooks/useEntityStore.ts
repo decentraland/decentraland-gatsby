@@ -1,19 +1,10 @@
-import { hash } from "immutable"
 import { useState, useEffect } from "react"
 import EntityStore, { EntityStoreState } from "../utils/EntityStore"
 
-const stores = new Map<number, EntityStore<any>>()
-
 export default function useEntityStore<E extends object>(
-  identifier: any
+  store: EntityStore<E>
 ) {
 
-  const key = hash(identifier)
-  if (!stores[key]) {
-    stores[key] = new EntityStore<E>()
-  }
-
-  const store = stores[key]
   const [state, setState] = useState(store.getState())
 
   useEffect(() => {
