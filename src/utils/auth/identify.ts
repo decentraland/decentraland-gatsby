@@ -52,10 +52,10 @@ export function getCurrentProfile() {
 
 export function createProfileEffect(handle: (event: ProfileChangeEvent) => void) {
   const listener = getListener()
-  listener.addEventListener('profile', handle as any)
+  listener.addEventListener('change', handle as any)
 
   return () => {
-    listener.removeEventListener('profile', handle as any)
+    listener.removeEventListener('change', handle as any)
   }
 }
 
@@ -74,7 +74,7 @@ function handleProfileChange(event: StorageEvent) {
           newProfile,
         }
 
-        PROFILE_LISTENER.dispatch('profile', event)
+        PROFILE_LISTENER.dispatch('change', event)
       }
     }
   }
@@ -87,7 +87,7 @@ function getListener() {
   }
 
   if (!PROFILE_LISTENER) {
-    PROFILE_LISTENER = SingletonListener.from(STORE_LISTENER)
+    PROFILE_LISTENER = new SingletonListener()
   }
 
   return PROFILE_LISTENER!
@@ -113,7 +113,7 @@ function storeProfile(profile: Profile | null) {
       oldProfile
     }
 
-    getListener().dispatch('profile', event)
+    getListener().dispatch('change', event)
   }
 }
 
