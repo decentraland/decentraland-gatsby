@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Profile } from '../utils/auth/types'
-import identify, { restoreCurrentProfile, setCurrentProfile, createProfileEffect } from "../utils/auth/identify"
+import identify, { restoreCurrentProfile, setCurrentProfile, createProfileEffect, getCurrentProfile } from "../utils/auth/identify"
 import usePatchState from './usePatchState'
 
 let CURRENT_PROFILE_LOADER: Promise<Profile | null> | null = null
@@ -52,7 +52,7 @@ export default function useProfile() {
   }
 
   useEffect(() => {
-    patchState({ loading: false, profile: restoreCurrentProfile() })
+    patchState({ loading: false, profile: getCurrentProfile() || restoreCurrentProfile() })
     return createProfileEffect((event) => patchState({ profile: event.newProfile }))
   }, [])
 
