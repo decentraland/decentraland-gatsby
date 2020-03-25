@@ -20,7 +20,7 @@ export default async function identify() {
     return CURRENT_PROFILE;
   }
 
-  const eth = getEth();
+  const eth = await getEth();
   const address = await getCurrentAddress();
   const account = Account.create();
   const expiration = 60 * 24 * 30;
