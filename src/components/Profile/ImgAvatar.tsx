@@ -15,6 +15,6 @@ export type ImgAvatarProps = Omit<React.HTMLProps<HTMLImageElement>, 'height' | 
 
 export default function ImgAvatar({ profile, address, size, src, ...props }: ImgAvatarProps) {
   const image = src || profile?.avatar?.avatar?.snapshots?.face || DEFAULT_AVATAR
-  const init = (address || profile?.address || '0x0')[2]
+  const init = (address || profile?.address.toString() || '0x0')[2]
   return <img {...props as any} src={image} width="100" height="100" className={classname([StyleNamespace, 'ImgAvatar', `ImgAvatar--${size}`, `ImgAvatar--${init}`, props.className])} />
 }
