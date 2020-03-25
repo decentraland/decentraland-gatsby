@@ -30,7 +30,11 @@ export default function useProfile() {
       return result
     }
 
-    CURRENT_PROFILE_LOADER = identify()
+    CURRENT_PROFILE_LOADER = identify().catch((err) => {
+      CURRENT_PROFILE_LOADER = null
+      console.error(err);
+      return null
+    })
 
     patchState({ loading: true })
 
