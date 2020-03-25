@@ -40,6 +40,6 @@ jobs:
       - name: publishing documents
         uses: peaceiris/actions-gh-pages@v2
         env:
-          personal_token: ${{ secrets.PERSONAL_TOKEN }}
-          publish_branch: gh-pages
-          publish_dir: ./docs
+          PERSONAL_TOKEN: ${{ secrets.PERSONAL_TOKEN }}
+          PUBLISH_BRANCH: gh-pages
+          PUBLISH_DIR: ./docs
