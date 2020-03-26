@@ -75,6 +75,14 @@ export type Estate = {
   "approvals_for_all": string[]
 }
 
+export type MapContent = {
+  "assets": {
+    "parcels": Parcel[],
+    "estates": Estate[]
+  },
+  "total": number
+}
+
 export default class Land extends API {
 
   static Url = 'https://api.decentraland.org/v1'
@@ -115,6 +123,10 @@ export default class Land extends API {
   async getEstates(options: GetListOptions = {}): Promise<Estate[]> {
     const { sortBy: sort_by, sortOrder: sort_order } = options
     return this.fetch('/estates' + this.query({ ...options, sort_by, sort_order }))
+  }
+
+  async getMapContent(nw: [number, number], se: [number, number]): Promise<MapContent> {
+    return this.fetch('/map' + this.query({ nw, se }))
   }
 
   getImage(options: GetMapImageOptions = {}) {
