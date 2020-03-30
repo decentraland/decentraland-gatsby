@@ -4,6 +4,7 @@ import { GatsbyLinkProps } from "gatsby"
 import { Link } from "gatsby-plugin-intl"
 import Menu from 'semantic-ui-react/dist/commonjs/collections/Menu/Menu'
 import Responsive from 'semantic-ui-react/dist/commonjs/addons/Responsive/Responsive'
+import trackEvent from '../Segment/trackEvent'
 
 export const Label = {
   en: "ENG",
@@ -42,7 +43,7 @@ export default function LanguageMenu(props: LanguageMenuProps) {
       as={Link}
       active={props.value === lang}
       language={lang}
-      onClick={handleClick}
+      onClick={trackEvent(handleClick)}
       to={props.to || '/'}
     >
       {Label[lang]}
