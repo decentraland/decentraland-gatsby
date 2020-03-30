@@ -2,7 +2,7 @@ import React from "react"
 
 export type SegmentProps = React.Props<HTMLScriptElement> &
   React.HTMLProps<HTMLScriptElement> & {
-    analyticsKey: string
+    analyticsKey?: string
     analyticsJS?: string
     trackPage?: boolean
   }
