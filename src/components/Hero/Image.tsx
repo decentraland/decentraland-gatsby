@@ -21,8 +21,10 @@ export default function Image({
   src,
   className,
   background,
+  backgroundSize,
   ...props
 }: ImageProps) {
+
   return (
     <motion.div
       {...props}
@@ -33,6 +35,7 @@ export default function Image({
       style={{
         ...props.style,
         backgroundImage: `url("${src}")`,
+        backgroundSize: backgroundSize
       }}
     />
   )
