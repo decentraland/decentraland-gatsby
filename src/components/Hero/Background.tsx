@@ -1,5 +1,5 @@
 import React from "react"
-import className from "~/utils/className"
+import classname from "../../utils/classname"
 
 import "./Background.css"
 
@@ -12,7 +12,7 @@ export default function Background({ src, ...props }: BackgroundProps) {
   return (
     <div
       {...props}
-      className={className(["Background", props.className])}
+      className={classname(["Background", props.className])}
       style={{
         ...props.style,
         backgroundImage: `url("${src}")`,

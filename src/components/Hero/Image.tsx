@@ -1,6 +1,6 @@
 import React from "react"
 import { motion, MotionProps } from "framer-motion"
-import classJoin from "~/utils/className"
+import classname from "../../utils/classname"
 
 import "./Image.css"
 
@@ -26,7 +26,7 @@ export default function Image({
   return (
     <motion.div
       {...props}
-      className={classJoin([
+      className={classname([
         background ? "HeroBackground" : "HeroImage",
         className,
       ])}
