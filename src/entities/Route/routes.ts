@@ -1,16 +1,16 @@
 import { Router } from 'express'
 import bodyParser from 'body-parser'
-import cors from 'cors'
+import expressCors from 'cors'
 import handle, { middleware } from './handle';
 import env from '../../utils/env';
-import { RouterHandler, RoutesOptions, createCorsOptions } from './types';
+import { RouterHandler, RoutesOptions, createCorsOptions, CorsOptions } from './types';
 
 const IMAGE = env('IMAGE', `unknown:${Date.now()}`)
 const [image, version] = IMAGE.split(':')
 
 export default function routes(handle: RouterHandler, options: RoutesOptions = {}): Router {
   const router = Router(options)
-  router.use(cors(createCorsOptions(options)))
+  router.use(cors(options))
   router.use(bodyParser.urlencoded({ extended: false }))
   router.use(bodyParser.json())
   handle(router)
@@ -25,6 +25,10 @@ export function status() {
       timestamp: new Date()
     })))
   })
+}
+
+export function cors(options: CorsOptions = {}) {
+  return expressCors(createCorsOptions(options))
 }
 
 export function logger() {
