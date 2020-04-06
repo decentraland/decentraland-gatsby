@@ -1,4 +1,5 @@
 import { Model, raw, SQLStatement, SQL } from "decentraland-server";
+import { LimitOptions } from "./types";
 
 export interface ModelConstructor {
   tableName: string
@@ -15,4 +16,30 @@ export function conditional(condition: boolean, statement: SQLStatement) {
   } else {
     return SQL``
   }
+}
+
+export function offset(value: number | null | undefined) {
+  if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) {
+    return SQL``
+  }
+
+  return SQL` OFFSET ${value}`
+}
+
+export function limit(value: number | null | undefined, options: Partial<LimitOptions> = {}) {
+  const min = options.min ?? 1
+  const max = options.max ?? 100
+  const defaultValue = options.defaultValue ?? 100
+
+  if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) {
+    value = defaultValue
+  }
+
+  if (value === null) {
+    return SQL``
+  }
+
+  value = Math.max(Math.min(value, max), min)
+
+  return SQL` LIMIT ${value}`
 }
