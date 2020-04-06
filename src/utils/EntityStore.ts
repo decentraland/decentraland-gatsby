@@ -1,14 +1,15 @@
 import SingletonListener from "./SingletonListener"
 
-export type EntityStoreOptions<E extends object> = {
-  identifier: (state: E) => string
-}
-
 export type EntityStoreState<E extends object> = {
   error: string | null
   loading: boolean,
   data: Record<string, E>,
   lists: Record<string, string[] | null>
+}
+
+export type EntityStoreOptions<E extends object> = {
+  identifier: (state: E) => string
+  initialState: Partial<EntityStore<E>>
 }
 
 export interface EntityStoreConstructor<E extends object> {
@@ -17,7 +18,8 @@ export interface EntityStoreConstructor<E extends object> {
 
 export default class EntityStore<E extends object> {
   private config: EntityStoreOptions<E> = {
-    identifier: (entity: E) => (entity as any).id
+    identifier: (entity: E) => (entity as any).id,
+    initialState: {}
   }
 
   private listener = new SingletonListener()
@@ -31,6 +33,7 @@ export default class EntityStore<E extends object> {
 
   constructor(config: Partial<EntityStoreOptions<E>> = {}) {
     Object.assign(this.config, config)
+    Object.assign(this.state, this.config.initialState)
   }
 
   addEventListener(event: string, callback: (entity: EntityStoreState<E>) => void) {
@@ -43,6 +46,15 @@ export default class EntityStore<E extends object> {
 
   getState() {
     return this.state
+  }
+
+  getList(listName: string = 'default') {
+    if (this.state.lists[listName]) {
+      const list = this.state.lists[listName]!
+      return list.map(id => this.state.data[id])
+    }
+
+    return null
   }
 
   setEntity(entity: E) {
@@ -58,7 +70,7 @@ export default class EntityStore<E extends object> {
     this.listener.dispatch('change', this.state)
   }
 
-  setEntities(entities: E[], asList?: string) {
+  setEntities(entities: E[], listName: string = 'default') {
 
     const data: Record<string, E> = {}
     const list: string[] = []
@@ -69,7 +81,7 @@ export default class EntityStore<E extends object> {
       list.push(id)
     }
 
-    const lists = asList && { [asList]: list }
+    const lists = listName && { [listName]: list }
 
     this.state = {
       ...this.state,
@@ -97,7 +109,7 @@ export default class EntityStore<E extends object> {
     this.listener.dispatch('change', this.state)
   }
 
-  setLoading(listName?: string) {
+  setLoading(listName: string = 'default') {
     const lists = listName ? { ...this.state.lists, [listName]: null } : this.state.lists;
     this.state = {
       ...this.state,
