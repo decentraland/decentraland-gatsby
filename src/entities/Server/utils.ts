@@ -20,7 +20,7 @@ export async function listen(app: Application, port: number | string = DEFAULT_P
       const protocol = 'http://'
       const canonicalHost = host === DEFAULT_HOST ? '127.0.0.1' : host
 
-      if (host === DEFAULT_HOST) {
+      if (host !== DEFAULT_HOST) {
         console.log(`running server on: ${protocol}${canonicalHost}:${port}`)
       } else {
         const interfaces = networkInterfaces()
