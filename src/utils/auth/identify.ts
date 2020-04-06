@@ -21,21 +21,26 @@ export default async function identify() {
     return CURRENT_PROFILE;
   }
 
-  const eth = await getEth();
-  const address = await getCurrentAddress();
-  const account = Account.create();
-  const expiration = 60 * 24 * 30;
-  const payload = {
-    address: account.address.toString(),
-    publicKey: bufferToHex(account.publicKey),
-    privateKey: bufferToHex(account.privateKey)
-  };
+  try {
+    const eth = await getEth();
+    const address = await getCurrentAddress();
+    const account = Account.create();
+    const expiration = 60 * 24 * 30;
+    const payload = {
+      address: account.address.toString(),
+      publicKey: bufferToHex(account.publicKey),
+      privateKey: bufferToHex(account.privateKey)
+    };
 
-  const identity = await Authenticator.initializeAuthChain(address.toString(), payload, expiration, message => new Personal(eth.provider).sign(message, address, ''));
-  const avatar = await Katalyst.get().getProfile(address)
-  const profile: Profile = { address, identity, avatar }
-  track((segment) => segment.identify(address.toString()))
-  return setCurrentProfile(profile)
+    const identity = await Authenticator.initializeAuthChain(address.toString(), payload, expiration, message => new Personal(eth.provider).sign(message, address, ''));
+    const avatar = await Katalyst.get().getProfile(address)
+    const profile: Profile = { address, identity, avatar }
+    track((segment) => segment.identify(address.toString()))
+    return setCurrentProfile(profile)
+  } catch (err) {
+    getListener().dispatch('error', err)
+    return null
+  }
 }
 
 export function setCurrentProfile(profile: Profile | null) {
@@ -52,12 +57,17 @@ export function getCurrentProfile() {
   return CURRENT_PROFILE
 }
 
-export function createProfileEffect(handle: (event: ProfileChangeEvent) => void) {
+export function createProfileEffect(
+  handleProfile: (event: ProfileChangeEvent) => void,
+  handleError: (event: Error) => void,
+) {
   const listener = getListener()
-  listener.addEventListener('change', handle as any)
+  listener.addEventListener('change', handleProfile as any)
+  listener.addEventListener('error', handleError as any)
 
   return () => {
-    listener.removeEventListener('change', handle as any)
+    listener.removeEventListener('change', handleProfile as any)
+    listener.removeEventListener('error', handleError as any)
   }
 }
 

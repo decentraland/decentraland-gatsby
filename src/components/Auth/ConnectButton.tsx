@@ -22,12 +22,12 @@ export type ConnectButtonProps = ButtonProps & {
 
 export default function ConnectButton({ onConnect, onDisconnect, onFail, onClick, i18n, children, className, ...props }: ConnectButtonProps) {
 
-  const [profile, loadingProfile, actions] = useProfile()
-  const loading = loadingProfile || props.loading
+  const [profile, actions] = useProfile()
+  const loading = actions.loading || props.loading
 
   function createHandleClick(handle: (event: React.MouseEvent<HTMLButtonElement>, data: ButtonProps) => Promise<void>) {
     return async (event: React.MouseEvent<HTMLButtonElement>, data: ButtonProps) => {
-      if (loadingProfile) {
+      if (actions.loading) {
         return
       }
 

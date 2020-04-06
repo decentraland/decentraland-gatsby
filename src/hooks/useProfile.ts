@@ -2,21 +2,32 @@ import { useEffect } from 'react'
 import { Profile } from '../utils/auth/types'
 import identify, { restoreCurrentProfile, setCurrentProfile, createProfileEffect, getCurrentProfile } from "../utils/auth/identify"
 import usePatchState from './usePatchState'
+import getProvider from '../utils/auth/getProvider'
+import WalletConnectError from '../utils/errors/WalletConnectError'
+import WalletTimeoutError from '../utils/errors/WalletTimeoutError'
+import EmptyAccountsError from '../utils/errors/EmptyAccountsError'
 
 let CURRENT_PROFILE_LOADER: Promise<Profile | null> | null = null
 
+type WalletError = WalletConnectError | WalletTimeoutError | EmptyAccountsError | Error & { code?: string } | null
+
 type State = {
   loading: boolean
+  provider: boolean
+  error: WalletError
   profile: Profile | null
 }
 
 export type ProfileActions = {
   connect: () => Promise<Profile | null>
   disconnect: () => Promise<null>
+  loading: boolean
+  provider: boolean
+  error: WalletError
 }
 
 export default function useProfile() {
-  const [{ profile, loading }, patchState] = usePatchState<State>({ profile: null, loading: true })
+  const [{ profile, loading, provider, error }, patchState] = usePatchState<State>({ profile: null, loading: true, provider: false, error: null })
 
   async function connect() {
     if (profile) {
@@ -56,14 +67,25 @@ export default function useProfile() {
   }
 
   useEffect(() => {
-    patchState({ loading: false, profile: getCurrentProfile() || restoreCurrentProfile() })
-    return createProfileEffect((event) => patchState({ profile: event.newProfile }))
+    patchState({
+      loading: false,
+      provider: !!getProvider(),
+      profile: getCurrentProfile() || restoreCurrentProfile()
+    })
+
+    return createProfileEffect(
+      (event) => patchState({ profile: event.newProfile }),
+      (error) => patchState({ loading: false, error })
+    )
   }, [])
 
   const actions: ProfileActions = {
     connect,
-    disconnect
+    disconnect,
+    loading,
+    provider,
+    error
   }
 
-  return [profile, loading, actions] as const
+  return [profile, actions] as const
 }
