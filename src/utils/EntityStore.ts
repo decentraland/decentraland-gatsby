@@ -9,7 +9,7 @@ export type EntityStoreState<E extends object> = {
 
 export type EntityStoreOptions<E extends object> = {
   identifier: (state: E) => string
-  initialState: Partial<EntityStore<E>>
+  initialState: Partial<EntityStoreState<E>>
 }
 
 export interface EntityStoreConstructor<E extends object> {
