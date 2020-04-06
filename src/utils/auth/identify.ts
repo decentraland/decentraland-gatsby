@@ -8,6 +8,7 @@ import getEth from './getEth';
 import getCurrentAddress from './getCurrentAddress';
 import Katalyst from '../api/Katalyst';
 import SingletonListener from '../SingletonListener';
+import track from '../../components/Segment/track';
 
 export const STORE_PROFILE_KEY = 'auth'
 let CURRENT_PROFILE: Profile | null = null
@@ -33,6 +34,7 @@ export default async function identify() {
   const identity = await Authenticator.initializeAuthChain(address.toString(), payload, expiration, message => new Personal(eth.provider).sign(message, address, ''));
   const avatar = await Katalyst.get().getProfile(address)
   const profile: Profile = { address, identity, avatar }
+  track((segment) => segment.identify(address.toString()))
   return setCurrentProfile(profile)
 }
 
