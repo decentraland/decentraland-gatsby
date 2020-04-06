@@ -38,6 +38,7 @@ export default async function identify() {
     track((segment) => segment.identify(address.toString()))
     return setCurrentProfile(profile)
   } catch (err) {
+    console.error(err);
     getListener().dispatch('error', err)
     return null
   }

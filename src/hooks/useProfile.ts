@@ -41,17 +41,16 @@ export default function useProfile() {
       return result
     }
 
-    CURRENT_PROFILE_LOADER = identify().catch((err) => {
-      CURRENT_PROFILE_LOADER = null
-      console.error(err);
-      return null
-    })
-
     patchState({ loading: true })
+    CURRENT_PROFILE_LOADER = identify()
 
     try {
       const result = await CURRENT_PROFILE_LOADER
       patchState({ loading: false, profile: result })
+
+      if (result === null) {
+        CURRENT_PROFILE_LOADER = null
+      }
       return result
     } catch (error) {
       patchState({ loading: false, profile: null })
