@@ -10,7 +10,10 @@ export default function useMobileDetector(initialValue: boolean = IS_MOBILE) {
     const value = isMobile()
     if (value !== IS_MOBILE) {
       IS_MOBILE = value
-      setMobile(isMobile())
+    }
+
+    if (value !== mobile) {
+      setMobile(IS_MOBILE)
     }
   }, [])
 
