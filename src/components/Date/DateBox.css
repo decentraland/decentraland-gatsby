@@ -1,0 +1,22 @@
+.DateBox {
+  height: 64px;
+  width: 64px;
+  border-radius: 6px;
+  background-color: #f3f2f5;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.DateBox .DateBox__Month {
+  font-size: 13px;
+  font-weight: 600;
+  color: #736e7d;
+}
+
+.DateBox .DateBox__Day {
+  font-size: 21px;
+  font-weight: 600;
+  color: #16141a;
+}
