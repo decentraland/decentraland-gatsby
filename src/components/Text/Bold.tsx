@@ -1,5 +1,5 @@
 import React from "react"
-import classname from "../../utils/classname"
+import TokenList from "../../utils/TokenList"
 import { StyleNamespace } from "../../variables"
 import "./Bold.css"
 
@@ -13,7 +13,7 @@ export default function Bold({ primary, secondary, ...props }: BoldProps) {
   return (
     <span
       {...props}
-      className={classname([
+      className={TokenList.join([
         StyleNamespace,
         "Bold",
         primary && "Bold--primary",

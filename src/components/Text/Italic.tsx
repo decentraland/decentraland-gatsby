@@ -1,5 +1,5 @@
 import React from "react"
-import classname from "../../utils/classname"
+import TokenList from "../../utils/TokenList"
 import { StyleNamespace } from "../../variables"
 import "./Italic.css"
 
@@ -13,7 +13,7 @@ export default function Italic({ primary, secondary, ...props }: ItalicProps) {
   return (
     <span
       {...props}
-      className={classname([
+      className={TokenList.join([
         StyleNamespace,
         "Italic",
         primary && "Italic--primary",

@@ -1,5 +1,5 @@
 import React from "react"
-import classname from "../../utils/classname"
+import TokenList from "../../utils/TokenList"
 
 import "./Background.css"
 
@@ -12,7 +12,7 @@ export default function Background({ src, ...props }: BackgroundProps) {
   return (
     <div
       {...props}
-      className={classname(["Background", props.className])}
+      className={TokenList.join(["Background", props.className])}
       style={{
         ...props.style,
         backgroundImage: `url("${src}")`,

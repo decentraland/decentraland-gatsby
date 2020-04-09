@@ -1,5 +1,5 @@
 import React from "react"
-import classname from "../../utils/classname"
+import TokenList from "../../utils/TokenList"
 import { StyleNamespace } from "../../variables"
 import "./Underline.css"
 
@@ -13,7 +13,7 @@ export default function Underline({ primary, secondary, ...props }: UnderlinePro
   return (
     <span
       {...props}
-      className={classname([
+      className={TokenList.join([
         StyleNamespace,
         "Underline",
         primary && "Underline--primary",

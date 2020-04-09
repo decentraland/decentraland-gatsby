@@ -1,5 +1,5 @@
 import React from "react"
-import classname from "../../utils/classname"
+import TokenList from "../../utils/TokenList"
 import Highlight from 'react-highlight'
 import { StyleNamespace } from "../../variables"
 
@@ -17,10 +17,10 @@ export default function Code({ inline, children, note, value, language, ...props
   return (
     <pre
       {...props}
-      className={classname([
+      className={TokenList.join([
         StyleNamespace,
         "Code",
-        note && "Code--with-note",
+        !!note && "Code--with-note",
         !inline && "Code--block",
         inline && "Code--inline",
         props.className,

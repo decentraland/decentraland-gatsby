@@ -1,5 +1,5 @@
 import React from 'react'
-import classname from '../../utils/classname'
+import TokenList from '../../utils/TokenList'
 import { StyleNamespace } from '../../variables'
 
 import './Divider.css'
@@ -10,7 +10,7 @@ export type DividerProps = Omit<React.HTMLProps<HTMLDivElement>, 'size'> & {
 }
 
 export default function Divider({ line, size, ...props }: DividerProps) {
-  return <div {...props} className={classname([
+  return <div {...props} className={TokenList.join([
     StyleNamespace,
     'Divider',
     line && 'Divider--line',

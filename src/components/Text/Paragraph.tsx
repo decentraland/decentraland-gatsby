@@ -1,5 +1,5 @@
 import React from "react"
-import classname from "../../utils/classname"
+import TokenList from "../../utils/TokenList"
 import { StyleNamespace } from "../../variables"
 import "./Paragraph.css"
 
@@ -19,7 +19,7 @@ export default function Paragraph({ primary, secondary, small, tiny, bold, itali
   return (
     <p
       {...props}
-      className={classname([
+      className={TokenList.join([
         StyleNamespace,
         "Paragraph",
         primary && "Paragraph--primary",

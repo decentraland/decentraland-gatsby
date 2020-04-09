@@ -1,5 +1,5 @@
 import React from 'react'
-import classname from '../../utils/classname'
+import TokenList from '../../utils/TokenList'
 import { StyleNamespace } from '../../variables'
 
 import './ImgFixed.css'
@@ -13,7 +13,7 @@ export type ImgFixedProps = Omit<React.HTMLProps<HTMLDivElement>, 'size'> & {
 
 export default function ImgFixed({ src, dimension, size, background, position, ...props }: ImgFixedProps) {
   return <div {...props}
-    className={classname([StyleNamespace, 'ImgFixed', props.className])}
+    className={TokenList.join([StyleNamespace, 'ImgFixed', props.className])}
     style={{
       ...props.style,
       backgroundColor: background || 'transparent',

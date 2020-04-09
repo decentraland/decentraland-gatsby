@@ -1,7 +1,6 @@
 import React from 'react'
-// import * as p from 'dcl-crypto/dist/types'
 import { Button, ButtonProps } from 'decentraland-ui/dist/components/Button/Button'
-import classname from '../../utils/classname'
+import TokenList from '../../utils/TokenList'
 import { StyleNamespace } from '../../variables'
 import { Profile } from '../../utils/auth/types'
 import useProfile from '../../hooks/useProfile'
@@ -60,7 +59,7 @@ export default function ConnectButton({ onConnect, onDisconnect, onFail, onClick
     }
   })
 
-  return <div className={classname([StyleNamespace, 'ConnectButton', className])}>
+  return <div className={TokenList.join([StyleNamespace, 'ConnectButton', className])}>
     {!profile && <Button {...props} onClick={handleConnect} loading={loading} >
       {i18n && i18n.connect || 'Sign in'}
     </Button>}
