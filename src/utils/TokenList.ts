@@ -44,7 +44,7 @@ export default class TokenList {
   add(...tokens: Token[]) {
 
     for (const token of tokens) {
-      if (token) {
+      if (typeof token === 'string') {
         for (const each of token.split(/\s+/)) {
           if (Boolean(each) && !this.contains(each)) {
             this.tokens.push(each)
@@ -58,7 +58,7 @@ export default class TokenList {
 
   remove(...tokens: Token[]) {
     for (const token of tokens) {
-      if (token) {
+      if (typeof token === 'string') {
         for (const each of token.split(' ')) {
           if (Boolean(each)) {
             this.tokens = this.tokens.filter(current => current !== each)
