@@ -35,7 +35,7 @@ export default async function identify() {
     const identity = await Authenticator.initializeAuthChain(address.toString(), payload, expiration, message => new Personal(eth.provider).sign(message, address, ''));
     const avatar = await Katalyst.get().getProfile(address)
     const profile: Profile = { address, identity, avatar }
-    track((segment) => segment.identify(address.toString()))
+    track((segment) => segment.identify(address.toString(), { email: avatar?.email, name: avatar?.name }))
     return setCurrentProfile(profile)
   } catch (err) {
     console.error(err);

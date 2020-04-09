@@ -6,6 +6,7 @@ import getProvider from '../utils/auth/getProvider'
 import WalletConnectError from '../utils/errors/WalletConnectError'
 import WalletTimeoutError from '../utils/errors/WalletTimeoutError'
 import EmptyAccountsError from '../utils/errors/EmptyAccountsError'
+import track from '../components/Segment/track'
 
 let CURRENT_PROFILE_LOADER: Promise<Profile | null> | null = null
 
@@ -16,6 +17,12 @@ type State = {
   provider: boolean
   error: WalletError
   profile: Profile | null
+}
+
+enum Event {
+  Connect = 'Connect',
+  Connected = 'Connected',
+  Disconnected = 'Disconnected',
 }
 
 export type ProfileActions = {
@@ -34,6 +41,8 @@ export default function useProfile() {
       return profile
     }
 
+    track((analytics) => analytics.track(Event.Connect))
+
     if (CURRENT_PROFILE_LOADER) {
       patchState({ loading: true })
       const result = await CURRENT_PROFILE_LOADER
@@ -50,7 +59,10 @@ export default function useProfile() {
 
       if (result === null) {
         CURRENT_PROFILE_LOADER = null
+      } else {
+        track((analytics) => analytics.track(Event.Connected))
       }
+
       return result
     } catch (error) {
       patchState({ loading: false, profile: null })
@@ -62,6 +74,7 @@ export default function useProfile() {
     CURRENT_PROFILE_LOADER = null
     setCurrentProfile(null)
     patchState({ loading: false, profile: null })
+    track((analytics) => analytics.track(Event.Disconnected))
     return null
   }
 
