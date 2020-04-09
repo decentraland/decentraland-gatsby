@@ -2,6 +2,7 @@ import React from 'react'
 import { storiesOf } from "@storybook/react";
 import centered from '@storybook/addon-centered/react'
 import useProfile from './useProfile';
+import useMobileDetector from './useMobileDetector';
 import Code from '../components/Text/Code';
 import Title from '../components/Text/Title';
 import { Container } from 'decentraland-ui/dist/components/Container/Container';
@@ -11,15 +12,34 @@ import { Button } from 'decentraland-ui/dist/components/Button/Button';
 import MainTitle from '../components/Text/MainTitle';
 import Divider from '../components/Text/Divider';
 import Link from '../components/Text/Link';
+import getUserAgent from '../utils/getUserAgent';
+import isMobile from '../utils/isMobile';
 
 storiesOf('Hooks', module)
   .addDecorator(centered)
+  .add('useMobileDetector', () => {
+    const mobile = useMobileDetector()
+    const userAgent = getUserAgent()
+
+    return <Container>
+      <Divider />
+      <MainTitle>Using mobile detector Hook</MainTitle>
+      <Paragraph secondary>The <Italic>mobile detector hook</Italic> let you check if the current navigator is mobile using the user agent</Paragraph>
+      <Code language="typescript">{`const mobile = useMobileDetector(initialValue)`}</Code>
+      <Divider size="small" />
+      <Paragraph><Code inline>mobile: boolean</Code> true when a mobile user agent was detected.</Paragraph>
+      <Divider line />
+      <Title>Live example:</Title>
+      <Code language="json" note="current user agent:">{JSON.stringify(userAgent)}</Code>
+      <Code language="json" note="mobile:">{JSON.stringify(mobile)}</Code>
+    </Container>
+  })
   .add('useProfile', () => {
     const [profile, actions] = useProfile()
     return <Container>
       <Divider />
-      <MainTitle>Using the Profile Hook</MainTitle>
-      <Paragraph secondary>The <Italic>Profile Hook</Italic> let you check for a user session</Paragraph>
+      <MainTitle>Using Profile Hook</MainTitle>
+      <Paragraph secondary>The <Italic>profile hook</Italic> let you check for a user session.</Paragraph>
       <Code language="typescript">{`const [profile, actions] = useProfile()`}</Code>
       <Divider size="small" />
       <Paragraph><Code inline>profile: Object | null</Code> contains all the the information about the current session.</Paragraph>
