@@ -1,69 +1,108 @@
 .dg.Input {
+  display: inline-block;
+}
+
+.dg.Input input {
   color: #736e7d;
   border-radius: 8px;
   background-color: #f3f2f5;
   border: 1px solid #f3f2f5;
+  font-size: inherit;
 }
 
-.dg.Input::-webkit-input-placeholder {
+.dg.Input input::-webkit-input-placeholder {
   /* Edge */
   color: #9c98a4;
 }
 
-.dg.Input:-ms-input-placeholder {
+.dg.Input input:-ms-input-placeholder {
   /* Internet Explorer 10-11 */
   color: #9c98a4;
 }
 
-.dg.Input::placeholder {
+.dg.Input input::placeholder {
   color: #9c98a4;
 }
 
-.dg.Input.Input--disabled {
+.dg.Input.Input--error input {
+  border-color: var(--error);
+}
+
+.dg.Input .Input__Message .dg.Paragraph {
+  font-size: 1em;
+}
+
+.dg.Input.Input--error .Input__Message .dg.Paragraph {
+  color: var(--error);
+}
+
+.dg.Input.Input--disabled input {
   opacity: 0.5;
 }
 
+.dg.Input.Input--align-top {
+  vertical-align: top;
+}
+
+.dg.Input.Input--align-bottom {
+  vertical-align: bottom;
+}
+
+.dg.Input.Input--align-middle {
+  vertical-align: middle;
+}
+
 .dg.Input.Input--mini {
-  padding: 3px 10px;
-  border-radius: 2px;
   font-size: 10px;
+}
+
+.dg.Input.Input--mini input {
+  padding: 3px 6px;
+  border-radius: 2px;
+  font-size: inherit;
   line-height: 14px;
 }
 
 .dg.Input.Input--tiny {
-  padding: 4px 12px;
-  border-radius: 3px;
   font-size: 11px;
+}
+
+.dg.Input.Input--tiny input {
+  padding: 4px 8px;
+  border-radius: 3px;
   line-height: 16px;
 }
 
-.dg.Input.Input--size {
-  padding: 7px 20px;
-  border-radius: 5px;
-  font-size: 13px;
-  line-height: 18px;
-}
-
 .dg.Input.Input--small {
-  padding: 7px 20px;
-  border-radius: 5px;
   font-size: 13px;
+}
+.dg.Input.Input--small input {
+  padding: 7px 14px;
+  border-radius: 5px;
   line-height: 18px;
 }
 
 .dg.Input,
 .dg.Input.Input--medium {
-  padding: 13px 32px;
-  border-radius: 6px;
   font-size: 13px;
+}
+
+.dg.Input input,
+.dg.Input.Input--medium input {
+  padding: 13px 26px;
+  border-radius: 6px;
   line-height: 18px;
 }
 
 .dg.Input.Input--large,
 .dg.Input.Input--huge,
 .dg.Input.Input--massive {
-  padding: 14px 40px;
-  border-radius: 8px;
   font-size: 15px;
+}
+.dg.Input.Input--large input,
+.dg.Input.Input--huge input,
+.dg.Input.Input--massive input {
+  padding: 14px 28px;
+  border-radius: 8px;
   line-height: 24px;
 }

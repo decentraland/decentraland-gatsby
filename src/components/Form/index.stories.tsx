@@ -10,8 +10,9 @@ import Paragraph from '../Text/Paragraph';
 import { Button } from 'decentraland-ui/dist/components/Button/Button';
 import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid';
 import Input from './Input'
+import Subscribe from './Subscribe'
 
-storiesOf('Input', module)
+storiesOf('From', module)
   .addDecorator(centered)
   .add('Input', () => {
     return <Container>
@@ -20,20 +21,23 @@ storiesOf('Input', module)
       <Divider line />
       <SubTitle>Common attributes</SubTitle>
       <Paragraph secondary> <Code inline>placeholder</Code>, <Code inline>value</Code>, <Code inline>disabled</Code>   </Paragraph>
-      <Input placeholder="with placeholder" defaultValue="" />{' '}
-      <Input placeholder="with placeholder" defaultValue="with value" />{' '}
-      <Input placeholder="disabled" defaultValue="" disabled />{' '}
+      <Input verticalAlign="top" placeholder="with placeholder" defaultValue="" />{' '}
+      <Input verticalAlign="top" placeholder="" defaultValue="with value" />{' '}
+      <Input verticalAlign="top" placeholder="with error" defaultValue="" error />{' '}
+      <Input verticalAlign="top" placeholder="placeholder" defaultValue="" message="with message" />{' '}
+      <Input verticalAlign="top" placeholder="placeholder" defaultValue="" error message="with error message" />{' '}
+      <Input verticalAlign="top" placeholder="disabled" defaultValue="" disabled />{' '}
       <Divider line />
+
       <SubTitle>Sizes</SubTitle>
       <Divider size="mini" />
-      <div>
-        <Input size="mini" placeholder="mini" /> {' '}
-        <Input size="tiny" placeholder="tiny" /> {' '}
-        <Input size="small" placeholder="small" /> {' '}
-        <Input size="medium" placeholder="medium" /> {' '}
-        <Input size="large" placeholder="large" /> {' '}
-      </div>
+      <Input verticalAlign="top" size="mini" placeholder="mini" /> {' '}
+      <Input verticalAlign="top" size="tiny" placeholder="tiny" /> {' '}
+      <Input verticalAlign="top" size="small" placeholder="small" /> {' '}
+      <Input verticalAlign="top" size="medium" placeholder="medium" /> {' '}
+      <Input verticalAlign="top" size="large" placeholder="large" /> {' '}
       <Divider line />
+
       <SubTitle>With Buttons</SubTitle>
       <Paragraph>You can use this input with buttons there size are the same</Paragraph>
       <Divider size="mini" />
@@ -106,6 +110,37 @@ storiesOf('Input', module)
           <Grid.Column tablet="8">
             <Input size="large" placeholder="large" /> {' '}
             <Button size="large" basic>large</Button>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+      <Divider />
+    </Container>
+  })
+  .add('Subscribe', () => {
+    return <Container>
+      <Divider />
+      <Title><Code inline>Subscribe</Code> component:  </Title>
+      <Divider line />
+      <SubTitle>Attributes</SubTitle>
+      <Grid stackable padded relaxed divided="vertically">
+        <Grid.Row>
+          <Grid.Column tablet="8">
+            <Subscribe primary />
+          </Grid.Column>
+          <Grid.Column tablet="8">
+            <Subscribe inverted />
+          </Grid.Column>
+          <Grid.Column tablet="8">
+            <Subscribe primary inverted />
+          </Grid.Column>
+          <Grid.Column tablet="8">
+            <Subscribe basic />
+          </Grid.Column>
+          <Grid.Column tablet="8">
+            <Subscribe primary loading />
+          </Grid.Column>
+          <Grid.Column tablet="8">
+            <Subscribe primary disabled />
           </Grid.Column>
         </Grid.Row>
       </Grid>
