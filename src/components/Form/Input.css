@@ -1,0 +1,69 @@
+.dg.Input {
+  color: #736e7d;
+  border-radius: 8px;
+  background-color: #f3f2f5;
+  border: 1px solid #f3f2f5;
+}
+
+.dg.Input::-webkit-input-placeholder {
+  /* Edge */
+  color: #9c98a4;
+}
+
+.dg.Input:-ms-input-placeholder {
+  /* Internet Explorer 10-11 */
+  color: #9c98a4;
+}
+
+.dg.Input::placeholder {
+  color: #9c98a4;
+}
+
+.dg.Input.Input--disabled {
+  opacity: 0.5;
+}
+
+.dg.Input.Input--mini {
+  padding: 3px 10px;
+  border-radius: 2px;
+  font-size: 10px;
+  line-height: 14px;
+}
+
+.dg.Input.Input--tiny {
+  padding: 4px 12px;
+  border-radius: 3px;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.dg.Input.Input--size {
+  padding: 7px 20px;
+  border-radius: 5px;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.dg.Input.Input--small {
+  padding: 7px 20px;
+  border-radius: 5px;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.dg.Input,
+.dg.Input.Input--medium {
+  padding: 13px 32px;
+  border-radius: 6px;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+.dg.Input.Input--large,
+.dg.Input.Input--huge,
+.dg.Input.Input--massive {
+  padding: 14px 40px;
+  border-radius: 8px;
+  font-size: 15px;
+  line-height: 24px;
+}
