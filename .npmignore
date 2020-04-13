@@ -2,6 +2,9 @@ node_modules
 storybook-static
 coverage/*
 src/*
+dist/__mock__
+dist/**/*.test.js
+dist/**/*.test.d.ts
 .circleci
 .storybook
 .github
