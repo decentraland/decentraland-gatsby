@@ -24,3 +24,20 @@
 .dg.Subscribe .ui.button {
   vertical-align: top;
 }
+
+@media only screen and (max-width: var(--mobile)) {
+  .dg.Subscribe {
+    flex-direction: column;
+  }
+
+  .dg.Subscribe .dg.Input {
+    padding: 0;
+  }
+
+  .dg.Subscribe .dg.Input,
+  .dg.Subscribe .ui.button {
+    min-width: auto;
+    width: 100%;
+    margin-bottom: 1em;
+  }
+}
