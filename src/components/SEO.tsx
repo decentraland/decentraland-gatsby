@@ -8,32 +8,73 @@
 import React from "react"
 import PropTypes from "prop-types"
 import Helmet from "react-helmet"
-import { useStaticQuery, graphql } from "gatsby"
 import { Locale } from "decentraland-ui/dist/components/Language/Language"
 
+export type MetaProps = JSX.IntrinsicElements['meta']
+
 export type SEOProps = {
-  description?: string
-  title?: string
+  title: string
+  titleTemplate?: string | null
+  description?: string | null
+  twitter?: string | null
+  author?: string | null
   lang?: Locale
-  meta?: ({ property: string, content: string } | { name: string, content: string })[]
+  meta?: MetaProps[]
 }
 
-export default function SEO({ description, lang, meta, title }: SEOProps) {
-  const { site } = useStaticQuery(
-    graphql`
-      query {
-        site {
-          siteMetadata {
-            title
-            description
-            author
-          }
-        }
-      }
-    `
-  )
+const DEFAULT_AUTHOR = '@decentraland'
+const DEFAULT_DESCRIPTION = ''
+const DEFAULT_TITLE_TEMPLATE = '%s | Decentraland'
 
-  const metaDescription = description || site.siteMetadata.description
+function useValue(value: string | null | undefined, defaultValue: string) {
+  if (value === null) {
+    return null
+  }
+
+  return value || defaultValue
+}
+
+export default function SEO({ description, lang, meta, title, titleTemplate, author }: SEOProps) {
+
+  const currentAuthor = useValue(author, DEFAULT_AUTHOR)
+  const currentDescription = useValue(description, DEFAULT_DESCRIPTION)
+  const currentTitleTemplate = useValue(titleTemplate, DEFAULT_TITLE_TEMPLATE)
+  const currentMeta: MetaProps[] = [
+    !currentDescription && {
+      name: `description`,
+      content: currentDescription,
+    },
+    !!currentDescription && {
+      name: `twitter:description`,
+      content: currentDescription,
+    },
+    !!currentDescription && {
+      property: `og:description`,
+      content: currentDescription,
+    },
+    {
+      property: `og:title`,
+      content: title,
+    },
+    {
+      property: `og:type`,
+      content: `website`,
+    },
+    {
+      name: `twitter:card`,
+      content: `summary`,
+    },
+    !!currentAuthor && {
+      name: `twitter:creator`,
+      content: currentAuthor,
+    },
+    {
+      name: `twitter:title`,
+      content: title,
+    },
+    ...meta
+  ]
+    .filter<MetaProps>(Boolean as any)
 
   return (
     <Helmet
@@ -41,41 +82,8 @@ export default function SEO({ description, lang, meta, title }: SEOProps) {
         lang,
       }}
       title={title}
-      titleTemplate={`%s | ${site.siteMetadata.title}`}
-      meta={[
-        {
-          name: `description`,
-          content: metaDescription,
-        },
-        {
-          property: `og:title`,
-          content: title,
-        },
-        {
-          property: `og:description`,
-          content: metaDescription,
-        },
-        {
-          property: `og:type`,
-          content: `website`,
-        },
-        {
-          name: `twitter:card`,
-          content: `summary`,
-        },
-        {
-          name: `twitter:creator`,
-          content: site.siteMetadata.author,
-        },
-        {
-          name: `twitter:title`,
-          content: title,
-        },
-        {
-          name: `twitter:description`,
-          content: metaDescription,
-        },
-      ].concat(meta || [])}
+      titleTemplate={currentTitleTemplate || ''}
+      meta={currentMeta}
     />
   )
 }
