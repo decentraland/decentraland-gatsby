@@ -28,10 +28,10 @@ export default function Link({ secondary, href, rel, target, ...props }: LinkPro
   return (
     <a
       {...props}
-      className={TokenList.join([StyleNamespace, "Link", (props.onClick || href) && 'Link--actionable', props.className])}
-      href={href}
-      target={target}
-      rel={rel}
+      className={TokenList.join([StyleNamespace, "Link", (props.onClick || href) && 'Link--pointer', props.className])}
+      href={href || undefined}
+      target={target || undefined}
+      rel={rel || undefined}
     />
   )
 }

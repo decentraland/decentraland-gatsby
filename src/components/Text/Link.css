@@ -4,7 +4,7 @@
   color: var(--primary);
 }
 
-.dg.Link.Link--actionable {
+.dg.Link.Link--pointer {
   cursor: pointer;
 }
 

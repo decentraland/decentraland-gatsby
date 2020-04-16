@@ -1,11 +1,6 @@
 import React, { useMemo } from "react"
-import ReactMarkdown, { NodeType } from 'react-markdown'
 import { useIntl, IntlShape } from "gatsby-plugin-intl"
-import Paragraph from "../components/Text/Paragraph"
-import Italic from "../components/Text/Italic"
-import Bold from "../components/Text/Bold"
-import Link from "../components/Text/Link"
-import Code from "../components/Text/Code"
+import Markdown from "../components/Text/Markdown"
 
 export type Formatter = (id: string, values?: any) => JSX.Element | undefined | null
 
@@ -13,30 +8,6 @@ export type IterationData = {
   index: number,
   isFirst: boolean,
   isLast: boolean
-}
-
-export const renderers = {
-  paragraph: Paragraph,
-  emphasis: Italic,
-  strong: Bold,
-  link: Link,
-  code: Code,
-  inlineCode: Code,
-}
-
-export const allowedTypes = ['root', 'text'].concat(Object.keys(renderers)) as NodeType[]
-
-// (uri: string, text: string, title?: string) => string
-export function linkTarget(uri: string, text: string, title?: string): string {
-  if (
-    String(uri).startsWith('https://') ||
-    String(uri).startsWith('http://') ||
-    String(uri).startsWith('//')
-  ) {
-    return '_blank'
-  }
-
-  return ""
 }
 
 export function createFormatMessage(intl: IntlShape) {
@@ -48,7 +19,7 @@ export function createFormatMessage(intl: IntlShape) {
     let message = intl.formatMessage({ id }, { ...values })
 
     if (typeof message === 'string') {
-      return <ReactMarkdown key={id} source={message} renderers={renderers} linkTarget={linkTarget} allowedTypes={allowedTypes} />
+      return <Markdown key={id} source={message} />
     }
 
     return message
