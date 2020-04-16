@@ -2,6 +2,7 @@ import React from 'react'
 import { storiesOf } from "@storybook/react";
 import centered from '@storybook/addon-centered/react'
 import useProfile from './useProfile';
+import useCountdown from './useCountdown';
 import useMobileDetector from './useMobileDetector';
 import Code from '../components/Text/Code';
 import Title from '../components/Text/Title';
@@ -13,7 +14,11 @@ import MainTitle from '../components/Text/MainTitle';
 import Divider from '../components/Text/Divider';
 import Link from '../components/Text/Link';
 import getUserAgent from '../utils/getUserAgent';
-import isMobile from '../utils/isMobile';
+import { Time } from '../components/Date/utils';
+
+const launch = new Date(Date.parse('2020-02-20T00:00:00.000Z'))
+const future = new Date(Date.now() + Time.Day + Time.Hour)
+future.setMilliseconds(0)
 
 storiesOf('Hooks', module)
   .addDecorator(centered)
@@ -72,4 +77,31 @@ storiesOf('Hooks', module)
       }, null, 2)}</Code>
       <Code language="json" note="profile:">{JSON.stringify(profile, null, 2)}</Code>
     </Container>
+  })
+  .add('useCountdown', () => {
+    const completed = useCountdown(launch)
+    const countdown = useCountdown(future)
+    return <Container>
+      <Divider />
+      <MainTitle>Using Countdown Hook</MainTitle>
+      <Paragraph secondary>The <Italic>countdown hook</Italic> update a countdown using a time interval.</Paragraph>
+      <Code language="typescript">{`const countdown = useCountdown(until, each)`}</Code>
+      <Divider size="small" />
+      <Paragraph><Code inline>until: Date</Code> the finish of the countdown.</Paragraph>
+      <Paragraph><Code inline>each: number = Time.Second</Code> update interval of the countdown.</Paragraph>
+      <Divider size="small" />
+      <Paragraph><Code inline>countdown: Object</Code></Paragraph>
+      <Paragraph><Code inline>countdown.days: number (>=0)</Code> days until the countdown finish.</Paragraph>
+      <Paragraph><Code inline>countdown.hours: number (>=0)</Code> hours until days decreases.</Paragraph>
+      <Paragraph><Code inline>countdown.minutes: number (>=0)</Code> minutes until hours decreases.</Paragraph>
+      <Paragraph><Code inline>countdown.seconds: number (>=0)</Code> seconds until minutes decreases.</Paragraph>
+      <Paragraph><Code inline>countdown.milliseconds: number (>=0)</Code> milliseconds until seconds decreases.</Paragraph>
+      <Paragraph><Code inline>countdown.time: number (>=0)</Code> milliseconds until the countdown finish.</Paragraph>
+      <Divider size="small" />
+      <Title>Live example:</Title>
+      <Code note="completed" language="json">{JSON.stringify(completed, null, 2)}</Code>
+      <Code note="active" language="json">{JSON.stringify(countdown, null, 2)}</Code>
+      <Divider />
+    </Container>
+
   })
