@@ -59,7 +59,7 @@ export default function Subscribe(props: SubscribeProps) {
 
   const [state, patchState] = usePatchState({ email: '', loading: false, error: ErrorKind.None })
   const intl = {
-    cta: 'Sing up',
+    cta: 'Sign up',
     invalidEmail: 'Invalid email',
     invalidInterest: 'Invalid interest',
     serverError: 'Server error',
