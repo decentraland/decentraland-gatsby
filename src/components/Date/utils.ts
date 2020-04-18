@@ -97,9 +97,33 @@ export type ToNumberOptions = {
   utc?: boolean
 }
 
+/**
+ * @deprecated use `toPrefixedNumber` instead
+ */
 export function toFixedNumber(value: number) {
   return value > 9 ? String(value) : String('0' + value)
 }
+
+export function toPrefixedNumber(value: number, length: number = 0) {
+  let raw = String(value)
+  let result = ''
+
+  if (raw.startsWith('-')) {
+    result += '-'
+    raw = raw.slice(1)
+  }
+
+  const [integer, decimals] = raw.split('.')
+  const prefix = '0'.repeat(Math.max(length - integer.length, 0))
+  result += prefix + integer
+
+  if (decimals) {
+    result += '.' + decimals
+  }
+
+  return result
+}
+
 
 export function toDayNumber(date: Date, options: ToNumberOptions = {}) {
   const day = options.utc ? date.getUTCDate() : date.getDate()
