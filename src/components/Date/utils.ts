@@ -101,7 +101,7 @@ export type ToNumberOptions = {
  * @deprecated use `toPrefixedNumber` instead
  */
 export function toFixedNumber(value: number) {
-  return value > 9 ? String(value) : String('0' + value)
+  return toPrefixedNumber(value, 2)
 }
 
 export function toPrefixedNumber(value: number, length: number = 0) {
