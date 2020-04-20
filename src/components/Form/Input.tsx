@@ -12,7 +12,7 @@ export type InputProps = Omit<React.HTMLProps<HTMLInputElement>, 'size'> & {
   size?: 'mini' | 'tiny' | 'small' | 'medium' | 'large' | 'big' | 'huge' | 'massive'
 }
 
-export default function Input({ className, size, message, verticalAlign, ...props }: InputProps) {
+export default function Input({ className, size, message, verticalAlign, error, ...props }: InputProps) {
 
   const msg = typeof message === 'string' ? <Paragraph secondary>{message}</Paragraph> : message
 
@@ -21,7 +21,7 @@ export default function Input({ className, size, message, verticalAlign, ...prop
       StyleNamespace,
       'Input',
       props.disabled && `Input--disabled`,
-      props.error && `Input--error`,
+      error && `Input--error`,
       size && `Input--${size}`,
       verticalAlign && `Input--align-${verticalAlign}`,
       className
