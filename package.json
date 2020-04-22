@@ -74,7 +74,7 @@
     "decentraland-commons": "^5.1.0",
     "decentraland-dapps": "^7.3.0",
     "decentraland-server": "^2.11.6",
-    "decentraland-ui": "^2.16.1",
+    "decentraland-ui": "^2.18.0",
     "express": "^4.17.1",
     "framer-motion": "^1.9.0",
     "gatsby": "^2.19.24",
