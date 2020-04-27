@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Profile } from '../utils/auth/types'
-import identify, { restoreCurrentProfile, setCurrentProfile, createProfileEffect, getCurrentProfile } from "../utils/auth/identify"
+import identify, { restoreCurrentProfile, setCurrentProfile, getCurrentProfile, createProfileEffectHandle } from "../utils/auth/identify"
 import usePatchState from './usePatchState'
 import getProvider from '../utils/auth/getProvider'
 import WalletConnectError from '../utils/errors/WalletConnectError'
@@ -26,7 +26,7 @@ enum Event {
 }
 
 export type ProfileActions = {
-  connect: () => Promise<Profile | null>
+  connect: (force?: boolean) => Promise<Profile | null>
   disconnect: () => Promise<null>
   loading: boolean
   provider: boolean
@@ -36,14 +36,14 @@ export type ProfileActions = {
 export default function useProfile() {
   const [{ profile, loading, provider, error }, patchState] = usePatchState<State>({ profile: null, loading: true, provider: false, error: null })
 
-  async function connect() {
-    if (profile) {
+  async function connect(force: boolean = false) {
+    if (profile && !force) {
       return profile
     }
 
     track((analytics) => analytics.track(Event.Connect))
 
-    if (CURRENT_PROFILE_LOADER) {
+    if (CURRENT_PROFILE_LOADER && !force) {
       patchState({ loading: true })
       const result = await CURRENT_PROFILE_LOADER
       patchState({ loading: false })
@@ -85,10 +85,11 @@ export default function useProfile() {
       profile: getCurrentProfile() || restoreCurrentProfile()
     })
 
-    return createProfileEffect(
-      (event) => patchState({ profile: event.newProfile }),
-      (error) => patchState({ loading: false, error })
-    )
+    return createProfileEffectHandle({
+      error: (error) => patchState({ loading: false, error }),
+      change: (event) => patchState({ profile: event.newProfile }),
+      expire: () => connect(true),
+    })
   }, [])
 
   const actions: ProfileActions = {

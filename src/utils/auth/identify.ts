@@ -3,7 +3,7 @@ import { Account } from 'web3x/account';
 import { Personal } from 'web3x/personal';
 import { bufferToHex } from 'web3x/utils';
 import { Authenticator } from 'dcl-crypto/dist/Authenticator';
-import { Profile, ProfileChangeEvent } from './types';
+import { Profile, ProfileChangeEvent, ProfileExpiredEvent, ProfileEffectHandle } from './types';
 import getEth from './getEth';
 import getCurrentAddress from './getCurrentAddress';
 import Katalyst from '../api/Katalyst';
@@ -15,10 +15,10 @@ let CURRENT_PROFILE: Profile | null = null
 let STORE_LISTENER: SingletonListener<Window> | null = null
 let PROFILE_LISTENER: SingletonListener<any> | null = null
 let LOCAl_CHANGE = false
+let EXPIRATION_TIMEOUT: any = null
 
 export default async function identify() {
-  const now = Date.now()
-  if (CURRENT_PROFILE && CURRENT_PROFILE.identity.expiration.getTime() > now) {
+  if (CURRENT_PROFILE && !isExpired(CURRENT_PROFILE)) {
     return CURRENT_PROFILE;
   }
 
@@ -45,9 +45,36 @@ export default async function identify() {
   }
 }
 
+export function isExpired(profile: Profile) {
+  return profile.identity.expiration.getTime() < Date.now()
+}
+
 export function setCurrentProfile(profile: Profile | null) {
+  if (profile && isExpired(profile)) {
+    profile = null
+  }
+
   storeProfile(profile)
   CURRENT_PROFILE = profile
+
+  if (EXPIRATION_TIMEOUT) {
+    clearTimeout(EXPIRATION_TIMEOUT)
+  }
+
+  if (profile) {
+    EXPIRATION_TIMEOUT = setTimeout(() => {
+      const listener = getListener()
+      const oldProfile = getCurrentProfile()
+      if (oldProfile) {
+        listener.dispatch('change', { newProfile: null, oldProfile } as ProfileChangeEvent)
+        listener.dispatch('expire', { profile: oldProfile } as ProfileExpiredEvent)
+      }
+    }, Math.min(
+      profile.identity.expiration.getTime() - Date.now(),
+      1000 * 60 * 60 * 24
+    ))
+  }
+
   return CURRENT_PROFILE
 }
 
@@ -73,6 +100,36 @@ export function createProfileEffect(
   }
 }
 
+export function createProfileEffectHandle(handle: ProfileEffectHandle) {
+  const listener = getListener();
+
+  if (handle.error) {
+    listener.addEventListener('error', handle.error as any)
+  }
+
+  if (handle.change) {
+    listener.addEventListener('change', handle.change as any)
+  }
+
+  if (handle.expire) {
+    listener.addEventListener('expire', handle.expire as any)
+  }
+
+  return () => {
+    if (handle.error) {
+      listener.removeEventListener('error', handle.error as any)
+    }
+
+    if (handle.change) {
+      listener.removeEventListener('change', handle.change as any)
+    }
+
+    if (handle.expire) {
+      listener.removeEventListener('expire', handle.expire as any)
+    }
+  }
+}
+
 function handleProfileChange(event: StorageEvent) {
   if (event.key === STORE_PROFILE_KEY && event.oldValue !== event.newValue) {
     if (LOCAl_CHANGE) {
@@ -83,7 +140,6 @@ function handleProfileChange(event: StorageEvent) {
 
       if (PROFILE_LISTENER) {
         const event: ProfileChangeEvent = {
-          local: false,
           oldProfile,
           newProfile,
         }
@@ -122,7 +178,6 @@ function storeProfile(profile: Profile | null) {
 
   if (STORE_LISTENER) {
     const event: ProfileChangeEvent = {
-      local: true,
       newProfile: profile,
       oldProfile
     }

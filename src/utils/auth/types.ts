@@ -9,7 +9,16 @@ export type Profile = {
 }
 
 export type ProfileChangeEvent = {
-  local: boolean,
   oldProfile: Profile | null,
   newProfile: Profile | null,
+}
+
+export type ProfileExpiredEvent = {
+  profile: Profile
+}
+
+export type ProfileEffectHandle = {
+  error?: (event: Error) => void,
+  change?: (event: ProfileChangeEvent) => void,
+  expire?: (event: ProfileExpiredEvent) => void,
 }
