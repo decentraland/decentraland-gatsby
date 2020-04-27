@@ -17,7 +17,8 @@ let PROFILE_LISTENER: SingletonListener<any> | null = null
 let LOCAl_CHANGE = false
 
 export default async function identify() {
-  if (CURRENT_PROFILE) {
+  const now = Date.now()
+  if (CURRENT_PROFILE && CURRENT_PROFILE.identity.expiration.getTime() > now) {
     return CURRENT_PROFILE;
   }
 
@@ -134,7 +135,20 @@ function restoreProfile(): Profile | null {
   const json = localStorage.getItem(STORE_PROFILE_KEY)
 
   try {
-    const data = JSON.parse(json || 'null')
+    const data = JSON.parse(json || 'null', (key: string, value: any) => {
+      switch (key) {
+        case 'expiration':
+          try {
+            return new Date(Date.parse(value))
+          } catch (err) {
+            return new Date(0)
+          }
+
+        default:
+          return value
+      }
+    })
+
     if (data) {
       const address = Address.fromString(data.address)
       return { ...data, address }
