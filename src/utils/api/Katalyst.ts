@@ -1,4 +1,4 @@
-import { Address } from 'web3x/address'
+import type { Address } from 'web3x/address'
 import API from './API'
 import env from '../env'
 
