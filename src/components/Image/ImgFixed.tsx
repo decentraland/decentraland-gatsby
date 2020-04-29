@@ -7,7 +7,7 @@ import './ImgFixed.css'
 export type ImgFixedProps = Omit<React.HTMLProps<HTMLDivElement>, 'size'> & {
   dimension?: 'square' | 'wide' | 'vertical'
   position?: string
-  size?: 'cover' | 'contain'
+  size?: 'cover' | 'contain' | 'initial' | string
   background?: string
 }
 
@@ -19,7 +19,7 @@ export default function ImgFixed({ src, dimension, size, background, position, .
       backgroundColor: background || 'transparent',
       backgroundSize: size || 'cover',
       backgroundPosition: position || 'center center',
-      backgroundImage: src && `url("${src}")`
+      backgroundImage: src && `url("${src}")`,
     }}
   >
     {(!dimension || dimension === 'square') && <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4AWNwL/BhAAADCQEEiiqnjQAAAABJRU5ErkJggg==" width="1" height="1" />}

@@ -1,5 +1,6 @@
 .dg.ImgFixed {
   width: 100%;
+  background-repeat: no-repeat;
 }
 
 .dg.ImgFixed img {
