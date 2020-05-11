@@ -19,6 +19,7 @@ export type SEOProps = {
   twitter?: string | null
   author?: string | null
   lang?: Locale
+  preload?: string[]
   meta?: MetaProps[]
 }
 
@@ -34,7 +35,136 @@ function useValue(value: string | null | undefined, defaultValue: string) {
   return value || defaultValue
 }
 
-export default function SEO({ description, lang, meta, title, titleTemplate, author }: SEOProps) {
+function preloadAs(file: string) {
+  const ext = file.slice(file.lastIndexOf('.') + 1);
+
+  switch (ext) {
+    case 'aac':
+    case 'flac':
+    case 'm4a':
+    case 'mp3':
+    case 'oga':
+    case 'wav':
+      return 'audio'
+
+    case 'woff2':
+      return 'font'
+
+    case 'svg':
+    case 'png':
+    case 'gif':
+    case 'jpg':
+    case 'jpeg':
+    case 'jfif':
+    case 'pjpeg':
+    case 'pjp':
+    case 'tif':
+    case 'tiff':
+    case 'apng':
+    case 'bmp':
+    case 'ico':
+    case 'cur':
+    case 'webp':
+      return 'image'
+
+    case 'js':
+      return 'script'
+
+    case 'css':
+      return 'style'
+
+    case 'webm':
+    case '3gp':
+    case 'mp4':
+    case 'ogg':
+    case 'ogv':
+    case 'mov':
+      return 'video'
+
+    default:
+      return undefined
+  }
+}
+
+function preloadType(file: string) {
+  const ext = file.slice(file.lastIndexOf('.') + 1);
+
+  switch (ext) {
+    case 'apng':
+      return 'image/apng'
+
+    case 'bmp':
+      return 'image/bmp'
+
+    case 'gif':
+      return 'image/gif'
+
+    case 'ico':
+    case 'cur':
+      return 'image/x-icon'
+
+    case 'jpg':
+    case 'jpeg':
+    case 'jfif':
+    case 'pjpeg':
+    case 'pjp':
+      return 'image/jpeg'
+
+    case 'png':
+      return 'image/png'
+
+    case 'svg':
+      return 'image/svg+xml'
+
+    case 'tif':
+    case 'tiff':
+      return 'image/tiff'
+
+    case 'webp':
+      return 'image/webp'
+
+    case 'acc':
+      return 'audio/acc'
+
+    case 'flac':
+      return 'audio/flac'
+
+    case 'mp3':
+      return 'audio/mp3'
+
+    case 'm4a':
+      return 'audio/mp4'
+
+    case 'oga':
+      return 'audio/ogg'
+
+    case 'wav':
+      return 'audio/wav'
+
+    case 'woff2':
+      return 'font/woff2'
+
+    case 'webm':
+      return 'video/webm'
+
+    case 'mp4':
+      return 'video/mp4'
+
+    case 'ogg':
+      return 'video/ogg'
+
+    case 'mov':
+      return 'video/quicktime'
+
+    case 'webm':
+      return 'video/webm'
+
+    default:
+      return undefined
+  }
+}
+
+export default function SEO({ description, lang, meta, title, titleTemplate, author, preload }: SEOProps) {
 
   const currentAuthor = useValue(author, DEFAULT_AUTHOR)
   const currentDescription = useValue(description, DEFAULT_DESCRIPTION)
@@ -84,13 +214,16 @@ export default function SEO({ description, lang, meta, title, titleTemplate, aut
       title={title}
       titleTemplate={currentTitleTemplate || ''}
       meta={currentMeta}
-    />
+    >
+      {(preload || []).map(file => <link key={file} rel="preload" href={file} as={preloadAs(file)} type={preloadType(file)} />)}
+    </Helmet>
   )
 }
 
 SEO.defaultProps = {
   lang: `en`,
   meta: [],
+  preload: [],
   description: ``,
 }
 
