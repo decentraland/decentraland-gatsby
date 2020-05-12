@@ -1,6 +1,14 @@
 import { Request } from 'express'
 import RequestError from './error';
 
+export type ParamOptions = {
+  validator: (value: any) => boolean,
+  parser: <T>(value: any) => T
+}
+
+/**
+ * @deprecated use the handle context instead
+ */
 export default function param<T = string>(req: Request, name: string, validator: (value: any) => boolean = Boolean): T {
   let value;
 
@@ -14,8 +22,7 @@ export default function param<T = string>(req: Request, name: string, validator:
     value = req.params[name];
   }
 
-
-  if (!validator(value)) {
+  if (validator && !validator(value)) {
     throw new RequestError(`Invalid param ${name}: "${value}"`, RequestError.BadRequest);
   }
 

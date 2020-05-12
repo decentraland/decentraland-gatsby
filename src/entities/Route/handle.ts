@@ -1,12 +1,13 @@
 import { Request, Response, NextFunction } from "express";
+import Context from "./context";
 import RequestError from "./error";
 
-export type AsyncHandler = (req: Request & any, res: Response & any) => Promise<any> | any
+export type AsyncHandler = (req: Request & any, res: Response & any, ctx: Context) => Promise<any> | any
 
-export default function handle(handler: AsyncHandler) {
+export default function handle(handler: AsyncHandler, ) {
   return function (req: Request, res: Response) {
 
-    handler(req, res)
+    handler(req, res, new Context(req, res))
       .then(function handleResponseBody(data: any) {
         if (!res.headersSent) {
           res.status(defaultStatusCode(req))
@@ -23,7 +24,7 @@ export default function handle(handler: AsyncHandler) {
 export function middleware(handler: AsyncHandler) {
   return function (req: Request, res: Response, next: NextFunction) {
 
-    handler(req, res)
+    handler(req, res, new Context(req, res))
       .then(() => next())
       .catch((err: RequestError) => handleResponseError(res, err))
   }
