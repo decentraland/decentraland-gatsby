@@ -11,8 +11,8 @@ export type ParamOptions<T> = {
 export default class Context {
   constructor(public readonly req: Request, public readonly res: Response) { }
 
-  header(name: string, defaultValue: string) {
-    return this.req.header(name) || defaultValue;
+  header(name: string, defaultValue: string | undefined = undefined) {
+    return this.req.header(name) ?? defaultValue;
   }
 
   param<T = string>(name: string, options: ParamOptions<T> = {}): T | null {
