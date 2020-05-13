@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import Context from "./context";
 import RequestError from "./error";
+import isStream from "../../utils/stream/isStream";
 
 export type AsyncHandler = (req: Request & any, res: Response & any, ctx: Context) => Promise<any> | any
 
@@ -14,7 +15,11 @@ export default function handle(handler: AsyncHandler, ) {
         }
 
         if (!res.writableFinished) {
-          res.json({ ok: true, data })
+          if (isStream(data)) {
+            return data.pipe(res)
+          } else {
+            return res.json({ ok: true, data })
+          }
         }
       })
       .catch((err: RequestError) => handleResponseError(res, err))
