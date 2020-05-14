@@ -12,8 +12,12 @@ export type IterationData = {
 
 export function createFormatMessage(shape: IntlShape) {
 
+  const empty = (id: string) => {
+    return !shape.messages[id]
+  }
+
   const str = (id: string, values?: any) => {
-    if (!shape.messages[id]) {
+    if (empty(id)) {
       return null
     }
 
@@ -49,7 +53,7 @@ export function createFormatMessage(shape: IntlShape) {
     return result
   }
 
-  return Object.assign(intl, { iter, str })
+  return Object.assign(intl, { iter, str, empty })
 }
 
 export function useFormatMessage() {

@@ -12,6 +12,7 @@ import Code from '../components/Text/Code';
 describe(__filename, () => {
   const intl = createIntl({
     locale: 'en', messages: flat({
+      empty: '',
       paragraph: '1rt paragraph: regular message with data: {value}.',
       decorations: '2nd paragraph: *italic*, **bold**, [innerLink](#) and [outerLink](https://decentraland.com).',
       breakLine: '1rt paragraph\n\n2nd paragraph.',
@@ -28,12 +29,21 @@ describe(__filename, () => {
 
   const l = createFormatMessage(intl)
 
+  test(`l.empty("invalid")`, () => expect(l.empty('invalid')).toBe(true))
+  test(`l.empty("empty")`, () => expect(l.empty('empty')).toBe(true))
+  test(`l.empty("paragraph")`, () => expect(l.empty('paragraph')).toBe(false))
+
+  test(`l.str("invalid")`, () => expect(l.str('invalid')).toBe(null))
+  test(`l.str("empty")`, () => expect(l.str('empty')).toBe(null))
+  test(`l.str("paragraph")`, () => expect(l.str('paragraph', { value: 2 })).toBe('1rt paragraph: regular message with data: 2.'))
+
   function expectRender(element: JSX.Element[] | JSX.Element | null, toBe: JSX.Element | null) {
     return expect(element && ReactDOM.renderToStaticMarkup(<>{element}</>))
       .toBe(toBe && ReactDOM.renderToStaticMarkup(toBe))
   }
 
   test(`l("invalid")`, () => expectRender(l('invalid'), null))
+  test(`l("empty")`, () => expectRender(l('empty'), null))
   test(`l("paragraph")`, () => expectRender(l('paragraph', { value: 1 }), <Paragraph>1rt paragraph: regular message with data: 1.</Paragraph>))
   test(`l("decorations")`, () => expectRender(l('decorations'), <Paragraph>2nd paragraph: <Italic>italic</Italic>, <Bold>bold</Bold>, <Link target="" href="#">innerLink</Link> and <Link target="_blank" href="https://decentraland.com">outerLink</Link>.</Paragraph>))
   test(`l("breakLine")`, () => expectRender(
@@ -79,8 +89,4 @@ describe(__filename, () => {
     <Code language="typescript">{`  const variable = "value";`}</Code>
     <Paragraph>this is and example.</Paragraph>
   </>))
-
-
-  test(`l.str("invalid")`, () => expect(l.str('invalid')).toBe(null))
-  test(`l.str("paragraph")`, () => expect(l.str('paragraph', { value: 2 })).toBe('1rt paragraph: regular message with data: 2.'))
 })
