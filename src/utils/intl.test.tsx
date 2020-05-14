@@ -12,7 +12,7 @@ import Code from '../components/Text/Code';
 describe(__filename, () => {
   const intl = createIntl({
     locale: 'en', messages: flat({
-      paragraph: '1rt paragraph: regular message.',
+      paragraph: '1rt paragraph: regular message with data: {value}.',
       decorations: '2nd paragraph: *italic*, **bold**, [innerLink](#) and [outerLink](https://decentraland.com).',
       breakLine: '1rt paragraph\n\n2nd paragraph.',
       list: [
@@ -34,7 +34,7 @@ describe(__filename, () => {
   }
 
   test(`l("invalid")`, () => expectRender(l('invalid'), null))
-  test(`l("paragraph")`, () => expectRender(l('paragraph'), <Paragraph>1rt paragraph: regular message.</Paragraph>))
+  test(`l("paragraph")`, () => expectRender(l('paragraph', { value: 1 }), <Paragraph>1rt paragraph: regular message with data: 1.</Paragraph>))
   test(`l("decorations")`, () => expectRender(l('decorations'), <Paragraph>2nd paragraph: <Italic>italic</Italic>, <Bold>bold</Bold>, <Link target="" href="#">innerLink</Link> and <Link target="_blank" href="https://decentraland.com">outerLink</Link>.</Paragraph>))
   test(`l("breakLine")`, () => expectRender(
     l('breakLine'),
@@ -45,6 +45,7 @@ describe(__filename, () => {
   ))
 
   const iterator = (l: Formatter, data?: any) => l('text', { ...data, isFirst: String(data.isFirst), isLast: String(data.isLast) })
+
   test(`l.iter("list", 1, ...)`, () => expectRender(
     l.iter('list', 1, iterator),
     <>
@@ -78,4 +79,8 @@ describe(__filename, () => {
     <Code language="typescript">{`  const variable = "value";`}</Code>
     <Paragraph>this is and example.</Paragraph>
   </>))
+
+
+  test(`l.str("invalid")`, () => expect(l.str('invalid')).toBe(null))
+  test(`l.str("paragraph")`, () => expect(l.str('paragraph', { value: 2 })).toBe('1rt paragraph: regular message with data: 2.'))
 })

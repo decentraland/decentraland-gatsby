@@ -10,25 +10,31 @@ export type IterationData = {
   isLast: boolean
 }
 
-export function createFormatMessage(intl: IntlShape) {
-  const l = (id: string, values?: any) => {
-    if (!intl.messages[id]) {
+export function createFormatMessage(shape: IntlShape) {
+
+  const str = (id: string, values?: any) => {
+    if (!shape.messages[id]) {
       return null
     }
 
-    let message = intl.formatMessage({ id }, { ...values })
+    return shape.formatMessage({ id }, { ...values })
+  }
 
-    if (typeof message === 'string') {
-      return <Markdown key={id} source={message} />
+  const intl = (id: string, values?: any) => {
+
+    let message = str(id, values)
+
+    if (typeof message !== 'string') {
+      return message
     }
 
-    return message
+    return <Markdown key={id} source={message} />
   };
 
   const iter = (base: string, items: number, iterator: (formatter: Formatter, data: IterationData) => JSX.Element | undefined | null) => {
     const result = [] as JSX.Element[]
     for (let current = 0; current < items; current++) {
-      const formatter = (id: string, values?: any) => l([base, current, id].join('.'), values)
+      const formatter = (id: string, values?: any) => intl([base, current, id].join('.'), values)
       const message = iterator(formatter, {
         index: current,
         isFirst: current === 0,
@@ -43,7 +49,7 @@ export function createFormatMessage(intl: IntlShape) {
     return result
   }
 
-  return Object.assign(l, { iter })
+  return Object.assign(intl, { iter, str })
 }
 
 export function useFormatMessage() {
