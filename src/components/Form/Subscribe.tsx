@@ -12,6 +12,7 @@ import './Subscribe.css'
 export type SubscribeData = {
   email: string,
   interest?: string,
+  lang?: string,
 }
 
 export type SubscribeProps = {
@@ -20,11 +21,11 @@ export type SubscribeProps = {
 
   intl?: {
     cta?: string,
-    invalidEmail?: string,
-    invalidInterest?: string,
+    inputError?: string,
     serverError?: string,
   },
 
+  lang?: string,
   interest?: string,
   placeholder?: string,
   defaultValue?: string,
@@ -49,19 +50,17 @@ export type SubscribeState = {
 export enum ErrorKind {
   None,
   InvalidEmail,
-  InvalidInterest,
   ServerError,
 }
 
-const DEFAULT_ACTION = process.env.GATSBY_SUBSCRIBE_TARGET || 'https://decentraland.org/subscribe'
+const DEFAULT_ACTION = process.env.GATSBY_SUBSCRIBE_TARGET || 'https://decentraland.org/v2/subscribe'
 
 export default function Subscribe(props: SubscribeProps) {
 
   const [state, patchState] = usePatchState({ email: '', loading: false, error: ErrorKind.None })
   const intl = {
     cta: 'Sign up',
-    invalidEmail: 'Invalid email',
-    invalidInterest: 'Invalid interest',
+    inputError: 'Invalid email',
     serverError: 'Server error',
     ...props.intl
   }
@@ -82,6 +81,10 @@ export default function Subscribe(props: SubscribeProps) {
 
     if (props.interest) {
       data.interest = props.interest
+    }
+
+    if (props.lang) {
+      data.lang = props.lang
     }
 
     if (props.onSubmit) {
@@ -106,7 +109,7 @@ export default function Subscribe(props: SubscribeProps) {
       body: JSON.stringify(data)
     })
       .then((response) => {
-        patchState({ loading: false, error: response.status >= 400 ? ErrorKind.InvalidInterest : ErrorKind.None })
+        patchState({ loading: false, error: response.status >= 400 ? ErrorKind.ServerError : ErrorKind.None })
         if (props.onSubscribe) {
           props.onSubscribe(data)
         }
@@ -116,11 +119,8 @@ export default function Subscribe(props: SubscribeProps) {
 
   let inputMessage: string | undefined;
   switch (error) {
-    case ErrorKind.InvalidInterest:
-      inputMessage = intl.invalidInterest;
-      break;
     case ErrorKind.InvalidEmail:
-      inputMessage = intl.invalidEmail;
+      inputMessage = intl.inputError;
       break;
     case ErrorKind.ServerError:
       inputMessage = intl.serverError;
