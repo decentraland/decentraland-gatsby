@@ -3,10 +3,12 @@ import { storiesOf } from "@storybook/react";
 import centered from '@storybook/addon-centered/react'
 import useProfile from './useProfile';
 import useCountdown from './useCountdown';
+import useResponsive from './useResponsive';
 import useMobileDetector from './useMobileDetector';
 import Code from '../components/Text/Code';
 import Title from '../components/Text/Title';
 import { Container } from 'decentraland-ui/dist/components/Container/Container';
+import Responsive from 'semantic-ui-react/dist/commonjs/addons/Responsive'
 import Paragraph from '../components/Text/Paragraph';
 import Italic from '../components/Text/Italic';
 import { Button } from 'decentraland-ui/dist/components/Button/Button';
@@ -22,6 +24,33 @@ future.setMilliseconds(0)
 
 storiesOf('Hooks', module)
   .addDecorator(centered)
+  .add('useCountdown', () => {
+    const completed = useCountdown(launch)
+    const countdown = useCountdown(future)
+    return <Container>
+      <Divider />
+      <MainTitle>Using Countdown Hook</MainTitle>
+      <Paragraph secondary>The <Italic>countdown hook</Italic> update a countdown using a time interval.</Paragraph>
+      <Code language="typescript">{`const countdown = useCountdown(until, each)`}</Code>
+      <Divider size="small" />
+      <Paragraph><Code inline>until: Date</Code> the finish of the countdown.</Paragraph>
+      <Paragraph><Code inline>each: number = Time.Second</Code> update interval of the countdown.</Paragraph>
+      <Divider size="small" />
+      <Paragraph><Code inline>countdown: Object</Code></Paragraph>
+      <Paragraph><Code inline>countdown.days: number (>=0)</Code> days until the countdown finish.</Paragraph>
+      <Paragraph><Code inline>countdown.hours: number (>=0)</Code> hours until days decreases.</Paragraph>
+      <Paragraph><Code inline>countdown.minutes: number (>=0)</Code> minutes until hours decreases.</Paragraph>
+      <Paragraph><Code inline>countdown.seconds: number (>=0)</Code> seconds until minutes decreases.</Paragraph>
+      <Paragraph><Code inline>countdown.milliseconds: number (>=0)</Code> milliseconds until seconds decreases.</Paragraph>
+      <Paragraph><Code inline>countdown.time: number (>=0)</Code> milliseconds until the countdown finish.</Paragraph>
+      <Divider size="small" />
+      <Title>Live example:</Title>
+      <Code note="completed" language="json">{JSON.stringify(completed, null, 2)}</Code>
+      <Code note="active" language="json">{JSON.stringify(countdown, null, 2)}</Code>
+      <Divider />
+    </Container>
+
+  })
   .add('useMobileDetector', () => {
     const mobile = useMobileDetector()
     const userAgent = getUserAgent()
@@ -78,30 +107,28 @@ storiesOf('Hooks', module)
       <Code language="json" note="profile:">{JSON.stringify(profile, null, 2)}</Code>
     </Container>
   })
-  .add('useCountdown', () => {
-    const completed = useCountdown(launch)
-    const countdown = useCountdown(future)
+  .add('useResponsive', () => {
+    const responsive = useResponsive()
     return <Container>
       <Divider />
-      <MainTitle>Using Countdown Hook</MainTitle>
-      <Paragraph secondary>The <Italic>countdown hook</Italic> update a countdown using a time interval.</Paragraph>
-      <Code language="typescript">{`const countdown = useCountdown(until, each)`}</Code>
+      <MainTitle>Using Responsive Hook</MainTitle>
+      <Paragraph secondary>The <Italic>responsive hook</Italic> allow you to check when the size of the windows is between a range.</Paragraph>
+      <Code language="typescript">{`const responsive = useResponsive()`}</Code>
       <Divider size="small" />
-      <Paragraph><Code inline>until: Date</Code> the finish of the countdown.</Paragraph>
-      <Paragraph><Code inline>each: number = Time.Second</Code> update interval of the countdown.</Paragraph>
-      <Divider size="small" />
-      <Paragraph><Code inline>countdown: Object</Code></Paragraph>
-      <Paragraph><Code inline>countdown.days: number (>=0)</Code> days until the countdown finish.</Paragraph>
-      <Paragraph><Code inline>countdown.hours: number (>=0)</Code> hours until days decreases.</Paragraph>
-      <Paragraph><Code inline>countdown.minutes: number (>=0)</Code> minutes until hours decreases.</Paragraph>
-      <Paragraph><Code inline>countdown.seconds: number (>=0)</Code> seconds until minutes decreases.</Paragraph>
-      <Paragraph><Code inline>countdown.milliseconds: number (>=0)</Code> milliseconds until seconds decreases.</Paragraph>
-      <Paragraph><Code inline>countdown.time: number (>=0)</Code> milliseconds until the countdown finish.</Paragraph>
+      <Paragraph><Code inline>{'responsive: ({ minWidth?: number, maxWith?: number }) => boolean'}</Code></Paragraph>
       <Divider size="small" />
       <Title>Live example:</Title>
-      <Code note="completed" language="json">{JSON.stringify(completed, null, 2)}</Code>
-      <Code note="active" language="json">{JSON.stringify(countdown, null, 2)}</Code>
+      <Code language="typescript">{`responsive(Responsive.onlyMobile) // ${responsive(Responsive.onlyMobile)}`}</Code>
+      <Code language="typescript">{`responsive(Responsive.onlyTablet) // ${responsive(Responsive.onlyTablet)}`}</Code>
+      <Code language="typescript">{`responsive(Responsive.onlyComputer) // ${responsive(Responsive.onlyComputer)}`}</Code>
+      <Divider size="small" />
+      <Code language="typescript">{`responsive({ minWidth: Responsive.onlyMobile.minWidth }) // ${responsive({ minWidth: Responsive.onlyMobile.minWidth })}`}</Code>
+      <Code language="typescript">{`responsive({ minWidth: Responsive.onlyTablet.minWidth }) // ${responsive({ minWidth: Responsive.onlyTablet.minWidth })}`}</Code>
+      <Code language="typescript">{`responsive({ minWidth: Responsive.onlyComputer.minWidth }) // ${responsive({ minWidth: Responsive.onlyComputer.minWidth })}`}</Code>
+      <Divider size="small" />
+      <Code language="typescript">{`responsive({ maxWidth: Responsive.onlyMobile.maxWidth }) // ${responsive({ maxWidth: Responsive.onlyMobile.maxWidth })}`}</Code>
+      <Code language="typescript">{`responsive({ maxWidth: Responsive.onlyTablet.maxWidth }) // ${responsive({ maxWidth: Responsive.onlyTablet.maxWidth })}`}</Code>
+      <Code language="typescript">{`responsive({ maxWidth: Responsive.onlyComputer.maxWidth }) // ${responsive({ maxWidth: Responsive.onlyComputer.maxWidth })}`}</Code>
       <Divider />
     </Container>
-
   })
