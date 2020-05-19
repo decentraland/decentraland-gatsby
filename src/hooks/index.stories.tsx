@@ -5,6 +5,7 @@ import useProfile from './useProfile';
 import useCountdown from './useCountdown';
 import useResponsive from './useResponsive';
 import useMobileDetector from './useMobileDetector';
+import useFeatureDetection, { features } from './useFeatureDetection';
 import Code from '../components/Text/Code';
 import Title from '../components/Text/Title';
 import { Container } from 'decentraland-ui/dist/components/Container/Container';
@@ -49,7 +50,20 @@ storiesOf('Hooks', module)
       <Code note="active" language="json">{JSON.stringify(countdown, null, 2)}</Code>
       <Divider />
     </Container>
-
+  })
+  .add('useFeatureDetection', () => {
+    return <Container>
+      <Divider />
+      <MainTitle>Using Feature detection Hook</MainTitle>
+      <Paragraph secondary>The <Italic>feature detection hook</Italic> checks if the browser support some feature.</Paragraph>
+      <Code language="typescript">{`const featureSupported = useFeatureDetection(feature)`}</Code>
+      <Divider size="tiny" />
+      <Title>Live example:</Title>
+      <Code language="typescript">
+        {features.map(feature => `useFeatureDetection("${feature}") // ${useFeatureDetection(feature)}`).join('\n')}
+      </Code>
+      <Divider />
+    </Container>
   })
   .add('useMobileDetector', () => {
     const mobile = useMobileDetector()
