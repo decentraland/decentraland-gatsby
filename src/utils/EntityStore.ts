@@ -119,4 +119,15 @@ export default class EntityStore<E extends object> {
 
     this.listener.dispatch('change', this.state)
   }
+
+  clear() {
+    this.state = {
+      ...this.state,
+      error: null,
+      data: {},
+      lists: {}
+    }
+
+    this.listener.dispatch('change', this.state)
+  }
 }
