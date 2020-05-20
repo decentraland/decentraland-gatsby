@@ -54,8 +54,8 @@ export function setCurrentProfile(profile: Profile | null) {
     profile = null
   }
 
-  storeProfile(profile)
   CURRENT_PROFILE = profile
+  storeProfile(profile)
 
   if (EXPIRATION_TIMEOUT) {
     clearTimeout(EXPIRATION_TIMEOUT)
