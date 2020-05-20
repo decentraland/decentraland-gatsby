@@ -110,10 +110,15 @@ export default class SingletonListener<T extends TargetListener> {
    * @param data 
    */
   dispatch(event: Event | string, data: any) {
+    const target = this.target
     const callback = this.callbacks.get(event as Event)
-    if (callback) {
-      callback.call(this.target, data)
-    }
+    return new Promise((resolve) => setTimeout(() => {
+      if (callback && target) {
+        callback.call(this.target, data)
+      }
+
+      resolve()
+    }, 0))
   }
 
   /**

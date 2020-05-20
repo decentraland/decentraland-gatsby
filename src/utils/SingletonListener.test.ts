@@ -46,12 +46,12 @@ describe(SingletonListener.name, () => {
     expect(target.addEventListener.mock.calls.length).toBe(2)
   })
 
-  test('dispatch', () => {
-    target.dispatch('click', data)
+  test('dispatch', async () => {
+    await target.dispatch('click', data)
     expect(handleMock1.mock.calls.length).toEqual(1)
     expect(handleMock2.mock.calls.length).toEqual(1)
 
-    target.dispatch('blur', data)
+    await target.dispatch('blur', data)
     expect(handleMock1.mock.calls.length).toBe(3)
     expect(handleMock2.mock.calls.length).toBe(4)
   })
