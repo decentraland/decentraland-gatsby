@@ -5,7 +5,7 @@ import handle, { middleware } from './handle';
 import env from '../../utils/env';
 import { RouterHandler, RoutesOptions, createCorsOptions, CorsOptions } from './types';
 
-const IMAGE = env('IMAGE', `unknown:${Date.now()}`)
+const IMAGE = env('IMAGE', `events:${Date.now()}`)
 const [image, version] = IMAGE.split(':')
 
 export default function routes(handle: RouterHandler, options: RoutesOptions = {}): Router {

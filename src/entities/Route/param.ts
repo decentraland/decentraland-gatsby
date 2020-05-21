@@ -28,3 +28,32 @@ export default function param<T = string>(req: Request, name: string, validator:
 
   return value;
 }
+
+export function bool(value: any): boolean | null {
+  switch (value) {
+    case 1:
+    case true:
+    case '1':
+    case 'true':
+    case 'True':
+    case 'TRUE':
+    case 'yes':
+    case 'Yes':
+    case 'YES':
+      return true
+
+    case 0:
+    case false:
+    case '0':
+    case 'false':
+    case 'False':
+    case 'FALSE':
+    case 'no':
+    case 'No':
+    case 'NO':
+      return false
+
+    default:
+      return null
+  }
+}
