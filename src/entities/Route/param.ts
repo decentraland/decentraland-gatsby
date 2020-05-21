@@ -57,3 +57,32 @@ export function bool(value: any): boolean | null {
       return null
   }
 }
+
+export function number(value: any): number | null {
+  if (value === '' || value === undefined || value === null) {
+    return null
+  }
+
+  const parsed = Number(value)
+
+  if (!Number.isFinite(parsed)) {
+    return null
+  }
+
+  return parsed
+}
+
+export function integer(value: any): number | null {
+  const parsed = number(value)
+
+  if (parsed === null) {
+    return null
+  }
+
+  const int = parsed | 0
+  if (int !== parsed) {
+    return null
+  }
+
+  return int
+}
