@@ -4,6 +4,7 @@ export default class RequestError extends Error {
   static Unauthorized = 401
   static Forbidden = 403
   static NotFound = 404
+  static PayloadTooLarge = 413
   static IAmATeapot = 418
   static TooManyRequests = 429
   static InternalServerError = 500
