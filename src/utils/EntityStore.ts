@@ -48,6 +48,10 @@ export default class EntityStore<E extends object> {
     return this.state
   }
 
+  getEntity(id: string): E | null {
+    return this.state.data[id] || null
+  }
+
   getList(listName: string = 'default') {
     if (this.state.lists[listName]) {
       const list = this.state.lists[listName]!
