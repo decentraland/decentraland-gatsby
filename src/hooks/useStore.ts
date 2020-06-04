@@ -1,27 +1,26 @@
-import { useState, useEffect, useMemo } from "react"
+
+import React, { useState, useEffect, useMemo } from "react"
 import EntityStore, { EntityStoreState } from "../utils/EntityStore"
 
-export default function useStore<E extends object>(
-  initialState: Partial<EntityStoreState<E>>
-) {
+const INITIAL_STATE = {}
 
-  const [st] = useState(initialState)
-  const store = useMemo(() => new EntityStore<E>({ initialState: st }), [st])
-  const [, setState] = useState(store.getState())
+export default function useStore<E extends object>(
+  initialState: Partial<EntityStoreState<E>> = INITIAL_STATE,
+  deps: React.DependencyList = []
+) {
+  const store = useMemo(() => new EntityStore<E>({ initialState }), deps)
+  const [current, setState] = useState(store.getState())
 
   useEffect(() => {
     function handleChange(newState: EntityStoreState<E>) {
-      if (st !== newState) {
+      if (current !== newState) {
         setState(newState)
       }
     }
 
     store.addEventListener('change', handleChange)
-
-    return function removeStoreListener() {
-      store.removeEventListener('change', handleChange)
-    }
-  }, [])
+    return () => store.removeEventListener('change', handleChange)
+  }, [store])
 
   return store
 }
