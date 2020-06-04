@@ -65,7 +65,6 @@ export default class EntityStore<E extends object> {
     const id = this.config.identifier(entity)
     this.state = {
       ...this.state,
-      loading: false,
       data: {
         ...this.state.data, [id]: entity
       }
@@ -75,7 +74,6 @@ export default class EntityStore<E extends object> {
   }
 
   setEntities(entities: E[], listName: string = 'default') {
-
     const data: Record<string, E> = {}
     const list: string[] = []
 
@@ -85,18 +83,15 @@ export default class EntityStore<E extends object> {
       list.push(id)
     }
 
-    const lists = listName && { [listName]: list }
-
     this.state = {
       ...this.state,
-      loading: false,
       data: {
         ...this.state.data,
         ...data
       },
       lists: {
         ...this.state.lists,
-        ...lists
+        [listName]: list
       }
     }
 
@@ -106,18 +101,33 @@ export default class EntityStore<E extends object> {
   setError(error: Error) {
     this.state = {
       ...this.state,
-      loading: false,
       error: error.message
     }
 
     this.listener.dispatch('change', this.state)
   }
 
-  setLoading(listName: string = 'default') {
+  setLoading(value: boolean = true) {
+    if (this.state.loading !== value) {
+      this.state = {
+        ...this.state,
+        loading: value,
+      }
+
+      this.listener.dispatch('change', this.state)
+    }
+
+    return value
+  }
+
+  isLoading() {
+    return !!this.state.loading
+  }
+
+  clearList(listName: string = 'default') {
     const lists = listName ? { ...this.state.lists, [listName]: null } : this.state.lists;
     this.state = {
       ...this.state,
-      loading: true,
       lists
     }
 
