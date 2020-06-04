@@ -29,6 +29,18 @@ export default function param<T = string>(req: Request, name: string, validator:
   return value;
 }
 
+export function num(value: any): number | null {
+  if (typeof value === 'string') {
+    value = Number(value)
+  }
+
+  if (typeof value === 'number' && Number.isFinite(value)) {
+    return value
+  }
+
+  return null
+}
+
 export function bool(value: any): boolean | null {
   switch (value) {
     case 1:
