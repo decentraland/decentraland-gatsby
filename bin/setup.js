@@ -70,6 +70,7 @@ const files = sync('**/*', {
   cwd: templates,
   root: templates,
   absolute: false,
+  dot: true,
   mark: true,
 })
 
