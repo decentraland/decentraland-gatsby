@@ -5,9 +5,24 @@ const { mkdirSync, writeFileSync, readFileSync } = require('fs')
 const { spawn } = require('child_process')
 const { grey, green, red } = require('colors/safe')
 
-function spawnPromise(command, args, options) {
+function installDevDependencies(modules) {
+  return installDependencies(modules, true)
+}
+
+function installDependencies(modules, dev) {
   return new Promise((resolve, reject) => {
-    const run = spawn(command, args, options)
+    console.log()
+    console.log(
+      grey(`    intalling ${dev ? 'devDependencies' : 'dependencies'}: `)
+    )
+    console.log()
+    modules.forEach(module => console.log(green('        ' + module)))
+    console.log()
+    const run = spawn(
+      'npm',
+      ['install', dev ? '-D' : '-s'].concat(modules || []),
+      { stdio: 'inherit' }
+    )
     run.on('exit', code =>
       code
         ? reject(new Error(`Command ${command} exit with code ${code}`))
@@ -18,42 +33,34 @@ function spawnPromise(command, args, options) {
 
 Promise.resolve()
   .then(() =>
-    spawnPromise(
-      'npm',
-      [
-        'install',
-        '-s',
-        'dotenv',
-        'express',
-        'web3x',
-        'dcl-crypto',
-        'decentraland-crypto',
-        'node-pg-migrate',
-        'isomorphic-fetch',
-        'nodemon',
-        'pg',
-        'ajv',
-        'body-parser',
-        'gatsby',
-        'gatsby-image',
-        'gatsby-plugin-intl',
-        'gatsby-plugin-manifest',
-        'gatsby-plugin-offline',
-        'gatsby-plugin-react-helmet',
-        'gatsby-plugin-sass',
-        'gatsby-plugin-sharp',
-        'gatsby-plugin-typescript',
-        'gatsby-source-filesystem',
-        'gatsby-transformer-sharp',
-        'validator',
-      ],
-      {}
-    )
+    installDependencies([
+      'dotenv',
+      'express',
+      'web3x',
+      'dcl-crypto',
+      'decentraland-crypto',
+      'node-pg-migrate',
+      'isomorphic-fetch',
+      'nodemon',
+      'pg',
+      'ajv',
+      'body-parser',
+      'gatsby',
+      'gatsby-image',
+      'gatsby-plugin-intl',
+      'gatsby-plugin-manifest',
+      'gatsby-plugin-offline',
+      'gatsby-plugin-react-helmet',
+      'gatsby-plugin-sass',
+      'gatsby-plugin-sharp',
+      'gatsby-plugin-typescript',
+      'gatsby-source-filesystem',
+      'gatsby-transformer-sharp',
+      'validator',
+    ])
   )
   .then(() =>
-    spawnSync('npm', [
-      'install ',
-      '-D',
+    installDevDependencies([
       'prettier',
       'concurrently',
       'ts-node',
@@ -108,7 +115,10 @@ Promise.resolve()
       }
     })
   })
-  .then(() => console.log('\n', green(`Done! Have a nice day!`, '\n')))
+  .then(() => {
+    console.log('\n', green(`Done! Have a nice day!`, '\n'))
+    process.exit(0)
+  })
   .catch(err => {
     console.log()
     console.error(red(`    ${err.message}`))
@@ -121,5 +131,5 @@ Promise.resolve()
       )
     )
     console.log()
-    process.exist(1)
+    process.exit(1)
   })

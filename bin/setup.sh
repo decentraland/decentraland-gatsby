@@ -1,2 +1,2 @@
 #!/usr/bin/env bash
-node -r 'decentraland-gatsby/bin/setup.js'
+node 'node_modules/decentraland-gatsby/bin/setup.js'
