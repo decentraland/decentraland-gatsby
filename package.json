@@ -3,6 +3,9 @@
   "version": "0.0.0-development",
   "description": "Common Gastby components",
   "main": "dist/index.js",
+  "bin": {
+    "project-setup": "./bin/setup.sh"
+  },
   "scripts": {
     "test": "jest",
     "build": "rm -rf dist && tsc -p . -outDir dist --sourceMap false --skipLibCheck && postcss --base src --dir dist 'src/**/*.css'",
