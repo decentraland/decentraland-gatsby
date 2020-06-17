@@ -4,7 +4,7 @@
   "description": "Common Gastby components",
   "main": "dist/index.js",
   "bin": {
-    "setup": "./bin/setup.js"
+    "setup": "./bin/setup.sh"
   },
   "scripts": {
     "test": "jest",
