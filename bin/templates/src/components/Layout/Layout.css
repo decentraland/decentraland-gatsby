@@ -1,0 +1,21 @@
+.dcl.navbar {
+  position: fixed;
+  transition: background-color 0.5s ease, border-color 0.5s ease;
+  background-color: var(--background);
+  border-color: var(--divider);
+}
+
+.dcl.navbar.initial {
+  background-color: transparent;
+  border-color: transparent;
+}
+
+.dcl.navbar .ui.menu .item {
+  color: var(--text);
+}
+
+@media only screen and (min-width: 1200px) {
+  .ui.container {
+    width: 1124px;
+  }
+}

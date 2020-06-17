@@ -4,7 +4,7 @@
   "description": "Common Gastby components",
   "main": "dist/index.js",
   "bin": {
-    "project-setup": "./bin/setup.sh"
+    "setup": "./bin/setup.js"
   },
   "scripts": {
     "test": "jest",
@@ -71,6 +71,7 @@
     "@types/react-helmet": "^5.0.15",
     "@types/validator": "^12.0.1",
     "autoprefix": "^1.0.1",
+    "colors": "^1.4.0",
     "cors": "^2.8.5",
     "cssnano": "^4.1.10",
     "dcl-crypto": "^2.0.0",
@@ -82,6 +83,7 @@
     "framer-motion": "^1.9.0",
     "gatsby": "^2.19.24",
     "gatsby-plugin-intl": "^0.3.3",
+    "glob": "^7.1.6",
     "highlight.js": "^9.18.1",
     "immutable": "^4.0.0-rc.12",
     "isomorphic-fetch": "^2.2.1",

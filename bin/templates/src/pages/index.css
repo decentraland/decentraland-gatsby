@@ -1,0 +1,50 @@
+.dcl.tabs {
+  position: relative;
+}
+
+.dcl.tabs .ui.container {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.dcl.tabs .ui.button {
+  position: absolute;
+  right: 0;
+  bottom: 2px;
+}
+
+.dcl.tabs .ui.container .ui.button {
+  bottom: 11px;
+}
+
+.dcl.header-menu {
+  margin: 0;
+}
+
+.ui.cards,
+.ui.cards ~ .ui.cards {
+  margin: -0.875em -0.5em;
+}
+
+.GroupTitle {
+  width: 100%;
+  padding: 24px 0;
+}
+
+.GroupTitle .dg.SubTitle {
+  font-size: 13px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.38;
+  letter-spacing: normal;
+  color: #736e7d;
+  text-transform: uppercase;
+}
+
+@media only screen and (max-width: 991px) and (min-width: 768px) {
+  .ui.cards > .ui.card {
+    width: calc(50% - 32px);
+  }
+}
