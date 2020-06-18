@@ -45,6 +45,10 @@ Run the setup command
 
   static/ ................ gatsby static files
 
+  .env.example ........... environment variables
+  .env.development ......  environment variables for development
+  .env.production .......  environment variables for production
+
   .gitlab-ci.yml    ...... CI configuration file
 
   .prettierignore   ...... prettier files
