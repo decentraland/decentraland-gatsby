@@ -2,12 +2,14 @@ import Ajv from 'ajv'
 import isEmail from 'validator/lib/isEmail'
 import isUUID from 'validator/lib/isUUID'
 import isURL from 'validator/lib/isURL'
+import isNumeric from 'validator/lib/isNumeric'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
 
 export default new Ajv()
   .addFormat('address', isEthereumAddress)
   .addFormat('email', isEmail)
   .addFormat('uuid', isUUID)
+  .addFormat('numeric', (n) => isNumeric(n))
   .addFormat('url', (url) => isURL(url, {
     protocols: ['http', 'https'],
     require_tld: true,
