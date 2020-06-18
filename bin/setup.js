@@ -25,7 +25,7 @@ function installDependencies(modules, dev) {
     )
     run.on('exit', code =>
       code
-        ? reject(new Error(`Command ${command} exit with code ${code}`))
+        ? reject(new Error(`Installation exits with code ${code}`))
         : resolve(0)
     )
   })
