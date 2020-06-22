@@ -52,11 +52,11 @@ export default function useCountdown(until: Date, each: number = Time.Second, co
   }
 
   return useMemo(() => {
-    const days = Math.abs(Math.floor(time / Time.Day))
-    const hours = Math.abs(Math.floor((time % Time.Day) / Time.Hour))
-    const minutes = Math.abs(Math.floor((time % Time.Hour) / Time.Minute))
-    const seconds = Math.abs(Math.floor((time % Time.Minute) / Time.Second))
-    const milliseconds = Math.abs(time % Time.Second)
+    const days = Math.abs(time / Time.Day) | 0
+    const hours = Math.abs((time % Time.Day) / Time.Hour) | 0
+    const minutes = Math.abs((time % Time.Hour) / Time.Minute) | 0
+    const seconds = Math.abs((time % Time.Minute) / Time.Second) | 0
+    const milliseconds = Math.abs(time % Time.Second) | 0
 
     return {
       days,
