@@ -10,7 +10,7 @@ export type CountDown = {
   time: number
 }
 
-export default function useCountdown(until: Date, each: number = Time.Second): CountDown {
+export default function useCountdown(until: Date, each: number = Time.Second, countUp: boolean = false): CountDown {
 
   const [now, setNow] = useState(Date.now())
 
@@ -24,7 +24,7 @@ export default function useCountdown(until: Date, each: number = Time.Second): C
       const diff = now % each;
       setNow(now - diff)
 
-      if (now >= until.getTime() && interval) {
+      if (!countUp && now >= until.getTime() && interval) {
         clearInterval(interval)
       }
     }
@@ -45,24 +45,17 @@ export default function useCountdown(until: Date, each: number = Time.Second): C
     }
   }, [])
 
-  const time = Math.max(until.getTime() - now, 0)
-  return useMemo(() => {
-    if (time === 0) {
-      return {
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-        milliseconds: 0,
-        time
-      }
-    }
+  let time = until.getTime() - now
+  if (!countUp && time < 0) {
+    time = 0
+  }
 
-    const days = Math.floor(time / Time.Day)
-    const hours = Math.floor((time % Time.Day) / Time.Hour)
-    const minutes = Math.floor((time % Time.Hour) / Time.Minute)
-    const seconds = Math.floor((time % Time.Minute) / Time.Second)
-    const milliseconds = time % Time.Second
+  return useMemo(() => {
+    const days = Math.abs(Math.floor(time / Time.Day))
+    const hours = Math.abs(Math.floor((time % Time.Day) / Time.Hour))
+    const minutes = Math.abs(Math.floor((time % Time.Hour) / Time.Minute))
+    const seconds = Math.abs(Math.floor((time % Time.Minute) / Time.Second))
+    const milliseconds = Math.abs(time % Time.Second)
 
     return {
       days,
@@ -70,7 +63,8 @@ export default function useCountdown(until: Date, each: number = Time.Second): C
       minutes,
       seconds,
       milliseconds,
-      time
+      time,
+      countingUp: time < 0
     }
 
   }, [time])
