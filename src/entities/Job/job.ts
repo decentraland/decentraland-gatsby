@@ -22,6 +22,16 @@ export default class JobManager {
     this.pool = createPool(poolFactory, { min: 0, max })
   }
 
+  stats() {
+    return {
+      size: this.pool.size,
+      available: this.pool.available,
+      running: this.pool.borrowed,
+      pending: this.pool.pending,
+      ids: Array.from(this.running.values())
+    }
+  }
+
   use(jobName: string, job: Job, ...extraJobs: Job[]) {
     const jobs = this.jobs.get(jobName) || []
     this.jobs.set(jobName, [...jobs, job, ...extraJobs])
