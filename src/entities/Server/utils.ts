@@ -25,9 +25,11 @@ export async function listen(app: Application, port: number | string = DEFAULT_P
       } else {
         const interfaces = networkInterfaces()
         for (const details of Object.values(interfaces)) {
-          for (const detail of details) {
-            if (detail.family === 'IPv4') {
-              console.log(`running server on: ${protocol}${detail.address}:${port}`)
+          if (details) {
+            for (const detail of details) {
+              if (detail.family === 'IPv4') {
+                console.log(`running server on: ${protocol}${detail.address}:${port}`)
+              }
             }
           }
         }
