@@ -1,4 +1,5 @@
 import { createPool, Pool } from 'generic-pool'
+import { CronJob } from 'cron'
 import { JobSettings, NextFunction } from './types'
 import JobContext from './context'
 import Model from './model'
@@ -14,12 +15,15 @@ export default class JobManager {
 
   running = new Set<string>()
   jobs: Map<string, Job[]> = new Map()
+  crons: CronJob[] = []
   pool: Pool<any>;
   interval: NodeJS.Timeout
+  initialInterval: NodeJS.Timeout
 
   constructor(settings: JobSettings) {
     const max = settings.concurrency || Infinity
     this.pool = createPool(poolFactory, { min: 0, max })
+    this.cron('0 * * * * *', () => this.check())
   }
 
   stats() {
@@ -32,44 +36,56 @@ export default class JobManager {
     }
   }
 
-  use(jobName: string, job: Job, ...extraJobs: Job[]) {
+  define(jobName: string, job: Job, ...extraJobs: Job[]) {
     const jobs = this.jobs.get(jobName) || []
     this.jobs.set(jobName, [...jobs, job, ...extraJobs])
     return this
   }
 
-  start(checkInterval: number = 1000 * 60) {
-    this.interval = setTimeout(() => {
-      this.interval = setInterval(() => this.check(), checkInterval)
-      this.check()
-    }, Date.now() % checkInterval)
+  cron(cronTime: string | Date, job: Job, ...extraJobs: Job[]) {
+    this.crons.push(new CronJob(cronTime, () => {
+      this.runJobs(null, null, {}, [job, ...extraJobs])
+    }))
+  }
+
+  start() {
+    this.crons.forEach(cron => cron.start())
+  }
+
+  stop() {
+    this.crons.forEach(cron => cron.stop())
   }
 
   async check() {
     const jobs = await Model.getPending()
-    return Promise.all(jobs.map(job => this.runJob(job.id, job.name, job.payload)))
+    await Promise.all(jobs.map(job => this.run(job.id, job.name, job.payload)))
   }
 
   async schedule(jobName: string, date: Date, payload: object = {}) {
     const job = await Model.schedule(jobName, date, payload)
     if (job.run_at.getTime() < Date.now()) {
-      this.runJob(job.id, job.name, job.payload)
+      this.run(job.id, job.name, job.payload)
     }
 
     return job
   }
 
-  async runJob(id: string, name: string, payload: any): Promise<void> {
+  async run(id: string | null, name: string, payload: any): Promise<void> {
+
     if (!this.jobs.has(name)) {
       console.log(`Missing job: ${name} (id: "${id}")`)
       return
     }
 
-    if (this.running.has(id)) {
+    if (id && this.running.has(id)) {
       console.log(`Job ${name} (id: "${id}") is already running`)
       return
     }
 
+    await this.runJobs(id, name, payload, this.jobs.get(name) as Job[])
+  }
+
+  async runJobs(id: string | null, name: string | null, payload: any, jobs: Job[]): Promise<void> {
     let current = 0;
 
     const schedule = (jobName: string, date: Date, payload: object = {}) => {
@@ -83,8 +99,6 @@ export default class JobManager {
       schedule
     )
 
-    const jobs = this.jobs.get(name) as Job[];
-
     const next = async (): Promise<void> => {
       const i = current
       if (jobs[i]) {
@@ -94,17 +108,17 @@ export default class JobManager {
       }
     }
 
-    this.running.add(id)
+    id && this.running.add(id)
     const resource = this.pool.acquire()
 
     try {
       await next()
-      await Model.complete(id)
+      id && await Model.complete(id)
     } catch (err) {
       console.error(`Error running job: "${name}" (id: "${id}")`, err)
     }
 
     await this.pool.release(resource)
-    this.running.delete(id)
+    id && this.running.delete(id)
   }
 }
