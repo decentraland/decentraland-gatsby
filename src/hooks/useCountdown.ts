@@ -8,6 +8,7 @@ export type CountDown = {
   seconds: number
   milliseconds: number
   time: number
+  countingUp: boolean
 }
 
 export default function useCountdown(until: Date, each: number = Time.Second, countUp: boolean = false): CountDown {
