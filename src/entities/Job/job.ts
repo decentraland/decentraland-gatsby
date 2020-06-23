@@ -1,15 +1,10 @@
-import { createPool, Pool } from 'generic-pool'
 import { CronJob } from 'cron'
 import { JobSettings, NextFunction } from './types'
 import JobContext from './context'
 import Model from './model'
+import { createVoidPool, Pool } from '../Pool/utils'
 
 export type Job = <P extends object = {}>(ctx: JobContext<P>, next: NextFunction) => Promise<void>
-
-const poolFactory = {
-  async create() { return () => null },
-  async destroy() { }
-}
 
 export default class JobManager {
 
@@ -22,7 +17,7 @@ export default class JobManager {
 
   constructor(settings: JobSettings) {
     const max = settings.concurrency || Infinity
-    this.pool = createPool(poolFactory, { min: 0, max })
+    this.pool = createVoidPool({ min: 0, max })
     this.cron('0 * * * * *', () => this.check())
   }
 
