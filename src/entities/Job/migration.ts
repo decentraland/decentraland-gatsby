@@ -6,7 +6,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
 
   pgm.createTable(Model.tableName, {
     id: {
-      type: 'UUID',
+      type: 'TEXT',
       notNull: true,
       primaryKey: true,
     },
@@ -15,15 +15,15 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       notNull: true,
     },
     payload: {
-      type: 'JSON',
+      type: 'TEXT',
       notNull: true
     },
     run_at: {
-      type: 'TIMESTAMP',
+      type: 'TIMESTAMPTZ',
       notNull: true
     },
     created_at: {
-      type: 'TIMESTAMP',
+      type: 'TIMESTAMPTZ',
       notNull: true,
       default: 'now()'
     }
