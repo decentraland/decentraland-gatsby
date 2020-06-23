@@ -103,17 +103,23 @@ export default class JobManager {
       }
     }
 
-    id && this.running.add(id)
+    if (id) {
+      this.running.add(id)
+    }
     const resource = await this.pool.acquire()
 
     try {
       await next()
-      id && await Model.complete(id)
+      if (id) {
+        await Model.complete(id)
+      }
     } catch (err) {
       console.error(`Error running job: "${name}" (id: "${id}")`, err)
     }
 
     await this.pool.release(resource)
-    id && this.running.delete(id)
+    if (id) {
+      this.running.delete(id)
+    }
   }
 }
