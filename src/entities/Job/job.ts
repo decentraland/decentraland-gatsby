@@ -109,7 +109,7 @@ export default class JobManager {
     }
 
     id && this.running.add(id)
-    const resource = this.pool.acquire()
+    const resource = await this.pool.acquire()
 
     try {
       await next()
