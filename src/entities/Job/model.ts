@@ -10,6 +10,7 @@ export default class Job extends Model<JobAttributes> {
   static build(job: JobAttributes): JobAttributes {
     return {
       ...job,
+      payload: JSON.parse(job.payload as any || '{}'),
       run_at: new Date(job.run_at.toString()),
       created_at: new Date(job.created_at.toString())
     }
@@ -24,7 +25,7 @@ export default class Job extends Model<JobAttributes> {
     const job: JobAttributes = {
       id: uuid(),
       name,
-      payload,
+      payload: JSON.stringify(payload),
       run_at: date,
       created_at: new Date()
     }
