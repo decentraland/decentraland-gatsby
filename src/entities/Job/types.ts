@@ -7,7 +7,8 @@ export type JobAttributes<P extends object = {}> = {
 }
 
 export type JobSettings = {
-  concurrency: number
+  concurrency: number,
+  memory: boolean,
 }
 
 export type NextFunction = () => Promise<void>

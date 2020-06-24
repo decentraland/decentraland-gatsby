@@ -3,11 +3,13 @@ import { JobSettings, NextFunction } from './types'
 import JobContext from './context'
 import Model from './model'
 import { createVoidPool, Pool } from '../Pool/utils'
+import MemoryModel from './memory'
 
 export type Job = <P extends object = {}>(ctx: JobContext<P>, next: NextFunction) => Promise<void>
 
 export default class JobManager {
 
+  memory: boolean = false;
   running = new Set<string>()
   jobs: Map<string, Job[]> = new Map()
   crons: CronJob[] = []
@@ -18,7 +20,16 @@ export default class JobManager {
   constructor(settings: JobSettings) {
     const max = settings.concurrency || Infinity
     this.pool = createVoidPool({ min: 0, max })
+    this.memory = !!settings.memory
     this.cron('0 * * * * *', () => this.check())
+  }
+
+  getModel() {
+    if (this.memory) {
+      return MemoryModel
+    }
+
+    return Model
   }
 
   stats() {
@@ -52,12 +63,12 @@ export default class JobManager {
   }
 
   async check() {
-    const jobs = await Model.getPending()
+    const jobs = await this.getModel().getPending()
     await Promise.all(jobs.map(job => this.run(job.id, job.name, job.payload)))
   }
 
   async schedule(jobName: string, date: Date, payload: object = {}) {
-    const job = await Model.schedule(jobName, date, payload)
+    const job = await this.getModel().schedule(jobName, date, payload)
     if (job.run_at.getTime() < Date.now()) {
       this.run(job.id, job.name, job.payload)
     }
@@ -111,7 +122,7 @@ export default class JobManager {
     try {
       await next()
       if (id) {
-        await Model.complete(id)
+        await this.getModel().complete(id)
       }
     } catch (err) {
       console.error(`Error running job: "${name}" (id: "${id}")`, err)

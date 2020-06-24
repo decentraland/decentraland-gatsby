@@ -17,8 +17,8 @@ export default class Job extends Model<JobAttributes> {
   }
 
   static async getPending() {
-    const jobs = await Job.query(SQL`SELECT * FROM jobs WHERE run_at >= now()`)
-    return jobs.map(job => Job.build(job))
+    const jobs = await this.query(SQL`SELECT * FROM jobs WHERE run_at >= now()`)
+    return jobs.map(job => this.build(job))
   }
 
   static async schedule(name: string, date: Date, payload: object = {}) {
@@ -30,7 +30,7 @@ export default class Job extends Model<JobAttributes> {
       created_at: new Date()
     }
 
-    return Job.build(await Job.create(job))
+    return this.build(await this.create(job))
   }
 
   static async complete(id: string): Promise<boolean> {
@@ -38,6 +38,6 @@ export default class Job extends Model<JobAttributes> {
       return false
     }
 
-    return Job.delete({ id })
+    return this.delete({ id })
   }
 }
