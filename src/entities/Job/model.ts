@@ -17,7 +17,7 @@ export default class Job extends Model<JobAttributes> {
   }
 
   static async getPending() {
-    const jobs = await this.query(SQL`SELECT * FROM jobs WHERE run_at >= ${new Date()}`)
+    const jobs = await this.query(SQL`SELECT * FROM jobs WHERE run_at <= ${new Date()}`)
     return jobs.map(job => this.build(job))
   }
 
