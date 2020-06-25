@@ -8,7 +8,7 @@ export default class JobContext<P extends object = {}> {
     private _schedule: ScheduleFunction,
   ) { }
 
-  log(...args: any[]) { console.log(`[${this.name}]`, ...args) }
+  log(...args: any[]) { console.log(`[${this.name || 'cron'}]`, ...args) }
 
   schedule(name: string | null, date: Date, payload: object = {}) {
     if (name) {

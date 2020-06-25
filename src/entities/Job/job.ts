@@ -5,13 +5,15 @@ import Model from './model'
 import { createVoidPool, Pool } from '../Pool/utils'
 import MemoryModel from './memory'
 
-export type Job = <P extends object = {}>(ctx: JobContext<P>, next: NextFunction) => Promise<void>
+export interface Job<P extends object = {}> {
+  (ctx: JobContext<P>, next: NextFunction): Promise<void>
+}
 
 export default class JobManager {
 
   memory: boolean = false;
   running = new Set<string>()
-  jobs: Map<string, Job[]> = new Map()
+  jobs: Map<string, Job<any>[]> = new Map()
   crons: CronJob[] = []
   pool: Pool<any>;
   interval: NodeJS.Timeout
@@ -21,7 +23,7 @@ export default class JobManager {
     const max = settings.concurrency || Infinity
     this.pool = createVoidPool({ min: 0, max })
     this.memory = !!settings.memory
-    this.cron('0 * * * * *', () => this.check())
+    this.cron('*/15 * * * * *', () => this.check())
   }
 
   getModel() {
@@ -42,15 +44,15 @@ export default class JobManager {
     }
   }
 
-  define(jobName: string, job: Job, ...extraJobs: Job[]) {
+  define(jobName: string, job: Job<any>, ...extraJobs: Job<any>[]) {
     const jobs = this.jobs.get(jobName) || []
     this.jobs.set(jobName, [...jobs, job, ...extraJobs])
     return this
   }
 
-  cron(cronTime: string | Date, job: Job, ...extraJobs: Job[]) {
+  cron(cronTime: string | Date, job: Job<any>, ...extraJobs: Job<any>[]) {
     this.crons.push(new CronJob(cronTime, () => {
-      this.runJobs(null, null, {}, [job, ...extraJobs])
+      this.runJobs(null, 'cron', {}, [job, ...extraJobs])
     }))
   }
 
@@ -88,10 +90,10 @@ export default class JobManager {
       return
     }
 
-    await this.runJobs(id, name, payload, this.jobs.get(name) as Job[])
+    await this.runJobs(id, name, payload, this.jobs.get(name) as Job<any>[])
   }
 
-  async runJobs(id: string | null, name: string | null, payload: any, jobs: Job[]): Promise<void> {
+  async runJobs(id: string | null, name: string | null, payload: any, jobs: Job<any>[]): Promise<void> {
     let current = 0;
 
     const schedule = (jobName: string, date: Date, payload: object = {}) => {
