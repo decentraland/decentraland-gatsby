@@ -25,7 +25,7 @@ export default class Job extends Model<JobAttributes> {
     const job: JobAttributes = {
       id: uuid(),
       name,
-      payload: JSON.stringify(payload),
+      payload: payload,
       run_at: date,
       created_at: new Date()
     }
@@ -33,7 +33,7 @@ export default class Job extends Model<JobAttributes> {
     const query = SQL`
       INSERT
         INTO ${raw(Job.tableName)} (id, name, payload, run_at, created_at)
-        VALUES (${job.id}, ${job.name}, ${job.payload}, ${job.run_at}, ${job.created_at})
+        VALUES (${job.id}, ${job.name}, ${JSON.stringify(job.payload)}, ${job.run_at}, ${job.created_at})
     `
 
     await Job.query(query)
