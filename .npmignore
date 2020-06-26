@@ -10,4 +10,3 @@ dist/**/*.test.d.ts
 .github
 .vscode
 test
-tsconfig.json
