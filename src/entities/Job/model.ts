@@ -1,5 +1,5 @@
 
-import { Model, SQL } from 'decentraland-server'
+import { Model, SQL, raw } from 'decentraland-server'
 import { JobAttributes } from './types'
 import isUUID from 'validator/lib/isUUID'
 import { v4 as uuid } from 'uuid'
@@ -17,7 +17,7 @@ export default class Job extends Model<JobAttributes> {
   }
 
   static async getPending() {
-    const jobs = await this.query(SQL`SELECT * FROM jobs WHERE run_at <= ${new Date()}`)
+    const jobs = await this.query(SQL`SELECT * FROM ${raw(Job.tableName)} WHERE run_at <= ${new Date()}`)
     return jobs.map(job => this.build(job))
   }
 
@@ -30,7 +30,14 @@ export default class Job extends Model<JobAttributes> {
       created_at: new Date()
     }
 
-    return this.build(await this.create(job))
+    const query = SQL`
+      INSERT
+        INTO ${raw(Job.tableName)} (id, name, payload, run_at, created_at)
+        VALUES (${job.id}, ${job.name}, ${job.payload}, ${job.run_at}, ${job.created_at})
+    `
+
+    await Job.query(query)
+    return job;
   }
 
   static async complete(id: string): Promise<boolean> {
