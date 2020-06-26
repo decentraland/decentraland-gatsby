@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { Authenticator, AuthLinkType, AuthIdentity, AuthChain } from 'dcl-crypto'
+import { Authenticator, AuthLinkType, AuthIdentity, AuthChain, parseEmphemeralPayload } from 'dcl-crypto'
 import { fromBase64 } from '../../utils/base64'
 import { HttpProvider } from 'web3x/providers'
 import RequestError from '../Route/error'
@@ -30,13 +30,18 @@ export function auth(options: AuthOptions = {}) {
       throw new RequestError(`Invalid authorization type: "${type}"`, RequestError.Unauthorized)
     }
 
-    let identity: AuthIdentity
+    // let identity: AuthIdentity
+    let ephemeralAddress: string
+    let authChain: AuthChain
     try {
       const data = fromBase64(token)
-      identity = JSON.parse(data) as AuthIdentity
+      const identity = JSON.parse(data) as AuthIdentity | AuthChain
+      authChain = Array.isArray(identity) ? identity : identity.authChain
+      const ephemeralPayloadLink = authChain.find(link => link.type === AuthLinkType.ECDSA_PERSONAL_EPHEMERAL)
+      const ephemeralPayload = parseEmphemeralPayload(ephemeralPayloadLink && ephemeralPayloadLink.payload || '')
+      ephemeralAddress = ephemeralPayload.ephemeralAddress
     } catch (error) {
       console.log(error)
-
       if (options.allowInvalid) {
         return
       } else {
@@ -44,11 +49,21 @@ export function auth(options: AuthOptions = {}) {
       }
     }
 
-    const result = await Authenticator.validateSignature(
-      identity.ephemeralIdentity.address,
-      identity.authChain,
-      new HttpProvider('https://mainnet.infura.io/v3/640777fe168f4b0091c93726b4f0463a')
-    )
+    let result: { ok: boolean, message?: string } = { ok: false }
+    try {
+      result = await Authenticator.validateSignature(
+        ephemeralAddress,
+        authChain,
+        new HttpProvider('https://mainnet.infura.io/v3/640777fe168f4b0091c93726b4f0463a')
+      )
+    } catch (error) {
+      console.error(error)
+      if (options.allowInvalid) {
+        return
+      } else {
+        throw new RequestError(`Invalid authorization token sign`, RequestError.Unauthorized)
+      }
+    }
 
     if (!result.ok && options.allowInvalid) {
       return
@@ -56,17 +71,8 @@ export function auth(options: AuthOptions = {}) {
       throw new RequestError(result.message || 'Invalid authorization data', RequestError.Forbidden)
     }
 
-    const auth = getPayload(identity.authChain, AuthLinkType.SIGNER)
+    const auth = Authenticator.ownerAddress(authChain).toLowerCase()
     Object.assign(req, { auth })
   })
 }
 
-function getPayload(authChain: AuthChain, type: AuthLinkType) {
-  for (const chain of authChain) {
-    if (chain.type === type) {
-      return chain.payload.toLowerCase()
-    }
-  }
-
-  return null
-}
