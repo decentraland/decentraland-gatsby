@@ -37,7 +37,7 @@ export function auth(options: AuthOptions = {}) {
       const data = fromBase64(token)
       const identity = JSON.parse(data) as AuthIdentity | AuthChain
       authChain = Array.isArray(identity) ? identity : identity.authChain
-      const ephemeralPayloadLink = authChain.find(link => link.type === AuthLinkType.ECDSA_PERSONAL_EPHEMERAL)
+      const ephemeralPayloadLink = authChain.find(link => [AuthLinkType.ECDSA_PERSONAL_EPHEMERAL, AuthLinkType.ECDSA_EIP_1654_EPHEMERAL].includes(link.type))
       const ephemeralPayload = parseEmphemeralPayload(ephemeralPayloadLink && ephemeralPayloadLink.payload || '')
       ephemeralAddress = ephemeralPayload.ephemeralAddress
     } catch (error) {
