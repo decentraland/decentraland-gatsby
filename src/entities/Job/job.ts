@@ -66,7 +66,11 @@ export default class JobManager {
 
   async check() {
     const jobs = await this.getModel().getPending()
-    await Promise.all(jobs.map(job => this.run(job.id, job.name, job.payload)))
+    const pendingJobs = jobs.filter(job => !this.running.has(job.id))
+
+    if (pendingJobs.length) {
+      await Promise.all(pendingJobs.map(job => this.run(job.id, job.name, job.payload)))
+    }
   }
 
   async schedule(jobName: string, date: Date, payload: object = {}) {
