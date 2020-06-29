@@ -1,4 +1,4 @@
-import { ScheduleFunction } from "./types";
+import { ScheduleFunction, UpdatePayloadFunction } from "./types";
 
 export default class JobContext<P extends object = {}> {
   constructor(
@@ -6,13 +6,20 @@ export default class JobContext<P extends object = {}> {
     public name: string | null,
     public payload: P = {} as P,
     private _schedule: ScheduleFunction,
+    private _update: UpdatePayloadFunction,
   ) { }
 
   log(...args: any[]) { console.log(`[${this.name || 'cron'}]`, ...args) }
 
-  schedule(name: string | null, date: Date, payload: object = {}) {
+  async updatePayload(payload: object = {}) {
+    if (this.id) {
+      await this._update(this.id, payload)
+    }
+  }
+
+  async schedule(name: string | null, date: Date, payload: object = {}) {
     if (name) {
-      this._schedule(name, date, payload)
+      await this._schedule(name, date, payload)
     }
   }
 }

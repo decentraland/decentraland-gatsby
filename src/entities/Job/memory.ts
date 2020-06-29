@@ -22,8 +22,14 @@ export default class MemoryModel {
     return job
   }
 
-  static async complete(id: string): Promise<boolean> {
+  static async updatePayload(id: string, payload: object = {}) {
+    const prev = this.cache.get(id)
+    if (prev) {
+      this.cache.set(id, { ...prev, payload })
+    }
+  }
 
+  static async complete(id: string): Promise<boolean> {
     return this.cache.delete(id)
   }
 }

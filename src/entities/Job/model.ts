@@ -17,8 +17,27 @@ export default class Job extends Model<JobAttributes> {
   }
 
   static async getPending() {
-    const jobs = await this.query(SQL`SELECT * FROM ${raw(Job.tableName)} WHERE run_at <= ${new Date()}`)
-    return jobs.map(job => this.build(job))
+    const query = SQL`SELECT * FROM ${raw(Job.tableName)} WHERE run_at <= ${new Date()}`
+    try {
+      const jobs = await this.query(query)
+      return jobs.map(job => this.build(job))
+    } catch (err) {
+      throw Object.assign(new Error(err.message), { query: query.text })
+    }
+  }
+
+  static async updatePayload(id: string, payload: object = {}) {
+    if (!id) {
+      return
+    }
+
+    const query = SQL`UPDATE INTO ${raw(Job.tableName)} SET payload = '${JSON.stringify(payload)}' WHERE id = '${id}'`
+    try {
+      const result = await Job.query(query)
+      return result
+    } catch (err) {
+      throw Object.assign(new Error(err.message), { query: query.text })
+    }
   }
 
   static async schedule(name: string, date: Date, payload: object = {}) {
@@ -36,8 +55,12 @@ export default class Job extends Model<JobAttributes> {
         VALUES (${job.id}, ${job.name}, ${JSON.stringify(job.payload)}, ${job.run_at}, ${job.created_at})
     `
 
-    await Job.query(query)
-    return job;
+    try {
+      await Job.query(query)
+      return job;
+    } catch (err) {
+      throw Object.assign(new Error(err.message), { query: query.text })
+    }
   }
 
   static async complete(id: string): Promise<boolean> {

@@ -13,4 +13,5 @@ export type JobSettings = {
 
 export type NextFunction = () => Promise<void>
 
-export type ScheduleFunction = (jobName: string, date: Date, payload?: object) => void
+export type ScheduleFunction = (jobName: string, date: Date, payload?: object) => Promise<void>
+export type UpdatePayloadFunction = (id: string, payload?: object) => Promise<void>

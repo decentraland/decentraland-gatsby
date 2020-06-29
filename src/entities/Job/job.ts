@@ -73,13 +73,15 @@ export default class JobManager {
     }
   }
 
-  async schedule(jobName: string, date: Date, payload: object = {}) {
+  updatePayload = async (id: string, payload: object = {}) => {
+    await this.getModel().updatePayload(id, payload)
+  }
+
+  schedule = async (jobName: string, date: Date, payload: object = {}) => {
     const job = await this.getModel().schedule(jobName, date, payload)
     if (job.run_at.getTime() < Date.now()) {
       this.run(job.id, job.name, job.payload)
     }
-
-    return job
   }
 
   async run(id: string | null, name: string, payload: any): Promise<void> {
@@ -100,15 +102,12 @@ export default class JobManager {
   async runJobs(id: string | null, name: string | null, payload: any, jobs: Job<any>[]): Promise<void> {
     let current = 0;
 
-    const schedule = (jobName: string, date: Date, payload: object = {}) => {
-      return this.schedule(jobName, date, payload)
-    }
-
     const context = new JobContext(
       id,
       name,
       payload || {},
-      schedule
+      this.schedule,
+      this.updatePayload
     )
 
     const next = async (): Promise<void> => {
