@@ -31,7 +31,7 @@ export default class Job extends Model<JobAttributes> {
       return
     }
 
-    const query = SQL`UPDATE ${raw(Job.tableName)} SET payload = '${JSON.stringify(payload)}' WHERE id = '${id}'`
+    const query = SQL`UPDATE ${raw(Job.tableName)} SET payload = ${JSON.stringify(payload)} WHERE id = ${id}`
     try {
       const result = await Job.query(query)
       return result
