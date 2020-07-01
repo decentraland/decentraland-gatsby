@@ -12,12 +12,13 @@ export interface Job<P extends object = {}> {
 export default class JobManager {
 
   memory: boolean = false;
-  running = new Set<string>()
+  runningJobs = new Set<string>()
   jobs: Map<string, Job<any>[]> = new Map()
   crons: CronJob[] = []
   pool: Pool<any>;
   interval: NodeJS.Timeout
   initialInterval: NodeJS.Timeout
+  running: boolean = false
 
   constructor(settings: JobSettings) {
     const max = settings.concurrency || Infinity
@@ -40,7 +41,7 @@ export default class JobManager {
       available: this.pool.available,
       running: this.pool.borrowed,
       pending: this.pool.pending,
-      ids: Array.from(this.running.values())
+      ids: Array.from(this.runningJobs.values())
     }
   }
 
@@ -58,18 +59,20 @@ export default class JobManager {
 
   start() {
     this.crons.forEach(cron => cron.start())
+    this.running = true
   }
 
   stop() {
     this.crons.forEach(cron => cron.stop())
+    this.running = false
   }
 
   async check() {
     const jobs = await this.getModel().getPending()
-    const pendingJobs = jobs.filter(job => !this.running.has(job.id))
+    const pendingJobs = jobs.filter(job => !this.runningJobs.has(job.id))
 
     if (pendingJobs.length) {
-      await Promise.all(pendingJobs.map(job => this.run(job.id, job.name, job.payload)))
+      Promise.all(pendingJobs.map(job => this.run(job.id, job.name, job.payload)))
     }
   }
 
@@ -79,7 +82,7 @@ export default class JobManager {
 
   schedule = async (jobName: string, date: Date, payload: object = {}) => {
     const job = await this.getModel().schedule(jobName, date, payload)
-    if (job.run_at.getTime() < Date.now()) {
+    if (this.running && job.run_at.getTime() < Date.now()) {
       this.run(job.id, job.name, job.payload)
     }
   }
@@ -91,7 +94,7 @@ export default class JobManager {
       return
     }
 
-    if (id && this.running.has(id)) {
+    if (id && this.runningJobs.has(id)) {
       console.log(`Job ${name} (id: "${id}") is already running`)
       return
     }
@@ -120,7 +123,7 @@ export default class JobManager {
     }
 
     if (id) {
-      this.running.add(id)
+      this.runningJobs.add(id)
     }
     const resource = await this.pool.acquire()
 
@@ -130,12 +133,12 @@ export default class JobManager {
         await this.getModel().complete(id)
       }
     } catch (err) {
-      console.error(`Error running job: "${name}" (id: "${id}")`, err)
+      context.log(`error running job: `, err)
     }
 
     await this.pool.release(resource)
     if (id) {
-      this.running.delete(id)
+      this.runningJobs.delete(id)
     }
   }
 }
