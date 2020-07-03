@@ -1,4 +1,4 @@
-import { Model, raw, SQLStatement, SQL } from "decentraland-server";
+import { Model, raw, SQLStatement, SQL, SQLInterface } from "decentraland-server";
 import { LimitOptions } from "./types";
 
 export interface ModelConstructor {
@@ -16,6 +16,19 @@ export function conditional(condition: boolean, statement: SQLStatement) {
   } else {
     return SQL``
   }
+}
+
+export function join(statements: (SQLStatement | string)[] = [], glue: SQLStatement | string = SQL`, `) {
+  const result = SQL``
+  statements.forEach((statement, i) => {
+    if (i === 0) {
+      result.append(glue)
+    }
+
+    result.append(statement)
+  })
+
+  return result
 }
 
 export function values(list: any[]) {
