@@ -37,13 +37,13 @@ storiesOf('Hooks', module)
       <Paragraph><Code inline>until: Date</Code> the finish of the countdown.</Paragraph>
       <Paragraph><Code inline>each: number = Time.Second</Code> update interval of the countdown.</Paragraph>
       <Divider size="small" />
-      <Paragraph><Code inline>countdown: Object</Code></Paragraph>
-      <Paragraph><Code inline>countdown.days: number (>=0)</Code> days until the countdown finish.</Paragraph>
-      <Paragraph><Code inline>countdown.hours: number (>=0)</Code> hours until days decreases.</Paragraph>
-      <Paragraph><Code inline>countdown.minutes: number (>=0)</Code> minutes until hours decreases.</Paragraph>
-      <Paragraph><Code inline>countdown.seconds: number (>=0)</Code> seconds until minutes decreases.</Paragraph>
-      <Paragraph><Code inline>countdown.milliseconds: number (>=0)</Code> milliseconds until seconds decreases.</Paragraph>
-      <Paragraph><Code inline>countdown.time: number (>=0)</Code> milliseconds until the countdown finish.</Paragraph>
+      <Paragraph><Code inline>{'countdown: Object'}</Code></Paragraph>
+      <Paragraph><Code inline>{'countdown.days: number (>=0)'}</Code> days until the countdown finish.</Paragraph>
+      <Paragraph><Code inline>{'countdown.hours: number (>=0)'}</Code> hours until days decreases.</Paragraph>
+      <Paragraph><Code inline>{'countdown.minutes: number (>=0)'}</Code> minutes until hours decreases.</Paragraph>
+      <Paragraph><Code inline>{'countdown.seconds: number (>=0)'}</Code> seconds until minutes decreases.</Paragraph>
+      <Paragraph><Code inline>{'countdown.milliseconds: number (>=0)'}</Code> milliseconds until seconds decreases.</Paragraph>
+      <Paragraph><Code inline>{'countdown.time: number (>=0)'}</Code> milliseconds until the countdown finish.</Paragraph>
       <Divider size="small" />
       <Title>Live example:</Title>
       <Code note="completed" language="json">{JSON.stringify(completed, null, 2)}</Code>

@@ -25,7 +25,7 @@ storiesOf('Hero', module)
       <Paragraph secondary>Define a background cover for a <Code inline>Hero</Code> Component</Paragraph>
       <Divider size="small" line />
 
-      <Code language="tsx" >{`<Background src="https://landing-org-1i93wf07p.now.sh/static/back....png" />`}</Code>
+      <Code language="tsx">{`<Background src="https://landing-org-1i93wf07p.now.sh/static/back....png" />`}</Code>
       <div style={{ height: '500px' }}>
         <Hero>
           <Hero.Content>
@@ -43,11 +43,11 @@ storiesOf('Hero', module)
       <Paragraph secondary>Extend a <Link href="https://www.framer.com/motion/">Motion</Link> component as an image for <Code inline>Hero</Code> Component.</Paragraph>
       <Divider size="small" line />
 
-      <Code language="tsx" >{`<Image src="https://landing-org-1i93wf07p.now.sh/static/back....png" />`}</Code>
+      <Code language="tsx">{`<Image src="https://landing-org-1i93wf07p.now.sh/static/back....png" />`}</Code>
       <Paragraph>
-        <Link href="https://www.framer.com/motion/#features">Explore features ></Link>
+        <Link href="https://www.framer.com/motion/#features">{'Explore features >'}</Link>
         <br />
-        <Link href="https://www.framer.com/api/motion/">Full motion documentation ></Link>
+        <Link href="https://www.framer.com/api/motion/">{'Full motion documentation >'}</Link>
       </Paragraph>
       <div style={{ height: '500px' }}>
         <Hero>
@@ -75,7 +75,7 @@ storiesOf('Hero', module)
       <Paragraph secondary>Define and animate an image over <Code inline>Hero</Code> Component</Paragraph>
       <Divider size="small" line />
 
-      <Code language="tsx" >{`<DAOBackground />`}</Code>
+      <Code language="tsx">{`<DAOBackground />`}</Code>
       <div style={{ height: '500px' }}>
         <Hero>
           <Hero.Content>
