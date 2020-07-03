@@ -18,6 +18,20 @@ export function conditional(condition: boolean, statement: SQLStatement) {
   }
 }
 
+export function values(list: any[]) {
+  const sql = SQL`(`
+  list.forEach((item, i) => {
+    if (i !== 0) {
+      sql.append(', ')
+    }
+
+    sql.append(`${item}`)
+  })
+
+  sql.append(SQL`)`)
+  return sql
+}
+
 export function offset(value: number | null | undefined) {
   if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) {
     return SQL``
