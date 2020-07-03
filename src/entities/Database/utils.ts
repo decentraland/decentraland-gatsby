@@ -1,4 +1,4 @@
-import { Model, raw, SQLStatement, SQL, SQLInterface } from "decentraland-server";
+import { Model, raw, SQLStatement, SQL } from "decentraland-server";
 import { LimitOptions } from "./types";
 
 export interface ModelConstructor {
