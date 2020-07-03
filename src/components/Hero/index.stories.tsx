@@ -34,7 +34,7 @@ storiesOf('Hero', module)
         </Hero>
       </div>
       <Divider />
-    </Container >
+    </Container>
   })
   .add('Image', () => {
     return <Container>
@@ -66,7 +66,7 @@ storiesOf('Hero', module)
         </Hero>
       </div>
       <Divider />
-    </Container >
+    </Container>
   })
   .add('DAOBackground', () => {
     return <Container>
@@ -84,5 +84,5 @@ storiesOf('Hero', module)
         </Hero>
       </div>
       <Divider />
-    </Container >
+    </Container>
   })
