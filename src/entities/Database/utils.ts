@@ -22,10 +22,10 @@ export function values(list: any[]) {
   const sql = SQL`(`
   list.forEach((item, i) => {
     if (i !== 0) {
-      sql.append(', ')
+      sql.append(SQL', ')
     }
 
-    sql.append(`${item}`)
+    sql.append(SQL`${item}`)
   })
 
   sql.append(SQL`)`)
