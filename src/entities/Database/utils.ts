@@ -31,6 +31,19 @@ export function join(statements: (SQLStatement | string)[] = [], glue: SQLStatem
   return result
 }
 
+export function keys(item: Record<string, any>) {
+  const sql = SQL`(`
+  Object.keys(item).forEach((k, i) => {
+    if (i !== 0) {
+      sql.append(SQL`, `)
+    }
+
+    sql.append(SQL`"${raw(k)}"`)
+  })
+  sql.append(SQL`)`)
+  return sql
+}
+
 export function values(list: any[]) {
   const sql = SQL`(`
   list.forEach((item, i) => {
