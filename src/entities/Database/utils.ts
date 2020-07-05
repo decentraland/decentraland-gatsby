@@ -18,42 +18,34 @@ export function conditional(condition: boolean, statement: SQLStatement) {
   }
 }
 
-export function join(statements: (SQLStatement | string)[] = [], glue: SQLStatement | string = SQL`, `) {
-  const result = SQL``
-  statements.forEach((statement, i) => {
-    if (i === 0) {
-      result.append(glue)
-    }
-
-    result.append(statement)
-  })
-
-  return result
-}
-
-export function keys(item: Record<string, any>) {
+export function columns(names: string[]) {
   const sql = SQL`(`
-  Object.keys(item).forEach((k, i) => {
+  names.forEach((name, i) => {
     if (i !== 0) {
       sql.append(SQL`, `)
     }
 
-    sql.append(SQL`"${raw(k)}"`)
+    sql.append(SQL`"${raw(name)}"`)
   })
   sql.append(SQL`)`)
   return sql
 }
 
-export function values(list: any[]) {
+export function values(names: string[], list: Record<string, any>[]) {
   const sql = SQL`(`
-  list.forEach((item, i) => {
+  list.forEach((_, i) => {
     if (i !== 0) {
-      sql.append(SQL`, `)
+      sql.append(SQL`), (`)
     }
 
-    sql.append(SQL`${item}`)
-  })
+    names.forEach((value, i) => {
+      if (i !== 0) {
+        sql.append(SQL`, `)
+      }
 
+      sql.append(SQL`${value}`)
+    })
+  })
   sql.append(SQL`)`)
   return sql
 }
