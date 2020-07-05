@@ -31,22 +31,31 @@ export function columns(names: string[]) {
   return sql
 }
 
-export function values(names: string[], list: Record<string, any>[]) {
+export function values(list: any[]) {
   const sql = SQL`(`
-  list.forEach((_, i) => {
+  list.forEach((item, i) => {
     if (i !== 0) {
-      sql.append(SQL`), (`)
+      sql.append(SQL`, `)
     }
 
-    names.forEach((value, i) => {
-      if (i !== 0) {
-        sql.append(SQL`, `)
-      }
-
-      sql.append(SQL`${value}`)
-    })
+    sql.append(SQL`${item}`)
   })
+
   sql.append(SQL`)`)
+  return sql
+}
+
+export function objectValues(names: string[], list: Record<string, any>[]) {
+  const sql = SQL``
+
+  list.forEach((item, i) => {
+    if (i !== 0) {
+      sql.append(SQL`, `)
+    }
+
+    sql.append(values(names.map(name => item[name])))
+  })
+
   return sql
 }
 
