@@ -11,11 +11,12 @@ export type ParagraphProps = React.Props<HTMLParagraphElement> &
     tiny?: boolean
     italic?: boolean
     bold?: boolean
+    semiBold?: boolean
     underline?: boolean
     uppercase?: boolean
   }
 
-export default function Paragraph({ primary, secondary, small, tiny, bold, italic, underline, uppercase, ...props }: ParagraphProps) {
+export default function Paragraph({ primary, secondary, small, tiny, bold, semiBold, italic, underline, uppercase, ...props }: ParagraphProps) {
   return (
     <p
       {...props}
@@ -25,6 +26,7 @@ export default function Paragraph({ primary, secondary, small, tiny, bold, itali
         primary && "Paragraph--primary",
         secondary && "Paragraph--secondary",
         bold && "Paragraph--bold",
+        semiBold && "Paragraph--semi-bold",
         italic && "Paragraph--italic",
         underline && "Paragraph--underline",
         small && "Paragraph--small",

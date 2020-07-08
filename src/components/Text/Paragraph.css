@@ -24,6 +24,10 @@
   color: var(--secondary-text);
 }
 
+.dg.Paragraph.Paragraph--semi-bold {
+  font-weight: 400;
+}
+
 .dg.Paragraph.Paragraph--bold {
   font-weight: bold;
 }
