@@ -22,9 +22,9 @@ export type Template = {
   TextPart: string,
 }
 
-export type SendOptions<R extends Record<string, string> = Record<string, string>> = {
+export type SendOptions<T extends string = string, R extends Record<string, string> = Record<string, string>> = {
   destinations: (string | Destination<R>)[],
-  template: string,
+  template: T,
   defaultReplacement?: R
 }
 
