@@ -1,34 +1,7 @@
 import { SES } from 'aws-sdk'
 import chuck from '../../utils/array/chunk';
 import { readTemplate } from './utils';
-
-export type SendOptions = {
-  destinations: (string | Destination)[],
-  template: string,
-  defaultReplacement?: Record<string, string>
-}
-
-export type Destination = {
-  email: string,
-  replacement: Record<string, string>
-}
-
-export type TemplateContent = {
-  Body: {
-    Html: {
-      Charset: string,
-      Data: string
-    },
-    Text: {
-      Charset: string,
-      Data: string
-    }
-  },
-  Subject: {
-    Charset: string,
-    Data: string
-  }
-}
+import { TemplateContent, SendOptions, Destination } from './types';
 
 export type Options = SES.Types.ClientConfiguration & {
   source?: string,

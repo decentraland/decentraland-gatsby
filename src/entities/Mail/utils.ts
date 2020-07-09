@@ -1,32 +1,9 @@
 import cherio from 'cherio'
 import { readFile } from 'fs'
 import { promisify } from 'util'
+import { Template } from './types'
 
 const read = promisify(readFile)
-
-export type TemplateContent = {
-  Body: {
-    Html: {
-      Charset: string,
-      Data: string
-    },
-    Text: {
-      Charset: string,
-      Data: string
-    }
-  },
-  Subject: {
-    Charset: string,
-    Data: string
-  }
-}
-
-export type Template = {
-  TemplateName: string,
-  SubjectPart: string,
-  HtmlPart: string,
-  TextPart: string,
-}
 
 export async function readTemplate(path: string, name: string): Promise<Template> {
   const TemplateName = name
