@@ -6,26 +6,26 @@ import { TemplateContent, SendOptions, Destination } from './types';
 export type Options = SES.Types.ClientConfiguration & {
   source?: string,
   path?: string,
-  production?: boolean,
+  bulk?: boolean,
 }
 
 export default class Sender {
   ses: SES;
   templateLoaded: Map<string, boolean> = new Map
   templateContent: Map<string, TemplateContent> = new Map
-  production: boolean;
+  bulk: boolean;
   path: string;
   source: string;
 
-  constructor({ path, production, source, ...options }: Options) {
+  constructor({ path, bulk, source, ...options }: Options) {
     this.ses = new SES(options)
     this.source = source || ''
     this.path = path ?? process.cwd()
-    this.production = production ?? false
+    this.bulk = bulk ?? false
   }
 
   async send(options: SendOptions) {
-    return this.production ? this.sendBulk(options) : this.sendAll(options)
+    return this.bulk ? this.sendBulk(options) : this.sendAll(options)
   }
 
   async sendAll(options: SendOptions) {
@@ -111,8 +111,13 @@ export default class Sender {
   }
 
   async deployTemplate(name: string) {
+    if (this.templateLoaded.get(name)) {
+      return true
+    }
+
     const templateExists = await this.checkTemplate(name)
     if (templateExists) {
+      this.templateLoaded.set(name, true)
       return true
     }
 
@@ -123,6 +128,7 @@ export default class Sender {
       })
     })
 
+    this.templateLoaded.set(name, true)
     return true
   }
 
