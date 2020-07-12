@@ -8,6 +8,7 @@ const detectors = {
   PushManager: () => 'PushManager' in window,
   Share: () => 'share' in navigator,
   ServiceWorker: () => 'serviceWorker' in navigator,
+  Notification: () => 'Notification' in window && 'permission' in Notification
 }
 
 export type Feature = keyof typeof detectors
