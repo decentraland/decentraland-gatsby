@@ -13,3 +13,19 @@ export function fromBase64(encoded: string) {
     return Buffer.from(encoded, 'base64').toString('utf8')
   }
 }
+
+export function fromWebPushKey(base64String: string) {
+  const padding = '='.repeat((4 - base64String.length % 4) % 4);
+  const base64 = (base64String + padding)
+    .replace(/\-/g, '+')
+    .replace(/_/g, '/');
+
+  const rawData = fromBase64(base64);
+  const outputArray = new Uint8Array(rawData.length);
+
+  for (let i = 0; i < rawData.length; ++i) {
+    outputArray[i] = rawData.charCodeAt(i);
+  }
+
+  return outputArray;
+}
