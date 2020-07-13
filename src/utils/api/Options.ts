@@ -19,8 +19,7 @@ export default class Options {
       }
     }
 
-    this.options = newOptions
-    return this
+    return new Options(newOptions)
   }
 
   set(options: Omit<RequestOptions, 'headers' | 'body'> = {}) {
