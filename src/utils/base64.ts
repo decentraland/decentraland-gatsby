@@ -1,8 +1,10 @@
-export function toBase64(original: string) {
+export function toBase64(original: string | ArrayBuffer) {
   if (typeof btoa === 'function') {
-    return btoa(original)
-  } else {
+    return btoa(original as string)
+  } else if (typeof original === 'string') {
     return Buffer.from(original, 'utf8').toString('base64')
+  } else {
+    return Buffer.from(original).toString('base64')
   }
 }
 
