@@ -16,14 +16,14 @@ function installDependencies(modules, dev) {
       grey(`    intalling ${dev ? 'devDependencies' : 'dependencies'}: `)
     )
     console.log()
-    modules.forEach(module => console.log(green('        ' + module)))
+    modules.forEach((module) => console.log(green('        ' + module)))
     console.log()
     const run = spawn(
       'npm',
       ['install', dev ? '-D' : '-s'].concat(modules || []),
       { stdio: 'inherit' }
     )
-    run.on('exit', code =>
+    run.on('exit', (code) =>
       code
         ? reject(new Error(`Installation exits with code ${code}`))
         : resolve(0)
@@ -64,6 +64,7 @@ Promise.resolve()
       'prettier',
       'concurrently',
       'ts-node',
+      'devcert@1.1.0',
       '@types/validator',
       '@types/node',
       '@types/isomorphic-fetch',
@@ -100,7 +101,7 @@ Promise.resolve()
       mark: true,
     })
 
-    files.forEach(file => {
+    files.forEach((file) => {
       const isDir = file.endsWith('/')
       const target = isDir ? file.slice(0, -1) : file
       console.log(grey('creating'), green(target))
@@ -119,14 +120,14 @@ Promise.resolve()
     console.log('\n', green(`Done! Have a nice day!`, '\n'))
     process.exit(0)
   })
-  .catch(err => {
+  .catch((err) => {
     console.log()
     console.error(red(`    ${err.message}`))
     console.error(
       grey(
         err.stack
           .split('\n')
-          .map(line => '    ' + line)
+          .map((line) => '    ' + line)
           .join('\n')
       )
     )
