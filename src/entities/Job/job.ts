@@ -24,7 +24,7 @@ export default class JobManager {
     const max = settings.concurrency || Infinity
     this.pool = createVoidPool({ min: 0, max })
     this.memory = !!settings.memory
-    this.cron('*/15 * * * * *', () => this.check())
+    this.cron(settings.cron || '0 * * * * *', () => this.check())
   }
 
   getModel() {
