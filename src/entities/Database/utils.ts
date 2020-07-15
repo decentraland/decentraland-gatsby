@@ -20,40 +20,31 @@ export function conditional(condition: boolean, statement: SQLStatement) {
 
 export function columns(names: string[]) {
   const sql = SQL`(`
-  names.forEach((name, i) => {
-    if (i !== 0) {
-      sql.append(SQL`, `)
-    }
-
-    sql.append(SQL`"${raw(name)}"`)
-  })
+  sql.append(join(names.map(name => SQL`"${raw(name)}"`)))
   sql.append(SQL`)`)
   return sql
 }
 
 export function values(list: any[]) {
   const sql = SQL`(`
-  list.forEach((item, i) => {
-    if (i !== 0) {
-      sql.append(SQL`, `)
-    }
-
-    sql.append(SQL`${item}`)
-  })
-
+  sql.append(join(list.map(item => SQL`${item}`)))
   sql.append(SQL`)`)
   return sql
 }
 
 export function objectValues(names: string[], list: Record<string, any>[]) {
+  return join(list.map(item => values(names.map(name => item[name]))))
+}
+
+export function join(statements: SQLStatement[], glue: SQLStatement = SQL`, `) {
   const sql = SQL``
 
-  list.forEach((item, i) => {
+  statements.forEach((statement, i) => {
     if (i !== 0) {
-      sql.append(SQL`, `)
+      sql.append(glue)
     }
 
-    sql.append(values(names.map(name => item[name])))
+    sql.append(statement)
   })
 
   return sql
