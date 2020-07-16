@@ -54,6 +54,7 @@ export default class Sender {
   async sendBulk(options: SendOptions) {
     const results: SES.SendBulkTemplatedEmailResponse[] = []
     const DefaultTemplateData = JSON.stringify(options.defaultReplacement || {})
+    await this.deployTemplate(options.template)
     for (const destinations of chuck(options.destinations, 50)) {
       const params = {
         Destinations: destinations.map(destination => {
@@ -99,6 +100,10 @@ export default class Sender {
       this.ses.getTemplate({ TemplateName: name }, (err, data) => {
         if (data) {
           return resolve(true)
+        }
+
+        if (err && err.code === 'TemplateDoesNotExist') {
+          return resolve(false)
         }
 
         return reject(err)
