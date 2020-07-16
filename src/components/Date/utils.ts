@@ -97,13 +97,12 @@ export type ToNumberOptions = {
   utc?: boolean
 }
 
-/**
- * @deprecated use `toPrefixedNumber` instead
- */
+/** @deprecated use `toPrefixedNumber` instead */
 export function toFixedNumber(value: number) {
   return toPrefixedNumber(value, 2)
 }
 
+/** @deprecated use `utils/number/pad` instead */
 export function toPrefixedNumber(value: number, length: number = 0) {
   let raw = String(value)
   let result = ''
@@ -124,12 +123,13 @@ export function toPrefixedNumber(value: number, length: number = 0) {
   return result
 }
 
-
+/** @deprecated use `utils/Datetime#getDatePadded` instead */
 export function toDayNumber(date: Date, options: ToNumberOptions = {}) {
   const day = options.utc ? date.getUTCDate() : date.getDate()
-  return toFixedNumber(day)
+  return (day)
 }
 
+/** @deprecated use `utils/Datetime#getDateName` instead */
 export function toDayName(date: Date, options: ToNameOptions = {}) {
   const day = options.utc ? date.getUTCDay() : date.getDay()
   let result = days[day]
@@ -145,6 +145,7 @@ export function toDayName(date: Date, options: ToNameOptions = {}) {
   return result;
 }
 
+/** @deprecated use `utils/Datetime#getMonthName` instead */
 export function toMonthName(date: Date, options: ToNameOptions = {}) {
   const month = options.utc ? date.getMonth() : date.getMonth()
   let result = months[month]
@@ -160,6 +161,7 @@ export function toMonthName(date: Date, options: ToNameOptions = {}) {
   return result;
 }
 
+/** @deprecated use `utils/Datetime#getTimezoneName` instead */
 export function toTimezoneName(value: Date) {
   const offset = value.getTimezoneOffset()
   const hour = toFixedNumber(Math.floor(offset / 60))
@@ -169,6 +171,7 @@ export function toTimezoneName(value: Date) {
   return `GMT${diff}${hour}:${minutes}`
 }
 
+/** @deprecated use `utils/Datetime#toInputDate` instead */
 export function toInputDate(date: Date): string {
   if (!date || Number.isNaN(date.getTime())) {
     return ''
@@ -184,6 +187,7 @@ export function toInputDate(date: Date): string {
   ].join('-')
 }
 
+/** @deprecated use `utils/Datetime#toInputDate` instead */
 export function toUTCInputDate(date: Date): string {
   if (!date || Number.isNaN(date.getTime())) {
     return ''
@@ -199,6 +203,7 @@ export function toUTCInputDate(date: Date): string {
   ].join('-')
 }
 
+/** @deprecated use `utils/Datetime@fromInputDate` instead */
 export function fromInputDate(value: string, base: Date = today()) {
   if (!value) {
     return base
@@ -212,6 +217,7 @@ export function fromInputDate(value: string, base: Date = today()) {
   return newDate
 }
 
+/** @deprecated use `utils/Datetime@fromInputDate` instead */
 export function fromUTCInputDate(value: string, base: Date = today()) {
   if (!value) {
     return base
@@ -225,6 +231,7 @@ export function fromUTCInputDate(value: string, base: Date = today()) {
   return newDate
 }
 
+/** @deprecated use `utils/Datetime#toInputTime` instead */
 export function toInputTime(date: Date): string {
   if (!date || Number.isNaN(date.getTime())) {
     return ''
@@ -239,6 +246,7 @@ export function toInputTime(date: Date): string {
   ].join(':')
 }
 
+/** @deprecated use `utils/Datetime#toInputTime` instead */
 export function toUTCInputTime(date: Date): string {
   if (!date || Number.isNaN(date.getTime())) {
     return ''
@@ -253,6 +261,7 @@ export function toUTCInputTime(date: Date): string {
   ].join(':')
 }
 
+/** @deprecated use `utils/Datetime@fromInputTime` instead */
 export function fromInputTime(value: string, base: Date = today()) {
   if (!value) {
     return base
@@ -265,7 +274,7 @@ export function fromInputTime(value: string, base: Date = today()) {
   return newDate
 }
 
-
+/** @deprecated use `utils/Datetime@fromInputTime` instead */
 export function fromUTCInputTime(value: string, base: Date = today()) {
   if (!value) {
     return base
@@ -278,6 +287,7 @@ export function fromUTCInputTime(value: string, base: Date = today()) {
   return newDate
 }
 
+/** @deprecated use `utils/Datetime#toGoogleCalendar` instead */
 export function toCalendarDate(date: Date) {
   const year = date.getUTCFullYear()
   const month = date.getUTCMonth() + 1
