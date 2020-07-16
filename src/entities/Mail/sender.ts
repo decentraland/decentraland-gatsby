@@ -101,10 +101,6 @@ export default class Sender {
           return resolve(true)
         }
 
-        if (err && err.code === 'TemplateDoesNotExist') {
-          return resolve(false)
-        }
-
         return reject(err)
       })
     })
