@@ -1,4 +1,5 @@
 import cherio from 'cherio'
+import htmlmin from 'htmlmin'
 import { readFile } from 'fs'
 import { promisify } from 'util'
 import { Template } from './types'
@@ -13,7 +14,7 @@ export async function readTemplate(path: string, name: string): Promise<Template
 
   const SubjectPart = $('title').text().trim() as string
   const TextPart = $('noscript').text().trim() as string
-  const HtmlPart = $('body').html().trim() as string
+  const HtmlPart = htmlmin($('body').html().trim() as string || '')
 
   return {
     TemplateName,

@@ -92,6 +92,7 @@
     "generic-pool": "^3.7.1",
     "glob": "^7.1.6",
     "highlight.js": "^9.18.1",
+    "htmlmin": "0.0.7",
     "immutable": "^4.0.0-rc.12",
     "isomorphic-fetch": "^2.2.1",
     "node-pg-migrate": "^5.1.1",
