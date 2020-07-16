@@ -248,11 +248,11 @@ export default class Datetime {
   }
 
   static fromInputDate(value: string | null | undefined, base: Date = new Date, options: DatetimeOptions = {}) {
+    const newDate = new Datetime(new Date(base.getTime()), { ...options })
     if (!value) {
-      return base
+      return newDate
     }
 
-    const newDate = new Datetime(new Date(base.getTime()), { ...options })
     const [year, month, day] = value.split('-').map(Number)
     newDate.setFullYear(year)
     newDate.setMonth(month - 1)
@@ -272,11 +272,11 @@ export default class Datetime {
   }
 
   static fromInputTime(value: string | null | undefined, base: Date = new Date(), options: DatetimeOptions = {}) {
+    const newDate = new Datetime(new Date(base.getTime()), { ...options })
     if (!value) {
-      return base
+      return newDate
     }
 
-    const newDate = new Datetime(new Date(base.getTime()), { ...options })
     const [hours, minutes] = value.split(':').map(Number)
     newDate.setHours(hours)
     newDate.setMinutes(minutes)
