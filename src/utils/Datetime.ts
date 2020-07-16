@@ -141,7 +141,13 @@ export default class Datetime {
   }
 
   setFullYear(year: number, month?: number, date?: number) {
-    return this.options.utc ? this.date.setUTCFullYear(year, month, date) : this.date.setFullYear(year, month, date)
+    if (date !== undefined) {
+      return this.options.utc ? this.date.setUTCFullYear(year, month, date) : this.date.setFullYear(year, month, date)
+    } else if (month !== undefined) {
+      return this.options.utc ? this.date.setUTCFullYear(year, month) : this.date.setFullYear(year, month)
+    } else {
+      return this.options.utc ? this.date.setUTCFullYear(year) : this.date.setFullYear(year)
+    }
   }
 
   getHours() {
@@ -153,7 +159,15 @@ export default class Datetime {
   }
 
   setHours(hours: number, min?: number, sec?: number, ms?: number) {
-    return this.options.utc ? this.date.setUTCHours(hours, min, sec, ms) : this.date.setHours(hours, min, sec, ms)
+    if (ms !== undefined) {
+      return this.options.utc ? this.date.setUTCHours(hours, min, sec, ms) : this.date.setHours(hours, min, sec, ms)
+    } else if (sec !== undefined) {
+      return this.options.utc ? this.date.setUTCHours(hours, min, sec) : this.date.setHours(hours, min, sec)
+    } else if (min !== undefined) {
+      return this.options.utc ? this.date.setUTCHours(hours, min) : this.date.setHours(hours, min)
+    } else {
+      return this.options.utc ? this.date.setUTCHours(hours) : this.date.setHours(hours)
+    }
   }
 
   getMilliseconds() {
@@ -177,7 +191,13 @@ export default class Datetime {
   }
 
   setMinutes(min: number, sec?: number | undefined, ms?: number | undefined) {
-    return this.options.utc ? this.date.setUTCMinutes(min, sec, ms) : this.date.setMinutes(min, sec, ms)
+    if (ms !== undefined) {
+      return this.options.utc ? this.date.setUTCMinutes(min, sec, ms) : this.date.setMinutes(min, sec, ms)
+    } else if (sec !== undefined) {
+      return this.options.utc ? this.date.setUTCMinutes(min, sec) : this.date.setMinutes(min, sec)
+    } else {
+      return this.options.utc ? this.date.setUTCMinutes(min) : this.date.setMinutes(min)
+    }
   }
 
   getMonth() {
@@ -203,7 +223,11 @@ export default class Datetime {
   }
 
   setMonth(month: number, date?: number) {
-    return this.options.utc ? this.date.setUTCMonth(month, date) : this.date.setMonth(month, date)
+    if (date !== undefined) {
+      return this.options.utc ? this.date.setUTCMonth(month, date) : this.date.setMonth(month, date)
+    } else {
+      return this.options.utc ? this.date.setUTCMonth(month) : this.date.setMonth(month)
+    }
   }
 
   getSeconds() {
@@ -215,7 +239,11 @@ export default class Datetime {
   }
 
   setSeconds(sec: number, ms?: number | undefined) {
-    return this.options.utc ? this.date.setUTCSeconds(sec, ms) : this.date.setSeconds(sec, ms)
+    if (ms !== undefined) {
+      return this.options.utc ? this.date.setUTCSeconds(sec, ms) : this.date.setSeconds(sec, ms)
+    } else {
+      return this.options.utc ? this.date.setUTCSeconds(sec) : this.date.setSeconds(sec)
+    }
   }
 
   getTimezoneOffset() {
