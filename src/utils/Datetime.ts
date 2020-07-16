@@ -9,7 +9,7 @@ export type NameOptions = {
   capitalized?: boolean,
 }
 
-export default class Datetime extends Date {
+export default class Datetime {
 
   static Millisecond = 1;
   static Second = 1000;
@@ -43,11 +43,11 @@ export default class Datetime extends Date {
   ]
 
   static Now(options: DatetimeOptions = {}) {
-    return new Datetime(Date.now(), options)
+    return new Datetime(new Date, options)
   }
 
   static Today(options: DatetimeOptions = {}) {
-    const date = new Datetime(Date.now(), options)
+    const date = new Datetime(new Date, options)
     date.setHours(0, 0, 0, 0)
     return date
   }
@@ -66,20 +66,56 @@ export default class Datetime extends Date {
 
   static from(value: Date | string | number = Date.now(), options: DatetimeOptions = {}) {
     if (value instanceof Date) {
-      return new Datetime(value.getTime(), options)
+      return new Datetime(new Date(value.getTime()), options)
     } else if (typeof value === 'string') {
-      return new Datetime(Datetime.parse(value), options)
+      return new Datetime(new Date(Date.parse(value)), options)
     } else {
-      return new Datetime(value, options)
+      return new Datetime(new Date(value), options)
     }
   }
 
-  constructor(time: number = Date.now(), public options: DatetimeOptions = {}) {
-    super(time)
+  constructor(public date: Date = new Date, public options: DatetimeOptions = {}) {
   }
 
+  getTime() {
+    return this.date.getTime()
+  }
+
+  getUTCDate() {
+    return this.date.getUTCDate()
+  }
+
+  getUTCDay() {
+    return this.date.getUTCDay()
+  }
+
+  getUTCFullYear() {
+    return this.date.getUTCFullYear()
+  }
+
+  getUTCHours() {
+    return this.date.getUTCHours()
+  }
+
+  getUTCMilliseconds() {
+    return this.date.getUTCMilliseconds()
+  }
+
+  getUTCMinutes() {
+    return this.date.getUTCMinutes()
+  }
+
+  getUTCMonth() {
+    return this.date.getUTCMonth()
+  }
+
+  getUTCSeconds() {
+    return this.date.getUTCSeconds()
+  }
+
+
   getDate() {
-    return this.options.utc ? super.getUTCDate() : super.getDate()
+    return this.options.utc ? this.date.getUTCDate() : this.date.getDate()
   }
 
   getDatePadded(digits: number = 2) {
@@ -93,23 +129,23 @@ export default class Datetime extends Date {
   }
 
   setDate(value: number) {
-    return this.options.utc ? super.setUTCDate(value) : super.setDate(value)
+    return this.options.utc ? this.date.setUTCDate(value) : this.date.setDate(value)
   }
 
   getDay() {
-    return this.options.utc ? super.getUTCDay() : super.getDay()
+    return this.options.utc ? this.date.getUTCDay() : this.date.getDay()
   }
 
   getFullYear() {
-    return this.options.utc ? super.getUTCFullYear() : super.getFullYear()
+    return this.options.utc ? this.date.getUTCFullYear() : this.date.getFullYear()
   }
 
   setFullYear(year: number, month?: number, date?: number) {
-    return this.options.utc ? super.setUTCFullYear(year, month, date) : super.setFullYear(year, month, date)
+    return this.options.utc ? this.date.setUTCFullYear(year, month, date) : this.date.setFullYear(year, month, date)
   }
 
   getHours() {
-    return this.options.utc ? super.getUTCHours() : super.getHours()
+    return this.options.utc ? this.date.getUTCHours() : this.date.getHours()
   }
 
   getHoursPadded(digits: number = 2) {
@@ -117,11 +153,11 @@ export default class Datetime extends Date {
   }
 
   setHours(hours: number, min?: number, sec?: number, ms?: number) {
-    return this.options.utc ? super.setUTCHours(hours, min, sec, ms) : super.setHours(hours, min, sec, ms)
+    return this.options.utc ? this.date.setUTCHours(hours, min, sec, ms) : this.date.setHours(hours, min, sec, ms)
   }
 
   getMilliseconds() {
-    return this.options.utc ? super.getUTCMilliseconds() : super.getMilliseconds()
+    return this.options.utc ? this.date.getUTCMilliseconds() : this.date.getMilliseconds()
   }
 
   getMillisecondsPadded(digits: number = 2) {
@@ -129,11 +165,11 @@ export default class Datetime extends Date {
   }
 
   setMilliseconds(ms: number) {
-    return this.options.utc ? super.setUTCMilliseconds(ms) : super.setMilliseconds(ms)
+    return this.options.utc ? this.date.setUTCMilliseconds(ms) : this.date.setMilliseconds(ms)
   }
 
   getMinutes() {
-    return this.options.utc ? super.getUTCMinutes() : super.getMinutes()
+    return this.options.utc ? this.date.getUTCMinutes() : this.date.getMinutes()
   }
 
   getMinutesPadded(digits: number = 2) {
@@ -141,11 +177,11 @@ export default class Datetime extends Date {
   }
 
   setMinutes(min: number, sec?: number | undefined, ms?: number | undefined) {
-    return this.options.utc ? super.setUTCMinutes(min, sec, ms) : super.setMinutes(min, sec, ms)
+    return this.options.utc ? this.date.setUTCMinutes(min, sec, ms) : this.date.setMinutes(min, sec, ms)
   }
 
   getMonth() {
-    return this.options.utc ? super.getUTCMonth() : super.getMonth()
+    return this.options.utc ? this.date.getUTCMonth() : this.date.getMonth()
   }
 
   getMonthPadded(digits: number = 2) {
@@ -167,11 +203,11 @@ export default class Datetime extends Date {
   }
 
   setMonth(month: number, date?: number) {
-    return this.options.utc ? super.setUTCMonth(month, date) : super.setMonth(month, date)
+    return this.options.utc ? this.date.setUTCMonth(month, date) : this.date.setMonth(month, date)
   }
 
   getSeconds() {
-    return this.options.utc ? super.getUTCSeconds() : super.getSeconds()
+    return this.options.utc ? this.date.getUTCSeconds() : this.date.getSeconds()
   }
 
   getSecondsPadded(digits: number = 2) {
@@ -179,7 +215,11 @@ export default class Datetime extends Date {
   }
 
   setSeconds(sec: number, ms?: number | undefined) {
-    return this.options.utc ? super.setUTCSeconds(sec, ms) : super.setSeconds(sec, ms)
+    return this.options.utc ? this.date.setUTCSeconds(sec, ms) : this.date.setSeconds(sec, ms)
+  }
+
+  getTimezoneOffset() {
+    return this.date.getTimezoneOffset()
   }
 
   getTimezoneName() {
@@ -187,7 +227,7 @@ export default class Datetime extends Date {
       return 'UTC'
     }
 
-    const offset = this.getTimezoneOffset()
+    const offset = this.date.getTimezoneOffset()
     if (offset === 0) {
       return 'UTC'
     }
@@ -207,12 +247,12 @@ export default class Datetime extends Date {
     ].join('-')
   }
 
-  static fromInputDate(value: string | null | undefined, base: Datetime | Date = Datetime.Now(), options: DatetimeOptions = {}) {
+  static fromInputDate(value: string | null | undefined, base: Date = new Date, options: DatetimeOptions = {}) {
     if (!value) {
       return base
     }
 
-    const newDate = new Datetime(base.getTime(), { ...(base as Datetime).options, ...options })
+    const newDate = new Datetime(new Date(base.getTime()), { ...options })
     const [year, month, day] = value.split('-').map(Number)
     newDate.setFullYear(year)
     newDate.setMonth(month - 1)
@@ -231,12 +271,12 @@ export default class Datetime extends Date {
     ].join(':')
   }
 
-  static fromInputTime(value: string | null | undefined, base: Datetime | Date = Datetime.Now(), options: DatetimeOptions = {}) {
+  static fromInputTime(value: string | null | undefined, base: Date = new Date(), options: DatetimeOptions = {}) {
     if (!value) {
       return base
     }
 
-    const newDate = new Datetime(base.getTime(), { ...(base as Datetime).options, ...options })
+    const newDate = new Datetime(new Date(base.getTime()), { ...options })
     const [hours, minutes] = value.split(':').map(Number)
     newDate.setHours(hours)
     newDate.setMinutes(minutes)
