@@ -122,18 +122,18 @@ export default class Datetime {
     return pad(this.getDate(), digits)
   }
 
-  getDateName(options: NameOptions = {}) {
-    const d = this.getDate()
-    const name = Datetime.Days[d]
-    return Datetime.parseName(name, options)
-  }
-
   setDate(value: number) {
     return this.options.utc ? this.date.setUTCDate(value) : this.date.setDate(value)
   }
 
   getDay() {
     return this.options.utc ? this.date.getUTCDay() : this.date.getDay()
+  }
+
+  getDayName(options: NameOptions = {}) {
+    const d = this.getDay()
+    const name = Datetime.Days[d]
+    return Datetime.parseName(name, options)
   }
 
   getFullYear() {
