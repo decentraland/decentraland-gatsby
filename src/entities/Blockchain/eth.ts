@@ -6,25 +6,27 @@ import env from '../../utils/env';
 
 const ETHEREUM_ENDPOINT = env('ETHEREUM_ENDPOINT', '')
 
+export function fromEndpoint(endpoint: string) {
+  const url = parse(endpoint)
+  switch (url.protocol) {
+    case 'wss:':
+      return new WebsocketProvider(endpoint);
+
+    case 'https:':
+      return new HttpProvider(endpoint)
+
+    case null:
+      return null
+
+    default:
+      throw new Error(`Invalid ethereum endpoint protocol: "${url.protocol}"`);
+  }
+}
+
 export function getCurrentProviders() {
   return ETHEREUM_ENDPOINT
     .split(',')
-    .map((endpoint) => {
-      const url = parse(endpoint)
-      switch (url.protocol) {
-        case 'wss:':
-          return new WebsocketProvider(endpoint);
-
-        case 'https:':
-          return new HttpProvider(endpoint)
-
-        case null:
-          return null
-
-        default:
-          throw new Error(`Invalid ethereum endpoint protocol: "${url.protocol}"`);
-      }
-    })
+    .map((endpoint) => fromEndpoint(endpoint))
     .filter(Boolean) as (WebsocketProvider | HttpProvider)[]
 }
 
