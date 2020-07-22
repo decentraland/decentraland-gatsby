@@ -36,8 +36,13 @@ export function logger() {
     const start = Date.now()
 
     res.on('close', function requestLogger() {
-      const diff = (Date.now() - start) / 1000
-      console.log(`[${req.method}] ${req.path} (status: ${res.statusCode}, time: ${diff.toFixed(3)}s)`)
+      const data: Record<string, any> = {
+        status: res.statusCode,
+        time: (Date.now() - start) / 1000,
+        auth: req.auth
+      }
+
+      console.log(`[${req.method}] ${req.path} ${JSON.stringify(data)}`)
     })
   })
 }
