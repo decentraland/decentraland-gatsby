@@ -5,7 +5,7 @@ import isStream from "../../utils/stream/isStream";
 
 export type AsyncHandler = (req: Request & any, res: Response & any, ctx: Context) => Promise<any> | any
 
-export default function handle(handler: AsyncHandler, ) {
+export default function handle(handler: AsyncHandler) {
   return function (req: Request, res: Response) {
 
     handler(req, res, new Context(req, res))
@@ -22,7 +22,7 @@ export default function handle(handler: AsyncHandler, ) {
           }
         }
       })
-      .catch((err: RequestError) => handleResponseError(res, err))
+      .catch((err: RequestError) => handleResponseError(req, res, err))
   }
 }
 
@@ -31,12 +31,24 @@ export function middleware(handler: AsyncHandler) {
 
     handler(req, res, new Context(req, res))
       .then(() => next())
-      .catch((err: RequestError) => handleResponseError(res, err))
+      .catch((err: RequestError) => handleResponseError(req, res, err))
   }
 }
 
-function handleResponseError(res: Response, err: RequestError) {
-  console.error(err);
+function handleResponseError(req: Request, res: Response, err: RequestError) {
+  const data = {
+    ...err,
+    message: err.message,
+    stack: err.stack,
+    method: req.method,
+    path: req.path,
+    auth: (req as any).auth,
+    params: (req as any).params,
+    query: (req as any).query,
+    body: (req as any).body,
+  }
+
+  console.error(`Error executing request ${req.method} ${req.path} : `, data);
 
   if (!res.headersSent) {
     res.status(err.statusCode || RequestError.InternalServerError)
