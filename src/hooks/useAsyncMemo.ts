@@ -28,5 +28,5 @@ export default function useAsyncMemo<T>(exec: () => Promise<T>, deps: Dependency
 
   useAsyncEffect(load, deps)
 
-  return [state.value, state.loading, load]
+  return [state.value, state.loading, load] as const
 }
