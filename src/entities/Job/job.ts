@@ -1,5 +1,5 @@
 import { CronJob } from 'cron'
-import { JobSettings, NextFunction } from './types'
+import { JobSettings, NextFunction, TimePresets, CronTime } from './types'
 import JobContext from './context'
 import Model from './model'
 import { createVoidPool, Pool } from '../Pool/utils'
@@ -24,7 +24,15 @@ export default class JobManager {
     const max = settings.concurrency || Infinity
     this.pool = createVoidPool({ min: 0, max })
     this.memory = !!settings.memory
-    this.cron(settings.cron || '0 * * * * *', () => this.check())
+    this.cron(this.time(settings.cron || '@minutely'), () => this.check())
+  }
+
+  time(cronTime: CronTime): string | Date {
+    if (typeof cronTime === 'string' && TimePresets[cronTime]) {
+      return TimePresets[cronTime]
+    }
+
+    return cronTime
   }
 
   getModel() {
@@ -51,8 +59,8 @@ export default class JobManager {
     return this
   }
 
-  cron(cronTime: string | Date, job: Job<any>, ...extraJobs: Job<any>[]) {
-    this.crons.push(new CronJob(cronTime, () => {
+  cron(cronTime: CronTime, job: Job<any>, ...extraJobs: Job<any>[]) {
+    this.crons.push(new CronJob(this.time(cronTime), () => {
       this.runJobs(null, 'cron', {}, [job, ...extraJobs])
     }))
   }
