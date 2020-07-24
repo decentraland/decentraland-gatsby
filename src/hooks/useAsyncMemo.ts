@@ -7,7 +7,11 @@ type AsyncMemoState<T> = {
   value: T | null
 }
 
-export default function useAsyncMemo<T>(exec: () => Promise<T>, deps: DependencyList = []) {
+export default function useAsyncMemo<T>(
+  exec: () => Promise<T>,
+  deps: DependencyList = [],
+  onlyWithTruthyDeps: boolean = false
+) {
 
   const [state, setState] = useState<AsyncMemoState<T>>({
     version: 0,
@@ -16,6 +20,10 @@ export default function useAsyncMemo<T>(exec: () => Promise<T>, deps: Dependency
   })
 
   async function load() {
+    if (onlyWithTruthyDeps && deps.some(dep => Boolean(dep) === false)) {
+      return
+    }
+
     const version = Math.ceil(Math.random() * 1e12)
     try {
       setState((current) => ({ version, value: current.value, loading: true }))
