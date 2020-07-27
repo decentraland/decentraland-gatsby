@@ -1,10 +1,9 @@
-
-function parseEndpointId(endpoint: string) {
+export function parseEndpointId(endpoint: string) {
   const url = new URL(endpoint)
   return url.pathname.split('/')[2]
 }
 
-function parseNetworkId(endpoint: string) {
+export function parseNetworkId(endpoint: string) {
   const url = new URL(endpoint)
   const network = url.host.split('.')[0]
   switch (network) {
