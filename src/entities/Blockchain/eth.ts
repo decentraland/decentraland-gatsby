@@ -1,4 +1,3 @@
-import { parse } from 'url'
 import { Eth } from 'web3x/eth';
 import { HttpProvider, WebsocketProvider } from 'web3x/providers';
 import { createItemPool } from '../Pool/utils';
@@ -7,7 +6,7 @@ import env from '../../utils/env';
 const ETHEREUM_ENDPOINT = env('ETHEREUM_ENDPOINT', '')
 
 export function fromEndpoint(endpoint: string) {
-  const url = parse(endpoint)
+  const url = new URL(endpoint)
   switch (url.protocol) {
     case 'wss:':
       return new WebsocketProvider(endpoint);
