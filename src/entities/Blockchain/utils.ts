@@ -1,10 +1,10 @@
 
-function getEndpointId(endpoint: string) {
+function parseEndpointId(endpoint: string) {
   const url = new URL(endpoint)
   return url.pathname.split('/')[2]
 }
 
-function getNetworkId(endpoint: string) {
+function parseNetworkId(endpoint: string) {
   const url = new URL(endpoint)
   const network = url.host.split('.')[0]
   switch (network) {
@@ -19,6 +19,6 @@ function getNetworkId(endpoint: string) {
     case 'kovan':
       return 42
     default:
-      return undefined
+      return null
   }
 }
