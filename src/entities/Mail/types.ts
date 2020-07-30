@@ -15,6 +15,12 @@ export type TemplateContent = {
   }
 }
 
+export type TemplateProps = {
+  name?: string,
+  subject?: string,
+  text?: string,
+}
+
 export type Template = {
   TemplateName: string,
   SubjectPart: string,
