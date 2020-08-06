@@ -39,6 +39,7 @@ export function logger() {
       const data: Record<string, any> = {
         status: res.statusCode,
         time: (Date.now() - start) / 1000,
+        ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
         auth: req.auth
       }
 
