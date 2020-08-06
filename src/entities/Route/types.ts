@@ -2,6 +2,14 @@ import { Router, RouterOptions } from "express"
 
 export type RouterHandler = (router: Router) => void
 export type RoutesOptions = RouterOptions & CorsOptions
+export type DDosOptions = {
+  limit: number,
+  maxcount: number,
+  burst: number,
+  maxexpiry: number,
+  checkinterval: number,
+  responseStatus: number,
+}
 export type CorsOptions = {
   cors?: 'public' | '*' | 'default' | 'same-origin' | false,
   corsOrigin?: boolean | string | RegExp | (string | RegExp)[];

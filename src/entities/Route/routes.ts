@@ -1,9 +1,13 @@
-import { Router } from 'express'
+import { Router, Response } from 'express'
+import * as Ddos from 'ddos'
 import bodyParser from 'body-parser'
 import expressCors from 'cors'
+import { readFile } from 'fs'
+import { promisify } from 'util'
+import { extname } from 'path'
 import handle, { middleware } from './handle';
 import env from '../../utils/env';
-import { RouterHandler, RoutesOptions, createCorsOptions, CorsOptions } from './types';
+import { RouterHandler, RoutesOptions, createCorsOptions, CorsOptions, DDosOptions } from './types';
 
 const IMAGE = env('IMAGE', `events:${Date.now()}`)
 const [image, version] = IMAGE.split(':')
@@ -29,6 +33,30 @@ export function status() {
 
 export function cors(options: CorsOptions = {}) {
   return expressCors(createCorsOptions(options))
+}
+
+export function file(path: string, status: number = 200) {
+  let data: Buffer | null = null
+  return middleware(async (req, res: Response) => {
+    if (!data) {
+      data = await promisify(readFile)(path)
+    }
+
+    res
+      .status(status)
+      .type(extname(path))
+      .send(data)
+  })
+}
+
+export function ddos(options: Partial<DDosOptions> = {}) {
+  const config: Partial<DDosOptions> = {
+    checkinterval: 5,
+    limit: 500,
+    ...options,
+  }
+  const protection = new Ddos(config)
+  return protection.express
 }
 
 export function logger() {
