@@ -59,7 +59,7 @@ function handleResponseError(req: Request, res: Response, err: RequestError) {
   }
 }
 
-function toResponseError(err: RequestError) {
+export function toResponseError(err: RequestError) {
   const result: any = {
     ok: false,
     error: err.message,

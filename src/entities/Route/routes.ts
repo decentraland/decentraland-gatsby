@@ -5,9 +5,10 @@ import expressCors from 'cors'
 import { readFile } from 'fs'
 import { promisify } from 'util'
 import { extname } from 'path'
-import handle, { middleware } from './handle';
+import handle, { middleware, toResponseError } from './handle';
 import env from '../../utils/env';
 import { RouterHandler, RoutesOptions, createCorsOptions, CorsOptions, DDosOptions } from './types';
+import RequestError from './error'
 
 const IMAGE = env('IMAGE', `events:${Date.now()}`)
 const [image, version] = IMAGE.split(':')
@@ -50,10 +51,13 @@ export function file(path: string, status: number = 200) {
 }
 
 export function ddos(options: Partial<DDosOptions> = {}) {
-  const config: Partial<DDosOptions> = {
+  const config: Partial<DDosOptions> & { errormessage: string } = {
     checkinterval: 5,
     limit: 500,
     ...options,
+    errormessage: JSON.stringify(toResponseError(
+      new RequestError('Too many requests', RequestError.TooManyRequests)
+    ))
   }
   const protection = new Ddos(config)
   return protection.express
