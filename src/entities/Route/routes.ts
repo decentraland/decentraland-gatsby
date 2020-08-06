@@ -1,5 +1,5 @@
 import { Router, Response } from 'express'
-import * as Ddos from 'ddos'
+import Ddos from 'ddos'
 import bodyParser from 'body-parser'
 import expressCors from 'cors'
 import { readFile } from 'fs'
