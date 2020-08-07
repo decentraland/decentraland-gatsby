@@ -46,7 +46,13 @@ export type ProfileResponse = {
 
 export default class Katalyst extends API {
 
-  static Url = 'https://peer.decentraland.org/lambdas'
+  static Url = (
+    process.env.GATSBY_PROFILE_URL ||
+    process.env.REACT_APP_PROFILE_URL ||
+    process.env.STORYBOOK_PROFILE_URL ||
+    process.env.PROFILE_URL ||
+    'https://peer.decentraland.org/lambdas'
+  )
 
   static Cache = new Map<string, Katalyst>()
 

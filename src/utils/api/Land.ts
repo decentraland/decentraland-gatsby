@@ -85,7 +85,13 @@ export type MapContent = {
 
 export default class Land extends API {
 
-  static Url = 'https://api.decentraland.org/v1'
+  static Url = (
+    process.env.GATSBY_LAND_URL ||
+    process.env.REACT_APP_LAND_URL ||
+    process.env.STORYBOOK_LAND_URL ||
+    process.env.LAND_URL ||
+    'https://api.decentraland.org/v1'
+  )
 
   static Cache = new Map<string, Land>()
 
