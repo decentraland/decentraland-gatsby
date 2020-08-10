@@ -40,7 +40,7 @@ export function cors(options: CorsOptions = {}) {
 
 export function file(path: string, status: number = 200) {
   let reader: Promise<readonly [Buffer, string]> | null = null
-  return middleware(async (req, res: Response) => {
+  return handle(async (req, res: Response) => {
     if (!reader) {
       reader = (async () => {
         const data = await promisify(readFile)(path).catch(() => Buffer.alloc(0))
@@ -53,10 +53,10 @@ export function file(path: string, status: number = 200) {
 
     const [data, etag] = await reader
     res
-      .status(status)
       .set('cache-control', 'public, max-age=86400')
       .set('etag', JSON.stringify(etag))
       .type(extname(path))
+      .status(status)
       .send(data)
   })
 }
@@ -100,22 +100,19 @@ export function redirect(to: string, status: number = 302) {
 export function filesystem(path: string, notFoundPage: string) {
   const router = Router()
   const cwd = resolve(process.cwd(), path)
-  const files = new Set(glob.sync('**/*', { cwd, mark: true }))
+  const files = new Set(glob.sync('**/*', { cwd, nodir: true }))
 
   for (const filepath of files.values()) {
-    if (filepath.endsWith('/')) {
-      if (files.has(filepath + 'index.html')) {
-        router.get('/' + filepath.slice(0, -1), redirect('/' + filepath))
-      }
-    } else if (
-      filepath === 'index.html' ||
-      filepath.endsWith('/index.html')
-    ) {
-      const response = file(resolve(cwd, filepath))
-      router.get('/' + filepath, response)
-      router.get('/' + filepath.slice(0, -10), response)
+    const webpath = '/' + filepath // => /en/index.html
+
+    if (webpath.endsWith('/index.html')) {
+      const basepath = webpath.slice(0, -10)
+      router.get(webpath, redirect(basepath)) // redirect /en/index.html => /en/
+      router.get(basepath, file(resolve(cwd, filepath))) // load /en/index.html on /en/
+
     } else {
-      router.get('/' + filepath, file(resolve(cwd, filepath)))
+      router.get(webpath, file(resolve(cwd, filepath))) // load /en/other.html
+
     }
   }
 
