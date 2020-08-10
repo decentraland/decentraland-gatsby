@@ -1,14 +1,17 @@
-import { Router, Response, Request } from 'express'
+import express, { Router, Response, Request } from 'express'
 import Ddos from 'ddos'
 import bodyParser from 'body-parser'
+import cache from 'apicache'
 import expressCors from 'cors'
+import glob from 'glob'
 import { readFile } from 'fs'
 import { promisify } from 'util'
-import { extname } from 'path'
+import { extname, resolve } from 'path'
 import handle, { middleware, toResponseError } from './handle';
 import env from '../../utils/env';
 import { RouterHandler, RoutesOptions, createCorsOptions, CorsOptions, DDosOptions } from './types';
 import RequestError from './error'
+import Datetime from '../../utils/Datetime'
 
 const IMAGE = env('IMAGE', `events:${Date.now()}`)
 const [image, version] = IMAGE.split(':')
@@ -78,4 +81,25 @@ export function logger() {
       console.log(`[${req.method}] ${req.originalUrl} ${JSON.stringify(data)}`)
     })
   })
+}
+
+export function filesystem(path: string, notFoundPage: string) {
+  const router = Router()
+  const cwd = resolve(process.cwd(), path)
+  const notFoundPath = resolve(cwd, notFoundPage)
+  const staticCache = cache.middleware(
+    7 * Datetime.Day,
+    (req: Request, res: Response) => {
+      return req.method === 'GET'
+    },
+  )
+  const staticFile = express.static(cwd, { maxAge: 1000 * 60 * 60 })
+  const files = glob.sync('**/*', { cwd })
+
+  for (const file in files) {
+    router.use(file, staticCache, staticFile)
+  }
+
+  router.use(file(notFoundPath, 404))
+  return router
 }
