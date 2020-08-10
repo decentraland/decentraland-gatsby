@@ -1,9 +1,9 @@
 import express, { Router, Response, Request } from 'express'
 import Ddos from 'ddos'
 import bodyParser from 'body-parser'
-import cache from 'apicache'
 import expressCors from 'cors'
 import glob from 'glob'
+import { cacheSeconds } from 'route-cache'
 import { readFile } from 'fs'
 import { promisify } from 'util'
 import { extname, resolve } from 'path'
@@ -87,20 +87,11 @@ export function filesystem(path: string, notFoundPage: string) {
   const router = Router()
   const cwd = resolve(process.cwd(), path)
   const notFoundPath = resolve(cwd, notFoundPage)
-  const staticCache = cache.middleware(
-    7 * Datetime.Day,
-    (req: Request, res: Response) => {
-      return req.method === 'GET'
-    },
-    {
-      appendKey: (req: Request) => req.path,
-    }
-  )
   const staticFile = express.static(cwd, { maxAge: 1000 * 60 * 60 })
   const files = glob.sync('**/*', { cwd })
 
-  for (const file in files) {
-    router.use('/' + file, staticCache, staticFile)
+  for (const file of files) {
+    router.use('/' + file, cacheSeconds(60 * 24 * 30, file), staticFile)
   }
 
   router.use(file(notFoundPath, 404))
