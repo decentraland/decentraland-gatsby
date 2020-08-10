@@ -87,10 +87,11 @@ export function filesystem(path: string, notFoundPage: string) {
   const cwd = resolve(process.cwd(), path)
   const notFoundPath = resolve(cwd, notFoundPage)
   const staticFile = express.static(cwd, { maxAge: 1000 * 60 * 60 })
+  const staticCache = cacheSeconds(60 * 24 * 30, (req: Request) => req.path)
   const files = glob.sync('**/*', { cwd })
 
   for (const file of files) {
-    router.use('/' + file, cacheSeconds(60 * 24 * 30, file), staticFile)
+    router.use('/' + file, staticCache, staticFile)
   }
 
   router.use(file(notFoundPath, 404))
