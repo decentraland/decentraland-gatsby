@@ -1,4 +1,4 @@
-import { Router, Response } from 'express'
+import { Router, Response, Request } from 'express'
 import Ddos from 'ddos'
 import bodyParser from 'body-parser'
 import expressCors from 'cors'
@@ -64,7 +64,7 @@ export function ddos(options: Partial<DDosOptions> = {}) {
 }
 
 export function logger() {
-  return middleware(async (req, res) => {
+  return middleware(async (req: Request & { auth?: any }, res) => {
     const start = Date.now()
 
     res.on('close', function requestLogger() {
@@ -75,7 +75,7 @@ export function logger() {
         auth: req.auth
       }
 
-      console.log(`[${req.method}] ${req.path} ${JSON.stringify(data)}`)
+      console.log(`[${req.method}] ${req.originalUrl} ${JSON.stringify(data)}`)
     })
   })
 }
