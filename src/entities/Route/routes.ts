@@ -11,7 +11,6 @@ import handle, { middleware, toResponseError } from './handle';
 import env from '../../utils/env';
 import { RouterHandler, RoutesOptions, createCorsOptions, CorsOptions, DDosOptions } from './types';
 import RequestError from './error'
-import Datetime from '../../utils/Datetime'
 
 const IMAGE = env('IMAGE', `events:${Date.now()}`)
 const [image, version] = IMAGE.split(':')
