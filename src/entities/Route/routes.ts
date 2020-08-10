@@ -1,9 +1,9 @@
-import express, { Router, Response, Request } from 'express'
+import { Router, Response, Request } from 'express'
+import { createHash } from 'crypto'
 import Ddos from 'ddos'
 import bodyParser from 'body-parser'
 import expressCors from 'cors'
 import glob from 'glob'
-import { cacheSeconds } from 'route-cache'
 import { readFile } from 'fs'
 import { promisify } from 'util'
 import { extname, resolve } from 'path'
@@ -40,13 +40,19 @@ export function cors(options: CorsOptions = {}) {
 
 export function file(path: string, status: number = 200) {
   let data: Buffer | null = null
+  let etag: string | null = null
   return middleware(async (req, res: Response) => {
     if (!data) {
       data = await promisify(readFile)(path)
+      const hash = createHash('sha256')
+      hash.write(data)
+      etag = hash.digest('hex')
     }
 
     res
       .status(status)
+      .set('cache-control', 'public, max-age=86400')
+      .set('etag', JSON.stringify(etag))
       .type(extname(path))
       .send(data)
   })
@@ -82,18 +88,34 @@ export function logger() {
   })
 }
 
+export function redirect(to: string, status: number = 302) {
+  return (req: Request, res: Response) => {
+    res.status(status).redirect(to)
+  }
+}
+
 export function filesystem(path: string, notFoundPage: string) {
   const router = Router()
   const cwd = resolve(process.cwd(), path)
-  const notFoundPath = resolve(cwd, notFoundPage)
-  const staticFile = express.static(cwd, { maxAge: 1000 * 60 * 60 })
-  const staticCache = cacheSeconds(60 * 24 * 30, (req: Request) => req.path)
-  const files = glob.sync('**/*', { cwd })
+  const files = new Set(glob.sync('**/*', { cwd, mark: true }))
 
-  for (const file of files) {
-    router.use('/' + file, staticCache, staticFile)
+  for (const filepath of files.values()) {
+    if (filepath.endsWith('/')) {
+      if (files.has(filepath + 'index.html')) {
+        router.get('/' + filepath.slice(0, -1), redirect('/' + filepath))
+      }
+    } else if (
+      filepath === 'index.html' ||
+      filepath.endsWith('/index.html')
+    ) {
+      const response = file(resolve(cwd, filepath))
+      router.get('/' + filepath, response)
+      router.get('/' + filepath.slice(0, -10), response)
+    } else {
+      router.get('/' + filepath, file(resolve(cwd, filepath)))
+    }
   }
 
-  router.use(file(notFoundPath, 404))
+  router.use(file(resolve(cwd, notFoundPage), 404))
   return router
 }
