@@ -92,12 +92,15 @@ export function filesystem(path: string, notFoundPage: string) {
     (req: Request, res: Response) => {
       return req.method === 'GET'
     },
+    {
+      appendKey: (req: Request) => req.path,
+    }
   )
   const staticFile = express.static(cwd, { maxAge: 1000 * 60 * 60 })
   const files = glob.sync('**/*', { cwd })
 
   for (const file in files) {
-    router.use(file, staticCache, staticFile)
+    router.use('/' + file, staticCache, staticFile)
   }
 
   router.use(file(notFoundPath, 404))
