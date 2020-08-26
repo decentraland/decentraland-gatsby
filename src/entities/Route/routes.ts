@@ -40,7 +40,7 @@ export function cors(options: CorsOptions = {}) {
 
 export function file(path: string, status: number = 200) {
   let reader: Promise<readonly [Buffer, string]> | null = null
-  return handle(async (req, res: Response) => {
+  return handle(async (_, res: Response) => {
     if (!reader) {
       reader = (async () => {
         const data = await promisify(readFile)(path).catch(() => Buffer.alloc(0))
@@ -52,7 +52,7 @@ export function file(path: string, status: number = 200) {
     }
 
     const [data, etag] = await reader
-    res
+    return res
       .set('cache-control', 'public, max-age=86400')
       .set('etag', JSON.stringify(etag))
       .type(extname(path))
@@ -92,7 +92,7 @@ export function logger() {
 }
 
 export function redirect(to: string, status: number = 302) {
-  return (req: Request, res: Response) => {
+  return (_: Request, res: Response) => {
     res.status(status).redirect(to)
   }
 }

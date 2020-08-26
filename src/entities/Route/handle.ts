@@ -14,7 +14,7 @@ export default function handle(handler: AsyncHandler) {
           res.status(defaultStatusCode(req))
         }
 
-        if (!res.writableFinished) {
+        if (!res.writableFinished && res !== data) {
           if (isStream(data)) {
             return data.pipe(res)
           } else {
