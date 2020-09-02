@@ -48,7 +48,7 @@ function handleResponseError(req: Request, res: Response, err: RequestError) {
     body: (req as any).body,
   }
 
-  console.error(`Error executing request ${req.method} ${req.path} : `, JSON.stringify(data));
+  console.error(`error executing request ${req.method} ${req.path} : `, process.env.NODE_ENV === 'production' && JSON.stringify(data) || data);
 
   if (!res.headersSent) {
     res.status(err.statusCode || RequestError.InternalServerError)
