@@ -1,4 +1,4 @@
-export * from './routes'
+export { default as default } from './routes'
 export { default as cors } from './cors'
 export { default as ddos } from './ddos'
 export { default as file } from './file'
