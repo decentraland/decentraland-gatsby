@@ -44,7 +44,7 @@ export default function useCountdown(until: Date, each: number = Time.Second, co
         clearInterval(interval)
       }
     }
-  }, [])
+  }, [ until.getTime() ])
 
   let time = until.getTime() - now
   if (!countUp && time < 0) {
