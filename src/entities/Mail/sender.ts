@@ -167,7 +167,11 @@ export default class Sender {
   replace(template: string, replacements: Record<string, string> = {}) {
     return template.replace(/\{\{\w+\}\}/gi, (match) => {
       const name = match.slice(2, -2)
-      return replacements[name] ?? ''
+      if (name in replacements) {
+        return replacements[name]
+      }
+
+      throw new Error(`missing replacement ${name}`)
     })
   }
 }
