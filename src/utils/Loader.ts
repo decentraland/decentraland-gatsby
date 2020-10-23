@@ -20,13 +20,20 @@ export default class Loader<T> {
     return this.cache.get(key)!
   }
 
+  set(key: string, value: T) {
+    this.cache.set(key, Promise.resolve(value))
+    this.data.set(key, value)
+  }
+
   clear(key: string) {
+    this.data.delete(key)
     return this.cache.delete(key)
   }
 
   clearAll() {
     const size = this.cache.size
     this.cache = new Map()
+    this.data = new Map()
     return size
   }
 }
