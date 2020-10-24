@@ -5,6 +5,7 @@ import useProfile from './useProfile';
 import useCountdown from './useCountdown';
 import useResponsive from './useResponsive';
 import useMobileDetector from './useMobileDetector';
+import useClipboardCopy from './useClipboardCopy';
 import useFeatureDetection, { features } from './useFeatureDetection';
 import Code from '../components/Text/Code';
 import Title from '../components/Text/Title';
@@ -48,6 +49,31 @@ storiesOf('Hooks', module)
       <Title>Live example:</Title>
       <Code note="completed" language="json">{JSON.stringify(completed, null, 2)}</Code>
       <Code note="active" language="json">{JSON.stringify(countdown, null, 2)}</Code>
+      <Divider />
+    </Container>
+  })
+  .add('useClipboardCopy', () => {
+    const [ state, copy ] = useClipboardCopy()
+    return <Container>
+      <Divider />
+      <MainTitle>Using Clipboard Copy Hook</MainTitle>
+      <Paragraph secondary>The <Italic>clipboard copy hook</Italic> allow users to copy and arbitrary string to they clipboards.</Paragraph>
+      <Code language="typescript">{`const [ state, copy ] = useClipboardCopy(loadingTime: number = 1000)`}</Code>
+      <Divider size="small" />
+      <Paragraph><Code inline>{'state: Object'}</Code></Paragraph>
+      <Paragraph><Code inline>{'state.value: string | null'}</Code> value copied to the clipboard.</Paragraph>
+      <Paragraph><Code inline>{'state.loading: boolean'}</Code> <Code inline>true</Code> until <Code inline>loadingTime ms</Code> after the copy, <Code inline>false</Code> otherwise.</Paragraph>
+      <Divider size="small" />
+      <Paragraph><Code inline>{'copy: (value: string) => void'}</Code></Paragraph>
+      <Divider size="tiny" />
+      <Title>Live example:</Title>
+      <Code language="typescript">
+        {`const [ state, copy ] = useClipboardCopy()`}
+      </Code>
+      <Button primary size="small" style={{ marginRight: '1em' }} onClick={() => copy('12345')}>COPY 12345</Button>
+      <Button primary size="small" style={{ marginRight: '1em' }} onClick={() => copy(String(Math.floor(Math.random() * 100000)))}>COPY RANDOM</Button>
+      {state.loading && <Button basic size="small" disabled style={{ marginRight: '1em' }}>COPIED: {state.value}</Button>}
+      <Code language="json" note="state:">{JSON.stringify(state, null, 2)}</Code>
       <Divider />
     </Container>
   })
@@ -105,8 +131,8 @@ storiesOf('Hooks', module)
       <Divider line />
       <Title>Live example:</Title>
       <Paragraph> Call actions and see the current value of <Code inline>profile</Code> and <Code inline>loading</Code></Paragraph>
-      <Button primary size="small" loading={actions.loading} disabled={actions.provider && !!profile} onClick={() => actions.connect()}>connect</Button>
-      <Button primary size="small" loading={actions.loading} disabled={actions.provider && !profile} onClick={() => actions.disconnect()}>disconnect</Button>
+      <Button primary size="small" loading={actions.loading} disabled={actions.provider && !!profile} style={{ marginRight: '1em' }} onClick={() => actions.connect()}>connect</Button>
+      <Button primary size="small" loading={actions.loading} disabled={actions.provider && !profile} style={{ marginRight: '1em' }} onClick={() => actions.disconnect()}>disconnect</Button>
       {/* <ConnectButton basic size="small" i18n={{ connect: `actions.connect()`, disconnect: 'actions.disconnect()' }} /> */}
       <Code language="json" note="actions:">{JSON.stringify({
         loading: actions.loading,
