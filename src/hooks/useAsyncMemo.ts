@@ -1,5 +1,4 @@
-import { DependencyList, useState } from 'react'
-import useAsyncEffect from './useAsyncEffect'
+import { DependencyList, useState, useEffect } from 'react'
 
 type AsyncMemoState<T> = {
   version: number,
@@ -8,7 +7,7 @@ type AsyncMemoState<T> = {
 }
 
 export default function useAsyncMemo<T>(
-  exec: () => Promise<T>,
+  effect: () => Promise<T>,
   deps: DependencyList = [],
   onlyWithTruthyDeps: boolean = false
 ) {
@@ -19,22 +18,31 @@ export default function useAsyncMemo<T>(
     value: null
   })
 
-  async function load() {
+  function load() {
     if (onlyWithTruthyDeps && deps.some(dep => Boolean(dep) === false)) {
       return
     }
 
+    let cancelled = false
     const version = Math.ceil(Math.random() * 1e12)
-    try {
-      setState((current) => ({ version, value: current.value, loading: true }))
-      const value = await exec()
-      setState((current) => current.version === version ? { version, value, loading: false } : current)
-    } catch (err) {
-      console.error(err)
+    Promise.resolve()
+      .then(() => {
+        setState((current) => ({ version, value: current.value, loading: true }))
+      })
+      .then(() => effect())
+      .then((value) => {
+        if (!cancelled) {
+          setState((current) => current.version === version ? { version, value, loading: false } : current)
+        }
+      })
+      .catch(console.error)
+
+    return () => {
+      cancelled = true
     }
   }
 
-  useAsyncEffect(load, deps)
+  useEffect(load, deps)
 
   return [state.value, state.loading, load] as const
 }
