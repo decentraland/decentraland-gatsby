@@ -1,6 +1,11 @@
 import { useState, useMemo } from 'react'
 import clipboardCopy from "clipboard-copy"
 
+// TODO v3: change return type
+//  => [
+//    values: string | null,
+//    state: { coping: boolean, copy(newValue: string): void }
+//  ]
 export type ClipboardCopyState = {
   value: string | null,
   loading: boolean,

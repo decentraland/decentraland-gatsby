@@ -2,6 +2,10 @@ import React, { useMemo } from "react"
 import { useIntl, IntlShape } from "gatsby-plugin-intl"
 import Markdown from "../components/Text/Markdown"
 
+// TODO v3: move to hooks dir
+// TODO v3: use intl.str formatter as default
+// TODO v3: move intl to intl.markdown
+// TODO v3: remove iter, use utils/array/iter
 export type Formatter = (id: string, values?: any) => JSX.Element | undefined | null
 
 export type IterationData = {
@@ -35,6 +39,7 @@ export function createFormatMessage(shape: IntlShape) {
     return <Markdown key={id} source={message} />
   };
 
+  /** @deprecated */
   const iter = (base: string, items: number, iterator: (formatter: Formatter, data: IterationData) => JSX.Element | undefined | null) => {
     const result = [] as JSX.Element[]
     for (let current = 0; current < items; current++) {

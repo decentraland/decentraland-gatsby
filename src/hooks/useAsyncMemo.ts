@@ -1,5 +1,7 @@
 import { DependencyList, useState, useEffect } from 'react'
 
+// TODO v3: replace onlyWithTruthyDeps params for an object
+// TODO v3: replace onlyWithTruthyDeps params for an object
 type AsyncMemoState<T> = {
   version: number,
   loading: boolean,
