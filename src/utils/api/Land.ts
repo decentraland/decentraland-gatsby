@@ -1,3 +1,4 @@
+import { toBN } from 'web3x/utils'
 import API from './API'
 import env from '../env'
 import Options from './Options'
@@ -83,6 +84,11 @@ export type MapContent = {
   "total": number
 }
 
+const CLEAR_LOW = toBN('0xffffffffffffffffffffffffffffffff00000000000000000000000000000000');
+const CLEAR_HIGH = toBN('0x00000000000000000000000000000000ffffffffffffffffffffffffffffffff');
+const FACTOR_HIGH = toBN('0x100000000000000000000000000000000');
+const FACTOR_LOW = toBN('0x10000000000000000000000000000000000000000000000000000000000000000');
+
 export default class Land extends API {
 
   static Url = (
@@ -133,6 +139,30 @@ export default class Land extends API {
 
   async getMapContent(nw: [number, number], se: [number, number]): Promise<MapContent> {
     return this.fetch('/map' + this.query({ nw, se }))
+  }
+
+  encodeParcelId(coordinates: [number, number]) {
+    const [ x, y ] = coordinates
+    if (
+      !Number.isFinite(x) ||
+      !Number.isFinite(y) ||
+      -1000000 >= x ||
+      x >= 1000000 ||
+      -1000000 >= y ||
+      y >= 1000000
+    ) {
+      throw new RangeError(`The coordinates should be inside bounds`)
+    }
+
+    // return ((uint(x) * factor) & clearLow) | (uint(y) & clearHigh);
+    // const signX = x < 0 ? 1 << 32 : 0
+    const absX = toBN(Math.abs(x))
+    const absY = toBN(Math.abs(y))
+    const uintX = x < 0 ? FACTOR_LOW.sub(absX) : absX
+    const uintY = y < 0 ? FACTOR_HIGH.sub(absY) : absY
+    let bX = CLEAR_LOW.and(toBN(uintX).mul(FACTOR_HIGH))
+    let bY = CLEAR_HIGH.and(toBN(uintY))
+    return bX.or(bY).toString()
   }
 
   getImage(options: GetMapImageOptions = {}) {
