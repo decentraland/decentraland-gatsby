@@ -1,5 +1,7 @@
 import pad from "./number/pad";
 
+// TODO v3: Move date directory
+
 export type DatetimeOptions = {
   utc?: boolean
 }

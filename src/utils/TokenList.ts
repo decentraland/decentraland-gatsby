@@ -1,5 +1,7 @@
 export type Token = string | undefined | null | false
 
+// TODO v3: Move html directory
+
 /**
  * Represents a set of space-separated tokens. It is indexed 
  * beginning with 0 as with JavaScript Array objects. TokenList

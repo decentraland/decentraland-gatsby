@@ -1,5 +1,7 @@
 import { hash } from 'immutable'
 
+// TODO v3: Move html directory
+
 export type TargetListener = Pick<HTMLElement, 'addEventListener' | 'removeEventListener'>
 
 export type Event = keyof HTMLElementEventMap
