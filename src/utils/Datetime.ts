@@ -9,6 +9,7 @@ export type NameOptions = {
   capitalized?: boolean,
 }
 
+// TODO v3: use a Factory and to build 2 classes Datetime and UTCDatetime
 export default class Datetime {
 
   static Millisecond = 1;
