@@ -3,6 +3,7 @@ import Land from './Land';
 
 describe('utils/api/Land', () => {
   test('encodeParcelId', () => {
+    expect(Land.get().encodeParcelId([0,0])).toBe("0")
     expect(Land.get().encodeParcelId([1,0])).toBe("340282366920938463463374607431768211456")
     expect(Land.get().encodeParcelId([1,1])).toBe("340282366920938463463374607431768211457")
     expect(Land.get().encodeParcelId([0,1])).toBe("1")
