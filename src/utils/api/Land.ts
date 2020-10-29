@@ -86,7 +86,7 @@ export type MapContent = {
 
 const CLEAR_LOW = toBN('0xffffffffffffffffffffffffffffffff00000000000000000000000000000000');
 const CLEAR_HIGH = toBN('0x00000000000000000000000000000000ffffffffffffffffffffffffffffffff');
-const FACTOR_HIGH = toBN('0x100000000000000000000000000000000');
+const FACTOR = toBN('0x100000000000000000000000000000000');
 const FACTOR_LOW = toBN('0x10000000000000000000000000000000000000000000000000000000000000000');
 
 export default class Land extends API {
@@ -154,14 +154,14 @@ export default class Land extends API {
       throw new RangeError(`The coordinates should be inside bounds`)
     }
 
-    // return ((uint(x) * factor) & clearLow) | (uint(y) & clearHigh);
-    // const signX = x < 0 ? 1 << 32 : 0
     const absX = toBN(Math.abs(x))
     const absY = toBN(Math.abs(y))
     const uintX = x < 0 ? FACTOR_LOW.sub(absX) : absX
-    const uintY = y < 0 ? FACTOR_HIGH.sub(absY) : absY
-    let bX = CLEAR_LOW.and(toBN(uintX).mul(FACTOR_HIGH))
-    let bY = CLEAR_HIGH.and(toBN(uintY))
+    const uintY = y < 0 ? FACTOR.sub(absY) : absY
+    
+    // return ((uint(x) * factor) & clearLow) | (uint(y) & clearHigh);
+    let bX = (toBN(uintX).mul(FACTOR)).and(CLEAR_LOW)
+    let bY = toBN(uintY).and(CLEAR_HIGH)
     return bX.or(bY).toString()
   }
 
