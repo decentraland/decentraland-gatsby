@@ -30,7 +30,11 @@
   "author": "",
   "license": "MIT",
   "release": {
-    "branch": "master",
+    "branches": [
+      { "name": "master" },
+      { "name": "feat/*", "channel": "alpha", "prerelease": "alpha" },
+      { "name": "fix/*", "channel": "alpha", "prerelease": "alpha" }
+    ],
     "ci": false
   },
   "bugs": {
