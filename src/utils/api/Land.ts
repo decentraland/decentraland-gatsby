@@ -88,6 +88,7 @@ const CLEAR_LOW = toBN('0xffffffffffffffffffffffffffffffff0000000000000000000000
 const CLEAR_HIGH = toBN('0x00000000000000000000000000000000ffffffffffffffffffffffffffffffff');
 const FACTOR = toBN('0x100000000000000000000000000000000');
 const FACTOR_LOW = toBN('0x10000000000000000000000000000000000000000000000000000000000000000');
+const REVERSE_FACTOR = toBN('0x1000000000000000000000000000000');
 
 export default class Land extends API {
 
@@ -141,7 +142,7 @@ export default class Land extends API {
     return this.fetch('/map' + this.query({ nw, se }))
   }
 
-  encodeParcelId(coordinates: [number, number]) {
+  encodeParcelId(coordinates: [number, number]): string {
     const [ x, y ] = coordinates
     if (
       !Number.isFinite(x) ||
@@ -158,11 +159,32 @@ export default class Land extends API {
     const absY = toBN(Math.abs(y))
     const uintX = x < 0 ? FACTOR_LOW.sub(absX) : absX
     const uintY = y < 0 ? FACTOR.sub(absY) : absY
-    
-    // return ((uint(x) * factor) & clearLow) | (uint(y) & clearHigh);
+
     let bX = (toBN(uintX).mul(FACTOR)).and(CLEAR_LOW)
     let bY = toBN(uintY).and(CLEAR_HIGH)
     return bX.or(bY).toString()
+  }
+
+  decodeParcelId(parcelId: string): [number, number] {
+
+    const bn = toBN(parcelId)
+    const bnX = bn.div(FACTOR)
+    const bnY = bn.mod(FACTOR)
+    const x = bnX.gte(REVERSE_FACTOR) ? bnX.sub(FACTOR).toNumber() : bnX.toNumber()
+    const y = bnY.gte(REVERSE_FACTOR) ? bnY.sub(FACTOR).toNumber() : bnY.toNumber()
+
+    if (
+      !Number.isFinite(x) ||
+      !Number.isFinite(y) ||
+      -1000000 >= x ||
+      x >= 1000000 ||
+      -1000000 >= y ||
+      y >= 1000000
+    ) {
+      throw new RangeError(`The coordinates should be inside bounds`)
+    }
+
+    return [x, y]
   }
 
   getImage(options: GetMapImageOptions = {}) {

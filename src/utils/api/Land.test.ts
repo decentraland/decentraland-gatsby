@@ -20,9 +20,15 @@ describe('utils/api/Land', () => {
     [-120, 120, '115792089237316195423570985008687907812436100635127948423852631116100944265336'],
   ] as const
 
-  for (const [x, y, expected] of cases) {
-    test(`.encodeParcelId(x: ${x}, y: ${y}) => "${expected}"`, () => {
-      expect(Land.get().encodeParcelId([x, y])).toBe(expected)
+  for (const [x, y, id] of cases) {
+    test(`.encodeParcelId(x: ${x}, y: ${y}) => "${id}"`, () => {
+      expect(Land.get().encodeParcelId([x, y])).toBe(id)
+    })
+  }
+
+  for (const [x, y, id] of cases) {
+    test(`.decodeParcelId(id: "${id}") => [${x}, ${y}]`, () => {
+      expect(Land.get().decodeParcelId(id)).toEqual([x, y])
     })
   }
 })
