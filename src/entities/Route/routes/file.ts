@@ -8,7 +8,6 @@ import handle from '../handle';
 export default function file(path: string, status: number = 200) {
   let reader: Promise<readonly [Buffer, string]> | null = null
   return handle(async (_, res: Response) => {
-    console.log('file: ', path)
     if (!reader) {
       reader = (async () => {
         const data = await promisify(readFile)(path).catch(() => Buffer.alloc(0))

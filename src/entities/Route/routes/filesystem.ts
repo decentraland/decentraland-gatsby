@@ -25,18 +25,19 @@ export default function filesystem(path: string, notFoundPage: string | Partial<
   const options = filesystemOptions(notFoundPage)
   const indexFile = '/' + options.indexFile
   const cwd = resolve(process.cwd(), path)
-  const files = new Set(glob.sync('**/*', { cwd, nodir: true }))
+  const files = Array.from(new Set(glob.sync('**/*', { cwd, nodir: true })).values()).sort()
 
-  for (const filepath of files.values()) {
-    const webpath = '/' + filepath // => /en/index.html
+  for (const filePath of files) {
+    const webPath = '/' + filePath // => /en/index.html
 
-    console.log('filesystem: ', webpath)
-    if (webpath.endsWith(indexFile)) {
-      const basepath = webpath.slice(0, -10)
-      router.get(webpath, redirect(basepath)) // redirect /en/index.html => /en/
-      router.get(basepath, file(resolve(cwd, filepath))) // load /en/index.html on /en/
+    if (webPath.endsWith(indexFile)) {
+      const basePath = webPath.slice(0, -10)
+      router.get(webPath, redirect(basePath)) // redirect /en/index.html => /en/
+      router.get(basePath, file(resolve(cwd, filePath))) // load /en/index.html on /en/
+      console.log('filesystem: ', basePath)
     } else {
-      router.get(webpath, file(resolve(cwd, filepath))) // load /en/other.html
+      router.get(webPath, file(resolve(cwd, filePath))) // load /en/other.html
+      console.log('filesystem: ', webPath)
     }
   }
 
