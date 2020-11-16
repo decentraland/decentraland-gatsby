@@ -1,7 +1,8 @@
 FROM node:12-alpine
 
 RUN apk add --update-cache --virtual native-deps \
-  g++ gcc libgcc libstdc++ linux-headers make python && \
+  g++ gcc libgcc libstdc++ linux-headers make automake autoconf libtool python \
+  shadow musl-dev nasm tiff jpeg zlib zlib-dev file pkgconf && \
   apk del native-deps && \
   rm -rf /var/cache/apk/*
 
