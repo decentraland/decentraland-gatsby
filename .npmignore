@@ -3,8 +3,11 @@ storybook-static
 coverage/*
 src/*
 dist/__mock__
+dist/__mocks__
 dist/**/*.test.js
 dist/**/*.test.d.ts
+postcss.config.js
+tsconfig.json
 .circleci
 .storybook
 .github
