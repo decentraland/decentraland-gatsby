@@ -30,6 +30,7 @@ export default function filesystem(path: string, notFoundPage: string | Partial<
   for (const filepath of files.values()) {
     const webpath = '/' + filepath // => /en/index.html
 
+    console.log('filesystem: ', webpath)
     if (webpath.endsWith(indexFile)) {
       const basepath = webpath.slice(0, -10)
       router.get(webpath, redirect(basepath)) // redirect /en/index.html => /en/
