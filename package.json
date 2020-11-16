@@ -104,7 +104,7 @@
     "decentraland-ui": "^2.23.0",
     "express": "^4.17.1",
     "framer-motion": "^1.9.0",
-    "gatsby": "^2.19.24",
+    "gatsby": "^2.26.1",
     "gatsby-plugin-intl": "^0.3.3",
     "generic-pool": "^3.7.1",
     "glob": "^7.1.6",
