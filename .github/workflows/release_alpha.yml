@@ -1,9 +1,11 @@
 name: release_alpha
 
 on:
-  pull_request:
+  push:
     branches:
-      - master
+      - next
+      - feat/*
+      - fix/*
 
 jobs:
   release_alpha:
