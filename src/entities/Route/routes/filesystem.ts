@@ -4,8 +4,21 @@ import { resolve } from 'path'
 import redirect from './redirect'
 import file from './file'
 
-export default function filesystem(path: string, notFoundPage: string) {
+export type FilesystemHandleOptions = {
+  notFoundPage: string
+}
+
+function filesystemOptions(options: string | FilesystemHandleOptions) {
+  if (typeof options === 'string') {
+    return { notFoundPage: options }
+  }
+
+  return options
+}
+
+export default function filesystem(path: string, notFoundPage: string | FilesystemHandleOptions) {
   const router = Router()
+  const options = filesystemOptions(notFoundPage)
   const cwd = resolve(process.cwd(), path)
   const files = new Set(glob.sync('**/*', { cwd, nodir: true }))
 
@@ -21,6 +34,6 @@ export default function filesystem(path: string, notFoundPage: string) {
     }
   }
 
-  router.use(file(resolve(cwd, notFoundPage), 404))
+  router.use(file(resolve(cwd, options.notFoundPage), 404))
   return router
 }
