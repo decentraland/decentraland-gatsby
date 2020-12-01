@@ -4,7 +4,8 @@
   "description": "Common Gastby components",
   "main": "dist/index.js",
   "bin": {
-    "setup": "./bin/setup.sh"
+    "setup": "./bin/setup.sh",
+    "pulumi-environment": "./bin/environment.sh"
   },
   "scripts": {
     "test": "jest",
@@ -59,7 +60,7 @@
     "@types/flat": "0.0.28",
     "@types/isomorphic-fetch": "0.0.35",
     "@types/jest": "^25.1.3",
-    "@types/node": "^13.7.7",
+    "@types/node": "^12.19.7",
     "@types/react-dom": "^16.9.5",
     "@types/react-highlight": "^0.12.2",
     "@types/segment-analytics": "0.0.32",
@@ -75,6 +76,7 @@
     "typescript": "^3.8.2"
   },
   "dependencies": {
+    "@pulumi/pulumi": "^2.14.0",
     "@reach/router": "^1.3.3",
     "@types/apicache": "^1.2.2",
     "@types/cors": "^2.8.6",
@@ -117,8 +119,10 @@
     "react-markdown": "^4.3.1",
     "semantic-release": "^17.0.4",
     "three": "^0.115.0",
+    "toml": "^3.0.0",
     "uuid": "^8.3.1",
     "validator": "^13.0.0",
-    "web3x": "^4.0.6"
+    "web3x": "^4.0.6",
+    "yaml": "^1.10.0"
   }
 }
