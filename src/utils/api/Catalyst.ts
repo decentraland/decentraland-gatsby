@@ -62,7 +62,15 @@ export type Status = {
 }
 
 export type StatusWithLayers = Status & {
-  layers: (Layer & { usersParcels: number[][] })[]
+  layers: (Layer & { usersParcels: Position[] })[]
+}
+
+export type Position = [ number, number ]
+
+export type Servers = {
+  address: string,
+  owner: string,
+  id: string
 }
 
 export type LayerUser = {
@@ -114,6 +122,27 @@ export default class Catalyst extends API {
       target += '?includeLayers=true'
     }
     return this.fetch(target)
+  }
+
+  async getServers() {
+    return this.fetch<Servers[]>(`/lambdas/contracts/servers`)
+  }
+
+  async getPOIs() {
+    const results = await this.fetch<string[]>(`/lambdas/contracts/pois`)
+    const pois: Position[] = []
+    for (const result of results ) {
+      const [ x, y ] = String(result || '').split(',').map(Number)
+      if (Number.isFinite(x) && Number.isFinite(y)) {
+        pois.push([ x, y ] as Position)
+      }
+    }
+
+    return pois
+  }
+
+  async getBanNames() {
+    return this.fetch<string[]>(`/lambdas/contracts/denylisted-names`)
   }
 
   async getLayers() {
