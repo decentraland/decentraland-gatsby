@@ -34,10 +34,8 @@ export default function filesystem(path: string, notFoundPage: string | Partial<
       const basePath = webPath.slice(0, -10)
       router.get(webPath, redirect(basePath)) // redirect /en/index.html => /en/
       router.get(basePath, file(resolve(cwd, filePath))) // load /en/index.html on /en/
-      console.log('filesystem: ', basePath)
     } else {
       router.get(webPath, file(resolve(cwd, filePath))) // load /en/other.html
-      console.log('filesystem: ', webPath)
     }
   }
 
