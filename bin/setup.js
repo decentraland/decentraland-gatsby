@@ -83,7 +83,7 @@ Promise.resolve()
         "DOTENV_CONFIG_PATH=.env.development nodemon --watch src/entities --watch src/server.ts -e ts,json --exec 'ts-node -r dotenv/config.js' src/server",
       clean: 'gatsby clean',
       migrate:
-        'DOTENV_CONFIG_PATH=.env.development ts-node -r dotenv/config.js ./node_modules/node-pg-migrate/bin/node-pg-migrate -j ts -d CONNECTION_STRING',
+        'DOTENV_CONFIG_PATH=.env.development ts-node -r dotenv/config.js ./node_modules/node-pg-migrate/bin/node-pg-migrate -j ts -m src/migrations -d CONNECTION_STRING',
       production: 'NODE_ENV=production node lib/server.js',
       test: 'echo "Write tests! -> https://gatsby.dev/unit-testing" && exit 1',
     })
