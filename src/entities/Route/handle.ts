@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from "express";
+import { NextHandleFunction } from "connect";
 import Context from "./context";
 import RequestError from "./error";
 import isStream from "../../utils/stream/isStream";
@@ -26,13 +27,22 @@ export default function handle(handler: AsyncHandler) {
   }
 }
 
-export function middleware(handler: AsyncHandler) {
+export function middleware(handler: AsyncHandler): NextHandleFunction {
   return function (req: Request, res: Response, next: NextFunction) {
-
     handler(req, res, new Context(req, res))
       .then(() => next())
       .catch((err: RequestError) => handleResponseError(req, res, err))
   }
+}
+
+export async function useMiddlaware(middlaware: NextHandleFunction, req: Request, res: Response) {
+  return new Promise<void>((resolve, reject) => {
+    try {
+      middlaware(req, res, (err?: any) => { err ? reject(err) : resolve() })
+    } catch (error) {
+      reject(error)
+    }
+  })
 }
 
 function handleResponseError(req: Request, res: Response, err: RequestError) {
