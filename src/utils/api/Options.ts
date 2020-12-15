@@ -1,3 +1,6 @@
+import { getCurrentProfile } from '../auth/identify'
+import { Profile } from '../auth/types'
+import { toBase64 } from '../base64'
 
 export type RequestOptions = Omit<RequestInit, 'headers'> & { headers?: Record<string, string> }
 
@@ -39,6 +42,19 @@ export default class Options {
     this.options = newOptions
 
     return this
+  }
+
+  authorization() {
+    const profile: Profile | null = getCurrentProfile()
+    if (
+      !profile ||
+      !profile.identity ||
+      !profile.identity.authChain
+    ) {
+      return this
+    }
+
+    return this.header('Authorization', 'Bearer ' + toBase64(JSON.stringify(profile.identity.authChain)))
   }
 
   header(key: string, value: string) {
