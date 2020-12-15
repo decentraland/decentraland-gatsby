@@ -75,7 +75,7 @@ Promise.resolve()
     const pkg = require(resolve(process.cwd(), 'package.json'))
     pkg.scripts = Object.assign(pkg.scripts || {}, {
       build: 'gatsby build && tsc -p .',
-      develop: 'gatsby develop -H 0.0.0.0',
+      develop: 'gatsby develop --https -H 0.0.0.0',
       format: 'prettier --write "**/*.{js,jsx,json,md}"',
       start:
         "concurrently -c blue,green -n SERVER,FRONT 'npm run serve' 'npm run develop'",
