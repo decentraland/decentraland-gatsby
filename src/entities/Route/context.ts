@@ -15,10 +15,7 @@ export default class Context {
     return this.req.header(name) ?? defaultValue;
   }
 
-  param<T = string>(name: string, options: ParamOptions<T> = {}): T | null {
-
-    let value = this.req.param(name, options.defaultValue);
-
+  value<T = string>(name: string, value: any, options: ParamOptions<T> = {}): T | null {
     if (value === undefined || value === null) {
       if (options.required) {
         throw new RequestError(`Param ${name} is required`, RequestError.BadRequest);
@@ -38,5 +35,22 @@ export default class Context {
     }
 
     return finalValue
+  }
+
+  param<T = string>(name: string, options: ParamOptions<T> = {}): T | null {
+    let value =  this.req.params[name] ?? this.req.body[name] ?? this.req.query[name];
+    return this.value(name, value, options)
+  }
+
+  pathParam<T = string>(name: string, options: ParamOptions<T> = {}): T | null {
+    return this.value(name, this.req.params[name], options)
+  }
+
+  searchParam<T = string>(name: string, options: ParamOptions<T> = {}): T | null {
+    return this.value(name, this.req.query[name], options)
+  }
+
+  bodyParam<T = string>(name: string, options: ParamOptions<T> = {}): T | null {
+    return this.value(name, this.req.body[name], options)
   }
 }
