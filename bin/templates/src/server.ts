@@ -1,5 +1,6 @@
 import express from 'express'
 import bodyParser from 'body-parser'
+// import database from 'decentraland-gatsby/dist/entities/Database/index'
 // import manager from 'decentraland-gatsby/dist/entities/Job/index'
 import { listen } from 'decentraland-gatsby/dist/entities/Server/utils'
 import { status, logger, filesystem, ddos } from 'decentraland-gatsby/dist/entities/Route/routes'
