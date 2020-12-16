@@ -119,7 +119,7 @@ storiesOf('Hooks', module)
       <Paragraph><Code inline>profile: Object | null</Code> contains all the the information about the current session.</Paragraph>
       <Paragraph><Code inline>profile.address: Address</Code> ethereum address used to create the session.</Paragraph>
       <Paragraph><Code inline>profile.identity: Object</Code> session representation created with <Link href="https://github.com/decentraland/decentraland-crypto">decentraland-crypto</Link>.</Paragraph>
-      <Paragraph><Code inline>profile.avatar: Object | null</Code> avatar information from Katalyst server, could be null if the address doesn't have an avatar.</Paragraph>
+      <Paragraph><Code inline>profile.avatar: Object | null</Code> avatar information from Catalyst server, could be null if the address doesn't have an avatar.</Paragraph>
       <Divider size="small" />
       <Paragraph><Code inline>actions: Object</Code> contains method to create or destroy sessions.</Paragraph>
       <Paragraph><Code inline>{`actions.loading: boolean`}</Code> true when the session is loading.</Paragraph>

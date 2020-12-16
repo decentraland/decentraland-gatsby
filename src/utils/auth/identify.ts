@@ -1,3 +1,4 @@
+// TODO v3: remove web3x
 import { Address } from 'web3x/address';
 import { Account } from 'web3x/account';
 import { Personal } from 'web3x/personal';
@@ -5,7 +6,7 @@ import { bufferToHex } from 'web3x/utils';
 import { Profile, ProfileChangeEvent, ProfileExpiredEvent, ProfileEffectHandle } from './types';
 import getEth from './getEth';
 import getCurrentAddress from './getCurrentAddress';
-import Katalyst from '../api/Katalyst';
+import Catalyst from '../api/Catalyst';
 import SingletonListener from '../SingletonListener';
 import track from '../../components/Segment/track';
 
@@ -36,7 +37,7 @@ export default async function identify() {
 
     const { Authenticator } = await dependency;
     const identity = await Authenticator.initializeAuthChain(address.toString(), payload, expiration, message => new Personal(eth.provider).sign(message, address, ''));
-    const avatar = await Katalyst.get().getProfile(address)
+    const avatar = await Catalyst.get().getProfile(address)
     const profile: Profile = { address, identity, avatar }
     track((segment) => segment.identify(address.toString(), { email: avatar?.email, name: avatar?.name }))
     return setCurrentProfile(profile)

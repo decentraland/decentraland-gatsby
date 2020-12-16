@@ -1,6 +1,5 @@
 import Land from './Land';
 
-
 describe('utils/api/Land', () => {
   const cases = [
     [0, 0, '0'],

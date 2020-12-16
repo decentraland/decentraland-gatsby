@@ -3,8 +3,8 @@ import API from './API'
 import env from '../env'
 
 export type Snapshot = {
-  "face": string,
-  "body": string,
+  face: string,
+  body: string,
 }
 
 export type BodyColor = {

@@ -1,6 +1,6 @@
 import { Request } from "express";
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
-import Katalyst, { Avatar } from "../../utils/api/Katalyst";
+import Catalyst, { Avatar } from "../../utils/api/Catalyst";
 import API from "../../utils/api/API";
 import RequestError from "../Route/error";
 import param from "../Route/param";
@@ -26,7 +26,7 @@ export function getUserParam(req: Request) {
 export function withProfile(options: WithProfileOptions = {}) {
   return middleware(async (req) => {
     const user = getUserParam(req).toLowerCase()
-    const profile = await API.catch(Katalyst.get().getProfile(user))
+    const profile = await API.catch(Catalyst.get().getProfile(user))
 
     if (!profile && !options.optional) {
       throw new RequestError(`Not found profile for "${user}"`, RequestError.NotFound)
@@ -46,7 +46,7 @@ export function withAuthProfile(options: WithProfileOptions = {}) {
       return
     }
 
-    const authProfile = await API.catch(Katalyst.get().getProfile(user))
+    const authProfile = await API.catch(Catalyst.get().getProfile(user))
 
     if (!authProfile && !options.optional) {
       throw new RequestError(`Not found profile for "${user}"`, RequestError.NotFound)
