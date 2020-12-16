@@ -21,15 +21,19 @@ storiesOf('Images', module)
       <SubTitle>Dimensions</SubTitle>
       <Grid>
         <Grid.Row>
-          <Grid.Column mobile="5">
+          <Grid.Column mobile="4">
             <Code inline>dimension="wide"</Code>
             <ImgFixed dimension="wide" src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png" />
           </Grid.Column>
-          <Grid.Column mobile="5">
+          <Grid.Column mobile="4">
             <Code inline>dimension="square"</Code>
             <ImgFixed dimension="square" src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png" />
           </Grid.Column>
-          <Grid.Column mobile="5">
+          <Grid.Column mobile="4">
+            <Code inline>dimension="circle"</Code>
+            <ImgFixed dimension="circle" src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png" />
+          </Grid.Column>
+          <Grid.Column mobile="4">
             <Code inline>dimension="vertical"</Code>
             <ImgFixed dimension="vertical" src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png" />
           </Grid.Column>
