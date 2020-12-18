@@ -1,9 +1,11 @@
 import { Request } from 'express'
-import { Authenticator, AuthLinkType, AuthIdentity, AuthChain, parseEmphemeralPayload } from 'dcl-crypto'
+import { AuthIdentity, AuthChain, AuthLinkType } from 'dcl-crypto/dist/types'
 import { fromBase64 } from '../../utils/base64'
 import { HttpProvider } from 'web3x/providers'
 import RequestError from '../Route/error'
 import { middleware } from '../Route/handle'
+
+const dependency = import('dcl-crypto/dist/Authenticator')
 
 export type WithAuth<R extends Request = Request> = R & {
   auth: string | null
@@ -16,6 +18,7 @@ export type AuthOptions = {
 
 export function auth(options: AuthOptions = {}) {
   return middleware(async (req) => {
+    const { Authenticator, parseEmphemeralPayload } = await dependency
     const authorization = req.header('authorization')
     if (!authorization && options.optional) {
       return
@@ -75,4 +78,3 @@ export function auth(options: AuthOptions = {}) {
     Object.assign(req, { auth })
   })
 }
-

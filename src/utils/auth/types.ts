@@ -1,6 +1,6 @@
-import { Address } from "web3x/address";
-import { AuthIdentity } from "dcl-crypto/dist/types";
-import { Avatar } from "../api/Catalyst";
+import type { Address } from "web3x/address";
+import type { AuthIdentity } from "dcl-crypto/dist/types";
+import type { Avatar } from "../api/Catalyst";
 
 export type Profile = {
   address: Address,

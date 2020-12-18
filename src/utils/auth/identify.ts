@@ -9,7 +9,6 @@ import getCurrentAddress from './getCurrentAddress';
 import Catalyst from '../api/Catalyst';
 import SingletonListener from '../SingletonListener';
 import track from '../../components/Segment/track';
-
 const dependency = import('dcl-crypto/dist/Authenticator')
 
 export const STORE_PROFILE_KEY = 'auth'
