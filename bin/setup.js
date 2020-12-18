@@ -5,22 +5,24 @@ const { mkdirSync, writeFileSync, readFileSync } = require('fs')
 const { spawn } = require('child_process')
 const { grey, green, red } = require('colors/safe')
 
-function installDevDependencies(modules) {
-  return installDependencies(modules, true)
-}
-
-function installDependencies(modules, dev) {
+function installDependencies(modules, options) {
   return new Promise((resolve, reject) => {
     console.log()
     console.log(
-      grey(`    intalling ${dev ? 'devDependencies' : 'dependencies'}: `)
+      grey(`    intalling ${options && options.dev ? 'devDependencies' : 'dependencies'}: `)
     )
     console.log()
     modules.forEach((module) => console.log(green('        ' + module)))
     console.log()
     const run = spawn(
       'npm',
-      ['install', dev ? '-D' : '-s'].concat(modules || []),
+      [
+        'install',
+        options && options.dev ? '-D' : '-s',
+        options && options.exact && '-E',
+      ]
+        .filter(Boolean)
+        .concat(modules || []),
       { stdio: 'inherit' }
     )
     run.on('exit', (code) =>
@@ -59,8 +61,15 @@ Promise.resolve()
       'validator',
     ])
   )
+
   .then(() =>
-    installDevDependencies([
+    installDependencies([
+      'eth-crypto@1.6.0',
+    ], { exact: true })
+  )
+
+  .then(() =>
+    installDependencies([
       'prettier',
       'concurrently',
       'ts-node',
@@ -69,8 +78,15 @@ Promise.resolve()
       '@types/node',
       '@types/isomorphic-fetch',
       '@types/express',
-    ])
+    ], { dev: true })
   )
+
+  .then(() =>
+    installDependencies([
+      'devcert@1.1.0',
+    ], { dev: true, exact: true })
+  )
+
   .then(() => {
     const pkg = require(resolve(process.cwd(), 'package.json'))
     pkg.scripts = Object.assign(pkg.scripts || {}, {
