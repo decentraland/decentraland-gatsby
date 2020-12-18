@@ -3,13 +3,13 @@ import { Address } from 'web3x/address';
 import { Account } from 'web3x/account';
 import { Personal } from 'web3x/personal';
 import { bufferToHex } from 'web3x/utils';
+import { Authenticator } from 'dcl-crypto/dist/Authenticator';
 import { Profile, ProfileChangeEvent, ProfileExpiredEvent, ProfileEffectHandle } from './types';
 import getEth from './getEth';
 import getCurrentAddress from './getCurrentAddress';
 import Catalyst from '../api/Catalyst';
 import SingletonListener from '../SingletonListener';
 import track from '../../components/Segment/track';
-const dependency = import('dcl-crypto/dist/Authenticator')
 
 export const STORE_PROFILE_KEY = 'auth'
 let CURRENT_PROFILE: Profile | null = null
@@ -34,7 +34,6 @@ export default async function identify() {
       privateKey: bufferToHex(account.privateKey)
     };
 
-    const { Authenticator } = await dependency;
     const identity = await Authenticator.initializeAuthChain(address.toString(), payload, expiration, message => new Personal(eth.provider).sign(message, address, ''));
     const avatar = await Catalyst.get().getProfile(address)
     const profile: Profile = { address, identity, avatar }
