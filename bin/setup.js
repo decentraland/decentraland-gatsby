@@ -114,6 +114,7 @@ Promise.resolve()
       cwd: templates,
       root: templates,
       absolute: false,
+      dot: true,
       mark: true,
     })
 

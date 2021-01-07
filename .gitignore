@@ -107,3 +107,4 @@ dist
 dist/
 build/
 public/
+.DS_Store
