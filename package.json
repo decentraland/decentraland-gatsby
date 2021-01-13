@@ -4,7 +4,7 @@
   "description": "Common Gastby components",
   "main": "dist/index.js",
   "bin": {
-    "setup": "./bin/setup.sh",
+    "gatsby-setup": "./bin/setup.sh",
     "pulumi-environment": "./bin/environment.sh"
   },
   "scripts": {

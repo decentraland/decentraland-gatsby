@@ -19,7 +19,7 @@ Install this library as a dependency:
 Run the setup command
 
 ```bash
-  ./node_modules/.bin/setup
+  ./node_modules/.bin/gatsby-setup
 ```
 
 ## Start project
