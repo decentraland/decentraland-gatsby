@@ -33,12 +33,21 @@ function toValue(value) {
 }
 
 function environment(name, value) {
-  if (name && value !== null && value !== undefined) {
-    name = toName(name)
-    value = toValue(value)
-    output.push(`export ${name}=${JSON.stringify(value)}`)
-    console.log(grey(`export  ${cyan(name)}=${green(JSON.stringify(value))}`), )
+  if (!name || value === null || value === undefined) {
+    return
   }
+
+  if (typeof value === 'object') {
+    const keys = Object.keys(value)
+    if (keys.length === 1 && keys[0] === 'secure') {
+      return
+    }
+  }
+
+  name = toName(name)
+  value = toValue(value)
+  output.push(`export ${name}=${JSON.stringify(value)}`)
+  console.log(grey(`export  ${cyan(name)}=${green(JSON.stringify(value))}`), )
 }
 
 function stats(file) {
@@ -51,15 +60,16 @@ function stats(file) {
 
 function ensureFile(file) {
   const relative_path = relative(cwd, file)
+  const full_relative_path = relative(process.cwd(), file)
   console.log(grey(`opening`), green(relative_path))
 
   const stat = stats(file)
   if (!stat) {
-    throw new Error(`File "./${relative_path}" not found `)
+    throw new Error(`File "./${full_relative_path}" not found `)
   }
 
   if (stat.isDirectory()) {
-    throw new Error(`File "./${relative_path}" is a directory`)
+    throw new Error(`File "./${full_relative_path}" is a directory`)
   }
 }
 
