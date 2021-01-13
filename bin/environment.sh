@@ -5,11 +5,10 @@ if [ "$PULUMI_PATH" = "" ]; then
 fi
 
 SCRIPT="bin/environment.js"
-OUTPUT="bin/environment.$RANDOM.sh"
+OUTPUT="$PULUMI_PATH/environment.$RANDOM.sh"
 
 if [ -f "node_modules/decentraland-gatsby/bin/environment.js" ]; then
   SCRIPT="node_modules/decentraland-gatsby/bin/environment.js"
-  OUTPUT="node_modules/decentraland-gatsby/bin/environment.$RANDOM.sh"
 fi
 
 node "$SCRIPT" "$PULUMI_PATH" "$OUTPUT"

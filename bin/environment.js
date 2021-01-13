@@ -75,7 +75,7 @@ if (!pulumi_dir.endsWith('/.ci')) {
 }
 
 function getPulumi() {
-  const pulumi_file = resolve(pulumi_dir, `./Pulumi.yaml`)
+  const pulumi_file = resolve(pulumi_dir, `./Pulumi.yml`)
   ensureFile(pulumi_file)
 
   const content = readFileSync(pulumi_file, 'utf-8')
@@ -102,7 +102,7 @@ function getPulumiConfig() {
     }
 
     const stack = stack_line.trim().slice('Current stack is '.length, -1)
-    const pulumi_stack_file = resolve(pulumi_dir, `./Pulumi.${stack}.yaml`)
+    const pulumi_stack_file = resolve(pulumi_dir, `./Pulumi.${stack}.yml`)
     ensureFile(pulumi_stack_file)
 
     const content = readFileSync(pulumi_stack_file, 'utf-8')
