@@ -10,7 +10,7 @@ export default function file(path: string, status: number = 200) {
   return handle(async (_, res: Response) => {
     if (!reader) {
       reader = (async () => {
-        const data = await promisify(readFile)(path).catch(() => Buffer.alloc(0))
+        const data = await readOnce(path)
         const hash = createHash('sha256')
         hash.write(data)
         const etag = hash.digest('hex')
@@ -26,4 +26,13 @@ export default function file(path: string, status: number = 200) {
       .status(status)
       .send(data)
   })
+}
+
+const files = new Map<string, Promise<Buffer>>()
+export async function readOnce(path: string) {
+  if (!files.has(path)) {
+    files.set(path, promisify(readFile)(path).catch(() => Buffer.alloc(0)))
+  }
+
+  return files.get(path)!
 }
