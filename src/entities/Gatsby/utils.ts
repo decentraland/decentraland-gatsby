@@ -35,6 +35,7 @@ export function replaceHelmetMetadata(page: string, options: Partial<MetadataOpt
         break;
 
       case `url`:
+        injected.push(`<meta name="twitter:url" content="${options[name]}" />`)
         injected.push(`<meta property="og:url" content="${options[name]}" />`)
         break;
 
