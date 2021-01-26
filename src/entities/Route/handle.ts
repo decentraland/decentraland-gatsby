@@ -6,9 +6,10 @@ import isStream from "../../utils/stream/isStream";
 
 export type AsyncHandler = (req: Request & any, res: Response & any, ctx: Context) => Promise<any> | any
 
+/** TODO v3: rename to api file */
+/** TODO v3: add html handles */
 export default function handle(handler: AsyncHandler) {
   return function (req: Request, res: Response) {
-
     handler(req, res, new Context(req, res))
       .then(function handleResponseBody(data: any) {
         if (!res.headersSent) {
@@ -45,6 +46,7 @@ export async function useMiddlaware(middlaware: NextHandleFunction, req: Request
   })
 }
 
+/** TODO v3: move to utils fil */
 function handleResponseError(req: Request, res: Response, err: RequestError) {
   const data = {
     ...err,
