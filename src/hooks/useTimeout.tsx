@@ -7,9 +7,9 @@ type State<T> = {
   timeout: ReturnType<typeof setTimeout> | null
 }
 
-export default function useTimeout<T>(fun: () => T, until: Date): T | null {
+export default function useTimeout<T>(fun: () => T, at: Date): T | null {
   const initialValue: State<T> = useMemo(() => {
-    if (until.getTime() <= Date.now()) {
+    if (at.getTime() <= Date.now()) {
       return {
         executed: true,
         value: fun(),
@@ -21,13 +21,7 @@ export default function useTimeout<T>(fun: () => T, until: Date): T | null {
   }, [])
 
   const [state, setState] = useState<State<T>>(initialValue)
-  const execute = () => setState({
-    executed: true,
-    value: fun(),
-    timeout: null
-  })
-
-  useEffect(() => {
+  const execute = () => {
     if (state.executed) {
       return
     }
@@ -36,11 +30,34 @@ export default function useTimeout<T>(fun: () => T, until: Date): T | null {
       clearTimeout(state.timeout)
     }
 
-    if (until.getTime() <= Date.now()) {
-      execute()
-    } else {
-      setTimeout(execute, Math.min(until.getTime() - Date.now(), Datetime.Day * 7))
+    if (at.getTime() > Date.now()) {
+      const time = at.getTime() - Date.now()
+      return setState({
+        executed: false,
+        value: null,
+        timeout: setTimeout(execute, Math.min(time, Datetime.Day))
+      })
     }
-  }, [ until.getTime() ])
+
+    return setState({
+      executed: true,
+      value: fun(),
+      timeout: null
+    })
+  }
+
+  useEffect(() => {
+    if (state.executed) {
+      return
+    }
+
+    execute()
+
+    return () => {
+      if (state.timeout) {
+        clearTimeout(state.timeout)
+      }
+    }
+  }, [ at.getTime() ])
   return state.value
 }

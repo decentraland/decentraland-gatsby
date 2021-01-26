@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react"
 import { storiesOf } from "@storybook/react";
 import centered from '@storybook/addon-centered/react'
 import useProfile from './useProfile';
@@ -7,6 +7,7 @@ import useResponsive from './useResponsive';
 import useMobileDetector from './useMobileDetector';
 import useClipboardCopy from './useClipboardCopy';
 import useFeatureDetection, { features } from './useFeatureDetection';
+import useTimeout from './useTimeout';
 import Code from '../components/Text/Code';
 import Title from '../components/Text/Title';
 import { Container } from 'decentraland-ui/dist/components/Container/Container';
@@ -19,6 +20,7 @@ import Divider from '../components/Text/Divider';
 import Link from '../components/Text/Link';
 import getUserAgent from '../utils/getUserAgent';
 import { Time } from '../components/Date/utils';
+import { useMemo } from "react";
 
 const launch = new Date(Date.parse('2020-02-20T00:00:00.000Z'))
 const future = new Date(Date.now() + Time.Day + Time.Hour)
@@ -169,6 +171,22 @@ storiesOf('Hooks', module)
       <Code language="typescript">{`responsive({ maxWidth: Responsive.onlyMobile.maxWidth }) // ${responsive({ maxWidth: Responsive.onlyMobile.maxWidth })}`}</Code>
       <Code language="typescript">{`responsive({ maxWidth: Responsive.onlyTablet.maxWidth }) // ${responsive({ maxWidth: Responsive.onlyTablet.maxWidth })}`}</Code>
       <Code language="typescript">{`responsive({ maxWidth: Responsive.onlyComputer.maxWidth }) // ${responsive({ maxWidth: Responsive.onlyComputer.maxWidth })}`}</Code>
+      <Divider />
+    </Container>
+  })
+  .add('useTimeout', () => {
+    const date = useMemo(() => new Date(Date.now() + 10000), [])
+    const value = useTimeout(() => Math.random(), date)
+    return <Container>
+      <Divider />
+      <MainTitle>Using Timeout Hook</MainTitle>
+      <Paragraph secondary>The <Italic>timeout hook</Italic> allow you to use a timeout in a safe way inside the lifecycle of React.</Paragraph>
+      <Code language="typescript">{`const value: T | null = useTimeout<T>(resolver: () => T, at: Date)`}</Code>
+      <Divider size="small" />
+      <Paragraph><Code inline>value: T | null</Code> contains <Code inline>T</Code> if current date is after <Code inline>at</Code>, <Code inline>null</Code> otherwise.</Paragraph>
+      <Divider size="small" />
+      <Title>Live example:</Title>
+      <Code language="typescript">{`const value = useTimeout(() => Math.random(), date /* wait 10s */) // value: ${value}`}</Code>
       <Divider />
     </Container>
   })
