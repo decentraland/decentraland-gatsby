@@ -41,6 +41,7 @@ Promise.resolve()
       'web3x',
       'dcl-crypto',
       'decentraland-crypto',
+      'eth-crypto@1.6.0',
       'node-pg-migrate',
       'isomorphic-fetch',
       'nodemon',
