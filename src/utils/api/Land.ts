@@ -164,7 +164,7 @@ export default class Land extends API {
     throw new Error(`Endpoint /v1/map is deprecated`)
   }
 
-  async getTiles(position1: [number, number], position2: [number, number], options: { include?: (keyof Tile)[], exclude?: (keyof Tile)[] } = {}): Promise<Tile[]> {
+  async getTiles(position1: [number, number], position2: [number, number], options: { include?: (keyof Tile)[], exclude?: (keyof Tile)[] } = {}): Promise<Record<string, Tile>> {
     const params = new URLSearchParams({
       x1: String(position1[0]),
       y1: String(position1[1]),
