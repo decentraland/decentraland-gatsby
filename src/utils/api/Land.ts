@@ -2,6 +2,7 @@ import { toBN } from 'web3x/utils'
 import API from './API'
 import env from '../env'
 import Options from './Options'
+import RequestError from '../errors/RequestError'
 
 export type GetListOptions = {
   status?: 'open' | 'cancelled' | 'sold'
@@ -24,56 +25,72 @@ export type GetMapImageOptions = GetImageOptions & {
 }
 
 export type Parcel = {
-  "id": string,
-  "x": number,
-  "y": number,
-  "auction_price": number,
-  "district_id": string | null,
-  "owner": string,
-  "data": {
-    "ipns"?: string
-    "name"?: string
-    "description"?: string
-    "version": number
+  id: string,
+  x: number,
+  y: number,
+  auction_price: number,
+  district_id: string | null,
+  owner: string,
+  data: {
+    ipns?: string
+    name?: string
+    description?: string
+    version: number
   },
-  "auction_owner": string
-  "tags"?: {
-    "proximity"?: {
-      "road"?: {
-        "district_id": string,
-        "distance": number
+  auction_owner: string
+  tags?: {s
+    proximity?: {
+      road?: {
+        district_id: string,
+        distance: number
       }
     }
   },
-  "last_transferred_at": string | null,
-  "estate_id": string | null,
-  "update_operator": string | null,
-  "auction_timestamp": string | null,
-  "operator": string | null,
-  "publication": string | null,
-  "update_managers": string[],
-  "approvals_for_all": string[]
+  last_transferred_at: string | null,
+  estate_id: string | null,
+  update_operator: string | null,
+  auction_timestamp: string | null,
+  operator: string | null,
+  publication: string | null,
+  update_managers: string[],
+  approvals_for_all: string[]
 }
 
 export type Estate = {
-  "id": string,
-  "owner": string,
-  "data": {
-    "ipns"?: string,
-    "name"?: string,
-    "parcels"?: { x: number, y: number }[],
-    "description"?: string,
-    "version": number,
+  id: string,
+  owner: string,
+  data: {
+    ipns?: string,
+    name?: string,
+    parcels?: { x: number, y: number }[],
+    description?: string,
+    version: number,
   },
-  "last_transferred_at": string,
-  "tx_hash": string,
-  "token_id": string,
-  "update_operator": string | null,
-  "district_id": string | null,
-  "operator": string | null,
-  "publication": string | null,
-  "update_managers": string[],
-  "approvals_for_all": string[]
+  last_transferred_at: string,
+  tx_hash: string,
+  token_id: string,
+  update_operator: string | null,
+  district_id: string | null,
+  operator: string | null,
+  publication: string | null,
+  update_managers: string[],
+  approvals_for_all: string[]
+}
+
+export type Tile = {
+  id: string
+  x: number
+  y: number
+  type: 'owned' | 'unowned' | 'plaza' | 'road' | 'district'
+  top: boolean
+  left: boolean
+  topLeft: boolean
+  updatedAt: number
+  name?: string
+  owner?: string
+  estateId?: string
+  tokenId?: string
+  price?: number
 }
 
 export type MapContent = {
@@ -138,8 +155,32 @@ export default class Land extends API {
     return this.fetch('/estates' + this.query({ ...options, sort_by, sort_order }))
   }
 
+  /**
+   * @deprecated
+   * @param nw
+   * @param se
+   */
   async getMapContent(nw: [number, number], se: [number, number]): Promise<MapContent> {
-    return this.fetch('/map' + this.query({ nw, se }))
+    throw new Error(`Endpoint /v1/map is deprecated`)
+  }
+
+  async getTiles(position1: [number, number], position2: [number, number], options: { include?: (keyof Tile)[], exclude?: (keyof Tile)[] } = {}): Promise<Tile[]> {
+    const params = new URLSearchParams({
+      x1: String(position1[0]),
+      y1: String(position1[1]),
+      x2: String(position2[0]),
+      y2: String(position2[1]),
+    })
+
+    if (options.include && options.include.length > 0) {
+      params.append('include', options.include.join(','))
+    }
+
+    if (options.exclude && options.exclude.length > 0) {
+      params.append('include', options.exclude.join(','))
+    }
+
+    return this.fetch('/v2/tiles?' + params.toString())
   }
 
   encodeParcelId(coordinates: [number, number]): string {
