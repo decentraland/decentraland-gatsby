@@ -6,48 +6,34 @@ import isStream from "../../utils/stream/isStream";
 
 export type AsyncHandler = (req: Request & any, res: Response & any, ctx: Context) => Promise<any> | any
 
-/** TODO v3: rename to api file */
-/** TODO v3: add html handles */
-export default function handle(handler: AsyncHandler) {
-  return function (req: Request, res: Response) {
-    handler(req, res, new Context(req, res))
-      .then(function handleResponseBody(data: any) {
-        if (!res.headersSent) {
-          res.status(defaultStatusCode(req))
-        }
+export default handleAPI;
 
-        if (!res.writableFinished && res !== data) {
-          if (isStream(data)) {
-            return data.pipe(res)
-          } else {
-            return res.json({ ok: true, data })
-          }
-        }
-      })
-      .catch((err: RequestError) => handleResponseError(req, res, err))
-  }
-}
-
-export function middleware(handler: AsyncHandler): NextHandleFunction {
-  return function (req: Request, res: Response, next: NextFunction) {
-    handler(req, res, new Context(req, res))
-      .then(() => next())
-      .catch((err: RequestError) => handleResponseError(req, res, err))
-  }
-}
-
-export async function useMiddlaware(middlaware: NextHandleFunction, req: Request, res: Response) {
-  return new Promise<void>((resolve, reject) => {
-    try {
-      middlaware(req, res, (err?: any) => { err ? reject(err) : resolve() })
-    } catch (error) {
-      reject(error)
-    }
+export function handleAPI(handler: AsyncHandler) {
+  return handleIncommingMessage(handler, (data, _req, res) => {
+    res.json({ ok: true, data })
   })
 }
 
-/** TODO v3: move to utils fil */
-function handleResponseError(req: Request, res: Response, err: RequestError) {
+export function handleJSON(handler: AsyncHandler) {
+  return handleIncommingMessage(handler, (data, _req, res) => {
+    res.json(data)
+  })
+}
+
+export function handleRaw(handler: AsyncHandler, type?: string) {
+  return handleIncommingMessage(
+    handler,
+    (data, _req, res) => {
+      if (type) {
+        res.type(type)
+      }
+
+      res.send(data)
+    }
+  )
+}
+
+export function handleExpressError(err: RequestError, req: Request, res: Response) {
   const data = {
     ...err,
     message: err.message,
@@ -60,38 +46,68 @@ function handleResponseError(req: Request, res: Response, err: RequestError) {
     body: (req as any).body,
   }
 
-  console.error(`error executing request ${req.method} ${req.path} : `, process.env.NODE_ENV === 'production' && JSON.stringify(data) || data);
+  console.error(
+    `error executing request ${req.method} ${req.path} : `,
+    process.env.NODE_ENV === 'production' && JSON.stringify(data) || data
+  );
 
   if (!res.headersSent) {
     res.status(err.statusCode || RequestError.InternalServerError)
   }
 
   if (!res.writableFinished) {
-    res.json(toResponseError(err))
+    res.json(RequestError.toJSON(err))
   }
 }
 
-export function toResponseError(err: RequestError) {
-  const result: any = {
-    ok: false,
-    error: err.message,
-  }
+function handleIncommingMessage(
+  handler: AsyncHandler,
+  onSuccess: (data: any, req: Request, res: Response) => void
+) {
+  return function (req: Request, res: Response) {
+    handler(req, res, new Context(req, res))
+      .then(function handleResponseOk(data: any) {
+        if (!res.headersSent) {
+          res.status(defaultStatusCode(req))
+        }
 
-  if (err.data) {
-    result.data = err.data
+        if (!res.writableFinished && res !== data) {
+          if (isStream(data)) {
+            return data.pipe(res)
+          } else {
+            onSuccess(data, req, res)
+            return data
+          }
+        }
+      })
+      .catch((err: RequestError) => handleExpressError(err, req, res))
   }
+}
 
-  if (process.env.NODE_ENV === 'development') {
-    result.stack = err.stack
+export function middleware(handler: AsyncHandler): NextHandleFunction {
+  return function (req: Request, res: Response, next: NextFunction) {
+    handler(req, res, new Context(req, res))
+      .then(() => next())
+      .catch((err: RequestError) => handleExpressError(err, req, res))
   }
+}
 
-  return result
+/** @deprecated */
+export async function useMiddlaware(middlaware: NextHandleFunction, req: Request, res: Response) {
+  return new Promise<void>((resolve, reject) => {
+    try {
+      middlaware(req, res, (err?: any) => { err ? reject(err) : resolve() })
+    } catch (error) {
+      reject(error)
+    }
+  })
 }
 
 function defaultStatusCode(req: Request) {
   switch (req.method) {
     case 'PATCH':
     case 'POST':
+    case 'PUT':
       return 201
 
     case 'DELETE':

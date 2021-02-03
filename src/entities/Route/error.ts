@@ -11,6 +11,23 @@ export default class RequestError extends Error {
   static NotImplemented = 501
   static ServiceUnavailable = 503
 
+  static toJSON(err: Error & { data?: any }) {
+    const result: Record<string, any> = {
+      ok: false,
+      error: err.message,
+    }
+
+    if (err.data) {
+      result.data = err.data
+    }
+
+    if (result.stack && process.env.NODE_ENV !== 'production') {
+      result.stack = err.stack
+    }
+
+    return result
+  }
+
   constructor(message: string, public statusCode: number = RequestError.InternalServerError, public data?: any) {
     super(message)
   }
