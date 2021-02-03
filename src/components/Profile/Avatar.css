@@ -1,0 +1,103 @@
+.dg.dcl-avatar {
+  height: auto;
+  border-radius: 100%;
+  background-color: #4e79a7;
+  vertical-align: middle;
+  max-width: 256px;
+  margin: 0;
+}
+
+.dg.dcl-avatar.dcl-avatar--0,
+.dg.dcl-avatar.dcl-avatar--1 {
+  background-color: #4e79a7;
+}
+
+.dg.dcl-avatar.dcl-avatar--2,
+.dg.dcl-avatar.dcl-avatar--3 {
+  background-color: #f28e2c;
+}
+
+.dg.dcl-avatar.dcl-avatar--4,
+.dg.dcl-avatar.dcl-avatar--5 {
+  background-color: #e15759;
+}
+
+.dg.dcl-avatar.dcl-avatar--6,
+.dg.dcl-avatar.dcl-avatar--7 {
+  background-color: #76b7b2;
+}
+
+.dg.dcl-avatar.dcl-avatar--8,
+.dg.dcl-avatar.dcl-avatar--9 {
+  background-color: #59a14f;
+}
+
+.dg.dcl-avatar.dcl-avatar--a,
+.dg.dcl-avatar.dcl-avatar--b {
+  background-color: #edc949;
+}
+
+.dg.dcl-avatar.dcl-avatar--c,
+.dg.dcl-avatar.dcl-avatar--d {
+  background-color: #af7aa1;
+}
+
+.dg.dcl-avatar.dcl-avatar--e,
+.dg.dcl-avatar.dcl-avatar--f {
+  background-color: #ff9da7;
+}
+
+.dg.dcl-avatar.dcl-avatar--mini {
+  width: 20px;
+}
+
+.dg.dcl-avatar.dcl-avatar--tiny {
+  width: 24px;
+}
+
+.dg.dcl-avatar.dcl-avatar--small {
+  width: 32px;
+}
+
+.dg.dcl-avatar,
+.dg.dcl-avatar.dcl-avatar--medium {
+  width: 44px;
+}
+
+.dg.dcl-avatar.dcl-avatar--large {
+  width: 52px;
+}
+
+.dg.dcl-avatar.dcl-avatar--big {
+  width: 66px;
+}
+
+.dg.dcl-avatar.dcl-avatar--huge {
+  width: 90px;
+}
+
+.dg.dcl-avatar.dcl-avatar--massive {
+  width: 122px;
+}
+
+.dg.dcl-avatar.dcl-avatar--full {
+  width: 100%;
+}
+
+.dg.dcl-avatar.dcl-avatar--loading,
+.dg.dcl-avatar.dcl-avatar--mini.dcl-avatar--loading,
+.dg.dcl-avatar.dcl-avatar--tiny.dcl-avatar--loading,
+.dg.dcl-avatar.dcl-avatar--small.dcl-avatar--loading,
+.dg.dcl-avatar.dcl-avatar--medium.dcl-avatar--loading {
+  filter: blur(2px) grayscale(1);
+}
+
+.dg.dcl-avatar.dcl-avatar--large.dcl-avatar--loading,
+.dg.dcl-avatar.dcl-avatar--big.dcl-avatar--loading,
+.dg.dcl-avatar.dcl-avatar--huge.dcl-avatar--loading {
+  filter: blur(3px) grayscale(1);
+}
+
+.dg.dcl-avatar.dcl-avatar--massive.dcl-avatar--loading {
+  filter: blur(4px) grayscale(1);
+}
