@@ -2,7 +2,6 @@ import { toBN } from 'web3x/utils'
 import API from './API'
 import env from '../env'
 import Options from './Options'
-import RequestError from '../errors/RequestError'
 
 export type GetListOptions = {
   status?: 'open' | 'cancelled' | 'sold'
@@ -38,7 +37,7 @@ export type Parcel = {
     version: number
   },
   auction_owner: string
-  tags?: {s
+  tags?: {
     proximity?: {
       road?: {
         district_id: string,
