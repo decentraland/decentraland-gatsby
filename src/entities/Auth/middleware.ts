@@ -76,3 +76,21 @@ export function auth(options: AuthOptions = {}) {
     Object.assign(req, { auth })
   })
 }
+
+export function withBearerToken(tokens: string[]) {
+  return middleware(async (req: Request) => {
+    const authorization = req.headers.authorization
+    if (!authorization) {
+      throw new RequestError('Missing Authorization', RequestError.Unauthorized)
+    }
+
+    if (!authorization.startsWith('Bearer ')) {
+      throw new RequestError(`Ivalid Authorization`, RequestError.BadRequest)
+    }
+
+    const token = authorization.slice('Bearer '.length)
+    if (!tokens.includes(token)) {
+      throw new RequestError('Unauthorized', RequestError.Unauthorized)
+    }
+  })
+}
