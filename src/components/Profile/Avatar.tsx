@@ -15,7 +15,7 @@ export type AvatarProps = Omit<React.HTMLProps<HTMLImageElement>, 'height' | 'wi
 
 export default React.memo(function Avatar({ address, size, src, ...props }: AvatarProps) {
 
-  const [ avatar ] = useAsyncMemo(() => profiles.load(address || ''), [ address ])
+  const [ avatar, loading ] = useAsyncMemo(() => profiles.load(address || ''), [ address ])
 
   return <img
     loading="lazy"
@@ -28,7 +28,7 @@ export default React.memo(function Avatar({ address, size, src, ...props }: Avat
       'dcl-avatar',
       `dcl-avatar--${size}`,
       `dcl-avatar--${((address || '')[2] || '').toLowerCase()}`,
-      true && `dcl-avatar--loading`,
+      loading && `dcl-avatar--loading`,
       props.className
     ])}
   />
