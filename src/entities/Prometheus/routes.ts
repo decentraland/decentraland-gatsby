@@ -1,4 +1,3 @@
-import { Handler } from "express";
 import env from "../../utils/env";
 import { withBearerToken } from "../Auth/middleware";
 import client from "../Prometheus/client";
