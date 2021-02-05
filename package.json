@@ -109,7 +109,7 @@
     "immutable": "^4.0.0-rc.12",
     "isomorphic-fetch": "^2.2.1",
     "juice": "^7.0.0",
-    "node-html-parser": "^2.0.2",
+    "node-html-parser": "2.0.2",
     "node-pg-migrate": "^5.1.1",
     "postcss-cli": "^7.1.0",
     "prom-client": "^13.1.0",
