@@ -1,22 +1,22 @@
 export default class Loader<T> {
-  
+
   cache: Map<string, Promise<T>> = new Map()
   data: Map<string, T> = new Map()
 
-  constructor(private loader: (key: string) => Promise<T>) {}
+  constructor(public handle: (key: string) => Promise<T>) {}
 
   async load(key: string): Promise<T> {
     if (!this.cache.has(key)) {
       this.cache.set(
         key,
-        this.loader(key)
+        this.handle(key)
           .then(result => {
             this.data.set(key, result)
             return result
           })
       )
     }
-    
+
     return this.cache.get(key)!
   }
 
