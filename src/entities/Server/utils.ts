@@ -1,3 +1,4 @@
+import { Server } from 'http'
 import { Application } from 'express'
 import { networkInterfaces } from 'os'
 
@@ -19,11 +20,7 @@ export async function listen(app: Application, port: number | string = DEFAULT_P
   }
 
   return new Promise((resolve, reject) => {
-    const server = app.listen(port as number, host, (error: Error) => {
-      if (error) {
-        return reject(error)
-      }
-
+    const server: Server = app.listen(port as number, host, () => {
       const protocol = 'http://'
       const canonicalHost = host === DEFAULT_HOST ? '127.0.0.1' : host
 
