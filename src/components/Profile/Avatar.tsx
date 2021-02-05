@@ -6,7 +6,7 @@ import profiles from '../../utils/store/profiles'
 
 import './Avatar.css'
 
-const DEFAULT_AVATAR = 'https://peer.decentraland.org/content/contents/QmVfTSvEJBtmaHrnmZtpoVCSpv2J69M1wqA97dc53DgbWG'
+const DEFAULT_AVATAR = 'https://peer.decentraland.org/content/contents/QmXo9BXGF9Tx6H3hNwMfdMsisogfVgpy1bRwxPQ2D4QhPW'
 
 export type AvatarProps = Omit<React.HTMLProps<HTMLImageElement>, 'height' | 'width' | 'size'> & {
   address?: string,
