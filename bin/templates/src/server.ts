@@ -15,9 +15,10 @@ const app = express()
 
 app.set('x-powered-by', false)
 app.use('/api', [
+  metrics,
   status(),
   withDDosProtection(),
-  metrics,
+  // routes
   handle(async () => {
     throw new RequestError('NotFound', RequestError.NotFound)
   })
