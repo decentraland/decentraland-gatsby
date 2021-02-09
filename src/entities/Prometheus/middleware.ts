@@ -12,7 +12,7 @@ export function withMetrics() {
     res.on('close', function saveMetrics() {
       const labels: Partial<Omit<HttpRequestLabels, 'method'>> = {statusCode: res.statusCode}
       if (req.route && req.route.path) {
-        labels.path = req.route.path
+        labels.path = req.baseUrl + req.route.path
       }
 
       endTimer(labels)
