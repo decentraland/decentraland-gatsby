@@ -1,9 +1,10 @@
 import express from 'express'
-import bodyParser from 'body-parser'
 // import database from 'decentraland-gatsby/dist/entities/Database/index'
 // import manager from 'decentraland-gatsby/dist/entities/Job/index'
 import { listen } from 'decentraland-gatsby/dist/entities/Server/utils'
-import { status, logger, filesystem, ddos } from 'decentraland-gatsby/dist/entities/Route/routes'
+import { status, filesystem } from 'decentraland-gatsby/dist/entities/Route/routes'
+import { withDDosProtection } from 'decentraland-gatsby/dist/entities/Route/middleware'
+import metrics from 'decentraland-gatsby/dist/entities/Prometheus/routes'
 import handle from 'decentraland-gatsby/dist/entities/Route/handle'
 import RequestError from 'decentraland-gatsby/dist/entities/Route/error'
 
@@ -15,9 +16,8 @@ const app = express()
 app.set('x-powered-by', false)
 app.use('/api', [
   status(),
-  logger(),
-  ddos(),
-  bodyParser.json(),
+  withDDosProtection(),
+  metrics,
   handle(async () => {
     throw new RequestError('NotFound', RequestError.NotFound)
   })
