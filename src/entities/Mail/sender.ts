@@ -1,5 +1,7 @@
 import { SES } from 'aws-sdk'
 import chuck from '../../utils/array/chunk';
+import { regiterMetrics } from '../Prometheus/metrics';
+import { SesSendLabels, ses_send_total } from './metrics';
 import { readTemplate } from './utils';
 import { TemplateContent, SendOptions, Destination } from './types';
 
@@ -7,6 +9,7 @@ export type Options = SES.Types.ClientConfiguration & {
   source?: string,
   path?: string,
   bulk?: boolean,
+  metrics?: boolean,
 }
 
 export default class Sender {
@@ -14,14 +17,44 @@ export default class Sender {
   templateLoaded: Map<string, boolean> = new Map
   templateContent: Map<string, TemplateContent> = new Map
   bulk: boolean;
+  metrics: boolean;
   path: string;
   source: string;
+  region?: string;
 
-  constructor({ path, bulk, source, ...options }: Options) {
+  constructor({ path, bulk, source, metrics, ...options }: Options) {
     this.ses = new SES(options)
     this.source = source || ''
     this.path = path ?? process.cwd()
     this.bulk = bulk ?? false
+
+    if (options.region) {
+      this.region = options.region
+    }
+
+    this.metrics = metrics ?? true
+    if (this.metrics) {
+      regiterMetrics(ses_send_total)
+    }
+  }
+
+  inc(value: number = 1) {
+    if (this.metrics) {
+      const labels: Partial<SesSendLabels> = {
+        bulk: this.bulk ? 'true' : 'false',
+      }
+
+      if (this.region) {
+        labels.region = this.region
+      }
+
+      if (this.source) {
+        labels.source = this.source
+      }
+
+
+      ses_send_total.inc({}, value)
+    }
   }
 
   async send(options: SendOptions) {
@@ -45,6 +78,7 @@ export default class Sender {
         this.ses.sendEmail(params, (err, result) => err ? reject(err) : resolve(result))
       })
 
+      this.inc()
       results.push(result)
     }
 
@@ -55,7 +89,9 @@ export default class Sender {
     const results: SES.SendBulkTemplatedEmailResponse[] = []
     const DefaultTemplateData = JSON.stringify(options.defaultReplacement || {})
     await this.deployTemplate(options.template)
-    for (const destinations of chuck(options.destinations, 50)) {
+
+    const batch = 50
+    for (const destinations of chuck(options.destinations, batch)) {
       const params = {
         Destinations: destinations.map(destination => {
           const { email, replacement } = this.destination(destination)
@@ -74,6 +110,7 @@ export default class Sender {
         this.ses.sendBulkTemplatedEmail(params, (err, data) => err ? reject(err) : resolve(data))
       })
 
+      this.inc(batch)
       results.push(result)
     }
 

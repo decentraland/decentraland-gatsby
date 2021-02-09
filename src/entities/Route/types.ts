@@ -1,7 +1,8 @@
 import { Router, RouterOptions } from "express"
 
 export type RouterHandler = (router: Router) => void
-export type RoutesOptions = RouterOptions & CorsOptions
+export type RoutesOptions = RouterOptions & CorsOptions & MiddlewaresOptions
+
 export type DDosOptions = {
   limit: number,
   maxcount: number,
@@ -10,11 +11,17 @@ export type DDosOptions = {
   checkinterval: number,
   responseStatus: number,
 }
+
 export type CorsOptions = {
   cors?: 'public' | '*' | 'default' | 'same-origin' | false,
   corsOrigin?: boolean | string | RegExp | (string | RegExp)[];
   allowedHeaders?: string | string[];
   exposedHeaders?: string | string[];
+}
+
+export type MiddlewaresOptions = {
+  disableLogs?: boolean
+  disableMetrics?: boolean
 }
 
 export function createCorsOptions(options: CorsOptions = {}) {

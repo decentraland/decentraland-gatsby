@@ -1,6 +1,4 @@
-import expressCors from 'cors'
-import { createCorsOptions, CorsOptions } from '../types';
+import { withCors } from '../middleware';
 
-export default function cors(options: CorsOptions = {}) {
-  return expressCors(createCorsOptions(options))
-}
+// TODO v3: remove
+export default withCors;
