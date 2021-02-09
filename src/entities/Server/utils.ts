@@ -26,6 +26,7 @@ export async function listen(app: Application, port: number | string = DEFAULT_P
       const protocol = 'http://'
       const canonicalHost = host === DEFAULT_HOST ? '127.0.0.1' : host
 
+      console.log()
       if (host !== DEFAULT_HOST) {
         log(protocol, canonicalHost, port)
       } else {
@@ -34,14 +35,13 @@ export async function listen(app: Application, port: number | string = DEFAULT_P
           if (details) {
             for (const detail of details) {
               if (detail.family === 'IPv4') {
-                console.log()
                 log(protocol, detail.address, port)
-                console.log()
               }
             }
           }
         }
       }
+      console.log()
 
       return resolve(server)
     })
