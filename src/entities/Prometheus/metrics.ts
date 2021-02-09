@@ -24,6 +24,8 @@ export function regiterMetrics(metric: client.Metric<string>) {
   }
 }
 
+export type HttpRequestLabels = Record<'method' | 'path' | 'statusCode', string | number>
+
 export const http_request_duration_seconds = new client.Histogram({
   name: 'http_request_duration_seconds',
   help: 'Request response time in sendonds',
