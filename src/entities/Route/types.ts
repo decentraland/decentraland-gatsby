@@ -1,7 +1,7 @@
 import { Router, RouterOptions } from "express"
 
 export type RouterHandler = (router: Router) => void
-export type RoutesOptions = RouterOptions & CorsOptions & MiddlewaresOptions
+export type RoutesOptions = RouterOptions
 
 export type DDosOptions = {
   limit: number,
@@ -19,9 +19,9 @@ export type CorsOptions = {
   exposedHeaders?: string | string[];
 }
 
-export type MiddlewaresOptions = {
-  disableLogs?: boolean
-  disableMetrics?: boolean
+export type BodyParserOptions = {
+  json?: boolean
+  urlencode?: boolean
 }
 
 export function createCorsOptions(options: CorsOptions = {}) {

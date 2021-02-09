@@ -1,9 +1,23 @@
-import { Request } from 'express'
+import { Request, Router } from 'express'
+import bodyParser from 'body-parser'
 import Ddos from 'ddos'
 import expressCors from 'cors'
 import { middleware } from './handle';
-import { DDosOptions, createCorsOptions, CorsOptions } from './types';
+import { DDosOptions, createCorsOptions, CorsOptions, BodyParserOptions } from './types';
 import RequestError from './error'
+
+export function withBody(options: BodyParserOptions = {}) {
+  const router = Router()
+  if (options.urlencode !== false ) {
+    router.use(bodyParser.urlencoded({ extended: false }))
+  }
+
+  if (options.json !== false) {
+    router.use(bodyParser.json())
+  }
+
+  return router
+}
 
 export function withCors(options: CorsOptions = {}) {
   return expressCors(createCorsOptions(options))
