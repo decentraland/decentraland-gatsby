@@ -31,5 +31,5 @@ export const http_request_duration_seconds = new client.Histogram({
   help: 'Request response time in sendonds',
   registers: [],
   labelNames: [ 'method', 'path', 'statusCode' ],
-  buckets: [ 1, 2, 3, 5, 8, 13, 21, 34, 55 ],
+  buckets: [ .005, .01, .025, .05, .1, .25, .5, 1, 2.5, 5, 10, 20, 30, 60 ],
 })
