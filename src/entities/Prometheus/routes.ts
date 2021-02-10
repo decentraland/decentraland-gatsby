@@ -1,3 +1,4 @@
+import { yellow } from 'colors/safe'
 import client from 'prom-client'
 import env from "../../utils/env";
 import { withBearerToken } from "../Auth/middleware";
@@ -11,7 +12,7 @@ let PROMETHEUS_EXPOSED = client.Registry.merge(Array.from(PROMETHEUS_REGISTRIES)
 
 export default routes((router) => {
   if (PROMETHEUS_BEARER_TOKEN) {
-    console.log(`exposing private /metrics: "Authentication: Bearer ${PROMETHEUS_BEARER_TOKEN}"`)
+    console.log(`exposing private /metrics:`, yellow(`"Authentication: Bearer ${PROMETHEUS_BEARER_TOKEN}"`))
     router.get('/metrics', withBearerToken([ PROMETHEUS_BEARER_TOKEN ]), handleRaw(getMetrics, 'text'))
   } else {
     console.log(`exposing public /metrics`)
