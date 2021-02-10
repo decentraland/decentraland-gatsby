@@ -3,7 +3,8 @@ import express from 'express'
 // import manager from 'decentraland-gatsby/dist/entities/Job/index'
 import { listen } from 'decentraland-gatsby/dist/entities/Server/utils'
 import { status, filesystem } from 'decentraland-gatsby/dist/entities/Route/routes'
-import { withDDosProtection } from 'decentraland-gatsby/dist/entities/Route/middleware'
+import { withMetrics } from 'decentraland-gatsby/dist/entities/Prometheus/middleware'
+import { withDDosProtection, withLogs, withCors } from 'decentraland-gatsby/dist/entities/Route/middleware'
 import metrics from 'decentraland-gatsby/dist/entities/Prometheus/routes'
 import handle from 'decentraland-gatsby/dist/entities/Route/handle'
 import RequestError from 'decentraland-gatsby/dist/entities/Route/error'
@@ -12,18 +13,20 @@ import RequestError from 'decentraland-gatsby/dist/entities/Route/error'
 // jobs.cron('@eachMinute', () => console.log('Runnign Job...'))
 
 const app = express()
-
 app.set('x-powered-by', false)
+app.use(withLogs())
+app.use(withMetrics())
 app.use('/api', [
-  metrics,
   status(),
   withDDosProtection(),
+  withCors(),
   // routes
   handle(async () => {
     throw new RequestError('NotFound', RequestError.NotFound)
   })
 ])
 
+app.use(metrics)
 app.use(filesystem('public', '404.html'))
 
 Promise.resolve()
