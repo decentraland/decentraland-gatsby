@@ -3,6 +3,7 @@ import { NextHandleFunction } from "connect";
 import Context from "./context";
 import RequestError from "./error";
 import isStream from "../../utils/stream/isStream";
+import { http_request_pool_size, http_request_duration_seconds } from "./metrics";
 
 export type AsyncHandler = (req: Request & any, res: Response & any, ctx: Context) => Promise<any> | any
 
@@ -65,6 +66,18 @@ function handleIncommingMessage(
   onSuccess: (data: any, req: Request, res: Response) => void
 ) {
   return function (req: Request, res: Response) {
+    const labels = {
+      method: req.method,
+      handler: req.route?.path,
+    }
+
+    http_request_pool_size.inc(labels)
+    const endTimer = http_request_duration_seconds.startTimer(labels)
+    res.on('close', () => {
+      endTimer({ statusCode: res.statusCode })
+      http_request_pool_size.dec(labels)
+    })
+
     handler(req, res, new Context(req, res))
       .then(function handleResponseOk(data: any) {
         if (!res.headersSent) {

@@ -4,13 +4,13 @@ import JobContext from './context'
 import Model from './model'
 import { createVoidPool, Pool } from '../Pool/utils'
 import MemoryModel from './memory'
+import { job_manager_duration_seconds, job_manager_pool_size } from './metrics'
 
 export interface Job<P extends object = {}> {
   (ctx: JobContext<P>, next: NextFunction): Promise<void>
 }
 
 export default class JobManager {
-
   memory: boolean = false;
   runningJobs = new Set<string>()
   jobs: Map<string, Job<any>[]> = new Map()
@@ -96,7 +96,6 @@ export default class JobManager {
   }
 
   async run(id: string | null, name: string, payload: any): Promise<void> {
-
     if (!this.jobs.has(name)) {
       console.log(`Missing job: ${name} (id: "${id}")`)
       return
@@ -133,6 +132,11 @@ export default class JobManager {
     if (id) {
       this.runningJobs.add(id)
     }
+
+
+    let error = 0
+    job_manager_pool_size.inc({ job: name || 'uknown' })
+    const completeJob = job_manager_duration_seconds.startTimer({ job: name || 'uknown' })
     const resource = await this.pool.acquire()
 
     try {
@@ -141,10 +145,14 @@ export default class JobManager {
         await this.getModel().complete(id)
       }
     } catch (err) {
-      context.log(`error running job: `, err)
+      context.log(`error running job "${name}": `, err)
+      error = 1
     }
 
     await this.pool.release(resource)
+    completeJob({ error })
+    job_manager_pool_size.dec()
+
     if (id) {
       this.runningJobs.delete(id)
     }

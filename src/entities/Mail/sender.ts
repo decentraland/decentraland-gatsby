@@ -1,15 +1,14 @@
 import { SES } from 'aws-sdk'
 import chuck from '../../utils/array/chunk';
-import { regiterMetrics } from '../Prometheus/metrics';
-import { SesSendLabels, ses_send_total } from './metrics';
+import { registerMetric } from '../Prometheus/metrics';
+import { aws_ses_sent_total } from './metrics';
 import { readTemplate } from './utils';
 import { TemplateContent, SendOptions, Destination } from './types';
 
 export type Options = SES.Types.ClientConfiguration & {
   source?: string,
   path?: string,
-  bulk?: boolean,
-  metrics?: boolean,
+  bulk?: boolean
 }
 
 export default class Sender {
@@ -20,9 +19,10 @@ export default class Sender {
   metrics: boolean;
   path: string;
   source: string;
+  email: string;
   region?: string;
 
-  constructor({ path, bulk, source, metrics, ...options }: Options) {
+  constructor({ path, bulk, source, ...options }: Options) {
     this.ses = new SES(options)
     this.source = source || ''
     this.path = path ?? process.cwd()
@@ -32,29 +32,19 @@ export default class Sender {
       this.region = options.region
     }
 
-    this.metrics = metrics ?? true
-    if (this.metrics) {
-      regiterMetrics(ses_send_total)
-    }
+    // this.source = 'Decentraland Events <hello@decentraland.org>'
+    // emailMatch = [ '<hello@decentraland.org>', 'hello@decentraland.org' ]
+    const emailMatch = this.source.match(/<(.*)>/i)
+    this.email = emailMatch ? emailMatch[1] : this.source
+    registerMetric(aws_ses_sent_total)
   }
 
   inc(value: number = 1) {
-    if (this.metrics) {
-      const labels: Partial<SesSendLabels> = {
-        bulk: this.bulk ? 'true' : 'false',
-      }
-
-      if (this.region) {
-        labels.region = this.region
-      }
-
-      if (this.source) {
-        labels.source = this.source
-      }
-
-
-      ses_send_total.inc({}, value)
-    }
+    aws_ses_sent_total.inc({
+      bulk: this.bulk ? 1 : 0,
+      region: this.region || 'default',
+      email: this.email
+    }, value)
   }
 
   async send(options: SendOptions) {

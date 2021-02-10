@@ -1,10 +1,12 @@
-import client from 'prom-client'
+import client, { registerMetric } from '../Prometheus/metrics'
 
 export type SesSendLabels = Record<'region' | 'source' | 'bulk', string | number>
 
-export const ses_send_total = new client.Counter({
-  name: 'ses_send_total',
+export const aws_ses_sent_total = new client.Counter({
+  name: 'aws_ses_sent_total',
   help: 'Counter of email sent through SES',
   registers: [],
-  labelNames: ['region', 'source', 'bulk']
+  labelNames: ['region', 'email', 'bulk']
 })
+
+registerMetric(aws_ses_sent_total)
