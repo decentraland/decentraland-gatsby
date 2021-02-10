@@ -7,8 +7,8 @@ import { handleRaw } from "../Route/handle";
 import routes from "../Route/routes";
 
 const PROMETHEUS_BEARER_TOKEN = env('PROMETHEUS_BEARER_TOKEN', '')
-const PROMETHEUS_REGISTRIES = new Set([ registry, client.register ])
-let PROMETHEUS_EXPOSED = client.Registry.merge(Array.from(PROMETHEUS_REGISTRIES))
+const PROMETHEUS_REGISTRIES = [ registry, client.register ]
+let PROMETHEUS_REGISTRY: client.Registry | null = null
 
 export default routes((router) => {
   if (PROMETHEUS_BEARER_TOKEN) {
@@ -21,10 +21,18 @@ export default routes((router) => {
 })
 
 export function exposeRegistry(registry: client.Registry) {
-  PROMETHEUS_REGISTRIES.add(registry)
-  PROMETHEUS_EXPOSED = client.Registry.merge(Array.from(PROMETHEUS_REGISTRIES))
+  if(!PROMETHEUS_REGISTRIES.includes(registry)) {
+    PROMETHEUS_REGISTRIES.push(registry)
+    PROMETHEUS_REGISTRY = null
+  }
+
+  return PROMETHEUS_REGISTRIES.length
 }
 
 export async function getMetrics() {
-  return PROMETHEUS_EXPOSED.metrics()
+  if (!PROMETHEUS_REGISTRY) {
+    PROMETHEUS_REGISTRY = client.Registry.merge(PROMETHEUS_REGISTRIES)
+  }
+
+  return PROMETHEUS_REGISTRY.metrics()
 }
