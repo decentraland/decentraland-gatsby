@@ -1,17 +1,17 @@
 import { Server } from 'http'
 import { Application } from 'express'
 import { networkInterfaces } from 'os'
-import { yellow, green } from 'colors/safe'
+import { yellow } from 'colors/safe'
 
 export const DEFAULT_PORT = 4000
 export const DEFAULT_HOST = '0.0.0.0'
 
 function log(protocol: string, host: string, port: string | number) {
   if (host === '127.0.0.1') {
-    console.log(green(`    running server on:`), yellow(`${protocol}localhost:${port}`))
+    console.log(`running server on:`, yellow(`${protocol}localhost:${port}`))
   }
 
-  console.log(green(`    running server on:`), yellow(`${protocol}${host}:${port}`))
+  console.log(`running server on:`, yellow(`${protocol}${host}:${port}`))
 }
 
 export async function listen(app: Application, port: number | string = DEFAULT_PORT, host: string = DEFAULT_HOST) {
@@ -26,7 +26,6 @@ export async function listen(app: Application, port: number | string = DEFAULT_P
       const protocol = 'http://'
       const canonicalHost = host === DEFAULT_HOST ? '127.0.0.1' : host
 
-      console.log()
       if (host !== DEFAULT_HOST) {
         log(protocol, canonicalHost, port)
       } else {
@@ -41,7 +40,6 @@ export async function listen(app: Application, port: number | string = DEFAULT_P
           }
         }
       }
-      console.log()
 
       return resolve(server)
     })

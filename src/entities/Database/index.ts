@@ -1,3 +1,4 @@
+import { yellow } from 'colors/safe'
 import { db } from 'decentraland-server'
 import env from '../../utils/env'
 
@@ -26,7 +27,7 @@ database.connect = async () => {
       url.password = ''
     }
 
-    console.log(`connecting to database: ${url.toString()}`)
+    console.log(`connecting to database:`, yellow(url.toString()))
   } catch (err) {
     console.error(err)
   }
