@@ -17,7 +17,7 @@ export default routes((router) => {
     console.log(`exposing public /metrics`)
     router.get('/metrics', handleRaw(getMetrics, 'text'))
   }
-}, { disableMetrics: true })
+})
 
 export function exposeRegistry(registry: client.Registry) {
   PROMETHEUS_REGISTRIES.add(registry)
