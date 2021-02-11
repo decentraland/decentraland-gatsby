@@ -135,8 +135,9 @@ export default class JobManager {
 
 
     let error = 0
-    job_manager_pool_size.inc({ job: name || 'uknown' })
-    const completeJob = job_manager_duration_seconds.startTimer({ job: name || 'uknown' })
+    const labels = { job: name || 'uknown' }
+    job_manager_pool_size.inc(labels)
+    const completeJob = job_manager_duration_seconds.startTimer(labels)
     const resource = await this.pool.acquire()
 
     try {
@@ -151,7 +152,7 @@ export default class JobManager {
 
     await this.pool.release(resource)
     completeJob({ error })
-    job_manager_pool_size.dec()
+    job_manager_pool_size.dec(labels)
 
     if (id) {
       this.runningJobs.delete(id)
