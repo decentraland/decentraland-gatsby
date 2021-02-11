@@ -100,7 +100,7 @@ export default class Sender {
         this.ses.sendBulkTemplatedEmail(params, (err, data) => err ? reject(err) : resolve(data))
       })
 
-      this.inc(batch)
+      this.inc(destinations.length)
       results.push(result)
     }
 
