@@ -68,7 +68,7 @@ function handleIncommingMessage(
   return function (req: Request, res: Response) {
     const labels = {
       method: req.method,
-      handler: req.route?.path,
+      handler: req.baseUrl + (req.route?.path || ''),
     }
 
     http_request_pool_size.inc(labels)
