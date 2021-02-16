@@ -47,6 +47,7 @@ Run the setup command
     ┣  entities/  ....................... server side entities
     ┃   ┗ [Entity] ...................... entity name
     ┃       ┣ job.ts .................... background handler (runs periodically in without expose an endpoint)
+    ┃       ┣ metrics.ts ................ metrics collectors
     ┃       ┣ middleware.ts ............. connect middleware to reuse
     ┃       ┣ model.ts .................. database model
     ┃       ┣ routes.ts ................. express routes
