@@ -6,22 +6,25 @@ type AsyncMemoState<T> = {
   value: T | null
 }
 
-// TODO v3: replace onlyWithTruthyDeps params for an object
-// TODO v3: add intialValue param
+type AsyncMemoOptions<T = any> = {
+  intialValue: T | null
+  callWithTruthyDeps: boolean
+}
+
 export default function useAsyncMemo<T>(
   effect: () => Promise<T>,
   deps: DependencyList = [],
-  onlyWithTruthyDeps: boolean = false
+  options: Partial<AsyncMemoOptions<T>> = {}
 ) {
 
   const [state, setState] = useState<AsyncMemoState<T>>({
     version: 0,
     loading: false,
-    value: null
+    value: options.intialValue ?? null
   })
 
   function load() {
-    if (onlyWithTruthyDeps && deps.some(dep => Boolean(dep) === false)) {
+    if (options.callWithTruthyDeps && deps.some(dep => Boolean(dep) === false)) {
       return
     }
 
