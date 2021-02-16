@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { JobAttributes } from "./types";
+import { JobAttributes } from "../types";
 
 export default class MemoryModel {
   static cache: Map<string, JobAttributes> = new Map()

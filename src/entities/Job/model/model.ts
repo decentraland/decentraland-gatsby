@@ -1,6 +1,6 @@
 
 import { Model, SQL, raw } from 'decentraland-server'
-import { JobAttributes } from './types'
+import { JobAttributes } from '../types'
 import isUUID from 'validator/lib/isUUID'
 import { v4 as uuid } from 'uuid'
 
