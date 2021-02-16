@@ -6,6 +6,8 @@ export interface ModelConstructor {
   new(): Model<any>
 }
 
+export { raw, SQL, SQLStatement }
+
 export function table(model: ModelConstructor) {
   return raw(model.tableName)
 }
