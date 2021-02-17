@@ -9,7 +9,7 @@ export type LinkProps = React.Props<HTMLAnchorElement> &
     secondary?: boolean
   }
 
-export default function Link({ secondary, href, rel, target, ...props }: LinkProps) {
+export default React.memo(function Link({ secondary, href, rel, target, ...props }: LinkProps) {
 
   const external = href && (
     href.startsWith('https://') ||
@@ -34,4 +34,4 @@ export default function Link({ secondary, href, rel, target, ...props }: LinkPro
       rel={rel || undefined}
     />
   )
-}
+})

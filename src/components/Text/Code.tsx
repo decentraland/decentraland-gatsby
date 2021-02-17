@@ -13,7 +13,7 @@ export type CodeProps = React.Props<HTMLPreElement> &
     language?: "json" | "typescript" | "javascript" | string
   }
 
-export default function Code({ inline, children, note, value, language, ...props }: CodeProps) {
+export default React.memo(function Code({ inline, children, note, value, language, ...props }: CodeProps) {
   return (
     <pre
       {...props}
@@ -31,4 +31,4 @@ export default function Code({ inline, children, note, value, language, ...props
       {language && <Highlight className={language}>{children ?? value}</Highlight>}
     </pre>
   )
-}
+})

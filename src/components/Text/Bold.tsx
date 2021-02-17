@@ -9,7 +9,7 @@ export type BoldProps = React.Props<HTMLSpanElement> &
     secondary?: boolean
   }
 
-export default function Bold({ primary, secondary, ...props }: BoldProps) {
+export default React.memo(function Bold({ primary, secondary, ...props }: BoldProps) {
   return (
     <span
       {...props}
@@ -22,4 +22,4 @@ export default function Bold({ primary, secondary, ...props }: BoldProps) {
       ])}
     />
   )
-}
+})

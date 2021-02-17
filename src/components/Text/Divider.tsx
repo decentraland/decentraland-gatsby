@@ -9,7 +9,7 @@ export type DividerProps = Omit<React.HTMLProps<HTMLDivElement>, 'size'> & {
   size?: 'mini' | 'tiny' | 'small' | 'medium' | 'large' | 'big' | 'huge' | 'massive'
 }
 
-export default function Divider({ line, size, ...props }: DividerProps) {
+export default React.memo(function Divider({ line, size, ...props }: DividerProps) {
   return <div {...props} className={TokenList.join([
     StyleNamespace,
     'Divider',
@@ -17,4 +17,4 @@ export default function Divider({ line, size, ...props }: DividerProps) {
     size && 'Divider--' + size,
     props.className
   ])} />
-}
+})
