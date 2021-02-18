@@ -1,6 +1,6 @@
 import React from 'react'
 import { Profile } from '../../utils/auth/types'
-import TokenList from '../../utils/TokenList'
+import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
 
 import './ImgAvatar.css'

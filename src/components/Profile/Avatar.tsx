@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import useAsyncMemo from '../../hooks/useAsyncMemo'
 import { StyleNamespace } from '../../variables'
-import TokenList from '../../utils/TokenList'
+import TokenList from '../../utils/dom/TokenList'
 import profiles from '../../utils/store/profiles'
 
 import './Avatar.css'
