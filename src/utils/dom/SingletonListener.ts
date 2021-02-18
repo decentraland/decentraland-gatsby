@@ -10,7 +10,7 @@ export type Listener<K extends Event = any> = (this: HTMLElement, ev: HTMLElemen
 
 /**
  * SingletonListener
- * 
+ *
  * An event handler manager to minimize the number of subscription to DOM objects
  */
 export default class SingletonListener<T extends TargetListener> {
@@ -22,7 +22,7 @@ export default class SingletonListener<T extends TargetListener> {
 
   /**
    * Check for previous instance to return, otherwise create new one
-   * 
+   *
    * @param target listener target
    */
   static from<T extends TargetListener>(target: T): SingletonListener<T> {
@@ -52,7 +52,7 @@ export default class SingletonListener<T extends TargetListener> {
 
   /**
    * Create a physical subscription to a target event
-   * @param event 
+   * @param event
    */
   private subscribe(event: Event) {
     if (this.callbacks.has(event)) {
@@ -84,8 +84,8 @@ export default class SingletonListener<T extends TargetListener> {
    * Remove a virtual subscription to a target event
    * if there aren't any more virtual subscription then
    * will remove the physical subscription
-   * 
-   * @param event 
+   *
+   * @param event
    */
   private unsubscribe(event: Event) {
     const listeners = this.listeners.get(event)
@@ -108,13 +108,13 @@ export default class SingletonListener<T extends TargetListener> {
 
   /**
    * Dispatch and event to all virtual subscriptions
-   * @param event 
-   * @param data 
+   * @param event
+   * @param data
    */
   dispatch(event: Event | string, data: any) {
     const target = this.target
     const callback = this.callbacks.get(event as Event)
-    return new Promise((resolve) => setTimeout(() => {
+    return new Promise<void>((resolve) => setTimeout(() => {
       if (callback) {
         callback.call(target, data)
       }
@@ -125,9 +125,9 @@ export default class SingletonListener<T extends TargetListener> {
 
   /**
    * Create a virtual subscription to the target
-   * 
-   * @param event 
-   * @param listener 
+   *
+   * @param event
+   * @param listener
    */
   addEventListener<K extends Event>(event: K | string, listener: Listener<K>) {
     const listeners = this.listeners.get(event as K) || []
@@ -143,9 +143,9 @@ export default class SingletonListener<T extends TargetListener> {
   }
 
   /**
-   * Remove a virtual subscription to the target 
-   * @param event 
-   * @param listener 
+   * Remove a virtual subscription to the target
+   * @param event
+   * @param listener
    */
   removeEventListener<K extends Event>(event: K | string, listener: Listener<K>) {
     const listeners = this.listeners.get(event as K)
