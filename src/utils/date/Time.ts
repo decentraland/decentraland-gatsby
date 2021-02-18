@@ -7,7 +7,8 @@ import isBetween from 'dayjs/plugin/isBetween'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import pluralGetSet from 'dayjs/plugin/pluralGetSet'
-import './extend'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
+import './extend.d.ts'
 
 Time.extend(utc)
 Time.extend(isToday)
@@ -17,6 +18,7 @@ Time.extend(isBetween)
 Time.extend(isSameOrAfter)
 Time.extend(isSameOrBefore)
 Time.extend(pluralGetSet)
+Time.extend(customParseFormat)
 Time.extend((_options, Dayjs, factory) => {
   const Constants = {
     Millisecond: 1,
@@ -46,6 +48,25 @@ Time.extend((_options, Dayjs, factory) => {
   }
 
   Object.assign(factory, Constants, { Formats, date })
+
+  // console.log(Dayjs.prototype as any)
+  const parse = (Dayjs.prototype as any).parse
+  Object.assign(Dayjs.prototype, {
+    parse: function (cfg: any) {
+      if (
+        typeof cfg.date === 'string' &&
+        typeof cfg.args[0] === 'string' &&
+        cfg.args[1] === Formats.TimeInput
+      ) {
+        cfg.date = '1970-01-01 ' + cfg.date
+        cfg.utc = true
+        cfg.args[0] = cfg.date
+        cfg.args[1] = Formats.DateInput + ' ' + Formats.TimeInput
+      }
+
+      parse.bind(this)(cfg)
+    }
+  })
 
   Dayjs.prototype.getTime = function timeGetTime() {
     return this.toDate().getTime()
