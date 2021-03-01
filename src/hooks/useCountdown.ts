@@ -1,62 +1,51 @@
 import { useEffect, useState, useMemo } from 'react';
-import { Time } from '../components/Date/utils';
+import Time from '../utils/date/Time';
 
-export type CountDown = {
-  days: number
-  hours: number
-  minutes: number
-  seconds: number
-  milliseconds: number
+export type Countdown = {
+
+  /** days until the countdown finish [>=0] */
+  days: number,
+
+  /** hours until days prop decreases [>=0]  */
+  hours: number,
+
+  /** minutes until hours prop decreases [>=0]  */
+  minutes: number,
+
+  /** seconds until minutes prop decreases [>=0]  */
+  seconds: number,
+
+  /** milliseconds until seconds decreases [>=0]  */
+  milliseconds: number,
+
+  /** milliseconds until the countdown finish [>=0] */
   time: number
-  countingUp: boolean
 }
 
-export default function useCountdown(until: Date, each: number = Time.Second, countUp: boolean = false): CountDown {
+export default function useCountdown(until: Pick<Date, 'getTime'>): Countdown {
 
-  const [now, setNow] = useState(Date.now())
+  const initial = useMemo(() => Date.now(), [ until.getTime() ])
+  const [now, setNow] = useState(initial)
+  const finished = until.getTime() <= now
+  const time = finished ? 0 : until.getTime() - now
+
+  useEffect(() => setNow(Date.now()), [ initial ])
 
   useEffect(() => {
-    let timeout: number;
-    let interval: number;
-    const initialDiff = now % each;
-
-    function update() {
-      const now = Date.now()
-      const diff = now % each;
-      setNow(now - diff)
-
-      if (!countUp && now >= until.getTime() && interval) {
-        clearInterval(interval)
-      }
+    if (finished) {
+      return
     }
 
-    timeout = setTimeout(() => {
-      interval = setInterval(update, each) as any
-      update()
-    }, initialDiff) as any
-
-    return () => {
-      if (timeout) {
-        clearTimeout(timeout)
-      }
-
-      if (interval) {
-        clearInterval(interval)
-      }
-    }
-  }, [ until.getTime() ])
-
-  let time = until.getTime() - now
-  if (!countUp && time < 0) {
-    time = 0
-  }
+    const interval = setInterval(() => setNow(Date.now()), Time.Second)
+    return () => clearInterval(interval)
+  }, [ finished ])
 
   return useMemo(() => {
-    const days = Math.abs(time / Time.Day) | 0
-    const hours = Math.abs((time % Time.Day) / Time.Hour) | 0
-    const minutes = Math.abs((time % Time.Hour) / Time.Minute) | 0
-    const seconds = Math.abs((time % Time.Minute) / Time.Second) | 0
-    const milliseconds = Math.abs(time % Time.Second) | 0
+    const days = (time / Time.Day) | 0
+    const hours = ((time % Time.Day) / Time.Hour) | 0
+    const minutes = ((time % Time.Hour) / Time.Minute) | 0
+    const seconds = ((time % Time.Minute) / Time.Second) | 0
+    const milliseconds = (time % Time.Second) | 0
 
     return {
       days,
@@ -64,10 +53,8 @@ export default function useCountdown(until: Date, each: number = Time.Second, co
       minutes,
       seconds,
       milliseconds,
-      time,
-      countingUp: time < 0
+      time
     }
 
   }, [time])
-
 }
