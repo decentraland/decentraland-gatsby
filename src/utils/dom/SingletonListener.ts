@@ -7,6 +7,7 @@ export type TargetListener = Pick<HTMLElement, 'addEventListener' | 'removeEvent
 export type Event = keyof HTMLElementEventMap
 
 export type Listener<K extends Event = any> = (this: HTMLElement, ev: HTMLElementEventMap[K]) => any
+export type Callback<D extends {}> = (this: HTMLElement, data: D) => any
 
 /**
  * SingletonListener
@@ -129,7 +130,9 @@ export default class SingletonListener<T extends TargetListener> {
    * @param event
    * @param listener
    */
-  addEventListener<K extends Event>(event: K | string, listener: Listener<K>) {
+  addEventListener<D extends {}>(event: string, listener: Callback<D>): this;
+  addEventListener<K extends Event>(event: K | string, listener: Listener<K>): this;
+  addEventListener<K extends Event>(event: K | string, listener: Listener<K>): this {
     const listeners = this.listeners.get(event as K) || []
     listeners.push(listener)
 
@@ -147,6 +150,8 @@ export default class SingletonListener<T extends TargetListener> {
    * @param event
    * @param listener
    */
+  removeEventListener<D extends {}>(event: string, listener: Callback<D>): this;
+  removeEventListener<K extends Event>(event: K | string, listener: Listener<K>): this;
   removeEventListener<K extends Event>(event: K | string, listener: Listener<K>) {
     const listeners = this.listeners.get(event as K)
 
