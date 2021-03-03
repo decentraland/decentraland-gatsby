@@ -1,5 +1,5 @@
 import React from "react"
-import TokenList from "../../utils/TokenList"
+import TokenList from "../../utils/dom/TokenList"
 import { createId } from "../../utils/createId"
 import { StyleNamespace } from "../../variables"
 
