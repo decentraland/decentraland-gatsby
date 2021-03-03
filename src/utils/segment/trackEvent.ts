@@ -1,10 +1,10 @@
-import track from "./track"
+import segment from "./segment"
 
-export type HandleOnClick = (event: React.MouseEvent<HTMLElement>, ...extra: any[]) => void
+export type HandleEvent = (event: React.SyntheticEvent<HTMLElement>, ...extra: any[]) => any
 
-export default function trackEvent(handleClick: HandleOnClick) {
+export default function trackEvent<H extends HandleEvent>(handle: H) {
   return (event: React.MouseEvent<HTMLElement>, ...extra: any[]) => {
-    track((analytics) => {
+    segment((analytics) => {
       const type = event.type
       const element = event.currentTarget
       const text = element.innerText.trim() || element.title.trim()
@@ -20,6 +20,6 @@ export default function trackEvent(handleClick: HandleOnClick) {
       })
     })
 
-    handleClick && handleClick(event, ...extra)
+    handle && handle(event, ...extra)
   }
 }
