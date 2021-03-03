@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import Datetime from '../utils/Datetime';
+import Time from '../utils/date/Time';
 
 type State<T> = {
   executed: boolean,
@@ -7,7 +7,7 @@ type State<T> = {
   timeout: ReturnType<typeof setTimeout> | null
 }
 
-export default function useTimeout<T>(fun: () => T, at: Date): T | null {
+export default function useTimeout<T>(fun: () => T, at: Pick<Date, 'getTime'>): T | null {
   const initialValue: State<T> = useMemo(() => {
     if (at.getTime() <= Date.now()) {
       return {
@@ -35,7 +35,7 @@ export default function useTimeout<T>(fun: () => T, at: Date): T | null {
       return setState({
         executed: false,
         value: null,
-        timeout: setTimeout(execute, Math.min(time, Datetime.Day))
+        timeout: setTimeout(execute, Math.min(time, Time.Day))
       })
     }
 
@@ -59,5 +59,6 @@ export default function useTimeout<T>(fun: () => T, at: Date): T | null {
       }
     }
   }, [ at.getTime() ])
+
   return state.value
 }
