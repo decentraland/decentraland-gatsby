@@ -5,14 +5,9 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React, { useState, useEffect } from "react"
+import React from "react"
 import { DropdownProps } from "semantic-ui-react"
 import { changeLocale } from "gatsby-plugin-intl"
-
-import 'semantic-ui-css/semantic.min.css'
-import 'balloon-css/balloon.min.css'
-import 'decentraland-ui/dist/themes/base-theme.css'
-import 'decentraland-ui/dist/themes/alternative/light-theme.css'
 
 import { Footer } from "decentraland-ui/dist/components/Footer/Footer"
 import { Locale } from "decentraland-ui/dist/components/LanguageIcon/LanguageIcon"
