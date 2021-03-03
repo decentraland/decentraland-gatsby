@@ -4,9 +4,10 @@ import { hash } from 'immutable'
 
 export type TargetListener = Pick<HTMLElement, 'addEventListener' | 'removeEventListener'>
 
-export type Event = keyof HTMLElementEventMap
+export type EventMap = HTMLElementEventMap & WindowEventMap
+export type Event = keyof EventMap
 
-export type Listener<K extends Event = any> = (this: HTMLElement, ev: HTMLElementEventMap[K]) => any
+export type Listener<K extends Event = any> = (this: HTMLElement, ev: EventMap[K]) => any
 export type Callback<D extends {}> = (this: HTMLElement, data: D) => any
 
 /**
@@ -35,8 +36,9 @@ export default class SingletonListener<T extends TargetListener> {
     return this.cache.get(id)!
   }
 
-  private listeners = new Map<Event, Listener[]>()
-  private callbacks = new Map<Event, Listener>()
+  public readonly target: T | null = null
+  private listeners = new Map<string, Listener[]>()
+  private callbacks = new Map<string, Listener>()
 
   /**
    * return the total of subscription to this listener
@@ -49,13 +51,15 @@ export default class SingletonListener<T extends TargetListener> {
     return result
   }
 
-  constructor(public readonly target: T | null = null) { }
+  constructor(target: T | null = null) {
+    this.target = target
+  }
 
   /**
    * Create a physical subscription to a target event
    * @param event
    */
-  private subscribe(event: Event) {
+  private subscribe(event: Event | string) {
     if (this.callbacks.has(event)) {
       console.warn(`Already subscribed to "${event}"`)
       return this
@@ -88,7 +92,7 @@ export default class SingletonListener<T extends TargetListener> {
    *
    * @param event
    */
-  private unsubscribe(event: Event) {
+  private unsubscribe(event: Event | string) {
     const listeners = this.listeners.get(event)
 
     if (listeners && listeners.length) {
@@ -112,16 +116,15 @@ export default class SingletonListener<T extends TargetListener> {
    * @param event
    * @param data
    */
-  dispatch(event: Event | string, data: any) {
+  dispatch<K extends Event>(event: K, data: EventMap[K]): Promise<void> {
     const target = this.target
     const callback = this.callbacks.get(event as Event)
-    return new Promise<void>((resolve) => setTimeout(() => {
-      if (callback) {
-        callback.call(target, data)
-      }
-
-      resolve()
-    }, 0))
+    return Promise.resolve()
+      .then(() => {
+        if (callback) {
+          callback.call(target, data)
+        }
+      })
   }
 
   /**
@@ -130,10 +133,8 @@ export default class SingletonListener<T extends TargetListener> {
    * @param event
    * @param listener
    */
-  addEventListener<D extends {}>(event: string, listener: Callback<D>): this;
-  addEventListener<K extends Event>(event: K | string, listener: Listener<K>): this;
-  addEventListener<K extends Event>(event: K | string, listener: Listener<K>): this {
-    const listeners = this.listeners.get(event as K) || []
+  addEventListener<K extends Event>(event: K, listener: Listener<K>): this {
+    const listeners = this.listeners.get(event) || []
     listeners.push(listener)
 
     if (listeners.length === 1) {
@@ -150,22 +151,20 @@ export default class SingletonListener<T extends TargetListener> {
    * @param event
    * @param listener
    */
-  removeEventListener<D extends {}>(event: string, listener: Callback<D>): this;
-  removeEventListener<K extends Event>(event: K | string, listener: Listener<K>): this;
-  removeEventListener<K extends Event>(event: K | string, listener: Listener<K>) {
-    const listeners = this.listeners.get(event as K)
+  removeEventListener<K extends Event>(event: K, listener: Listener<K>): this {
+    const listeners = this.listeners.get(event)
 
     if (!listeners || listeners.length === 0) {
-      return this.unsubscribe(event as K)
+      return this.unsubscribe(event)
     }
 
     const newListeners = listeners.filter(l => l !== listener)
 
     if (newListeners.length === 0) {
-      return this.unsubscribe(event as K)
+      return this.unsubscribe(event)
     }
 
-    this.listeners.set(event as K, newListeners)
+    this.listeners.set(event, newListeners)
 
     return this
   }

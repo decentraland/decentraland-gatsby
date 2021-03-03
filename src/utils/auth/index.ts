@@ -1,4 +1,3 @@
-export { default as getEth } from './getEth'
-export { default as getCurrentAddress } from './getCurrentAddress'
-export { default as identify, setCurrentProfile, getCurrentProfile } from './identify'
-
+export { default as identify } from './identify'
+export * from './storage'
+export * from './types'

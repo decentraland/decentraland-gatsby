@@ -21,7 +21,7 @@ describe(SingletonListener.name, () => {
   let handleMock1 = jest.fn()
   let handleMock2 = jest.fn()
 
-  const data = {}
+  const data = {} as any
   const target = createTarget()
   const listener = new SingletonListener(target)
 
