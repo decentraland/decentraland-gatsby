@@ -1,5 +1,3 @@
-// TODO v3: move to base64 directory
-
 export function toBase64(original: string | ArrayBuffer) {
   if (typeof btoa === 'function' && typeof original === 'string') {
     return btoa(original as string)

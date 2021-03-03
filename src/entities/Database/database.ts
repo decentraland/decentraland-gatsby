@@ -2,7 +2,6 @@ import { yellow } from 'colors/safe'
 import { db } from 'decentraland-server'
 import env from '../../utils/env'
 
-// TODO v3: move from index.ts
 const pg = db.clients.postgres
 
 const database: typeof pg = Object.create(pg)

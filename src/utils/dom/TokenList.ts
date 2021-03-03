@@ -1,12 +1,10 @@
 export type Token = string | undefined | null | false
 
-// TODO v3: Move html directory
-
 /**
- * Represents a set of space-separated tokens. It is indexed 
+ * Represents a set of space-separated tokens. It is indexed
  * beginning with 0 as with JavaScript Array objects. TokenList
  * is always case-sensitive.
- * 
+ *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList
  */
 export default class TokenList {
