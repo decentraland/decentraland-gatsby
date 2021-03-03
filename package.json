@@ -6,6 +6,13 @@
   "bin": {
     "setup-project": "./bin/setup.sh"
   },
+  "static": [
+    "node_modules/semantic-ui-css/semantic.min.css",
+    "node_modules/balloon-css/balloon.min.css",
+    "node_modules/decentraland-ui/dist/themes/base-theme.css",
+    "node_modules/decentraland-ui/dist/themes/alternative/dark-theme.css",
+    "node_modules/decentraland-ui/dist/themes/alternative/light-theme.css"
+  ],
   "scripts": {
     "test": "jest",
     "build": "rm -rf dist && tsc -p . -outDir dist --sourceMap false --skipLibCheck && postcss --base src --dir dist 'src/**/*.css'",
@@ -30,16 +37,6 @@
   "author": "",
   "license": "MIT",
   "release": {
-    "branches": [
-      {
-        "name": "master"
-      },
-      {
-        "name": "{feat,fix}/*",
-        "channel": "alpha",
-        "prerelease": "alpha"
-      }
-    ],
     "ci": false
   },
   "bugs": {
@@ -96,7 +93,8 @@
     "dcl-crypto": "^2.3.0",
     "ddos": "^0.2.1",
     "decentraland-commons": "^5.1.0",
-    "decentraland-dapps": "^7.13.1",
+    "decentraland-connect": "^2.1.0",
+    "decentraland-dapps": "^8.6.2",
     "decentraland-server": "^2.11.6",
     "decentraland-ui": "^2.23.0",
     "eth-crypto": "1.6.0",
@@ -104,6 +102,7 @@
     "framer-motion": "^1.9.0",
     "gatsby": "^2.26.1",
     "gatsby-plugin-intl": "^0.3.3",
+    "gatsby-plugin-react-redux": "^1.1.0",
     "generic-pool": "^3.7.1",
     "glob": "^7.1.6",
     "highlight.js": "^10.4.1",
@@ -120,9 +119,13 @@
     "react-helmet": "^5.2.1",
     "react-highlight": "^0.12.0",
     "react-markdown": "^4.3.1",
+    "react-redux": "^7.2.2",
+    "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
     "semantic-release": "^17.3.0",
     "three": "^0.115.0",
     "toml": "^3.0.0",
+    "typesafe-actions": "^5.1.0",
     "uuid": "^8.3.1",
     "validator": "^13.0.0",
     "web3x": "^4.0.6",
