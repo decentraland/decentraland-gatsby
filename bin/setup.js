@@ -4,6 +4,9 @@ const { sync } = require('glob')
 const { mkdirSync, writeFileSync, readFileSync } = require('fs')
 const { spawn } = require('child_process')
 const { grey, green, red } = require('colors/safe')
+const pkg = require('../package.json')
+
+const isUpdate = process.argv.find(arg => arg === '--update')
 
 function installDependencies(modules, options) {
   return new Promise((resolve, reject) => {
@@ -89,11 +92,14 @@ Promise.resolve()
   )
 
   .then(() => {
-    const pkg = require(resolve(process.cwd(), 'package.json'))
-    pkg.scripts = Object.assign(pkg.scripts || {}, {
+    const projectPkg = require(resolve(process.cwd(), 'package.json'))
+    projectPkg.scripts = Object.assign(projectPkg.scripts || {}, {
       build: 'gatsby build && tsc -p .',
       develop: 'gatsby develop --https -H 0.0.0.0',
       format: 'prettier --write "**/*.{js,jsx,json,md}"',
+      theme: pkg.static
+        .join(file => `cp ${file} static`)
+        .join(' && '),
       start:
         "concurrently -c blue,green -n SERVER,FRONT 'npm run serve' 'npm run develop'",
       serve:
@@ -106,10 +112,14 @@ Promise.resolve()
     })
     writeFileSync(
       resolve(process.cwd(), 'package.json'),
-      JSON.stringify(pkg, null, 2)
+      JSON.stringify(projectPkg, null, 2)
     )
   })
   .then(() => {
+    if (isUpdate) {
+      return
+    }
+
     const templates = __dirname + '/templates'
     const files = sync('**/*', {
       cwd: templates,
