@@ -1,5 +1,8 @@
-import SingletonListener from "./SingletonListener"
+import SingletonListener from "./dom/SingletonListener"
 
+/**
+ * @deprecated
+ */
 export type EntityStoreState<E extends object> = {
   error: string | null
   loading: boolean,
@@ -37,11 +40,11 @@ export default class EntityStore<E extends object> {
   }
 
   addEventListener(event: string, callback: (entity: EntityStoreState<E>) => void) {
-    this.listener.addEventListener(event, callback as any)
+    this.listener.addEventListener(event as any, callback as any)
   }
 
   removeEventListener(event: string, callback: (entity: EntityStoreState<E>) => void) {
-    this.listener.removeEventListener(event, callback as any)
+    this.listener.removeEventListener(event as any, callback as any)
   }
 
   getState() {
@@ -70,7 +73,7 @@ export default class EntityStore<E extends object> {
       }
     }
 
-    this.listener.dispatch('change', this.state)
+    this.listener.dispatch('change' as any, this.state)
   }
 
   setEntities(entities: E[], listName: string = 'default') {
@@ -95,7 +98,7 @@ export default class EntityStore<E extends object> {
       }
     }
 
-    this.listener.dispatch('change', this.state)
+    this.listener.dispatch('change' as any, this.state)
   }
 
   setError(error: Error) {
@@ -104,7 +107,7 @@ export default class EntityStore<E extends object> {
       error: error.message
     }
 
-    this.listener.dispatch('change', this.state)
+    this.listener.dispatch('change' as any, this.state)
   }
 
   setLoading(value: boolean = true) {
@@ -114,7 +117,7 @@ export default class EntityStore<E extends object> {
         loading: value,
       }
 
-      this.listener.dispatch('change', this.state)
+      this.listener.dispatch('change' as any, this.state)
     }
 
     return value
@@ -131,7 +134,7 @@ export default class EntityStore<E extends object> {
       lists
     }
 
-    this.listener.dispatch('change', this.state)
+    this.listener.dispatch('change' as any, this.state)
   }
 
   clear() {
@@ -142,6 +145,6 @@ export default class EntityStore<E extends object> {
       lists: {}
     }
 
-    this.listener.dispatch('change', this.state)
+    this.listener.dispatch('change' as any, this.state)
   }
 }
