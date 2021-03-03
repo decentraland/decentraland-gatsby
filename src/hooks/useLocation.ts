@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import SingletonListener from '../utils/SingletonListener'
+import SingletonListener from '../utils/dom/SingletonListener'
 
 export default function useLocation() {
   const [location, setLocation] = useState<URL | null>(null)

@@ -1,6 +1,6 @@
 import Responsive, { ResponsiveWidthShorthand } from 'semantic-ui-react/dist/commonjs/addons/Responsive'
 import { useState, useEffect } from 'react'
-import SingletonListener from '../utils/SingletonListener'
+import SingletonListener from '../utils/dom/SingletonListener'
 
 let CURRENT_WIDTH = Responsive.onlyMobile.maxWidth as number
 
