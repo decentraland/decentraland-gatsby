@@ -16,7 +16,7 @@ export type AvatarProps = Omit<React.HTMLProps<HTMLImageElement>, 'height' | 'wi
 export default React.memo(function Avatar({ address, size, src, ...props }: AvatarProps) {
 
   const [ failed, setFailed ] = useState(false)
-  const [ avatar, loading ] = useAsyncMemo(() => profiles.load(address || ''), [ address ])
+  const [ avatar, { loading } ] = useAsyncMemo(() => profiles.load(address || ''), [ address ])
   const target = useMemo(() => {
     if (src) {
       return src
