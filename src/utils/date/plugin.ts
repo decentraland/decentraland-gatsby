@@ -15,10 +15,10 @@ declare module 'dayjs' {
   }
 
   export function date(value?: undefined | null): null
-  export function date(value: string | number | Date | Dayjs): Date
-  export function date(value?: undefined | null | string | number | Date | Dayjs): Date | null
+  export function date(value: string | number | Date | dayjs.Dayjs): Date
+  export function date(value?: undefined | null | string | number | Date | dayjs.Dayjs): Date | null
 
-  export function from(date: dayjs.ConfigType, utc?: boolean): Dayjs
+  export function from(date: dayjs.ConfigType, utc?: boolean): dayjs.Dayjs
 
   export const isTime: typeof dayjs.isDayjs
 

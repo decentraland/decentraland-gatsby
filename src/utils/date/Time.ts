@@ -8,7 +8,17 @@ import isSameOrAfter from 'dayjs/plugin/isSameOrAfter'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import pluralGetSet from 'dayjs/plugin/pluralGetSet'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
-import './extend.d.ts'
+
+import 'dayjs/plugin/utc'
+import 'dayjs/plugin/isToday'
+import 'dayjs/plugin/isTomorrow'
+import 'dayjs/plugin/isYesterday'
+import 'dayjs/plugin/isBetween'
+import 'dayjs/plugin/isSameOrAfter'
+import 'dayjs/plugin/isSameOrBefore'
+import 'dayjs/plugin/pluralGetSet'
+import 'dayjs/plugin/customParseFormat'
+import './plugin'
 
 Time.extend(utc)
 Time.extend(isToday)
