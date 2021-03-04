@@ -57,15 +57,7 @@ Time.extend((_options, Dayjs, factory) => {
     return Time(value).toDate()
   }
 
-  function from(date: Time.ConfigType, utc?: boolean): Time.Dayjs {
-    if (utc) {
-      return Time.utc(date)
-    } else {
-      return Time(date)
-    }
-  }
-
-  Object.assign(factory, Constants, { Formats, isTime: factory.isDayjs, date, from })
+  Object.assign(factory, Constants, { Formats, isTime: factory.isDayjs, date, from: factory })
 
   // console.log(Dayjs.prototype as any)
   const parse = (Dayjs.prototype as any).parse

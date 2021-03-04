@@ -18,8 +18,7 @@ declare module 'dayjs' {
   export function date(value: string | number | Date | dayjs.Dayjs): Date
   export function date(value?: undefined | null | string | number | Date | dayjs.Dayjs): Date | null
 
-  export function from(date: dayjs.ConfigType, utc?: boolean): dayjs.Dayjs
-
+  export const from: typeof dayjs
   export const isTime: typeof dayjs.isDayjs
 
   interface Dayjs {
