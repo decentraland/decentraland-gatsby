@@ -11,7 +11,7 @@ import { changeLocale } from "gatsby-plugin-intl"
 import { PageProps } from "gatsby"
 
 import useWindowScroll from "../../hooks/useWindowScroll"
-import trackEvent from "../Segment/trackEvent"
+import trackEvent from "../../utils/segment/trackEvent"
 import { Footer } from "decentraland-ui/dist/components/Footer/Footer"
 import { Locale } from "decentraland-ui/dist/components/LanguageIcon/LanguageIcon"
 import { Navbar } from "decentraland-ui/dist/components/Navbar/Navbar"

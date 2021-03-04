@@ -4,7 +4,7 @@ import { GatsbyLinkProps } from "gatsby"
 import { Link } from "gatsby-plugin-intl"
 import Menu from 'semantic-ui-react/dist/commonjs/collections/Menu/Menu'
 import Responsive from 'semantic-ui-react/dist/commonjs/addons/Responsive/Responsive'
-import trackEvent from '../Segment/trackEvent'
+import trackEvent from '../../utils/segment/trackEvent'
 
 export const Label = {
   en: "ENG",
