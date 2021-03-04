@@ -1,8 +1,8 @@
 import useAuth from './useAuth'
 import useAsyncMemo from './useAsyncMemo'
-import Catalyst from '../utils/api/Catalyst'
+import profile from '../utils/loader/profile'
 
 export default function useAvatar() {
   const [ account ] = useAuth()
-  return useAsyncMemo(async () => !account ? null : Catalyst.get().getProfile(account), [ account ])
+  return useAsyncMemo(async () => !account ? null : profile.load(account), [ account ])
 }
