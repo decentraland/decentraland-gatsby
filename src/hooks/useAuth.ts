@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
-import { Provider, ProviderType, ChainId } from "decentraland-connect/dist/types"
+import { ChainId } from "@dcl/schemas"
+import { Provider, ProviderType } from "decentraland-connect/dist/types"
 import { connection } from "decentraland-connect/dist/ConnectionManager"
 import { getCurrentIdentity, setCurrentIdentity } from "../utils/auth/storage"
 import segment from "../utils/segment/segment"
