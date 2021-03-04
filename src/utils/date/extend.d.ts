@@ -1,4 +1,4 @@
-import { PluginFunc, ConfigType } from 'dayjs'
+import dayjs from 'dayjs'
 
 declare module 'dayjs' {
   // export function ddd(config?: ConfigType, format?: string): Dayjs
@@ -17,6 +17,10 @@ declare module 'dayjs' {
   export function date(value?: undefined | null): null
   export function date(value: string | number | Date | Dayjs): Date
   export function date(value?: undefined | null | string | number | Date | Dayjs): Date | null
+
+  export function from(date: dayjs.ConfigType, utc?: boolean): Dayjs
+
+  export const isTime: typeof dayjs.isDayjs
 
   interface Dayjs {
     getTime(): number
