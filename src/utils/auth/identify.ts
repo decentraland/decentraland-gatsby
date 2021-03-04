@@ -58,5 +58,5 @@ export async function ownerAddress(authChain: AuthChain) {
     { Authenticator } /* from dcl-crypto/dist/Authenticator */,
   ] = await dependencies()
 
-  return Authenticator.ownerAddress(authChain)
+  return Authenticator.ownerAddress(authChain).toLowerCase()
 }
