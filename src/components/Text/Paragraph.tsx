@@ -1,5 +1,5 @@
 import React from "react"
-import TokenList from "../../utils/TokenList"
+import TokenList from "../../utils/dom/TokenList"
 import { StyleNamespace } from "../../variables"
 import "./Paragraph.css"
 
@@ -16,7 +16,7 @@ export type ParagraphProps = React.Props<HTMLParagraphElement> &
     uppercase?: boolean
   }
 
-export default function Paragraph({ primary, secondary, small, tiny, bold, semiBold, italic, underline, uppercase, ...props }: ParagraphProps) {
+export default React.memo(function Paragraph({ primary, secondary, small, tiny, bold, semiBold, italic, underline, uppercase, ...props }: ParagraphProps) {
   return (
     <p
       {...props}
@@ -36,4 +36,4 @@ export default function Paragraph({ primary, secondary, small, tiny, bold, semiB
       ])}
     />
   )
-}
+})

@@ -1,8 +1,8 @@
 import React, { useMemo, useState } from 'react'
 import useAsyncMemo from '../../hooks/useAsyncMemo'
 import { StyleNamespace } from '../../variables'
-import TokenList from '../../utils/TokenList'
-import profiles from '../../utils/store/profiles'
+import TokenList from '../../utils/dom/TokenList'
+import profiles from '../../utils/loader/profile'
 
 import './Avatar.css'
 
@@ -16,7 +16,7 @@ export type AvatarProps = Omit<React.HTMLProps<HTMLImageElement>, 'height' | 'wi
 export default React.memo(function Avatar({ address, size, src, ...props }: AvatarProps) {
 
   const [ failed, setFailed ] = useState(false)
-  const [ avatar, loading ] = useAsyncMemo(() => profiles.load(address || ''), [ address ])
+  const [ avatar, { loading } ] = useAsyncMemo(() => profiles.load(address || ''), [ address ])
   const target = useMemo(() => {
     if (src) {
       return src

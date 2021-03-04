@@ -1,5 +1,5 @@
 import React from "react"
-import TokenList from "../../utils/TokenList"
+import TokenList from "../../utils/dom/TokenList"
 import { StyleNamespace } from "../../variables"
 import "./Underline.css"
 
@@ -9,7 +9,7 @@ export type UnderlineProps = React.Props<HTMLSpanElement> &
     secondary?: boolean
   }
 
-export default function Underline({ primary, secondary, ...props }: UnderlineProps) {
+export default React.memo(function Underline({ primary, secondary, ...props }: UnderlineProps) {
   return (
     <span
       {...props}
@@ -22,4 +22,4 @@ export default function Underline({ primary, secondary, ...props }: UnderlinePro
       ])}
     />
   )
-}
+})

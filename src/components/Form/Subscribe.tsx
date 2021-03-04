@@ -1,7 +1,7 @@
 import React from 'react';
 import fetch from 'isomorphic-fetch';
 import Input from './Input';
-import TokenList from '../../utils/TokenList';
+import TokenList from '../../utils/dom/TokenList';
 import { StyleNamespace } from '../../variables';
 import { Button } from 'decentraland-ui/dist/components/Button/Button';
 import usePatchState from '../../hooks/usePatchState';

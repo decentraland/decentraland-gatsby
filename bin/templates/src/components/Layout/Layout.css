@@ -14,6 +14,10 @@
   color: var(--text);
 }
 
+.dcl.navbar .ui.menu .item[href="https://avatars.decentraland.org"] {
+  display: none;
+}
+
 @media only screen and (min-width: 1200px) {
   .ui.container {
     width: 1124px;

@@ -1,7 +1,7 @@
 import { Request } from 'express'
 import { AuthIdentity, AuthChain, AuthLinkType } from 'dcl-crypto/dist/types'
 import { Authenticator, parseEmphemeralPayload } from 'dcl-crypto/dist/Authenticator'
-import { fromBase64 } from '../../utils/base64'
+import { fromBase64 } from '../../utils/string/base64'
 import { HttpProvider } from 'web3x/providers'
 import RequestError from '../Route/error'
 import { middleware } from '../Route/handle'

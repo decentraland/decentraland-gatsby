@@ -1,5 +1,5 @@
 import React from "react"
-import TokenList from "../../utils/TokenList"
+import TokenList from "../../utils/dom/TokenList"
 import { StyleNamespace } from "../../variables"
 import "./Italic.css"
 
@@ -9,7 +9,7 @@ export type ItalicProps = React.Props<HTMLSpanElement> &
     secondary?: boolean
   }
 
-export default function Italic({ primary, secondary, ...props }: ItalicProps) {
+export default React.memo(function Italic({ primary, secondary, ...props }: ItalicProps) {
   return (
     <span
       {...props}
@@ -22,4 +22,4 @@ export default function Italic({ primary, secondary, ...props }: ItalicProps) {
       ])}
     />
   )
-}
+})

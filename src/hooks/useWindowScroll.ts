@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { useMotionValue } from "framer-motion"
-import SingletonListener from "../utils/SingletonListener"
+import SingletonListener from "../utils/dom/SingletonListener"
 
 export default function useWindowScroll() {
   const scrollX = useMotionValue(0)

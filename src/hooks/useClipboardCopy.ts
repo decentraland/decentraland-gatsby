@@ -1,49 +1,31 @@
-import { useState, useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import clipboardCopy from "clipboard-copy"
 
-// TODO v3: change return type
-//  => [
-//    values: string | null,
-//    state: { coping: boolean, copy(newValue: string): void }
-//  ]
-export type ClipboardCopyState = {
-  value: string | null,
-  loading: boolean,
-}
+export default function useClipboardCopy(timeout?: number) {
 
-type InnerState = ClipboardCopyState & { timeout: ReturnType<typeof setTimeout> | null }
+  const [ state, setState ] = useState<string | number | boolean | null>(null)
 
-export default function useClipboardCopy(loadingTime: number = 1000) {
-
-  const [ inner, setInner ] = useState<InnerState>({
-    timeout: null,
-    value: null,
-    loading: false
-  })
-
-  const state = useMemo<ClipboardCopyState>(
-    () => ({ value: inner.value, loading: inner.loading }),
-    [ inner.value, inner.loading ]
-  )
-
-  function copy(value: string) {
-    clipboardCopy(value)
-    if (inner.timeout) {
-      clearTimeout(inner.timeout)
-    }
-
-    const timeout = setTimeout(() => setInner((current) => ({
-      ...current,
-      timeout: null,
-      loading: false
-    })), loadingTime)
-
-    setInner({
-      loading: true,
-      value,
-      timeout
-    })
+  function copy(value: string | number | boolean | null) {
+    clipboardCopy(String(value ?? ''))
+    setState(value)
   }
 
-  return [ state, copy ] as const
+  function clear() {
+    setState(null)
+  }
+
+  useEffect(() => {
+    let copyTimeout: null | ReturnType<typeof setTimeout> = null
+    if (state && timeout && timeout > 0) {
+      copyTimeout = setTimeout(() => clear(), timeout)
+    }
+
+    return () => {
+      if (copyTimeout) {
+        clearTimeout(copyTimeout)
+      }
+    }
+  }, [ state, timeout ])
+
+  return [ state, { copy, clear } ] as const
 }

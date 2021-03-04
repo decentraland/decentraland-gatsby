@@ -1,4 +1,4 @@
-import getUserAgent from "./getUserAgent"
+import getUserAgent from "./dom/getUserAgent"
 
 /**
  * Detect mobile browser

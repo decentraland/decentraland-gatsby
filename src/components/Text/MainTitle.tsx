@@ -1,6 +1,6 @@
 import React from "react"
-import TokenList from "../../utils/TokenList"
-import { createId } from "../../utils/createId"
+import TokenList from "../../utils/dom/TokenList"
+import { createId } from "../../utils/react/createId"
 import { StyleNamespace } from "../../variables"
 
 import "./MainTitle.css"
@@ -8,6 +8,6 @@ import "./MainTitle.css"
 export type MainTitleProps = React.Props<HTMLHeadingElement> &
   React.HTMLProps<HTMLHeadingElement>
 
-export default function MainTitle(props: MainTitleProps) {
+export default React.memo(function MainTitle(props: MainTitleProps) {
   return <h1 id={createId(props)} {...props} className={TokenList.join([StyleNamespace, "MainTitle", props.className])} />
-}
+})

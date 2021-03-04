@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactMarkdown, { ReactMarkdownProps, NodeType } from 'react-markdown'
 import { Table } from 'decentraland-ui/dist/components/Table/Table'
+import MainTitle from './MainTitle';
+import Title from './Title';
 import SubTitle from './SubTitle';
 import Paragraph from './Paragraph';
 import Italic from './Italic';
@@ -11,7 +13,16 @@ import Link from './Link';
 export type MarkdownProps = Omit<ReactMarkdownProps, 'renders' | 'linkTarget' | 'astPlugins' | 'plugins'>
 
 export const renderers = {
-  heading: SubTitle,
+  heading: ({level, ...props}: any) => {
+    switch(level) {
+      case 1:
+        return <MainTitle {...props} />
+      case 2:
+        return <Title {...props} />
+      default:
+        return <SubTitle {...props} />
+    }
+  },
   paragraph: Paragraph,
   emphasis: Italic,
   strong: Bold,
@@ -29,6 +40,6 @@ export const renderers = {
 
 export const allowedTypes = ['root', 'text'].concat(Object.keys(renderers)) as NodeType[]
 
-export default function Markdown(props: MarkdownProps) {
+export default React.memo(function Markdown(props: MarkdownProps) {
   return <ReactMarkdown {...props} renderers={renderers} allowedTypes={allowedTypes} />
-}
+})

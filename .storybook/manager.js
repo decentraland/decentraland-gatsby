@@ -2,6 +2,8 @@ import { addons } from '@storybook/addons'
 import { create } from '@storybook/theming/create'
 
 addons.setConfig({
+  showPanel: false,
+  showRoots: true,
   theme: create({
     base: 'light',
     brandTitle: 'Gatsby | Decentraland',

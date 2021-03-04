@@ -1,7 +1,7 @@
 import fetch from 'isomorphic-fetch'
 import FetchError from '../errors/FetchError'
 import RequestError from '../errors/RequestError'
-import Options from './Options'
+import Options, { RequestOptions } from './Options'
 
 export default class API {
 
@@ -26,6 +26,10 @@ export default class API {
     }
 
     return baseUrl + path
+  }
+
+  options(options: RequestOptions = {}) {
+    return new Options(options)
   }
 
   query<T extends {} = {}>(qs?: T) {

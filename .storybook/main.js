@@ -5,10 +5,11 @@ const prettierConfig = JSON.parse(
 )
 
 module.exports = {
-  stories: ['../src/**/*.stories.tsx'],
+  stories: ['../src/**/*.stories.@(js|mdx)'],
   addons: [
     '@storybook/addon-actions',
     '@storybook/addon-links',
+    '@storybook/addon-docs',
     '@storybook/addon-viewport/register',
     '@storybook/addon-actions/register',
     {
@@ -24,20 +25,20 @@ module.exports = {
       },
     },
   ],
-  webpackFinal: async config => {
-    config.module.rules.push({
-      test: /\.(ts|tsx)$/,
-      use: [
-        {
-          loader: require.resolve('ts-loader'),
-        },
-        // Optional
-        {
-          loader: require.resolve('react-docgen-typescript-loader'),
-        },
-      ],
-    })
-    config.resolve.extensions.push('.ts', '.tsx')
-    return config
-  },
+  // webpackFinal: async config => {
+  //   config.module.rules.push({
+  //     test: /\.(ts|tsx)$/,
+  //     use: [
+  //       {
+  //         loader: require.resolve('ts-loader'),
+  //       },
+  //       // Optional
+  //       {
+  //         loader: require.resolve('react-docgen-typescript-loader'),
+  //       },
+  //     ],
+  //   })
+  //   config.resolve.extensions.push('.ts', '.tsx')
+  //   return config
+  // },
 }

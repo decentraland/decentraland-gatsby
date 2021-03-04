@@ -1,0 +1,91 @@
+import { useState, useMemo, useEffect } from 'react'
+import { Source, ArgsTable } from '@storybook/components';
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
+import { ProviderType, ChainId } from "decentraland-connect/dist/types"
+import { Button } from 'decentraland-ui/dist/components/Button/Button';
+import { Args } from '../components/Storybook/utils';
+import Container from '../components/Storybook/Container';
+import useAuth from './useAuth';
+
+<Meta title="Standalone Hooks/useAuth" />
+
+# Auth Hook
+
+> The *auth hook* allows to create a user session using one of the availables providers.
+
+```ts
+const [ account, state ] = useAuth()
+```
+
+<ArgsTable rows={[
+  Args.returns('account', 'ethereum address ', `string | null`),
+  Args.returns('state.loading', '`true` when is waiting for a user initeraction', `boolean`),
+  Args.returns(
+    'state.providerType',
+    'type of provider conneceted to, `null` if not connected. \n\n imported from [decentraland-connect](https://www.npmjs.com/package/decentraland-connect)',
+    Args.definedTypes(
+      `ProviderType | null`,
+      [
+        'ProviderType.INJECTED',
+        'ProviderType.FORTMATIC',
+        null
+      ]
+    )
+  ),
+  Args.returns(
+    'state.chainId',
+    'chain id connected to, `null` if not connected. \n\n imported from [decentraland-connect](https://www.npmjs.com/package/decentraland-connect)',
+    Args.definedTypes(
+      `ChainId | null`,
+      [
+        'ChainId.ETHEREUM_MAINNET',
+        'ChainId.ETHEREUM_ROPSTEN',
+        'ChainId.ETHEREUM_RINKEBY',
+        'ChainId.ETHEREUM_GOERLI',
+        'ChainId.ETHEREUM_KOVAN',
+        'ChainId.MATIC_MUMBAI',
+        'ChainId.MATIC_MAINNET',
+        null
+      ]
+    )
+  ),
+  {/* Args.returns('clipboard.copy', 'send value to the user clipboard', `(value: boolean | number | string) => void`),
+  Args.returns('clipboard.clear', 'reset clipboard value to `null`', `() => void`), */}
+]} />
+
+## Preview
+
+export const Example = () => {
+  const [ account, state ] = useAuth()
+  return <Container>
+    <Button primary size="small" disabled={!!account} loading={state.loading} onClick={() => state.connect(ProviderType.INJECTED, ChainId.ETHEREUM_MAINNET)}>connect injected</Button>
+    <Button primary size="small" disabled={!!account} loading={state.loading} onClick={() => state.connect(ProviderType.FORTMATIC, ChainId.ETHEREUM_MAINNET)}>connect fortmatic</Button>
+    {/* <Button primary size="small" disabled={true} loading={state.loading} onClick={() => null}>connect wallet connect</Button> */}
+    {/* <Button primary size="small" disabled={true} loading={state.loading} onClick={() => null}>connect wallet link</Button> */}
+    <Button primary size="small" disabled={!account} loading={state.loading} onClick={() => state.disconnect()}>disconnect</Button>
+    <Source language="ts" code={JSON.stringify(account, null, 2)} />
+    <Source language="ts" code={JSON.stringify({
+      loading: state.loading,
+      providerType: state.providerType,
+      chainId: state.chainId,
+    }, null, 2)} />
+  </Container>
+}
+
+<Example />
+
+```tsx dark=true
+import React from "react"
+import { ProviderType, ChainId } from "decentraland-connect/dist/types"
+
+export function Example () {
+  const [ account, state ] = useAuth()
+
+  return <div>
+    <button disabled={!!account} loading={state.loading} onClick={() => state.connect(ProviderType.INJECTED, ChainId.ETHEREUM_MAINNET)}>connect injected</button>
+    <button disabled={!!account} loading={state.loading} onClick={() => state.connect(ProviderType.FORTMATIC, ChainId.ETHEREUM_MAINNET)}>connect fortmatic</button>
+    <button disabled={!account} loading={state.loading} onClick={() => state.disconnect()}>disconnect</button>
+    <pre>{JSON.stringify(account, null, 2)}</pre>
+  </div>
+}
+```

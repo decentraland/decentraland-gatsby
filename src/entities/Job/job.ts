@@ -1,9 +1,9 @@
 import { CronJob } from 'cron'
 import { JobSettings, NextFunction, TimePresets, CronTime } from './types'
 import JobContext from './context'
-import Model from './model'
 import { createVoidPool, Pool } from '../Pool/utils'
-import MemoryModel from './memory'
+import MemoryModel from './model/memory'
+import DatabaseModel from './model/model'
 import { job_manager_duration_seconds, job_manager_pool_size } from './metrics'
 
 export interface Job<P extends object = {}> {
@@ -40,7 +40,7 @@ export default class JobManager {
       return MemoryModel
     }
 
-    return Model
+    return DatabaseModel
   }
 
   stats() {
