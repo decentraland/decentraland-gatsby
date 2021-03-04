@@ -41,8 +41,8 @@ Time.extend((_options, Dayjs, factory) => {
 
   const Formats = Object.freeze({
     GoogleCalendar: 'YYYYMMDDTHHmmss[Z]',
-    DateInput: 'YYYY-MM-DD',
-    TimeInput: 'HH:mm',
+    InputDate: 'YYYY-MM-DD',
+    InputTime: 'HH:mm',
   })
 
   function date(value?: null | number | string | Date | Time.Dayjs) {
@@ -74,12 +74,12 @@ Time.extend((_options, Dayjs, factory) => {
       if (
         typeof cfg.date === 'string' &&
         typeof cfg.args[0] === 'string' &&
-        cfg.args[1] === Formats.TimeInput
+        cfg.args[1] === Formats.InputTime
       ) {
         cfg.date = '1970-01-01 ' + cfg.date
         cfg.utc = true
         cfg.args[0] = cfg.date
-        cfg.args[1] = Formats.DateInput + ' ' + Formats.TimeInput
+        cfg.args[1] = Formats.InputDate + ' ' + Formats.InputTime
       }
 
       parse.bind(this)(cfg)

@@ -10,8 +10,8 @@ declare module 'dayjs' {
   export const Week: number
   export const Formats: {
     GoogleCalendar: string,
-    DateInput: string,
-    TimeInput: string,
+    InputDate: string,
+    InputTime: string,
   }
 
   export function date(value?: undefined | null): null

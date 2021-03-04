@@ -19,8 +19,8 @@ describe(`utils/date/Time`, () => {
   })
 
   test(`combine date input and time input`, () => {
-    const time = Time.utc('23:59', Time.Formats.TimeInput).getTime()
-    const date = Time.utc('2020-02-20', Time.Formats.DateInput).getTime()
+    const time = Time.utc('23:59', Time.Formats.InputTime).getTime()
+    const date = Time.utc('2020-02-20', Time.Formats.InputDate).getTime()
     expect(new Date(date + time).toJSON()).toBe(`2020-02-20T23:59:00.000Z`)
   })
 
