@@ -16,11 +16,15 @@ export type AvatarProps = Omit<React.HTMLProps<HTMLImageElement>, 'height' | 'wi
 export default React.memo(function Avatar({ address, size, src, ...props }: AvatarProps) {
 
   const [ failed, setFailed ] = useState(false)
-  const [ avatar, { loading } ] = useAsyncMemo(() => profiles.load(address || ''), [ address ])
+  const [ avatar, { loading } ] = useAsyncMemo(
+    () => profiles.load(address || ''),
+    [ address ],
+    { callWithTruthyDeps: true }
+  )
   const target = useMemo(() => {
     if (src) {
       return src
-    } else  if (failed || !(avatar?.avatar?.snapshots?.face)) {
+    } else if (failed || !(avatar?.avatar?.snapshots?.face)) {
       return DEFAULT_AVATAR
     } else {
       return avatar?.avatar?.snapshots?.face
@@ -39,7 +43,7 @@ export default React.memo(function Avatar({ address, size, src, ...props }: Avat
       'dcl-avatar',
       `dcl-avatar--${size}`,
       `dcl-avatar--${((address || '')[2] || '').toLowerCase()}`,
-      loading && `dcl-avatar--loading`,
+      !src && loading && `dcl-avatar--loading`,
       props.className
     ])}
   />
