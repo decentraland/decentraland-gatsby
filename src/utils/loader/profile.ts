@@ -20,7 +20,8 @@ export default new Loader<Profile>(async (address: string) => {
   address = address.toLowerCase()
 
   try {
-    const profile = await Catalyst.get().getProfile(address)
+    const catalyst = await Catalyst.getAny()
+    const profile = await catalyst.getProfile(address)
     return profile || defaultProfile(address)
   } catch (err) {
     return defaultProfile(address)
