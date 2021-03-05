@@ -6,7 +6,10 @@ export type RequestOptions = Omit<RequestInit, 'headers'> & { headers?: Record<s
 
 export default class Options {
 
-  constructor(private options: RequestOptions = {}) { }
+  private options: RequestOptions = {}
+  constructor(options: RequestOptions = {}) {
+    this.options = options
+  }
 
   merge(options: Options) {
     const raw = options.toObject()

@@ -5,6 +5,9 @@ import Options, { RequestOptions } from './Options'
 
 export default class API {
 
+  readonly baseUrl: string = ''
+  readonly defaultOptions: Options = new Options({})
+
   static catch<T>(prom: Promise<T>) {
     return prom.catch((err) => {
       console.error(err)
@@ -12,7 +15,10 @@ export default class API {
     })
   }
 
-  constructor(public readonly baseUrl: string, public readonly defaultOptions: Options = new Options({})) { }
+  constructor(baseUrl: string = '', defaultOptions: Options = new Options({})) {
+    this.baseUrl = baseUrl || ''
+    this.defaultOptions = defaultOptions
+  }
 
   url(path: string) {
     let baseUrl = this.baseUrl
