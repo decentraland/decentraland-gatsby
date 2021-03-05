@@ -1,7 +1,12 @@
+import isEthereumAddress from "validator/lib/isEthereumAddress"
 import Catalyst, { Avatar } from "../api/Catalyst"
 import Loader from "./Loader"
 
-export type Profile = Omit<Avatar, 'avatar'> & Partial<Pick<Avatar, 'avatar'>>
+export type Profile = Omit<Avatar, 'avatar'> & Partial<Pick<Avatar, 'avatar'>> & {
+  isDefaultProfile?: boolean,
+  invalidAddress?: boolean,
+  invalidServerResponse?: boolean,
+}
 
 const defaultProfile = (address: string): Profile => ({
   userId: address,
@@ -14,16 +19,32 @@ const defaultProfile = (address: string): Profile => ({
   inventory: [],
   version: 0,
   tutorialStep: 0,
+  isDefaultProfile: true
 })
 
 export default new Loader<Profile>(async (address: string) => {
   address = address.toLowerCase()
 
+  if (!isEthereumAddress(address)) {
+    return {
+      ...defaultProfile(address),
+      invalidAddress: true
+    }
+  }
+
   try {
     const catalyst = await Catalyst.getAny()
     const profile = await catalyst.getProfile(address)
-    return profile || defaultProfile(address)
-  } catch (err) {
+    if (profile) {
+      return profile
+    }
+
     return defaultProfile(address)
+  } catch (err) {
+    console.error(err)
+    return {
+      ...defaultProfile(address),
+      invalidServerResponse: true,
+    }
   }
 })
