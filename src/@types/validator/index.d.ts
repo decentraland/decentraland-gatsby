@@ -1,3 +1,3 @@
 declare module 'validator/lib/isEthereumAddress' {
-  export default function (): boolean
+  export default function (value: string): boolean
 }
