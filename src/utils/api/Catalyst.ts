@@ -1,6 +1,7 @@
 import type { Address } from 'web3x/address'
-import API from './API'
+import random from '../number/random'
 import env from '../env'
+import API from './API'
 
 export type Snapshot = {
   face: string,
@@ -94,10 +95,27 @@ export default class Catalyst extends API {
     'https://peer.decentraland.org'
   )
 
+  static Servers: Promise<void> | null = null
   static Cache = new Map<string, Catalyst>()
 
   static get() {
     return this.from(env('PROFILE_URL', this.Url))
+  }
+
+  static async getAny() {
+    const api = this.get()
+    if (!this.Servers) {
+      this.Servers = api.getServers()
+        .then((servers) => {
+          for (const server of servers) {
+            this.Cache.set(server.address, new Catalyst(server.address))
+          }
+        })
+    }
+
+    await this.Servers
+    const i = random(this.Cache.size)
+    return Array.from(this.Cache.values())[i] || api
   }
 
   static from(baseUrl: string) {
