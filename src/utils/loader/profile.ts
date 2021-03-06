@@ -33,8 +33,9 @@ export default new Loader<Profile>(async (address: string) => {
   }
 
   try {
-    const catalyst = await Catalyst.getAny()
-    const profile = await catalyst.getProfile(address)
+    // const catalyst = await Catalyst.getAny()
+    // const profile = await catalyst.getProfile(address)
+    const profile = await Catalyst.get().getProfile(address)
     if (profile) {
       return profile
     }
