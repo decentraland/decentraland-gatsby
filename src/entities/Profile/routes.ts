@@ -3,7 +3,7 @@ import isURL from "validator/lib/isURL";
 import routes from "../Route/routes";
 import { withProfile, WithProfile } from "./middleware";
 
-const DEFAULT_AVATAR = 'https://peer.decentraland.org/content/contents/QmVfTSvEJBtmaHrnmZtpoVCSpv2J69M1wqA97dc53DgbWG'
+const DEFAULT_AVATAR = 'https://decentraland.org/images/male.png'
 
 export default routes((router) => {
   router.get('/profile/:user/face.png', withProfile({ optional: true }), redirectToFace)

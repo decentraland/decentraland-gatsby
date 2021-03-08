@@ -3,33 +3,35 @@ import useAsyncMemo from '../../hooks/useAsyncMemo'
 import { StyleNamespace } from '../../variables'
 import TokenList from '../../utils/dom/TokenList'
 import profiles from '../../utils/loader/profile'
+import { SizeProps } from '../Props/types'
 
 import './Avatar.css'
 
-const DEFAULT_AVATAR = 'https://peer.decentraland.org/content/contents/QmXo9BXGF9Tx6H3hNwMfdMsisogfVgpy1bRwxPQ2D4QhPW'
-
-export type AvatarProps = Omit<React.HTMLProps<HTMLImageElement>, 'height' | 'width' | 'size'> & {
-  address?: string,
-  size?: 'mini' | 'tiny' | 'small' | 'medium' | 'large' | 'big' | 'huge' | 'massive' | 'full'
+const DEFAULT_AVATAR = 'https://decentraland.org/images/male.png'
+type Props = SizeProps & {
+  src?: string
+  address?: string
 }
 
-export default React.memo(function Avatar({ address, size, src, ...props }: AvatarProps) {
+export type AvatarProps = Omit<React.HTMLProps<HTMLImageElement>, 'height' | 'width' | 'size' | 'src'> & Props
 
+export default React.memo(function Avatar({ address, size, src, ...props }: AvatarProps) {
   const [ failed, setFailed ] = useState(false)
-  const [ avatar, { loading } ] = useAsyncMemo(
+  const [ profile, { loading } ] = useAsyncMemo(
     () => profiles.load(address || ''),
     [ address ],
     { callWithTruthyDeps: true }
   )
+
   const target = useMemo(() => {
     if (src) {
       return src
-    } else if (failed || !(avatar?.avatar?.snapshots?.face)) {
+    } else if (failed || !(profile?.avatar?.snapshots?.face)) {
       return DEFAULT_AVATAR
     } else {
-      return avatar?.avatar?.snapshots?.face
+      return profile?.avatar?.snapshots?.face
     }
-  }, [ avatar, failed ])
+  }, [ profile, failed ])
 
   return <img
     loading="lazy"
