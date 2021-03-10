@@ -40,17 +40,6 @@ Promise.resolve()
   .then(() =>
     installDependencies([
       'dotenv',
-      'express',
-      'web3x',
-      'dcl-crypto',
-      'decentraland-crypto',
-      'eth-crypto@1.6.0',
-      'node-pg-migrate',
-      'isomorphic-fetch',
-      'nodemon',
-      'pg',
-      'ajv',
-      'body-parser',
       'gatsby',
       'gatsby-image',
       'gatsby-plugin-intl',
@@ -62,7 +51,6 @@ Promise.resolve()
       'gatsby-plugin-typescript',
       'gatsby-source-filesystem',
       'gatsby-transformer-sharp',
-      'validator',
     ])
   )
 
