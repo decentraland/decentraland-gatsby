@@ -51,7 +51,10 @@ export type Layer = {
   maxUsers: number
 }
 
-export type Status = {
+export type Status = CommsStatus
+export type StatusWithLayers = CommsStatusWithLayers
+
+export type CommsStatus = {
   name: string,
   version: string,
   currenTime: number,
@@ -62,11 +65,38 @@ export type Status = {
   ready: boolean
 }
 
-export type StatusWithLayers = Status & {
+export type CommsStatusWithLayers = CommsStatus & {
   layers: (Layer & { usersParcels: Position[] })[]
 }
 
-export type Position = [ number, number ]
+export type LambdasStatus = {
+  version: string,
+  currentTime: number,
+  contentServerUrl: string,
+  commitHash: string
+}
+
+export type ContentStatus = {
+  name: string,
+  version: string,
+  currentTime: number,
+  lastImmutableTime: number,
+  historySize: number,
+  synchronizationStatus: {
+    otherServers: {
+      address: string,
+      connectionState: "Connected" | "Connection lost" | "Could never be reached",
+      lastDeploymentTimestamp: number
+    }[],
+    lastSyncWithDAO: number,
+    synchronizationState: "Bootstrapping" | "Syncing" | "Synced" | "Failed to sync" ,
+    lastSyncWithOtherServers: number
+  },
+  commitHash: string,
+  ethNetwork: string
+}
+
+export type Position = [number, number]
 
 export type Servers = {
   address: string,
@@ -75,14 +105,14 @@ export type Servers = {
 }
 
 export type LayerUser = {
-  "id": string,
-  "userId": string,
-  "protocolVersion": number,
-  "peerId": string,
-  "parcel": [number, number],
-  "position": [number, number, number],
-  "lastPing": number,
-  "address": string
+  id: string,
+  userId: string,
+  protocolVersion: number,
+  peerId: string,
+  parcel: [number, number],
+  position: [number, number, number],
+  lastPing: number,
+  address: string
 }
 
 export default class Catalyst extends API {
@@ -103,9 +133,8 @@ export default class Catalyst extends API {
   }
 
   static async getAny() {
-    const api = this.get()
     if (!this.Servers) {
-      this.Servers = api.getServers()
+      this.Servers = this.get().getServers()
         .then((servers) => {
           for (const server of servers) {
             this.Cache.set(server.address, new Catalyst(server.address))
@@ -114,8 +143,9 @@ export default class Catalyst extends API {
     }
 
     await this.Servers
-    const i = random(this.Cache.size)
-    return Array.from(this.Cache.values())[i] || api
+    const instaces = Array.from(this.Cache.values())
+    const index = random(instaces.length)
+    return instaces[index] || this.get()
   }
 
   static from(baseUrl: string) {
@@ -131,15 +161,29 @@ export default class Catalyst extends API {
     return result && result.avatars && result.avatars[0] || null
   }
 
-  async getStatus(): Promise<Status>
-  async getStatus(includeLayers: false): Promise<Status>
-  async getStatus(includeLayers: true): Promise<StatusWithLayers>
+  async getStatus(): Promise<CommsStatus>
+  async getStatus(includeLayers: false): Promise<CommsStatus>
+  async getStatus(includeLayers: true): Promise<CommsStatusWithLayers>
   async getStatus(includeLayers?: boolean) {
+    return this.getCommsStatus(includeLayers as any)
+  }
+
+  async getCommsStatus(): Promise<CommsStatus>
+  async getCommsStatus(includeLayers: false): Promise<CommsStatus>
+  async getCommsStatus(includeLayers: true): Promise<CommsStatusWithLayers>
+  async getCommsStatus(includeLayers?: boolean) {
     let target = '/comms/status'
     if (includeLayers) {
       target += '?includeLayers=true'
     }
     return this.fetch(target)
+  }
+
+  async getLambdasStatus(): Promise<LambdasStatus> {
+    return this.fetch('/lambdas/status')
+  }
+  async getContentStatus(): Promise<ContentStatus> {
+    return this.fetch('/content/status')
   }
 
   async getServers() {
@@ -149,10 +193,10 @@ export default class Catalyst extends API {
   async getPOIs() {
     const results = await this.fetch<string[]>(`/lambdas/contracts/pois`)
     const pois: Position[] = []
-    for (const result of results ) {
-      const [ x, y ] = String(result || '').split(',').map(Number)
+    for (const result of results) {
+      const [x, y] = String(result || '').split(',').map(Number)
       if (Number.isFinite(x) && Number.isFinite(y)) {
-        pois.push([ x, y ] as Position)
+        pois.push([x, y] as Position)
       }
     }
 

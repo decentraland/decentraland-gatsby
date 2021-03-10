@@ -61,7 +61,6 @@ export default class API {
   }
 
   async fetch<T extends object>(path: string, options: Options = new Options({})): Promise<T> {
-
     let res: Response;
     let json: T;
     const url = this.url(path);
