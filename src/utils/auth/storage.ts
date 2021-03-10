@@ -1,3 +1,4 @@
+import { AuthLinkType } from 'dcl-crypto/dist/types'
 import SingletonListener from '../dom/SingletonListener';
 import { Identity } from './types';
 import Time from '../date/Time'
@@ -29,11 +30,33 @@ function getStorateListener() {
 }
 
 export function isExpired(identity?: Identity) {
-  return identity && Time.date(identity.expiration).getTime() < Date.now()
+  if (!identity) {
+    return true
+  }
+
+  return Time.date(identity.expiration).getTime() < Date.now()
+}
+
+export function isValid(identity?: Identity) {
+  if (!identity) {
+    return false
+  }
+
+  const link = identity.authChain
+    .find(link => (
+      link.type === AuthLinkType.ECDSA_PERSONAL_EPHEMERAL ||
+      link.type === AuthLinkType.ECDSA_EIP_1654_EPHEMERAL
+    ))
+
+  if (link && link.signature && typeof link.signature === 'string') {
+    return true
+  }
+
+  return false
 }
 
 export function setCurrentIdentity(identity: Identity | null) {
-  if (identity === null || isExpired(identity)) {
+  if (identity === null || isExpired(identity) || !isValid(identity)) {
     CURRENT_IDENTITY = null
     storeIdentity(null)
     return null
@@ -81,7 +104,7 @@ function restoreIdentity(): Identity | null {
   try {
     const identity = JSON.parse(raw)
 
-    if (identity && isExpired(identity)) {
+    if (identity && (isExpired(identity) || !isValid(identity))) {
       localStorage.removeItem(PersistedKeys.Identity)
       CURRENT_IDENTITY_RAW = null
       return null
