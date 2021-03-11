@@ -32,14 +32,14 @@ type AuthState = {
   status: AuthStatus,
 }
 
-const initialState: AuthState = {
+export const initialState: AuthState = Object.freeze({
   account: null,
   identity: null,
   provider: null,
   providerType: null,
   chainId: null,
   status: AuthStatus.Restoring,
-}
+})
 
 let WINDOW_LISTENER: SingletonListener<Window> | null = null
 function getListener(): SingletonListener<Window> {
@@ -68,12 +68,13 @@ async function restoreConnection(): Promise<AuthState> {
     }
 
     if (identity && connectionData) {
+      let provider: Provider | null = null
       if (!connection.connector) {
-        await connection.tryPreviousConnection()
+        const previousConnection = await connection.tryPreviousConnection()
+        provider = previousConnection.provider
       }
 
       const account = await ownerAddress(identity!.authChain)
-      const provider = await connection.connector!.getProvider()
       const providerType = connectionData!.providerType
       const chainId = connectionData!.chainId
 
@@ -97,18 +98,21 @@ async function createConnection(providerType: ProviderType, chainId: ChainId) {
   try {
     const data = await connection.connect(providerType, chainId)
     const identity = await identify(data)
+
     if (identity && identity.authChain) {
       const account = await ownerAddress(identity.authChain)
+      const previousConnection = await connection.tryPreviousConnection()
       Promise.resolve().then(() => {
         setCurrentIdentity(identity)
       })
+
       return {
         account,
         identity,
         chainId,
         providerType,
         status: AuthStatus.Connected,
-        provider: data.provider,
+        provider: previousConnection.provider,
       }
     }
   } catch (err) {
