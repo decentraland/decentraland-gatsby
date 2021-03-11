@@ -74,6 +74,15 @@ async function restoreConnection(): Promise<AuthState> {
         provider = previousConnection.provider
       }
 
+      if (!provider) {
+        const connectConnection = await connection.connect(connectionData!.providerType, connectionData!.chainId)
+        provider = connectConnection.provider
+      }
+
+      if (!provider) {
+        throw new Error()
+      }
+
       const account = await ownerAddress(identity!.authChain)
       const providerType = connectionData!.providerType
       const chainId = connectionData!.chainId
