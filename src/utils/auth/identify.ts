@@ -1,7 +1,7 @@
 import type { ConnectionResponse } from 'decentraland-connect/dist/types';
 import type { AuthChain } from 'dcl-crypto/dist/types';
 import EmptyAccountsError from '../errors/EmptyAccountsError';
-import once from '../funtion/once';
+import once from '../function/once';
 
 const dependencies = once(async () => Promise.all([
   import('web3x/address'),
