@@ -49,12 +49,11 @@ Promise.resolve()
     installDependencies([
       'dotenv',
       'gatsby@2',
-      'gatsby-image@2',
+      'gatsby-plugin-image@2',
       'gatsby-plugin-intl@2',
       'gatsby-plugin-manifest@2',
       'gatsby-plugin-offline@2',
       'gatsby-plugin-react-helmet@2',
-      'gatsby-plugin-sass@2',
       'gatsby-plugin-sharp@2',
       'gatsby-plugin-typescript@2',
       'gatsby-source-filesystem@2',
