@@ -49,7 +49,7 @@ Promise.resolve()
     installDependencies([
       'dotenv',
       'gatsby@2',
-      'gatsby-plugin-image@2',
+      'gatsby-plugin-image@1',
       'gatsby-plugin-intl@0',
       'gatsby-plugin-manifest@2',
       'gatsby-plugin-offline@3',
