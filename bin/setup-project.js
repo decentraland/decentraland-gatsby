@@ -6,6 +6,14 @@ const { spawn } = require('child_process')
 const { grey, green, red } = require('colors/safe')
 const pkg = require('../package.json')
 
+const STATIC_FILES = [
+  "node_modules/semantic-ui-css/semantic.min.css",
+  "node_modules/balloon-css/balloon.min.css",
+  "node_modules/decentraland-ui/dist/themes/base-theme.css",
+  "node_modules/decentraland-ui/dist/themes/alternative/dark-theme.css",
+  "node_modules/decentraland-ui/dist/themes/alternative/light-theme.css"
+]
+
 const isUpdate = process.argv.find(arg => arg === '--update')
 
 function installDependencies(modules, options) {
@@ -85,7 +93,7 @@ Promise.resolve()
       build: 'gatsby build && tsc -p .',
       develop: 'gatsby develop --https -H 0.0.0.0',
       format: 'prettier --write "**/*.{js,jsx,json,md}"',
-      theme: pkg.static
+      theme: STATIC_FILES
         .join(file => `cp ${file} static`)
         .join(' && '),
       start:
