@@ -4,15 +4,9 @@
   "description": "Common Gastby components",
   "main": "dist/index.js",
   "bin": {
-    "setup-project": "./bin/setup.sh"
+    "setup-project": "./bin/setup-project.sh",
+    "setup-statics": "./bin/setup-statics.sh"
   },
-  "static": [
-    "node_modules/semantic-ui-css/semantic.min.css",
-    "node_modules/balloon-css/balloon.min.css",
-    "node_modules/decentraland-ui/dist/themes/base-theme.css",
-    "node_modules/decentraland-ui/dist/themes/alternative/dark-theme.css",
-    "node_modules/decentraland-ui/dist/themes/alternative/light-theme.css"
-  ],
   "scripts": {
     "test": "jest",
     "build": "rm -rf dist && tsc -p . -outDir dist --sourceMap false --skipLibCheck && postcss --base src --dir dist 'src/**/*.css'",
