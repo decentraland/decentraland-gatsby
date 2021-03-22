@@ -48,17 +48,19 @@ Promise.resolve()
   .then(() =>
     installDependencies([
       'dotenv',
-      'gatsby',
-      'gatsby-image',
-      'gatsby-plugin-intl',
-      'gatsby-plugin-manifest',
-      'gatsby-plugin-offline',
-      'gatsby-plugin-react-helmet',
-      'gatsby-plugin-sass',
-      'gatsby-plugin-sharp',
-      'gatsby-plugin-typescript',
-      'gatsby-source-filesystem',
-      'gatsby-transformer-sharp',
+      'gatsby@2',
+      'gatsby-image@2',
+      'gatsby-plugin-intl@2',
+      'gatsby-plugin-manifest@2',
+      'gatsby-plugin-offline@2',
+      'gatsby-plugin-react-helmet@2',
+      'gatsby-plugin-sass@2',
+      'gatsby-plugin-sharp@2',
+      'gatsby-plugin-typescript@2',
+      'gatsby-source-filesystem@2',
+      'gatsby-transformer-sharp@2',
+      'node-pg-migrate@4',
+      'pg@7',
     ])
   )
 
@@ -72,8 +74,8 @@ Promise.resolve()
     installDependencies([
       'prettier',
       'concurrently',
+      'nodemon',
       'ts-node',
-      'devcert@1.1.0',
       '@types/validator',
       '@types/node',
       '@types/isomorphic-fetch',

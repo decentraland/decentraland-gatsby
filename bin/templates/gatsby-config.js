@@ -31,7 +31,6 @@ module.exports = {
         icon: `node_modules/decentraland-gatsby/static/decentraland.svg`, // This path is relative to the root of the site.
       },
     },
-    `gatsby-plugin-sass`,
     {
       resolve: `gatsby-plugin-typescript`,
       options: {
