@@ -62,11 +62,11 @@ Promise.resolve()
     ])
   )
 
-  .then(() =>
-    installDependencies([
-      'eth-crypto@1.6.0',
-    ], { exact: true })
-  )
+  // .then(() =>
+  //   installDependencies([
+  //     'eth-crypto@1.6.0',
+  //   ], { exact: true })
+  // )
 
   .then(() =>
     installDependencies([
@@ -89,13 +89,12 @@ Promise.resolve()
 
   .then(() => {
     const projectPkg = require(resolve(process.cwd(), 'package.json'))
+    // projectPkg.statics = STATIC_FILES
     projectPkg.scripts = Object.assign(projectPkg.scripts || {}, {
       build: 'gatsby build && tsc -p .',
       develop: 'gatsby develop --https -H 0.0.0.0',
       format: 'prettier --write "**/*.{js,jsx,json,md}"',
-      theme: STATIC_FILES
-        .join(file => `cp ${file} static`)
-        .join(' && '),
+      theme: `setup-statics ${STATIC_FILES.join(' ')}`,
       start:
         "concurrently -c blue,green -n SERVER,FRONT 'npm run serve' 'npm run develop'",
       serve:
