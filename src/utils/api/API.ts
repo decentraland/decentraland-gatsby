@@ -4,16 +4,15 @@ import RequestError from '../errors/RequestError'
 import Options, { RequestOptions } from './Options'
 
 export default class API {
-
-  readonly baseUrl: string = ''
-  readonly defaultOptions: Options = new Options({})
-
   static catch<T>(prom: Promise<T>) {
     return prom.catch((err) => {
       console.error(err)
       return null
     })
   }
+
+  readonly baseUrl: string = ''
+  readonly defaultOptions: Options = new Options({})
 
   constructor(baseUrl: string = '', defaultOptions: Options = new Options({})) {
     this.baseUrl = baseUrl || ''
@@ -62,7 +61,8 @@ export default class API {
 
   async fetch<T extends object>(path: string, options: Options = new Options({})): Promise<T> {
     let res: Response;
-    let json: T;
+    let body: string = '';
+    let json: T = null as any;
     const url = this.url(path);
     const opt = this.defaultOptions.merge(options);
 
@@ -73,9 +73,10 @@ export default class API {
     }
 
     try {
-      json = await res.json() as T
+      body = await res.text()
+      json = JSON.parse(body || '{}') as T
     } catch (error) {
-      throw new FetchError(url, opt.toObject(), error.message)
+      throw new RequestError(url, opt.toObject(), res, json || body)
     }
 
     if (res.status >= 400) {
