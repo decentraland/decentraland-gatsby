@@ -8,7 +8,7 @@ export default function validate<R extends {}>(validator: Ajv.ValidateFunction, 
     .map((error) => `${error.dataPath.slice(1)} ${error.message!}`)
     .filter(Boolean)
 
-    throw new RequestError('Invalid event data', RequestError.BadRequest, { errors, body })
+    throw new RequestError('Bad request', RequestError.BadRequest, { errors, body })
   }
 
   return body as R
