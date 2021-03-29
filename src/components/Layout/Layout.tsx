@@ -10,16 +10,15 @@ import { DropdownProps } from "semantic-ui-react"
 import { changeLocale } from "gatsby-plugin-intl"
 import { PageProps } from "gatsby"
 
-import useWindowScroll from "../../hooks/useWindowScroll"
 import trackEvent from "../../utils/segment/trackEvent"
 import { Footer } from "decentraland-ui/dist/components/Footer/Footer"
 import { Locale } from "decentraland-ui/dist/components/LanguageIcon/LanguageIcon"
-import { Navbar } from "decentraland-ui/dist/components/Navbar/Navbar"
+import { Navbar, NavbarProps } from "decentraland-ui/dist/components/Navbar/Navbar"
 
 import "./Layout.css"
+import WalletSelectorModal from "../Modal/WalletSelectorModal"
 
-export type LayoutProps = PageProps & {
-  rightMenu?: React.ReactNode,
+export type LayoutProps = PageProps & NavbarProps & {
   pageContext?: {
     intl?: {
       language?: Locale
@@ -29,13 +28,10 @@ export type LayoutProps = PageProps & {
   }
 }
 
-export default function Layout({ children, rightMenu, pageContext, location }: LayoutProps) {
+export default function Layout({ children, pageContext, ...props }: LayoutProps) {
   const language: Locale = pageContext?.intl?.language || 'en'
   const languages: Locale[] = pageContext?.intl?.languages || ['en']
   const currentPath: string = pageContext?.intl?.originalPath || '/'
-
-  const scroll = useWindowScroll()
-  const isScrolled = scroll.scrollY.get() > 0
 
   const handleChangeLocal = function (
     _: React.SyntheticEvent<HTMLElement>,
@@ -46,11 +42,9 @@ export default function Layout({ children, rightMenu, pageContext, location }: L
 
   return (
     <>
-      <Navbar
-        className={isScrolled ? "" : "initial"}
-        rightMenu={rightMenu || <></>}
-      />
+      <Navbar {...props} />
       {children}
+      <WalletSelectorModal />
       <Footer
         locale={language}
         locales={languages}
