@@ -15,7 +15,7 @@ export default function useChainId() {
     }
 
     if (DETECTED_CHAIN_ID !== chainId) {
-      setChainId(getCurrentChainId())
+      setChainId(DETECTED_CHAIN_ID)
     }
   }, [])
 
