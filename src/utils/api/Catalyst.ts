@@ -176,7 +176,12 @@ export default class Catalyst extends API {
     }
 
     const results: ProfileResponse[] = await this.fetch(`/lambdas/profiles/?` + params.toString())
+    const map = new Map(results.map(result => {
+      const avatar = result.avatars[0]!
+      return [ avatar.ethAddress, avatar ] as const
+    }))
 
+    return addresses.map(address => map.get(address.toString().toLowerCase()) || null)
   }
 
   async getStatus(): Promise<CommsStatus>
