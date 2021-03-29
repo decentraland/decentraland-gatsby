@@ -1,0 +1,12 @@
+.Label {
+  font-family: var(--font-family);
+  font-style: normal;
+  font-stretch: normal;
+  text-transform: none;
+  font-size: 15px;
+  color: var(--secondary-text);
+  line-height: 18px;
+  font-weight: normal;
+  padding: 0;
+  margin-bottom: 0.14285714rem;
+}

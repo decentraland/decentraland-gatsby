@@ -1,0 +1,76 @@
+.ImageInput {
+  position: relative;
+  border-radius: 8px;
+}
+
+.ImageInput .ImgFixed {
+  border-radius: 8px;
+}
+
+.ImageInput .ImageInput__Label {
+  text-transform: none;
+  font-size: 15px;
+  line-height: 18px;
+  font-weight: normal;
+  padding: 0;
+  margin-bottom: 8px;
+  color: var(--secondary-text);
+}
+
+.ImageInput .ImageInput__Message {
+  margin-top: 8px;
+  font-size: 15px;
+  color: var(--secondary-text);
+}
+
+.ImageInput .ImageInput__Value {
+  position: relative;
+}
+
+.ImageInput .ImageInput__Content {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 8px;
+  border: solid 1px rgba(115, 110, 125, 0.32);
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+}
+
+.ImageInput .ImageInput__Background {
+  background: white;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  cursor: pointer;
+  border-radius: 8px;
+}
+
+.ImageInput.ImageInput--with-value .ImageInput__Content,
+.ImageInput.ImageInput--with-value .ImageInput__Background {
+  opacity: 0;
+}
+
+.ImageInput.ImageInput--with-value:hover .ImageInput__Content {
+  opacity: 1;
+}
+
+.ImageInput.ImageInput--with-value.ImageInput--loading .ImageInput__Background,
+.ImageInput--with-value:hover .ImageInput__Background {
+  opacity: 0.7;
+}
+
+.ImageInput.ImageInput--error .ImageInput__Content {
+  border-color: var(--primary);
+}
+
+.ImageInput.ImageInput--error .ImageInput__Label,
+.ImageInput.ImageInput--error .ImageInput__Message {
+  color: var(--primary);
+}

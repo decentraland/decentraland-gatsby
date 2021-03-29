@@ -1,0 +1,42 @@
+.dg.Textarea {
+  position: relative;
+}
+
+.dg.Textarea textarea {
+  padding: 0px;
+  padding-bottom: 12px;
+  padding-top: 4px;
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 500;
+  border: none;
+  border-bottom: 2px solid var(--divider);
+  border-radius: 0px;
+  color: var(--text);
+  background: transparent;
+  margin: 0;
+  max-width: 100%;
+  flex: 1 0 auto;
+  outline: 0;
+  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  text-align: left;
+  font-family: Lato, "Helvetica Neue", Arial, Helvetica, sans-serif;
+  transition: box-shadow 0.1s ease, border-color 0.1s ease;
+  box-shadow: none;
+}
+
+.dg.Textarea .icon {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 2.67142857em;
+}
+
+.dg.Textarea.error textarea {
+  border-color: var(--error);
+  padding-right: 2.67142857em !important;
+}
+
+.dg.Textarea.disabled textarea {
+  opacity: 0.5;
+}
