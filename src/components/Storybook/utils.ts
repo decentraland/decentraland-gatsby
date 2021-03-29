@@ -16,6 +16,27 @@ export const Args = {
     return this.type(summary, types.map(String).join('\n'))
   },
 
+  prop(name: string, description: string, type?: TableAnnotation['type'] | string): ArgType {
+    return {
+      name,
+      description,
+      table: {
+        type: typeof type === 'string' ? Args.type(type) : type,
+      }
+    }
+  },
+
+  requiredProp(name: string, description: string, type?: TableAnnotation['type'] | string): ArgType {
+    return {
+      name,
+      description,
+      type: { required: true },
+      table: {
+        type: typeof type === 'string' ? Args.type(type) : type,
+      }
+    }
+  },
+
   param(name: string, description: string, type?: TableAnnotation['type'] | string): ArgType {
     return {
       name,
