@@ -4,10 +4,12 @@ import useAuth from '../../hooks/useAuth'
 const defaultState: ReturnType<typeof useAuth> = [
   null,
   {
+    selecting: false,
     loading: true,
     chainId: null,
     providerType: null,
     provider: null,
+    select: () => {},
     connect: () => {},
     disconnect: () => {}
   }

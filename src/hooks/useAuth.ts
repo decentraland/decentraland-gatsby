@@ -183,7 +183,7 @@ export default function useAuth() {
       account: null,
       identity: null,
       provider: null,
-      selecting: false,
+      selecting: state.selecting,
       status: AuthStatus.Connecting,
       providerType,
       chainId,
@@ -282,7 +282,10 @@ export default function useAuth() {
                 analytics.identify(conn.account!)
                 analytics.track(AuthEvent.Connected, conn)
               })
+            } else {
+              result.selecting = state.selecting
             }
+
             setState(result)
           }
         })
@@ -313,6 +316,7 @@ export default function useAuth() {
       disconnect,
       select,
       loading,
+      selectiong: state.selecting,
       provider: !loading ? state.provider: null,
       providerType: !loading ? state.providerType: null,
       chainId: !loading ? state.chainId: null,

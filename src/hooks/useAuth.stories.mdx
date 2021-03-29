@@ -21,6 +21,7 @@ const [ account, state ] = useAuth()
 <ArgsTable rows={[
   Args.returns('account', 'ethereum address ', `string | null`),
   Args.returns('state.loading', '`true` when is waiting for a user initeraction', `boolean`),
+  Args.returns('state.selecting', '`true` when is showing the wallet selector modal', `boolean`),
   Args.returns(
     'state.providerType',
     'type of provider conneceted to, `null` if not connected. \n\n imported from [decentraland-connect](https://www.npmjs.com/package/decentraland-connect)',
