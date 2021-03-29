@@ -24,6 +24,7 @@ enum AuthStatus {
 }
 
 type AuthState = {
+  selecting: boolean
   account: string | null,
   identity: Identity | null,
   provider: Provider | null,
@@ -33,6 +34,7 @@ type AuthState = {
 }
 
 export const initialState: AuthState = Object.freeze({
+  selecting: false,
   account: null,
   identity: null,
   provider: null,
@@ -93,7 +95,8 @@ async function restoreConnection(): Promise<AuthState> {
         chainId,
         providerType,
         identity,
-        status: AuthStatus.Connected
+        status: AuthStatus.Connected,
+        selecting: false,
       }
     }
   } catch (err) {
@@ -122,6 +125,7 @@ async function createConnection(providerType: ProviderType, chainId: ChainId) {
         providerType,
         status: AuthStatus.Connected,
         provider: previousConnection.provider,
+        selecting: false
       }
     }
   } catch (err) {
@@ -146,6 +150,18 @@ function isLoading(status: AuthStatus) {
 export default function useAuth() {
   const [ state, setState ] = useState<AuthState>({ ...initialState })
 
+  function select(selecting: boolean = true) {
+    if(isLoading(state.status)) {
+      return
+    }
+
+    if (selecting === state.selecting) {
+      return
+    }
+
+    setState((current) => ({ ...current, selecting }))
+  }
+
   function connect(providerType: ProviderType, chainId: ChainId) {
     if (isLoading(state.status)) {
       return
@@ -163,11 +179,11 @@ export default function useAuth() {
     }
 
     segment((analytics) => analytics.track(AuthEvent.Connect, conn))
-
     setState({
       account: null,
       identity: null,
       provider: null,
+      selecting: false,
       status: AuthStatus.Connecting,
       providerType,
       chainId,
@@ -188,6 +204,7 @@ export default function useAuth() {
       account: null,
       identity: null,
       provider: null,
+      selecting: false,
       providerType: null,
       chainId: null
     })
@@ -206,6 +223,7 @@ export default function useAuth() {
           if (newIdentity) {
             return {
               status: AuthStatus.Restoring,
+              selecting: false,
               account: null,
               identity: null,
               provider: null,
@@ -216,6 +234,7 @@ export default function useAuth() {
 
           return {
             status: AuthStatus.Disconnecting,
+            selecting: false,
             account: null,
             identity: null,
             provider: null,
@@ -292,6 +311,7 @@ export default function useAuth() {
     {
       connect,
       disconnect,
+      select,
       loading,
       provider: !loading ? state.provider: null,
       providerType: !loading ? state.providerType: null,
