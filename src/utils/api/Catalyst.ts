@@ -165,6 +165,20 @@ export default class Catalyst extends API {
     return result && result.avatars && result.avatars[0] || null
   }
 
+  async getProfiles(addresses: (Address | string)[]): Promise<(Avatar | null)[]> {
+    if (addresses.length === 0) {
+      return []
+    }
+
+    const params = new URLSearchParams()
+    for (const address of addresses) {
+      params.append('id', address.toString().toLowerCase())
+    }
+
+    const results: ProfileResponse[] = await this.fetch(`/lambdas/profiles/?` + params.toString())
+
+  }
+
   async getStatus(): Promise<CommsStatus>
   async getStatus(includeLayers: false): Promise<CommsStatus>
   async getStatus(includeLayers: true): Promise<CommsStatusWithLayers>
