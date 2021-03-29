@@ -43,7 +43,9 @@ export default function Layout({ children, pageContext, ...props }: LayoutProps)
   return (
     <>
       <Navbar {...props} />
-      {children}
+      <main>
+        {children}
+      </main>
       <WalletSelectorModal />
       <Footer
         locale={language}
