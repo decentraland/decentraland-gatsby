@@ -316,7 +316,7 @@ export default function useAuth() {
       disconnect,
       select,
       loading,
-      selectiong: state.selecting,
+      selecting: state.selecting,
       provider: !loading ? state.provider: null,
       providerType: !loading ? state.providerType: null,
       chainId: !loading ? state.chainId: null,
