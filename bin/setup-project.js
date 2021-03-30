@@ -95,7 +95,7 @@ Promise.resolve()
       build: 'gatsby build && tsc -p .',
       develop: 'gatsby develop --https -H 0.0.0.0',
       format: 'prettier --write "**/*.{js,jsx,json,md}"',
-      theme: `setup-statics ${STATIC_FILES.join(' ')}`,
+      theme: `setup-global-css ${STATIC_FILES.join(' ')}`,
       start:
         "concurrently -c blue,green -n SERVER,FRONT 'npm run serve' 'npm run develop'",
       serve:

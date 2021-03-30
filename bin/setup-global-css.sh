@@ -8,7 +8,9 @@ else
     exit 1
 fi
 
+echo "" > "static/global.css"
 for file in "$@"
 do
-  cp "$file" "static"
+  echo "/** $file */" >> ""
+  cat "$file" >> "static/global.css"
 done

@@ -5,7 +5,7 @@
   "main": "dist/index.js",
   "bin": {
     "setup-project": "./bin/setup-project.sh",
-    "setup-statics": "./bin/setup-statics.sh"
+    "setup-global-css": "./bin/setup-global-css.sh"
   },
   "scripts": {
     "test": "jest",
