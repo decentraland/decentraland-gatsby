@@ -16,8 +16,6 @@ export type UserMenuProps = Pick<BaseUserMenuProps,
   | 'onClickSettings'
 > & {
   i18n?: Partial<UserMenuI18N>
-  onClickSignIn?: () => void
-  onClickSignOut?: () => void
 }
 
 export default function UserMenu(props: UserMenuProps) {
@@ -34,12 +32,12 @@ export default function UserMenu(props: UserMenuProps) {
     [ user, userState.chainId ]
   )
 
-  if (!user) {
+  if (!user || loading) {
     return <Button size="small" basic
       loading={loading}
       disabled={loading}
-      onClick={props.onClickSignIn}>{i18n.signIn}</Button>
+      onClick={() => userState.select()}>{i18n.signIn}</Button>
   }
 
-  return <BaseUserMenu i18n={i18n} manaBalances={manaBalances || {}} />
+  return <BaseUserMenu {...props} isSignedIn i18n={i18n} manaBalances={manaBalances || {}} />
 }
