@@ -17,6 +17,8 @@ import { Navbar, NavbarProps } from "decentraland-ui/dist/components/Navbar/Navb
 
 import WalletSelectorModal from "../Modal/WalletSelectorModal"
 import "./Layout.css"
+import useWindowScroll from "../../hooks/useWindowScroll"
+import TokenList from "../../utils/dom/TokenList"
 
 export type LayoutProps = PageProps & NavbarProps & FooterProps & {
   pageContext?: {
@@ -32,6 +34,8 @@ export default function Layout({ children, pageContext, ...props }: LayoutProps)
   const language: Locale = pageContext?.intl?.language || 'en'
   const languages: Locale[] = pageContext?.intl?.languages || ['en']
   const currentPath: string = pageContext?.intl?.originalPath || '/'
+  const scroll = useWindowScroll()
+  const isScrolled = scroll.scrollY.get() > 0
 
   const handleChangeLocal = function (
     _: React.SyntheticEvent<HTMLElement>,
@@ -55,7 +59,7 @@ export default function Layout({ children, pageContext, ...props }: LayoutProps)
         isSignIn={props.isSignIn}
         isFullscreen={props.isFullscreen}
         isOverlay={props.isOverlay}
-        className={props.className}
+        className={TokenList.join([ props.className, isScrolled && "initial"])}
         onSignIn={props.onSignIn}
         onClickAccount={props.onClickAccount}
       />
