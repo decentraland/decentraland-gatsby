@@ -21,7 +21,7 @@ export type UserMenuProps = Pick<BaseUserMenuProps,
 export default function UserMenu(props: UserMenuProps) {
   const i18n = { ...BaseUserMenu.defaultProps.i18n as UserMenuI18N, ...props.i18n }
   const [ user, userState ] = useAuthContext()
-  const [ , profileState ] = useProfileInjected()
+  const [ profile, profileState ] = useProfileInjected()
   const loading = userState.loading || profileState.loading
   const [ manaBalances ] = useAsyncMemo(
     async () => {
@@ -39,5 +39,12 @@ export default function UserMenu(props: UserMenuProps) {
       onClick={() => userState.select()}>{i18n.signIn}</Button>
   }
 
-  return <BaseUserMenu {...props} isSignedIn i18n={i18n} manaBalances={manaBalances || {}} />
+  return <BaseUserMenu
+    {...props}
+    isSignedIn
+    i18n={i18n}
+    manaBalances={manaBalances || {}}
+    avatar={(profile || undefined) as any}
+    onSignOut={() => userState.disconnect()}
+  />
 }
