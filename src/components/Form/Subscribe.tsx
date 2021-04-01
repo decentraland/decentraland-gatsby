@@ -18,7 +18,7 @@ export type SubscribeData = {
 export type SubscribeProps = {
   className?: string,
   action?: string,
-
+  method?: 'POST' | 'GET'
   intl?: {
     cta?: string,
     inputError?: string,
@@ -101,13 +101,17 @@ export default function Subscribe(props: SubscribeProps) {
     }
 
     patchState({ loading: true })
-    fetch(action, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    })
+    const req = props.method === 'GET' ?
+      fetch(action + '?' + new URLSearchParams(data).toString()) :
+      fetch(action, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+
+    req
       .then((response) => {
         patchState({ loading: false, error: response.status >= 400 ? ErrorKind.ServerError : ErrorKind.None })
         if (props.onSubscribe) {
