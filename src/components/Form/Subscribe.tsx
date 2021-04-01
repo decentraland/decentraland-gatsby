@@ -102,7 +102,7 @@ export default function Subscribe(props: SubscribeProps) {
 
     patchState({ loading: true })
     const req = props.method === 'GET' ?
-      fetch(action + '?' + new URLSearchParams(data).toString()) :
+      fetch(action + '?' + new URLSearchParams(data as Record<string, string>).toString()) :
       fetch(action, {
         method: 'POST',
         headers: {
