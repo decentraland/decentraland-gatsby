@@ -26,7 +26,8 @@ export function getUserParam(req: Request) {
 export function withProfile(options: WithProfileOptions = {}) {
   return middleware(async (req) => {
     const user = getUserParam(req).toLowerCase()
-    const profile = await API.catch(Catalyst.get().getProfile(user))
+    const profiles = await API.catch(Catalyst.get().getProfiles([ user ]))
+    const profile = profiles && profiles[0] || undefined
 
     if (!profile && !options.optional) {
       throw new RequestError(`Not found profile for "${user}"`, RequestError.NotFound)
@@ -46,7 +47,8 @@ export function withAuthProfile(options: WithProfileOptions = {}) {
       return
     }
 
-    const authProfile = await API.catch(Catalyst.get().getProfile(user))
+    const authProfiles = await API.catch(Catalyst.get().getProfiles([ user ]))
+    const authProfile = authProfiles && authProfiles[0] || undefined
 
     if (!authProfile && !options.optional) {
       throw new RequestError(`Not found profile for "${user}"`, RequestError.NotFound)
