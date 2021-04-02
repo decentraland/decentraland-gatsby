@@ -5,6 +5,7 @@ import { UserMenu as BaseUserMenu, UserMenuProps as BaseUserMenuProps, UserMenuI
 import useAuthContext from '../../context/Auth/useAuthContext'
 import useProfileInjected from '../../context/Auth/useProfileContext'
 import useAsyncMemo from '../../hooks/useAsyncMemo'
+import './UserMenu.css'
 
 type UserMenuBalances = Partial<Record<Network, number>>
 
@@ -33,18 +34,22 @@ export default function UserMenu(props: UserMenuProps) {
   )
 
   if (!user || loading) {
-    return <Button size="small" basic
-      loading={loading}
-      disabled={loading}
-      onClick={() => userState.select()}>{i18n.signIn}</Button>
+    return <div>
+      <Button size="small" basic
+        loading={loading}
+        disabled={loading}
+        onClick={() => userState.select()}>{i18n.signIn}</Button>
+    </div>
   }
 
-  return <BaseUserMenu
-    {...props}
-    isSignedIn
-    i18n={i18n}
-    manaBalances={manaBalances || {}}
-    avatar={(profile || undefined) as any}
-    onSignOut={() => userState.disconnect()}
-  />
+  return <div className={`dcl-avatar--${user[2]}`}>
+    <BaseUserMenu
+      {...props}
+      isSignedIn
+      i18n={i18n}
+      manaBalances={manaBalances || {}}
+      avatar={(profile || undefined) as any}
+      onSignOut={() => userState.disconnect()}
+    />
+  </div>
 }
