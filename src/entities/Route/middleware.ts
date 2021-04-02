@@ -35,6 +35,10 @@ export function withLogs() {
         auth: req.auth
       }
 
+      if (req.headers['referer']) {
+        data.referer = req.headers['referer']
+      }
+
       console.log(`[${req.method}] ${req.originalUrl} ${JSON.stringify(data)}`)
     })
   })

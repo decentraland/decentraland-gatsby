@@ -47,4 +47,4 @@ export default function UserMenu(props: UserMenuProps) {
     avatar={(profile || undefined) as any}
     onSignOut={() => userState.disconnect()}
   />
-}
+}``

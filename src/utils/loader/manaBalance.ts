@@ -22,7 +22,7 @@ function createBalanceLoader(chainId: ChainId) {
 
     try {
       const response = await fetch(MANA_GRAPH_BY_CHAIN_ID[chainId], {
-        method: 'psot',
+        method: 'post',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           query: MANA_QUERY,
