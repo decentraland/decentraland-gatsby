@@ -20,25 +20,3 @@ export const database_duration_seconds = new client.Histogram({
 
 registerMetric(database_pool_size)
 registerMetric(database_duration_seconds)
-
-
-type Chunk = string | number | (string | number)[]
-const cache: Record<string, Chunk[]> = {}
-export function createQueryHash(...chucks: Chunk[]) {
-  const query = chucks.map(chuck => Array.isArray(chuck) ? chuck.join('::') : chuck).join(':::')
-  const queryHash = createHash('sha1').update(query).digest('hex').slice(0, 6)
-  if (!cache[queryHash]) {
-    console.log(`new query hash "${queryHash}": ${JSON.stringify(chucks)}`)
-    cache[queryHash] = chucks
-  }
-
-  return queryHash
-}
-
-export function getQueryHash(hash: string) {
-  return cache[hash] || null
-}
-
-export function getQueryHashes() {
-  return { ...cache }
-}
