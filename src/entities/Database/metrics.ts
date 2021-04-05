@@ -1,4 +1,3 @@
-import { createHash } from 'crypto'
 import client, { registerMetric } from '../Prometheus/metrics'
 
 export type JobLabels = Record<'job', string | number>
