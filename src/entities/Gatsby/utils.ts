@@ -1,5 +1,10 @@
+import escaper from 'html-escaper'
 import { parse, HTMLElement } from 'node-html-parser'
 import { MetadataOptions } from './types';
+
+function escape(text: string): string {
+  return escaper.escape(text).replace(/\n+/gi, ' ')
+}
 
 export function replaceHelmetMetadata(page: string, options: Partial<MetadataOptions> = {}) {
   const html = parse(page)
@@ -18,15 +23,22 @@ export function replaceHelmetMetadata(page: string, options: Partial<MetadataOpt
   for (const name of Object.keys(options)) {
     switch (name) {
       case 'title':
-        injected.push(`<title>${options[name]}</title>`)
-        injected.push(`<meta name="twitter:title" content="${options[name]}" />`)
-        injected.push(`<meta property="og:title" content="${options[name]}" />`)
+        const title = escape(options[name] || '')
+        injected.push(`<title>${title}</title>`)
+        injected.push(`<meta name="twitter:title" content="${title}" />`)
+        injected.push(`<meta property="og:title" content="${title}" />`)
         break;
 
       case `description`:
-        injected.push(`<meta name="description" content="${options[name]}" />`)
-        injected.push(`<meta name="twitter:description" content="${options[name]}" />`)
-        injected.push(`<meta property="og:description" content="${options[name]}" />`)
+        let descriptionValue = (options[name] || '').trim()
+        const descriptionParragraphPosition = descriptionValue.indexOf(`\n\n`)
+        if (descriptionParragraphPosition > 0) {
+          descriptionValue = descriptionValue.slice(0, descriptionParragraphPosition).trim()
+        }
+        const description = escape(descriptionValue)
+        injected.push(`<meta name="description" content="${description}" />`)
+        injected.push(`<meta name="twitter:description" content="${description}" />`)
+        injected.push(`<meta property="og:description" content="${description}" />`)
         break;
 
       case `image`:
@@ -41,9 +53,9 @@ export function replaceHelmetMetadata(page: string, options: Partial<MetadataOpt
 
       default:
         if (name.startsWith('og:')) {
-          injected.push(`<meta property="${name}" content="${options[name]}" />`)
+          injected.push(`<meta property="${name}" content="${escape(String(options[name] ?? ''))}" />`)
         } else {
-          injected.push(`<meta name="${name}" content="${options[name]}" />`)
+          injected.push(`<meta name="${name}" content="${escape(String(options[name] ?? ''))}" />`)
         }
     }
   }
