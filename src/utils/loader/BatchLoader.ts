@@ -6,9 +6,9 @@ export default class BatchLoader<T> {
   data: Map<string | number, T> = new Map()
   readonly handle: (key: (string | number)[]) => Promise<T[]>
 
-  constructor(handle: (key: (string | number)[]) => Promise<T[]>) {
+  constructor(handle: (key: (string | number)[]) => Promise<T[]>, options: Dataloader.Options<string|number, T> = {}) {
     this.handle = handle
-    this.loader = new Dataloader(handle)
+    this.loader = new Dataloader(handle, options)
   }
 
   private async _handle(key: string | number): Promise<T> {
