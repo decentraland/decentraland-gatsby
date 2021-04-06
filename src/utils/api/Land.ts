@@ -161,7 +161,7 @@ export default class Land extends API {
     }
 
     const parcel = await this.getParcel(position)
-    if (parcel && parcel.name !== `Parcel ${position.join(',')}`) {
+    if (parcel && parcel.name && parcel.name !== `Parcel ${position.join(',')}`) {
       return parcel.name
     }
 
