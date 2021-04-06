@@ -165,6 +165,19 @@ export default class Catalyst extends API {
     return result && result.avatars && result.avatars[0] || null
   }
 
+  /**
+   * loads profile data in parallel
+   *
+   * @param addresses - profile addresses list
+   * @returns array of profiles in the same order used in the addresses param,
+   *  if the profile doesn't exists the array will include a `null` in the corresponding
+   *  position
+   *
+   * @example
+   * ```typescript
+   * getProfiles([ `0x1234...`, 0x00000 ]) => Promise<[ { user: `0x1234...`, ...profile }, null ]>
+   * ```
+   */
   async getProfiles(addresses: (Address | string)[]): Promise<(Avatar | null)[]> {
     if (addresses.length === 0) {
       return []
