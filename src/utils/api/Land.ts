@@ -154,8 +154,22 @@ export default class Land extends API {
     return result.data
   }
 
-  async getParcel(coordinates: [number, number]): Promise<Parcel> {
-    const [x, y] = coordinates
+  async getPositionName(position: [number, number]) {
+    const tile = await this.getTile(position)
+    if (tile && tile.name && tile.name !== 'Roads') {
+      return tile.name
+    }
+
+    const parcel = await this.getParcel(position)
+    if (parcel && parcel.name !== `Parcel ${position.join(',')}`) {
+      return parcel.name
+    }
+
+    return 'Decentraland'
+  }
+
+  async getParcel(position: [number, number]): Promise<Parcel> {
+    const [x, y] = position
     return this.fetch(`/v2/parcels/${x}/${y}`)
   }
 
