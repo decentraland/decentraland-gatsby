@@ -20,8 +20,8 @@ async function messureWithParams<T>(exec: () => Promise<T>, params: { queryId: s
 function getQueryId(methodName: string, table: string) {
   return (
     methodName[0] +
-    (methodName.match(/[A-Z]/g) || [] ).join(',') +
-    table.split('_').map(word => word[0])
+    (methodName.match(/[A-Z]/g) || [] ).join('') +
+    table.split('_').map(word => word[0]).join('')
   ).toLowerCase()
 }
 
