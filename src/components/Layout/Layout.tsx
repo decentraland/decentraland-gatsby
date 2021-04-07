@@ -59,7 +59,7 @@ export default function Layout({ children, pageContext, ...props }: LayoutProps)
         isSignIn={props.isSignIn}
         isFullscreen={props.isFullscreen}
         isOverlay={props.isOverlay}
-        className={TokenList.join([ props.className, isScrolled && "initial"])}
+        className={TokenList.join([ 'LayoutNavbarContainer', props.className, isScrolled && "initial"])}
         onSignIn={props.onSignIn}
         onClickAccount={props.onClickAccount}
       />
@@ -73,7 +73,7 @@ export default function Layout({ children, pageContext, ...props }: LayoutProps)
         locale={language}
         locales={languages}
         isFullscreen={props.isFullscreen}
-        className={props.className}
+        className={TokenList.join([ 'LayoutFooterContainer', props.className ])}
         i18n={props.i18n}
         onChange={trackEvent(handleChangeLocal)}
       />
