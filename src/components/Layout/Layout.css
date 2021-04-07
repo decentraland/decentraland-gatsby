@@ -1,6 +1,6 @@
 .dcl.navbar {
   top: 0;
-  position: fixed;
+  position: relative;
   transition: background-color 0.5s ease, border-color 0.5s ease;
   background-color: var(--background);
   border-color: var(--divider);

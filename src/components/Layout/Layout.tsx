@@ -64,7 +64,7 @@ export default function Layout({ children, pageContext, ...props }: LayoutProps)
         onClickAccount={props.onClickAccount}
       />
       <main
-        className={props.className}
+        className={TokenList.join([ 'LayoutMainContainer', props.className])}
       >
         {children}
       </main>
