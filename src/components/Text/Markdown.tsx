@@ -12,7 +12,7 @@ import Link from './Link';
 
 export type MarkdownProps = Omit<ReactMarkdownProps, 'renders' | 'linkTarget' | 'astPlugins' | 'plugins'>
 
-export const renderers = {
+export const renderers: Partial<Record<NodeType, React.ReactType<any>>> = {
   heading: ({level, ...props}: any) => {
     switch(level) {
       case 1:

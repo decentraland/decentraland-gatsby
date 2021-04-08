@@ -1,9 +1,8 @@
 import React, { useRef, useEffect } from 'react'
 import { FieldProps } from 'decentraland-ui/dist/components/Field/Field'
 import TokenList from '../../utils/dom/TokenList'
-
-import './Textarea.css'
 import { StyleNamespace } from '../../variables'
+import './Textarea.css'
 
 export type TextareaProps = Omit<FieldProps, 'onAction'> & {
   disabled?: boolean
