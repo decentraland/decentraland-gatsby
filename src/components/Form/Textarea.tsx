@@ -35,10 +35,11 @@ export default function Textarea({ minHeight, maxHeight, ...props }: TextareaPro
   }
 
   function handleChange(event: React.ChangeEvent<any>) {
-    handleRowChange()
     if (props.onChange) {
       props.onChange(event, { ...props, value: event.currentTarget.value })
     }
+
+    handleRowChange()
   }
 
   useEffect(() => handleRowChange(), [])
