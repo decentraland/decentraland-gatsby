@@ -1,11 +1,16 @@
 import { useState, useMemo, useEffect } from 'react'
+import { Address } from 'web3x/address'
+import { Personal } from 'web3x/personal'
+import { LegacyProviderAdapter } from 'web3x/providers'
 import { Source, ArgsTable } from '@storybook/components';
 import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
 import { ChainId } from "@dcl/schemas"
 import { ProviderType } from "decentraland-connect/dist/types"
+import Grid from "semantic-ui-react/dist/commonjs/collections/Grid/Grid"
 import { Button } from 'decentraland-ui/dist/components/Button/Button';
 import { Args } from '../components/Storybook/utils';
 import Container from '../components/Storybook/Container';
+import Textarea from '../components/Form/Textarea';
 import useAuth from './useAuth';
 
 <Meta title="Standalone Hooks/useAuth" />
@@ -55,7 +60,7 @@ const [ account, state ] = useAuth()
   Args.returns('clipboard.clear', 'reset clipboard value to `null`', `() => void`), */}
 ]} />
 
-## Preview
+## Connect Preview
 
 export const Example = () => {
   const [ account, state ] = useAuth()
@@ -88,6 +93,70 @@ export function Example () {
     <button disabled={!!account} loading={state.loading} onClick={() => state.connect(ProviderType.FORTMATIC, ChainId.ETHEREUM_MAINNET)}>connect fortmatic</button>
     <button disabled={!account} loading={state.loading} onClick={() => state.disconnect()}>disconnect</button>
     <pre>{JSON.stringify(account, null, 2)}</pre>
+  </div>
+}
+```
+
+## Using the connected provider
+
+export const Sign = () => {
+  const [ account, accountState ] = useAuth()
+  const [ state, setState ] = useState({
+    message: 'This a the origina messsage',
+    signature: '',
+    signing: false,
+  })
+  useEffect(() => {
+    if (state.signing) {
+      new Personal(accountState.provider)
+        .sign(state.message, Address.fromString(account), '')
+        .then((signature) => {
+          console.log(signature)
+          setState((current) => ({ ...current, signature, signing: false }))
+        })
+        .catch((err) => {
+          console.error(err)
+          setState((current) => ({ ...current, signing: false }))
+        })
+    }
+  }, [ state.signing ])
+  return <Container>
+    <Grid>
+      <Grid.Row>
+        <Grid.Column tablet="8">
+          <Textarea value={state.message} minHeight={170} onChange={(e, { value }) => setState((current) => ({ ...current, message: value })) } />
+        </Grid.Column>
+        <Grid.Column tablet="8">
+          <Button primary size="small" style={{ minWidth: '200px', margin: '0 auto' }} disabled={!account} loading={state.signing} onClick={() => setState((current) => ({ ...current, signing: true }))}>Sign</Button>
+          <Source language="ts" code={JSON.stringify(state.signature, null, 2)} />
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
+  </Container>
+}
+
+<Sign />
+
+```tsx dark=true
+import React from "react"
+import { Address } from 'web3x/address'
+import { Personal } from 'web3x/personal'
+import { ProviderType, ChainId } from "decentraland-connect/dist/types"
+
+export function Sign () {
+  const [ address, state ] = useAuth()
+  const [ message, setMessage ] = useState('This a the origina messsage')
+  const [ signature, setSignature ] = useState('')
+  function handleSignature() {
+    new Personal(state.provider)
+        .sign(message, Address.fromString(address), '')
+        .then((signature) => setSignature(signature))
+  }
+
+  return <div>
+    <textarea value={message} onChange={(e) => setMessage(e.currentTarget.value)}></textarea>
+    <button disabled={!account} onClick={handleSignature}>sign</button>
+    <pre>{JSON.stringify(signature, null, 2)}</pre>
   </div>
 }
 ```
