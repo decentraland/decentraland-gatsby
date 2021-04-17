@@ -7,8 +7,7 @@ const dependencies = once(async () => Promise.all([
   import('web3x/address'),
   import('web3x/account'),
   import('web3x/personal'),
-  import('web3x/providers'),
-  import('web3x/utils'),
+  import('web3x/utils/hex-buffer'),
   import('dcl-crypto/dist/Authenticator'),
 ] as const))
 
@@ -22,8 +21,7 @@ export default async function identify(connection: ConnectionResponse) {
       { Address } /* from web3x/address */ ,
       { Account } /* from web3x/account */ ,
       { Personal } /* from web3x/personal */ ,
-      { LegacyProviderAdapter } /* from web3x/providers */ ,
-      { bufferToHex } /* from web3x/utils */ ,
+      { bufferToHex } /* from web3x/utils/hex-buffer */ ,
       { Authenticator } /* from dcl-crypto/dist/Authenticator */ ,
     ] = await dependencies()
 
@@ -41,7 +39,7 @@ export default async function identify(connection: ConnectionResponse) {
       address,
       payload,
       expiration,
-      message => new Personal(new LegacyProviderAdapter(provider as any)).sign(message, Address.fromString(address), '')
+      message => new Personal(provider as any).sign(message, Address.fromString(address), '')
     );
 
     return identity
@@ -56,8 +54,7 @@ export async function ownerAddress(authChain: AuthChain) {
     /*web3x/address*/,
     /*web3x/account*/,
     /*web3x/personal*/,
-    /*web3x/providers*/,
-    /*web3x/utils*/,
+    /*web3x/utils/hex-buffer*/,
     { Authenticator } /* from dcl-crypto/dist/Authenticator */,
   ] = await dependencies()
 
