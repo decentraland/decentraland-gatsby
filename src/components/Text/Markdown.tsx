@@ -41,5 +41,5 @@ export const renderers: Partial<Record<NodeType, React.ReactType<any>>> = {
 export const allowedTypes = ['root', 'text'].concat(Object.keys(renderers)) as NodeType[]
 
 export default React.memo(function Markdown(props: MarkdownProps) {
-  return <ReactMarkdown {...props} renderers={renderers} allowedTypes={allowedTypes} />
+  return <ReactMarkdown {...props} renderers={renderers as any} allowedTypes={allowedTypes} />
 })
