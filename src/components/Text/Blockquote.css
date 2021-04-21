@@ -1,0 +1,5 @@
+.dg.Blockquote {
+  margin: 1em 0;
+  padding: 0 1em;
+  border-left: .5em solid var(--divider);
+}

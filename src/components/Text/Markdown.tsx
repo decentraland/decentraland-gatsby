@@ -9,6 +9,7 @@ import Italic from './Italic';
 import Bold from './Bold';
 import Code from './Code';
 import Link from './Link';
+import Blockquote from './Blockquote';
 
 export type MarkdownProps = Omit<ReactMarkdownProps, 'renders' | 'linkTarget' | 'astPlugins' | 'plugins'>
 
@@ -29,6 +30,7 @@ export const renderers: Partial<Record<NodeType, React.ReactType<any>>> = {
   link: Link,
   code: Code,
   inlineCode: Code,
+  blockquote: Blockquote,
   table: (props: React.Props<any>) => <Table basic="very">{props.children}</Table>,
   tableHead: (props: React.Props<any>) => <Table.Header>{props.children}</Table.Header>,
   tableBody: (props: React.Props<any>) => <Table.Body>{props.children}</Table.Body>,
