@@ -96,15 +96,15 @@ export const PreviewLoader = () => {
   const [ auth ] = useAuth()
   const [ address, setAddress ] = useState('0x05d48ee3e815bf376fc79d283301cfdef872e280')
   const [ servers, { loading } ] = useAsyncMemo(() => Catalyst.get().getServers(), [])
-  useEffect(() => { auth && setAddress(current => ({ ...current, address: auth })) }, [ auth ])
+  useEffect(() => { auth && setAddress(auth) }, [ auth ])
   return <Container>
     <div style={{ maxWidth: '525px' }}>
-      <Field type="address" value={address} onChange={(e, { value }) => (console.log(address), setAddress((value || '').toLowerCase()))} />
+      <Field type="address" value={address || ''} onChange={(e, { value }) => setAddress((value || '').toLowerCase())} />
     </div>
     <div style={{ minHeight: '200px', position: 'relative', padding: '3rem 0' }}>
       {loading && <Loader active />}
       {servers && <Card.Group>
-        {servers.map(server =>  <CatalystLoader key={server.id} {...server} user={address} />)}
+        {servers.map(server =>  <CatalystLoader key={server.id} {...server} user={address || ''} />)}
       </Card.Group>}
     </div>
   </Container>
