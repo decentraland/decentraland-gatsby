@@ -1,7 +1,8 @@
 import React, { createContext } from "react"
 import useAuth from '../../hooks/useAuth'
+import useTransaction from "../../hooks/useTransaction"
 
-const defaultState: ReturnType<typeof useAuth> = [
+const defaultAuthState: ReturnType<typeof useAuth> = [
   null,
   {
     selecting: false,
@@ -15,8 +16,23 @@ const defaultState: ReturnType<typeof useAuth> = [
   }
 ]
 
-export const Context = createContext(defaultState)
+const defaultTransactionState: ReturnType<typeof useTransaction> = [
+  null,
+  {
+    add: () => {},
+    clear: () => {}
+  }
+]
+
+export const AuthContext = createContext(defaultAuthState)
+export const TransactionContext = createContext(defaultTransactionState)
+
 export default React.memo(function AuthProvider(props: React.PropsWithChildren<{}>) {
   const auth = useAuth()
-  return <Context.Provider value={auth}>{props.children}</Context.Provider>
+  const transactions = useTransaction(auth[0], auth[1].chainId)
+  return <AuthContext.Provider value={auth}>
+    <TransactionContext.Provider value={transactions}>
+      {props.children}
+    </TransactionContext.Provider>
+  </AuthContext.Provider>
 })
