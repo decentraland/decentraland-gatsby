@@ -8,12 +8,13 @@ import { ChainId } from "@dcl/schemas"
 import { ProviderType } from "decentraland-connect/dist/types"
 import Grid from "semantic-ui-react/dist/commonjs/collections/Grid/Grid"
 import { Button } from 'decentraland-ui/dist/components/Button/Button';
+import { SelectField } from 'decentraland-ui/dist/components/SelectField/SelectField';
 import { Args } from '../components/Storybook/utils';
 import Container from '../components/Storybook/Container';
 import Textarea from '../components/Form/Textarea';
 import useAuth from './useAuth';
 
-<Meta title="Standalone Hooks/useAuth" />
+<Meta title="Hooks/useAuth" />
 
 # Auth Hook
 
@@ -64,12 +65,34 @@ const [ account, state ] = useAuth()
 
 export const Example = () => {
   const [ account, state ] = useAuth()
+  const [ chain, setChain ] = useState(ChainId.ETHEREUM_MAINNET)
+  const selectChain = (_, { value }) => setChain(value)
+  const connectInjected = () => state.connect(ProviderType.INJECTED, chain)
+  const connectFortmatic = () => state.connect(ProviderType.FORTMATIC, chain)
+  const connectWalletConnect = () => null
+  const connectWalletLink = () => null
+  const disconnect = () => state.disconnect()
   return <Container>
-    <Button primary size="small" disabled={!!account} loading={state.loading} onClick={() => state.connect(ProviderType.INJECTED, ChainId.ETHEREUM_MAINNET)}>connect injected</Button>
-    <Button primary size="small" disabled={!!account} loading={state.loading} onClick={() => state.connect(ProviderType.FORTMATIC, ChainId.ETHEREUM_MAINNET)}>connect fortmatic</Button>
-    {/* <Button primary size="small" disabled={true} loading={state.loading} onClick={() => null}>connect wallet connect</Button> */}
-    {/* <Button primary size="small" disabled={true} loading={state.loading} onClick={() => null}>connect wallet link</Button> */}
-    <Button primary size="small" disabled={!account} loading={state.loading} onClick={() => state.disconnect()}>disconnect</Button>
+    <div style={{ display: 'flex' }}>
+      <div>
+        <SelectField value={chain} label="chain" onChange={selectChain} options={[
+          { key: ChainId.ETHEREUM_MAINNET, value: ChainId.ETHEREUM_MAINNET, text: 'ETHEREUM_MAINNET' },
+          { key: ChainId.ETHEREUM_ROPSTEN, value: ChainId.ETHEREUM_ROPSTEN, text: 'ETHEREUM_ROPSTEN' },
+          { key: ChainId.ETHEREUM_RINKEBY, value: ChainId.ETHEREUM_RINKEBY, text: 'ETHEREUM_RINKEBY' },
+          { key: ChainId.ETHEREUM_GOERLI, value: ChainId.ETHEREUM_GOERLI, text: 'ETHEREUM_GOERLI' },
+          { key: ChainId.ETHEREUM_KOVAN, value: ChainId.ETHEREUM_KOVAN, text: 'ETHEREUM_KOVAN' },
+          { key: ChainId.MATIC_MUMBAI, value: ChainId.MATIC_MUMBAI, text: 'MATIC_MUMBAI' },
+          { key: ChainId.MATIC_MAINNET, value: ChainId.MATIC_MAINNET, text: 'MATIC_MAINNET' },
+        ]}/>
+      </div>
+      <div style={{ paddingTop: '20px', paddingLeft: '20px' }}>
+        <Button primary size="small" disabled={!!account} loading={state.loading} onClick={connectInjected}>connect injected</Button>
+        <Button primary size="small" disabled={!!account} loading={state.loading} onClick={connectFortmatic}>connect fortmatic</Button>
+        {/* <Button primary size="small" disabled={true} loading={state.loading} onClick={connectWalletConnect}>connect wallet connect</Button> */}
+        {/* <Button primary size="small" disabled={true} loading={state.loading} onClick={connectWalletLink}>connect wallet link</Button> */}
+        <Button primary size="small" disabled={!account} loading={state.loading} onClick={disconnect}>disconnect</Button>
+      </div>
+    </div>
     <Source language="ts" code={JSON.stringify(account, null, 2)} />
     <Source language="ts" code={JSON.stringify({
       loading: state.loading,
@@ -88,75 +111,24 @@ import { ProviderType, ChainId } from "decentraland-connect/dist/types"
 export function Example () {
   const [ account, state ] = useAuth()
 
+  const connectInjected = () => state.connect(ProviderType.INJECTED, ChainId.ETHEREUM_MAINNET)
+  const connectFortmatic = () => state.connect(ProviderType.FORTMATIC, ChainId.ETHEREUM_MAINNET)
+  const disconnect = () => state.disconnect()
+
   return <div>
-    <button disabled={!!account} loading={state.loading} onClick={() => state.connect(ProviderType.INJECTED, ChainId.ETHEREUM_MAINNET)}>connect injected</button>
-    <button disabled={!!account} loading={state.loading} onClick={() => state.connect(ProviderType.FORTMATIC, ChainId.ETHEREUM_MAINNET)}>connect fortmatic</button>
-    <button disabled={!account} loading={state.loading} onClick={() => state.disconnect()}>disconnect</button>
+    <button disabled={!!account} loading={state.loading} onClick={connectInjected}>connect injected</button>
+    <button disabled={!!account} loading={state.loading} onClick={connectFortmatic}>connect fortmatic</button>
+    <button disabled={!account} loading={state.loading} onClick={disconnect}>disconnect</button>
     <pre>{JSON.stringify(account, null, 2)}</pre>
   </div>
 }
 ```
 
-## Using the connected provider
+## Related hooks
 
-export const Sign = () => {
-  const [ account, accountState ] = useAuth()
-  const [ state, setState ] = useState({
-    message: 'This a the origina messsage',
-    signature: '',
-    signing: false,
-  })
-  useEffect(() => {
-    if (state.signing) {
-      new Personal(accountState.provider)
-        .sign(state.message, Address.fromString(account), '')
-        .then((signature) => {
-          console.log(signature)
-          setState((current) => ({ ...current, signature, signing: false }))
-        })
-        .catch((err) => {
-          console.error(err)
-          setState((current) => ({ ...current, signing: false }))
-        })
-    }
-  }, [ state.signing ])
-  return <Container>
-    <Grid>
-      <Grid.Row>
-        <Grid.Column tablet="8">
-          <Textarea value={state.message} minHeight={170} onChange={(e, { value }) => setState((current) => ({ ...current, message: value })) } />
-        </Grid.Column>
-        <Grid.Column tablet="8">
-          <Button primary size="small" style={{ minWidth: '200px', margin: '0 auto' }} disabled={!account} loading={state.signing} onClick={() => setState((current) => ({ ...current, signing: true }))}>Sign</Button>
-          <Source language="ts" code={JSON.stringify(state.signature, null, 2)} />
-        </Grid.Column>
-      </Grid.Row>
-    </Grid>
-  </Container>
-}
-
-<Sign />
-
-```tsx dark=true
-import React from "react"
-import { Address } from 'web3x/address'
-import { Personal } from 'web3x/personal'
-import { ProviderType, ChainId } from "decentraland-connect/dist/types"
-
-export function Sign () {
-  const [ address, state ] = useAuth()
-  const [ message, setMessage ] = useState('This a the origina messsage')
-  const [ signature, setSignature ] = useState('')
-  function handleSignature() {
-    new Personal(state.provider)
-        .sign(message, Address.fromString(address), '')
-        .then((signature) => setSignature(signature))
-  }
-
-  return <div>
-    <textarea value={message} onChange={(e) => setMessage(e.currentTarget.value)}></textarea>
-    <button disabled={!account} onClick={handleSignature}>sign</button>
-    <pre>{JSON.stringify(signature, null, 2)}</pre>
-  </div>
-}
-```
+- [`useAuth`](/?path=/story/hooks-useauth--page): allows to create a user session using one of the availables providers
+- [`useSign`](/?path=/story/hooks-usesign--page): allow to sign a message using a pair address and provider
+- [`useTransaction`](/?path=/story/hooks-useatransaction--page): allow to track transactions
+- [`useAuthContext`](/?path=/story/context-auth-useauthcontext--page): use a single instance of `useAuth` injected through a provider
+- [`useSignContext`](/?path=/story/context-auth-usesigncontext--page): same as `useSign` but detects params automatically usgin the `useAuthContext` hook
+- [`useTransactionContext`](/?path=/story/context-auth-usetransactioncontext--page): same as `useTransaction` but detects params automatically usign the `useAuthContext` hook
