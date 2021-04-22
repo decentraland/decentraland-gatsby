@@ -26,7 +26,6 @@ const defaultTransactionState: ReturnType<typeof useTransaction> = [
 
 export const AuthContext = createContext(defaultAuthState)
 export const TransactionContext = createContext(defaultTransactionState)
-
 export default React.memo(function AuthProvider(props: React.PropsWithChildren<{}>) {
   const auth = useAuth()
   const transactions = useTransaction(auth[0], auth[1].chainId)
