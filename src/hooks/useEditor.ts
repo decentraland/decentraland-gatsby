@@ -4,7 +4,7 @@ import omit from 'lodash.omit'
 export type Editor<P extends {} = {}> = (state: P, newProps: Partial<P>) => P
 export type EditorError<P extends {} = {}> = Partial<Record<keyof P | '*', string>>
 export type Validator<P extends {} = {}> = (state: P, props: (keyof P | '*')[]) => EditorError<P>
-export type PropValidator<P extends {} = {}> = (state: P, props: keyof P | '*') => EditorError<P>
+export type PropValidator<P extends {} = {}> = (state: P, prop: keyof P | '*', props: (keyof P | '*')[]) => EditorError<P>
 
 type EditorState<P extends {} = {}> = {
   value: P,
@@ -79,7 +79,7 @@ export function createValidator<P extends {} = {}>(map: Record<keyof P | '*', Pr
     for (const prop of props) {
       if (typeof map[prop] === 'function') {
         error = {
-          ...clear(map[prop](state, prop)),
+          ...clear(map[prop](state, prop, props)),
           ...error
         }
       }
