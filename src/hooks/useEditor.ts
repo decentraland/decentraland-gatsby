@@ -41,5 +41,11 @@ export default function useEditor<P extends {} = {}>(
     }
   }
 
-  return [ state, { set, validate } ]
+  function error(err: Partial<Record<keyof P | '*', string>>) {
+    if (Object.keys(err).length > 0) {
+      setState({ value: state.value, error: { ...state.error, ...err }, validated: false})
+    }
+  }
+
+  return [ state, { set, validate, error } ]
 }
