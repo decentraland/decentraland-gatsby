@@ -65,6 +65,8 @@ function clear<P>(err: EditorError<P>): EditorError<P> {
   return omit(err, emptyKeys)
 }
 
+export function assert<T>(value: true, onError: T): null;
+export function assert<T>(value: false, onError: T): T;
 export function assert<T>(value: boolean, onError: T): T | null {
-  return value ? onError : null
+  return value ? null : onError
 }
