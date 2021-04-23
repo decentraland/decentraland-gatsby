@@ -47,5 +47,5 @@ export default function useEditor<P extends {} = {}>(
     }
   }
 
-  return [ state, { set, validate, error } ]
+  return [ state, { set, validate, error } ] as const
 }
