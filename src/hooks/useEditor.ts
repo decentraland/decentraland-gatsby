@@ -73,13 +73,14 @@ export function assert<T>(value: boolean, onError: T): T | null {
   return value ? null : onError
 }
 
-export function createValidator<P extends {} = {}>(map: Record<keyof P | '*', PropValidator<P>>): Validator<P> {
+export function createValidator<P extends {} = {}>(map: Partial<Record<keyof P | '*', PropValidator<P>>>): Validator<P> {
   return function (state, props) {
     let error: EditorError<P> = {}
     for (const prop of props) {
-      if (typeof map[prop] === 'function') {
+      const validator = map[prop]!
+      if (typeof validator === 'function') {
         error = {
-          ...clear(map[prop](state, prop, props)),
+          ...clear(validator(state, prop, props)),
           ...error
         }
       }
