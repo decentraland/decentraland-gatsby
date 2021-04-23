@@ -2,7 +2,7 @@ import { useState } from 'react'
 import omit from 'lodash.omit'
 
 export type Editor<P extends {} = {}> = (state: P, newProps: Partial<P>) => P
-export type Validator<P extends {} = {}> = (state: P, props: (keyof P | '*')[]) => Record<keyof P, string>
+export type Validator<P extends {} = {}> = (state: P, props: (keyof P | '*')[]) => Partial<Record<keyof P, string>>
 
 type EditorState<P extends {} = {}> = {
   value: P,
