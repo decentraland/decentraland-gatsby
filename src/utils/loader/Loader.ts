@@ -1,14 +1,14 @@
-export default class Loader<T> {
+export default class Loader<V, K = string | number> {
 
-  cache: Map<string | number, Promise<T>> = new Map()
-  data: Map<string | number, T> = new Map()
-  readonly handle: (key: string | number) => Promise<T>
+  cache: Map<K, Promise<V>> = new Map()
+  data: Map<K, V> = new Map()
+  readonly handle: (key: K) => Promise<V>
 
-  constructor(handle: (key: string | number) => Promise<T>) {
+  constructor(handle: (key: K) => Promise<V>) {
     this.handle = handle
   }
 
-  private async _handle(key: string | number): Promise<T> {
+  private async _handle(key: K): Promise<V> {
     return this.handle(key)
       .then(result => {
         this.data.set(key, result)
@@ -20,7 +20,7 @@ export default class Loader<T> {
       })
   }
 
-  async load(key: string | number): Promise<T> {
+  async load(key: K): Promise<V> {
     if (!this.cache.has(key)) {
       this.cache.set(key, this._handle(key))
     }
@@ -28,16 +28,16 @@ export default class Loader<T> {
     return this.cache.get(key)!
   }
 
-  isLoading(key: string | number) {
+  isLoading(key: K) {
     return this.cache.has(key) && !this.data.has(key)
   }
 
-  set(key: string | number, value: T) {
+  set(key: K, value: V) {
     this.cache.set(key, Promise.resolve(value))
     this.data.set(key, value)
   }
 
-  clear(key: string | number) {
+  clear(key: K) {
     this.data.delete(key)
     return this.cache.delete(key)
   }

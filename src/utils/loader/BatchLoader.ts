@@ -1,17 +1,17 @@
 import Dataloader from 'dataloader'
 
-export default class BatchLoader<T> {
-  private loader: Dataloader<string | number, T>
-  cache: Map<string | number, Promise<T>> = new Map()
-  data: Map<string | number, T> = new Map()
-  readonly handle: (key: (string | number)[]) => Promise<T[]>
+export default class BatchLoader<V, K = string | number> {
+  private loader: Dataloader<K, V>
+  cache: Map<K, Promise<V>> = new Map()
+  data: Map<K, V> = new Map()
+  readonly handle: (key: (K)[]) => Promise<V[]>
 
-  constructor(handle: (key: (string | number)[]) => Promise<T[]>, options: Dataloader.Options<string|number, T> = {}) {
+  constructor(handle: (key: (K)[]) => Promise<V[]>, options: Dataloader.Options<K, V> = {}) {
     this.handle = handle
     this.loader = new Dataloader(handle, options)
   }
 
-  private async _handle(key: string | number): Promise<T> {
+  private async _handle(key: K): Promise<V> {
     return this.loader.load(key)
       .then(result => {
         this.data.set(key, result)
@@ -23,7 +23,7 @@ export default class BatchLoader<T> {
       })
   }
 
-  async load(key: string | number): Promise<T> {
+  async load(key: K): Promise<V> {
     if (!this.cache.has(key)) {
       this.cache.set(key, this._handle(key))
     }
@@ -31,16 +31,16 @@ export default class BatchLoader<T> {
     return this.cache.get(key)!
   }
 
-  isLoading(key: string | number) {
+  isLoading(key: K) {
     return this.cache.has(key) && !this.data.has(key)
   }
 
-  set(key: string | number, value: T) {
+  set(key: K, value: V) {
     this.cache.set(key, Promise.resolve(value))
     this.data.set(key, value)
   }
 
-  clear(key: string | number) {
+  clear(key: K) {
     this.loader.clear(key)
     this.data.delete(key)
     return this.cache.delete(key)
