@@ -35,6 +35,10 @@ export default class BatchLoader<V, K = string | number> {
     return this.cache.has(key) && !this.data.has(key)
   }
 
+  get size() {
+    return this.data.size
+  }
+
   set(key: K, value: V) {
     this.cache.set(key, Promise.resolve(value))
     this.data.set(key, value)
