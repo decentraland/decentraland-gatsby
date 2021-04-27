@@ -147,9 +147,26 @@ export default class Catalyst extends API {
     }
 
     await this.Servers
-    const instaces = Array.from(this.Cache.values())
-    const index = random(instaces.length)
-    return instaces[index] || this.get()
+    while (this.Cache.size) {
+      const instances = Array.from(this.Cache.values())
+      const index = random(instances.length)
+      if (instances[index]) {
+        const instance = instances[index]
+        if (instance.available) {
+          return instance
+        }
+
+        const result = await API.catch(instance.getStatus())
+        if (result) {
+          instance.available = true
+          return instance
+        }
+
+        this.Cache.delete(instance.baseUrl)
+      }
+    }
+
+    return this.get()
   }
 
   static from(baseUrl: string) {
@@ -159,6 +176,8 @@ export default class Catalyst extends API {
 
     return this.Cache.get(baseUrl)!
   }
+
+  private available: boolean | null = null
 
   async getProfile(address: Address | string): Promise<Avatar | null> {
     const result: ProfileResponse = await this.fetch(`/lambdas/profile/${address.toString().toLowerCase()}`)
