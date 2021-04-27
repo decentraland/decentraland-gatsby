@@ -18,7 +18,7 @@ import useAuth from '../../hooks/useAuth.ts';
 export const PreviewAvatar = () => {
   const [ auth ] = useAuth()
   const [ state, setState ] = useState({ address: '0x05d48ee3e815bf376fc79d283301cfdef872e280', size: Size.Full, source: '' })
-  useEffect(() => { auth && setAddress(current => ({ ...current, address: auth })) }, [ auth ])
+  useEffect(() => { auth && setState(current => ({ ...current, address: auth })) }, [ auth ])
   return <Container>
     <div style={{ display:'flex' }}>
       <div style={{ flex: '0 0 40%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
