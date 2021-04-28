@@ -10,17 +10,7 @@ export default new Ajv()
   .addFormat('email', isEmail)
   .addFormat('uuid', isUUID)
   .addFormat('numeric', (n) => isNumeric(n))
-  .addFormat('domain', (url) => isURL('https://' + url, {
-    protocols: ['http', 'https'],
-    require_tld: true,
-    require_protocol: true,
-    require_host: true,
-    require_valid_protocol: true,
-    allow_underscores: false,
-    allow_trailing_dot: false,
-    allow_protocol_relative_urls: false,
-    disallow_auth: true
-  }))
+  .addFormat('domain', (domain) => new RegExp('^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$').test(domain))
   .addFormat('url', (url) => isURL(url, {
     protocols: ['http', 'https'],
     require_tld: true,
