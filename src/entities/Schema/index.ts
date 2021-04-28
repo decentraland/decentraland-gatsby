@@ -10,6 +10,17 @@ export default new Ajv()
   .addFormat('email', isEmail)
   .addFormat('uuid', isUUID)
   .addFormat('numeric', (n) => isNumeric(n))
+  .addFormat('domain', (url) => isURL('https://' + url, {
+    protocols: ['http', 'https'],
+    require_tld: true,
+    require_protocol: true,
+    require_host: true,
+    require_valid_protocol: true,
+    allow_underscores: false,
+    allow_trailing_dot: false,
+    allow_protocol_relative_urls: false,
+    disallow_auth: true
+  }))
   .addFormat('url', (url) => isURL(url, {
     protocols: ['http', 'https'],
     require_tld: true,
