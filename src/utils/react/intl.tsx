@@ -15,8 +15,19 @@ export function createFormatMessage(shape: IntlShape) {
     return shape.formatMessage({ id }, { ...values })
   }
 
-  const markdown = (id: string, values?: any) => {
+  const optional = (id?: string | null, values?: any) => {
+    if (!id) {
+      return ''
+    }
 
+    if (isEmpty(id)) {
+      return id
+    }
+
+    return shape.formatMessage({ id }, { ...values })
+  }
+
+  const markdown = (id: string, values?: any) => {
     let message = str(id, values)
 
     if (typeof message !== 'string') {
@@ -26,5 +37,5 @@ export function createFormatMessage(shape: IntlShape) {
     return <Markdown key={id} source={message} />
   };
 
-  return Object.assign(str, { markdown, isEmpty })
+  return Object.assign(str, { markdown, optional, isEmpty })
 }
