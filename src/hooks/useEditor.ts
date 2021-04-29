@@ -19,13 +19,14 @@ export default function useEditor<P extends {} = {}>(
 ) {
 
   const [ state, setState ] = useState<EditorState<P>>({ value: initialState, error: {}, validated: false })
-  function set(newProps: Partial<P>) {
+  function set(newProps: Partial<P>, options: { validate?: boolean } = {}) {
     const value = editor(state.value, newProps)
     if (state.value !== value) {
       const keys = Object.keys(newProps) as (keyof P)[]
+      const newError = options.validate === false ? {} : validator(value, keys)
       const error = clear({
         ...omit(state.error, keys) as EditorError<P>,
-        ...validator(value, keys),
+        ...newError,
       })
 
       setState({ value, error, validated: false })
