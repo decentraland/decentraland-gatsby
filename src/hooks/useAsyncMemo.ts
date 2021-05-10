@@ -18,18 +18,17 @@ type AsyncMemoOptions<T = any> = {
  * it will execute again each time deps change, and it return only the result
  * for the latest change
  *
- * @param effect - async function
+ * @param callback - async function
  * @param deps - dependency list
  * @param options.initialValue - initial memo value (default=null)
  * @param options.callWithTruthyDeps - if true the effect will be executed only when
  *   all values in the dependency list are evaluated as true
  */
 export default function useAsyncMemo<T>(
-  effect: () => Promise<T>,
+  callback: () => Promise<T>,
   deps: DependencyList = [],
   options: Partial<AsyncMemoOptions<T>> = {}
 ) {
-
   const [state, setState] = useState<AsyncMemoState<T>>({
     version: 0,
     loading: false,
@@ -43,32 +42,51 @@ export default function useAsyncMemo<T>(
       return
     }
 
-    const initial = Date.now()
-    let cancelled = false
-    const version = Math.ceil(Math.random() * 1e12)
-    Promise.resolve()
-      .then(() => {
-        setState((current) => ({ version, value: current.value, error: null, loading: true, time: Date.now() - initial }))
-      })
-      .then(() => effect())
-      .then((value) => {
-        if (!cancelled) {
-          setState((current) => current.version === version ? { version, value, error: null, loading: false, time: Date.now() - initial } : current)
-        }
-      })
-      .catch((err) => {
-        console.error(err)
-        if (!cancelled) {
-          setState((current) => current.version === version ? { version, value: current.value, error: err, loading: false, time: Date.now() - initial} : current)
-        }
-      })
-
-    return () => {
-      cancelled = true
-    }
+    setState((current) => ({ ...current, loading: true, version: current.version + 1 }))
   }
 
-  useEffect(load, deps)
+  useEffect(() => {
+    if (options.callWithTruthyDeps && deps.some(dep => Boolean(dep) === false)) {
+      return
+    }
 
-  return [state.value, { version: state.version, loading: state.loading, error: state.error, time: state.time, reload: load }] as const
+    let cancelled = false
+    const loading = false
+    const initial = Date.now()
+    Promise.resolve()
+      .then(() => callback())
+      .then((value) => {
+        if (cancelled) {
+          return
+        }
+
+        setState((current) => ({
+          ...current, value, error: null, loading, time: Date.now() - initial
+        }))
+      })
+      .catch((error) => {
+        console.error(error)
+        if (cancelled) {
+          return
+        }
+
+        setState((current) => ({
+          ...current, value: current.value, error, loading, time: Date.now() - initial
+        }))
+      })
+
+    return () => { cancelled = true }
+
+  }, [ state.version, ...deps ])
+
+  return [
+    state.value,
+    {
+      version: state.version,
+      loading: state.loading,
+      error: state.error,
+      time: state.time,
+      reload: load
+    }
+  ] as const
 }
