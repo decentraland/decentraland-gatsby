@@ -1,32 +1,31 @@
 import { useState, useEffect } from 'react'
 
-/**
- * Execute and async function and save the result in the component memory,
- * it will execute again each time deps change, and it return only the result
- * for the latest change
- *
- * @param callback - async function
- * @param deps - dependency list
- * @param options.initialValue - initial memo value (default=null)
- * @param options.callWithTruthyDeps - if true the effect will be executed only when
- *   all values in the dependency list are evaluated as true
- */
-export default function useAsync<T>(callback: () => Promise<T>) {
-  const [ loading, setLoading ] = useState(false)
+type AsyncState<A extends any[] = []> = {
+  loading: boolean,
+  args: A | null
+}
+
+export default function useAsync<A extends any[] = []>(callback: (...args: A) => Promise<void>) {
+  const [ { loading, args }, setLoading ] = useState<AsyncState<A>>({ loading: false, args: null })
+
   useEffect(() => {
-    if (loading) {
+    if (!loading) {
+      return
+    }
+
+    if (args === null) {
       return
     }
 
     let cancelled = false
     Promise.resolve()
-      .then(callback)
+      .then(() => callback(...args))
       .then(() => {
         if (cancelled) {
           return
         }
 
-        setLoading(false)
+        setLoading({ loading: false, args: null })
       })
       .catch((err) => {
         console.error(err)
@@ -34,11 +33,11 @@ export default function useAsync<T>(callback: () => Promise<T>) {
           return
         }
 
-        setLoading(false)
+        setLoading({ loading: false, args: null })
       })
 
     return () => { cancelled = true }
   }, [ loading ])
 
-  return [ loading, () => { setLoading(true) } ] as const
+  return [ loading, (...args: A) => { setLoading({ loading: true, args }) } ] as const
 }
