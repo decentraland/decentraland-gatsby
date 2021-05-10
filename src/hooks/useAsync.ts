@@ -40,5 +40,5 @@ export default function useAsync<T>(callback: () => Promise<T>) {
     return () => { cancelled = true }
   }, [ loading ])
 
-  return () => { setLoading(true) }
+  return [ loading, () => { setLoading(true) } ] as const
 }
