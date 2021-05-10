@@ -5,7 +5,7 @@ type AsyncState<A extends any[] = []> = {
   args: A | null
 }
 
-export default function useAsync<A extends any[] = []>(callback: (...args: A) => Promise<void>) {
+export default function useAsync<A extends any[] = []>(callback: (...args: A) => Promise<any>) {
   const [ { loading, args }, setLoading ] = useState<AsyncState<A>>({ loading: false, args: null })
 
   useEffect(() => {
