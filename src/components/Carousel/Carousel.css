@@ -1,0 +1,109 @@
+.Carousel,
+.Carousel .Carousel__Scroll {
+  position: relative;
+}
+
+.Carousel .Carousel__Scroll .Carousel__Item {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  transition: 0.3s ease transform, 0.3s ease opacity;
+}
+
+.Carousel .Carousel__Scroll .Carousel__Item.Carousel__Item--first {
+  position: relative;
+}
+
+.Carousel .Carousel__Scroll .Carousel__Item.Carousel__Item--on-left {
+  opacity: 0;
+  transform: translateX(-100%);
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.Carousel .Carousel__Scroll .Carousel__Item.Carousel__Item--on-right {
+  opacity: 0;
+  transform: translateX(100%);
+  pointer-events: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.Carousel .Carousel__List {
+  display: flex;
+  justify-content: center;
+  padding: 12px;
+}
+
+.Carousel .Carousel__List > div {
+  padding: 6px;
+  cursor: pointer;
+}
+
+.Carousel .Carousel__List > div > div {
+  width: 10px;
+  height: 10px;
+  opacity: 0.32;
+  border-radius: 100%;
+  background-color: #736e7d;
+  transition: 0.3s ease background-color, 0.3s ease opacity;
+}
+
+.Carousel .Carousel__List > div.active > div {
+  opacity: 1;
+  background-color: var(--primary);
+}
+
+.Carousel .Carousel__Prev,
+.Carousel .Carousel__Next {
+  cursor: pointer;
+  position: absolute;
+  top: 0;
+  display: flex;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  transform: translateY(-44px);
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.Carousel .Carousel__Prev {
+  right: 100%;
+}
+
+.Carousel .Carousel__Next {
+  left: 100%;
+}
+
+@media only screen and (max-width: 767px) {
+  .Carousel .Carousel__Items {
+    overflow: hidden;
+  }
+  .Carousel .Carousel__List {
+    padding: 6px;
+  }
+
+  .Carousel .Carousel__List > div {
+    padding: 6px 12px;
+  }
+
+  .Carousel .Carousel__List > div > div {
+    width: 20px;
+    height: 20px;
+  }
+
+  .Carousel .Carousel__Prev,
+  .Carousel .Carousel__Next,
+  .Carousel .JumpInButton__Position {
+    display: none;
+  }
+}
