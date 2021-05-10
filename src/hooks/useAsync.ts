@@ -39,5 +39,10 @@ export default function useAsync<A extends any[] = []>(callback: (...args: A) =>
     return () => { cancelled = true }
   }, [ loading ])
 
-  return [ loading, (...args: A) => { setLoading({ loading: true, args }) } ] as const
+  return [
+    (...args: A) => {
+      setLoading({ loading: true, args })
+    },
+    loading
+  ] as const
 }
