@@ -10,11 +10,11 @@ export default function useAsyncTasks<ID extends string | number = string | numb
     const task = Promise.resolve()
       .then(() => callback(id))
       .then(() => {
-        setTasks(current => current.filter(([currentId]) => currentId === id))
+        setTasks(current => current.filter(([currentId]) => currentId !== id))
       })
       .catch(err => {
         console.error(err)
-        setTasks(current => current.filter(([currentId]) => currentId === id))
+        setTasks(current => current.filter(([currentId]) => currentId !== id))
       })
 
     setTasks((current) => [ ...current, [ id, task ] ])
