@@ -1,48 +1,24 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 
-type AsyncTaskState<A extends any[] = []> = {
-  loading: boolean,
-  args: A | null
-}
-
-export default function useAsyncTask<A extends any[] = []>(callback: (...args: A) => Promise<any>) {
-  const [ { loading, args }, setLoading ] = useState<AsyncTaskState<A>>({ loading: false, args: null })
-
-  useEffect(() => {
-    if (!loading) {
+export default function useAsyncTasks<ID extends string | number = string | number>(callback: (id: ID) => Promise<any>) {
+  const [ tasks, setTasks ] = useState<[ ID, Promise<any> | null ][]>([])
+  function addTask(id: ID) {
+    if (tasks.find(([ currentId ]) => currentId === id )) {
       return
     }
 
-    if (args === null) {
-      return
-    }
-
-    let cancelled = false
-    Promise.resolve()
-      .then(() => callback(...args))
+    const task = Promise.resolve()
+      .then(() => callback(id))
       .then(() => {
-        if (cancelled) {
-          return
-        }
-
-        setLoading({ loading: false, args: null })
+        setTasks(current => current.filter(([currentId]) => currentId === id))
       })
-      .catch((err) => {
+      .catch(err => {
         console.error(err)
-        if (cancelled) {
-          return
-        }
-
-        setLoading({ loading: false, args: null })
+        setTasks(current => current.filter(([currentId]) => currentId === id))
       })
 
-    return () => { cancelled = true }
-  }, [ loading ])
+    setTasks((current) => [ ...current, [ id, task ] ])
+  }
 
-  return [
-    loading,
-    (...args: A) => {
-      setLoading({ loading: true, args })
-    }
-  ] as const
+  return [ tasks.map(([ id ]) => id), addTask ] as const
 }
