@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 
-type AsyncState<A extends any[] = []> = {
+type AsyncTaskState<A extends any[] = []> = {
   loading: boolean,
   args: A | null
 }
 
-export default function useAsync<A extends any[] = []>(callback: (...args: A) => Promise<any>) {
-  const [ { loading, args }, setLoading ] = useState<AsyncState<A>>({ loading: false, args: null })
+export default function useAsyncTask<A extends any[] = []>(callback: (...args: A) => Promise<any>) {
+  const [ { loading, args }, setLoading ] = useState<AsyncTaskState<A>>({ loading: false, args: null })
 
   useEffect(() => {
     if (!loading) {
