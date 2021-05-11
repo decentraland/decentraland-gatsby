@@ -40,9 +40,9 @@ export default function useAsync<A extends any[] = []>(callback: (...args: A) =>
   }, [ loading ])
 
   return [
+    loading,
     (...args: A) => {
       setLoading({ loading: true, args })
-    },
-    loading
+    }
   ] as const
 }
