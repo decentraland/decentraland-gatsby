@@ -79,6 +79,11 @@ export default function useAsyncMemo<T>(
 
   }, [ state.version, ...deps ])
 
+  function set(value: ((current: T | null) => T) | T) {
+    const newValue: T = typeof value === 'function' ? (value as (current: T | null) => T)(state.value) : value
+    setState((current) => ({ ...current, value: newValue }))
+  }
+
   return [
     state.value,
     {
@@ -86,7 +91,8 @@ export default function useAsyncMemo<T>(
       loading: state.loading,
       error: state.error,
       time: state.time,
-      reload: load
+      reload: load,
+      set,
     }
   ] as const
 }
