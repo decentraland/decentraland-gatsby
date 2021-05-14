@@ -94,5 +94,5 @@ export default function useTransaction(address?: string | null, chainId?: ChainI
     clearTransactions(address, chainId)
   }
 
-  return [ transactions, { add, clear } ]
+  return [ transactions, { add, clear } ] as const
 }
