@@ -37,7 +37,10 @@ export default function useTransaction(address?: string | null, chainId?: ChainI
           const updatedTransaction = await getTransaction(address, tx.chainId, tx.hash)
           if (updatedTransaction) {
             const hasChanges = Object.keys(updatedTransaction)
-              .some(key => tx[key] !== updateTransactions[key])
+              .some(key => (
+                tx[key] !== updatedTransaction[key] &&
+                String(tx[key]) !== String(updatedTransaction[key])
+              ))
 
             if (hasChanges) {
               updatedTransactions.push({
