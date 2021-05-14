@@ -35,10 +35,17 @@ export default function useTransaction(address?: string | null, chainId?: ChainI
       for (const tx of txs) {
         if (isPending(tx.status)) {
           const updatedTransaction = await getTransaction(address, tx.chainId, tx.hash)
-          updatedTransactions.push({
-            ...tx,
-            ...updatedTransaction
-          })
+          if (updatedTransaction) {
+            const hasChanges = Object.keys(updatedTransaction)
+              .some(key => tx[key] !== updateTransactions[key])
+
+            if (hasChanges) {
+              updatedTransactions.push({
+                ...tx,
+                ...updatedTransaction
+              })
+            }
+          }
         }
       }
 
