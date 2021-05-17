@@ -67,11 +67,11 @@ function clear<P>(err: EditorError<P>): EditorError<P> {
   return omit(err, emptyKeys)
 }
 
-export function assert<T>(value: true, onError: T): null;
+export function assert<T>(value: true, onError: T): undefined;
 export function assert<T>(value: false, onError: T): T;
-export function assert<T>(value: boolean, onError: T): T | null;
-export function assert<T>(value: boolean, onError: T): T | null {
-  return value ? null : onError
+export function assert<T>(value: boolean, onError: T): T | undefined;
+export function assert<T>(value: boolean, onError: T): T | undefined {
+  return value ? undefined : onError
 }
 
 export function createValidator<P extends {} = {}>(map: Partial<Record<keyof P | '*', PropValidator<P>>>): Validator<P> {
