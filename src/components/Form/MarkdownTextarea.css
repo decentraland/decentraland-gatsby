@@ -1,3 +1,12 @@
 .MarkdownTextarea {
   position: relative
 }
+
+.MarkdownTextarea__Preview  {
+  padding-top: 4px;
+  padding-bottom: 12px;
+}
+
+.MarkdownTextarea.error .MarkdownTextarea__Preview {
+  border-bottom: 2px solid var(--error);
+}
