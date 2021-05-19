@@ -1,15 +1,15 @@
 import { DependencyList, useState, useEffect } from 'react'
 
-type AsyncMemoState<T> = {
+type AsyncMemoState<T, I = null> = {
   version: number,
   loading: boolean,
-  value: T | null,
+  value: T | I,
   time: number,
   error: Error | null
 }
 
-type AsyncMemoOptions<T = any> = {
-  initialValue: T | null
+type AsyncMemoOptions<T = any, I = null> = {
+  initialValue: T | I
   callWithTruthyDeps: boolean
 }
 
@@ -24,15 +24,15 @@ type AsyncMemoOptions<T = any> = {
  * @param options.callWithTruthyDeps - if true the effect will be executed only when
  *   all values in the dependency list are evaluated as true
  */
-export default function useAsyncMemo<T>(
+export default function useAsyncMemo<T, I = null>(
   callback: () => Promise<T>,
   deps: DependencyList = [],
-  options: Partial<AsyncMemoOptions<T>> = {}
+  options: Partial<AsyncMemoOptions<T, I>> = {}
 ) {
-  const [state, setState] = useState<AsyncMemoState<T>>({
+  const [state, setState] = useState<AsyncMemoState<T, I>>({
     version: 0,
     loading: false,
-    value: options.initialValue ?? null,
+    value: (options.initialValue ?? null)  as I,
     time: 0,
     error: null
   })
@@ -79,8 +79,8 @@ export default function useAsyncMemo<T>(
 
   }, [ state.version, ...deps ])
 
-  function set(value: ((current: T | null) => T) | T) {
-    const newValue: T = typeof value === 'function' ? (value as (current: T | null) => T)(state.value) : value
+  function set(value: ((current: T | I) => T) | T) {
+    const newValue: T = typeof value === 'function' ? (value as (current: T | I) => T)(state.value) : value
     setState((current) => ({ ...current, value: newValue }))
   }
 
