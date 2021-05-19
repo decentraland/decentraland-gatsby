@@ -10,12 +10,10 @@ export type Snapshot = {
 
 export type BodyColor = {
   color: {
-    color: {
-      r: number
-      g: number
-      b: number
-      a: number
-    }
+    r: number
+    g: number
+    b: number
+    a?: number
   }
 }
 
