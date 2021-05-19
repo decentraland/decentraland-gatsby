@@ -45,8 +45,10 @@ export default function useAsyncMemo<T, I = null>(
     setState((current) => ({ ...current, loading: true, version: current.version + 1 }))
   }
 
+  useEffect(() => { load() }, deps)
+
   useEffect(() => {
-    if (options.callWithTruthyDeps && deps.some(dep => Boolean(dep) === false)) {
+    if (!state.loading) {
       return
     }
 
@@ -77,7 +79,7 @@ export default function useAsyncMemo<T, I = null>(
 
     return () => { cancelled = true }
 
-  }, [ state.version, ...deps ])
+  }, [ state.version, state.loading ])
 
   function set(value: ((current: T | I) => T) | T) {
     const newValue: T = typeof value === 'function' ? (value as (current: T | I) => T)(state.value) : value
