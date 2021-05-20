@@ -84,6 +84,12 @@
   left: 100%;
 }
 
+.Carousel .Carousel__Prev.disabled,
+.Carousel .Carousel__Next.disabled {
+  opacity: .3;
+  pointer-events: none;
+}
+
 @media only screen and (max-width: 767px) {
   .Carousel .Carousel__Items {
     overflow: hidden;

@@ -3,7 +3,12 @@ import usePatchState from '../../hooks/usePatchState'
 import TokenList from '../../utils/dom/TokenList'
 import './Carousel.css'
 
-export type CarouselProps = React.HTMLProps<HTMLDivElement>
+export type CarouselProps = React.HTMLProps<HTMLDivElement> & {
+  onMove?: (index: number) => void
+  progress?: boolean
+  time?: number | false
+}
+
 export type CarouselState = {
   current: number
   running: boolean
@@ -28,14 +33,20 @@ export function Prev() {
   </svg>
 }
 
-export default function Carousel({ className, children, ...props }: CarouselProps) {
-
+export default function Carousel({ className, children, progress, onMove, time,  ...props }: CarouselProps) {
+  const timeout = !progress ? (time ?? 5000) || false : false
   const size = React.Children.count(children)
   const [state, patchState] = usePatchState<CarouselState>({ current: 0, timer: null, running: true })
 
   useEffect(() => {
-    if (state.running) {
-      patchState({ timer: setTimeout(handleNext, 5000) as any })
+    if (state.current > size) {
+      handleMove(0)
+    }
+  }, [ size ])
+
+  useEffect(() => {
+    if (timeout && state.running) {
+      patchState({ timer: setTimeout(handleNext, timeout) as any })
     }
 
     return () => {
@@ -44,7 +55,7 @@ export default function Carousel({ className, children, ...props }: CarouselProp
       }
     }
 
-  }, [state.running, state.current])
+  }, [state.running, state.current, timeout])
 
   function handleTimerOn() {
     patchState({ running: true })
@@ -54,19 +65,25 @@ export default function Carousel({ className, children, ...props }: CarouselProp
     if (state.timer) {
       clearTimeout(state.timer)
     }
+
     patchState({ timer: null, running: false })
   }
 
   function handleMove(to: number) {
     patchState({ current: to })
+    if (onMove) {
+      onMove(to)
+    }
   }
 
   function handleNext() {
-    handleMove(state.current >= size - 1 ? 0 : state.current + 1)
+    const next = state.current >= size - 1 ? 0 : state.current + 1
+    handleMove(next)
   }
 
   function handlePrev() {
-    handleMove(state.current <= 0 ? size - 1 : state.current - 1)
+    const prev = state.current <= 0 ? size - 1 : state.current - 1
+    handleMove(prev)
   }
 
   return <div {...props} className={TokenList.join(['Carousel', className])}>
@@ -85,12 +102,26 @@ export default function Carousel({ className, children, ...props }: CarouselProp
       </div>
     </div>
     {size > 1 && <div className="Carousel__List">
-      {React.Children.map(children, (_, i) => <div key={'list:' + i} onClick={() => handleMove(i)} className={TokenList.join([i === state.current && 'active'])}><div /></div>)}
+      {React.Children.map(children, (_, i) => <div
+        key={'list:' + i}
+        onClick={() => handleMove(i)}
+        className={TokenList.join([
+          progress && i <= state.current && 'active',
+          !progress && i === state.current && 'active',
+        ])}>
+          <div />
+        </div>)}
     </div>}
-    {size > 1 && <div className="Carousel__Next" onClick={handleNext}>
+    {size > 1 && <div onClick={handleNext} className={TokenList.join([
+      "Carousel__Next",
+      progress && state.current === (size - 1) && 'disabled'
+    ])}>
       <Next />
     </div>}
-    {size > 1 && <div className="Carousel__Prev" onClick={handlePrev}>
+    {size > 1 && <div onClick={handlePrev} className={TokenList.join([
+      "Carousel__Prev",
+      progress && state.current === 0 && 'disabled'
+    ])}>
       <Prev />
     </div>}
   </div>
