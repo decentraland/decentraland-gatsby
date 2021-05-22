@@ -48,7 +48,6 @@ export type MetaProperties = {
 }
 
 export default function Head(props: HeadProps) {
-
   const meta: Partial<MetaProperties> = {
     'og:title': props.title || props.defaultTitle || '',
     'twitter:title': props.title || props.defaultTitle || '',
@@ -88,4 +87,3 @@ Head.defaultProps = {
   title: ``,
   description: ``,
 }
-

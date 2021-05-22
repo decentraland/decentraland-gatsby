@@ -1,7 +1,7 @@
 
 /**
  * Extract the extension from a file path
- * 
+ *
  * @example `assert.equal(extension("./file.html"), "html")`
  * @example `assert.equal(extension("./file.html?query"), "html")`
  * @example `assert.equal(extension("./file.min.js?query"), "js")`
@@ -18,4 +18,14 @@ export function extension(file: string) {
   }
 
   return null
+}
+
+export function formatDescription(value: string): string {
+  value = (value || '').trim()
+  const position = value.indexOf(`\n\n`)
+  if (position > 0) {
+    value = value.slice(0, position).trim()
+  }
+
+  return value
 }
