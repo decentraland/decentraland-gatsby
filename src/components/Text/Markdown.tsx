@@ -31,6 +31,23 @@ export const renderers: Partial<Record<NodeType, React.ReactType<any>>> = {
   code: Code,
   inlineCode: Code,
   blockquote: Blockquote,
+  list: (props: any) => {
+    switch (props.ordered) {
+      case true:
+        return <ol start={props.start}>{props.children}</ol>
+      case false:
+      default:
+        return <ul>{props.children}</ul>
+    }
+  },
+  listItem: (props: any) => {
+    return <li {...props}>
+      <Paragraph>
+        {typeof props.checked === 'boolean' && <input type="checkbox" checked={props.checked} readOnly style={{ marginRight: '.5em' }} />}
+        {props.children}
+      </Paragraph>
+    </li>
+  },
   table: (props: React.Props<any>) => <Table basic="very">{props.children}</Table>,
   tableHead: (props: React.Props<any>) => <Table.Header>{props.children}</Table.Header>,
   tableBody: (props: React.Props<any>) => <Table.Body>{props.children}</Table.Body>,
