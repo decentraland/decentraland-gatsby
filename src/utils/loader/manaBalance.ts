@@ -25,7 +25,7 @@ export async function fetchManaBalance(address: string, chainId: ChainId) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         query: MANA_QUERY,
-        values: { address: address.toLowerCase() }
+        variables: { address: address.toLowerCase() }
       })
     })
 
