@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch'
+import isEthereumAddress from 'validator/lib/isEthereumAddress'
 
 export type FeatureFlagsResponse = {
   // whether a feature flag is active.
@@ -19,18 +20,37 @@ export type Variant = {
   }
 }
 
+export type UnleashOptions = {
+  debug: boolean,
+  address: string,
+  referer: string,
+}
+
 export const DEFAULT_FEATURE_FLAG: FeatureFlagsResponse = {
   flags: {},
   variants: {},
 }
 
-export default async function unleash(endpoint?: string | null) {
+export default async function unleash(endpoint?: string | null, options: Partial<UnleashOptions> = {}) {
   if (!endpoint) {
     return DEFAULT_FEATURE_FLAG
   }
 
   try {
-    const req = await fetch(endpoint)
+    const headers: Record<string, string> = {}
+    if (options.debug) {
+      headers['x-debug'] = 'true'
+    }
+
+    if (options.address && isEthereumAddress(options.address)) {
+      headers['x-address-hash'] = options.address
+    }
+
+    if (options.referer) {
+      headers['Referer'] = options.referer
+    }
+
+    const req = await fetch(endpoint, { method: 'GET', headers })
     const body = await req.json()
     return body as FeatureFlagsResponse
   } catch (err) {
