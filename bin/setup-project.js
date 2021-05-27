@@ -4,15 +4,6 @@ const { sync } = require('glob')
 const { mkdirSync, writeFileSync, readFileSync } = require('fs')
 const { spawn } = require('child_process')
 const { grey, green, red } = require('colors/safe')
-const pkg = require('../package.json')
-
-const STATIC_FILES = [
-  "node_modules/semantic-ui-css/semantic.min.css",
-  "node_modules/balloon-css/balloon.min.css",
-  "node_modules/decentraland-ui/dist/themes/base-theme.css",
-  "node_modules/decentraland-ui/dist/themes/alternative/dark-theme.css",
-  "node_modules/decentraland-ui/dist/themes/alternative/light-theme.css"
-]
 
 const isUpdate = process.argv.find(arg => arg === '--update')
 
@@ -39,6 +30,25 @@ function installDependencies(modules, options) {
     run.on('exit', (code) =>
       code
         ? reject(new Error(`Installation exits with code ${code}`))
+        : resolve(0)
+    )
+  })
+}
+
+function executable(file) {
+  return new Promise((resolve, reject) => {
+    const run = spawn(
+      'chmod',
+      [
+        '+x',
+        file
+      ],
+      { stdio: 'inherit' }
+    )
+
+    run.on('exit', (code) =>
+      code
+        ? reject(new Error(`Error changing executables`))
         : resolve(0)
     )
   })
@@ -95,7 +105,6 @@ Promise.resolve()
       build: 'gatsby build && tsc -p .',
       develop: 'gatsby develop --https -H 0.0.0.0',
       format: 'prettier --write "**/*.{js,jsx,json,md}"',
-      theme: `setup-global-css ${STATIC_FILES.join(' ')}`,
       start:
         "concurrently -c blue,green -n SERVER,FRONT 'npm run serve' 'npm run develop'",
       serve:
@@ -140,6 +149,7 @@ Promise.resolve()
       }
     })
   })
+  .then(() => executable('entrypoint.sh'))
   .then(() => {
     console.log('\n', green(`Done! Have a nice day!`, '\n'))
     process.exit(0)
