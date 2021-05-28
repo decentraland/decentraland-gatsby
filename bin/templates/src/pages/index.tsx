@@ -1,16 +1,9 @@
 
 import React from "react"
-
-import Layout from "../components/Layout/Layout"
 import { Container } from "decentraland-ui/dist/components/Container/Container"
-
 import './index.css'
 
-export default function IndexPage(props: any) {
+export default function IndexPage() {
 
-  return (
-    <Layout {...props}>
-      <Container></Container>
-    </Layout>
-  )
+  return <Container></Container>
 }
