@@ -5,7 +5,7 @@ import Loader from './Loader'
 
 export type ChainId = keyof typeof MANA_GRAPH_BY_CHAIN_ID
 
-const MANA_QUERY = `
+const QUERY = `
 query ($address: String!) {
   accounts(where: { id: $address }) {
     id,
@@ -24,7 +24,7 @@ export async function fetchManaBalance(address: string, chainId: ChainId) {
       method: 'post',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        query: MANA_QUERY,
+        query: QUERY,
         variables: { address: address.toLowerCase() }
       })
     })
@@ -52,5 +52,6 @@ export default function manaBalance(chainId: ChainId) {
   if (!cache.has(chainId)) {
     cache.set(chainId, createBalanceLoader(chainId))
   }
+
   return cache.get(chainId)!
 }
