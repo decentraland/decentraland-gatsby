@@ -1,6 +1,5 @@
 import fetch from 'isomorphic-fetch'
 import { ChainId } from '@dcl/schemas'
-import { MANA_GRAPH_BY_CHAIN_ID } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
 
 const DECENTRALAND_MARKETPLACE_SUBGRAPH_URL = {
@@ -34,7 +33,7 @@ export async function fetchEstateBalance(address: string, chainId: ChainId) {
     let hasNext = true
     const first = 1000
     while(hasNext) {
-      const response = await fetch(MANA_GRAPH_BY_CHAIN_ID[chainId], {
+      const response = await fetch(DECENTRALAND_MARKETPLACE_SUBGRAPH_URL[chainId], {
         method: 'post',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
