@@ -8,7 +8,7 @@ const DECENTRALAND_MARKETPLACE_SUBGRAPH_URL = {
 };
 
 const QUERY = `
-query ($address: String!, $first: Number!, $skip: Number!) {
+query ($address: String!, $first: Int!, $skip: Int!) {
   nfts(where: { owner: $address, category: parcel }, first: $first, skip: $skip) {
     tokenId
   }
