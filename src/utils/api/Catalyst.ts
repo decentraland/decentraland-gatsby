@@ -2,115 +2,40 @@ import type { Address } from 'web3x/address'
 import random from '../number/random'
 import env from '../env'
 import API from './API'
+import type {
+  Snapshot,
+  BodyColor,
+  Avatar,
+  ProfileResponse,
+  Layer,
+  Status,
+  StatusWithLayers,
+  CommsStatus,
+  CommsStatusWithLayers,
+  LambdasStatus,
+  ContentStatus,
+  Position,
+  Servers,
+  LayerUser,
+  EntityScene,
+} from './Catalyst.types'
 
-export type Snapshot = {
-  face: string,
-  body: string,
-}
-
-export type BodyColor = {
-  color: {
-    r: number
-    g: number
-    b: number
-    a?: number
-  }
-}
-
-export type Avatar = {
-  userId: string,
-  email: string | null | undefined
-  name: string | null | undefined
-  hasClaimedName: boolean
-  description: string | null | undefined
-  ethAddress: string
-  version: number
-  avatar: {
-    bodyShape: string,
-    snapshots: Snapshot,
-    eyes: BodyColor,
-    hair: BodyColor,
-    skin: BodyColor,
-    wearables: string[],
-    version: number
-  },
-  inventory: string[],
-  blocked: string[],
-  tutorialStep: number
-}
-
-export type ProfileResponse = {
-  avatars: Avatar[]
-}
-
-export type Layer = {
-  name: string,
-  usersCount: number
-  maxUsers: number
-}
-
-export type Status = CommsStatus
-export type StatusWithLayers = CommsStatusWithLayers
-
-export type CommsStatus = {
-  name: string,
-  version: string,
-  currenTime: number,
-  env: {
-    secure: boolean,
-    commitHash: string
-  },
-  ready: boolean
-}
-
-export type CommsStatusWithLayers = CommsStatus & {
-  layers: (Layer & { usersParcels: Position[] })[]
-}
-
-export type LambdasStatus = {
-  version: string,
-  currentTime: number,
-  contentServerUrl: string,
-  commitHash: string
-}
-
-export type ContentStatus = {
-  name: string,
-  version: string,
-  currentTime: number,
-  lastImmutableTime: number,
-  historySize: number,
-  synchronizationStatus: {
-    otherServers: {
-      address: string,
-      connectionState: "Connected" | "Connection lost" | "Could never be reached",
-      lastDeploymentTimestamp: number
-    }[],
-    lastSyncWithDAO: number,
-    synchronizationState: "Bootstrapping" | "Syncing" | "Synced" | "Failed to sync" ,
-    lastSyncWithOtherServers: number
-  },
-  commitHash: string,
-  ethNetwork: string
-}
-
-export type Position = [number, number]
-
-export type Servers = {
-  address: string,
-  owner: string,
-  id: string
-}
-
-export type LayerUser = {
-  id: string,
-  userId: string,
-  protocolVersion: number,
-  peerId: string,
-  parcel: [number, number],
-  position: [number, number, number],
-  lastPing: number,
-  address: string
+export {
+  Snapshot,
+  BodyColor,
+  Avatar,
+  ProfileResponse,
+  Layer,
+  Status,
+  StatusWithLayers,
+  CommsStatus,
+  CommsStatusWithLayers,
+  LambdasStatus,
+  ContentStatus,
+  Position,
+  Servers,
+  LayerUser,
+  EntityScene,
 }
 
 export default class Catalyst extends API {
@@ -235,8 +160,22 @@ export default class Catalyst extends API {
   async getLambdasStatus(): Promise<LambdasStatus> {
     return this.fetch('/lambdas/status')
   }
+
   async getContentStatus(): Promise<ContentStatus> {
     return this.fetch('/content/status')
+  }
+
+  async getEntityScenes(pointers: string[] | [number, number][]): Promise<EntityScene[]> {
+    if (!pointers || pointers.length === 0) {
+      return []
+    }
+
+    return this.fetch(
+      '/content/entities/scene?' +
+      pointers
+        .map((point: string | [number, number]) => `pointer=${Array.isArray(point) ? point.slice(0,2).join(',') : point}`)
+        .join('&')
+    )
   }
 
   async getServers() {
