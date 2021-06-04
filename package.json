@@ -14,7 +14,7 @@
     "format": "prettier --write './src/**/*.{ts,tsx,js,jsx,json,md}'",
     "storybook": "start-storybook -s static -p 6006",
     "semantic-release": "semantic-release",
-    "build-storybook": "build-storybook && cp ./static/* ./storybook-static && mv ./storybook-static ./public"
+    "build-storybook": "build-storybook --loglevel warn && cp ./static/* ./storybook-static && mv ./storybook-static ./public"
   },
   "repository": {
     "type": "git",
