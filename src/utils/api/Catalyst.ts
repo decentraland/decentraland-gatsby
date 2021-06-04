@@ -170,6 +170,10 @@ export default class Catalyst extends API {
     return this.fetch('/content/status')
   }
 
+  async getContentUrl(hash: string) {
+    return this.url(`/content/contents/${hash}`)
+  }
+
   async getEntityScenes(
     pointers: (string | [number, number])[]
   ): Promise<EntityScene[]> {
