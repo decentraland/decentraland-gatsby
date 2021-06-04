@@ -1,15 +1,22 @@
-import { useEffect, useState } from "react"
-import { ChainId } from "@dcl/schemas"
-import Time from "../utils/date/Time"
-import { clearTransactions, restoreTransactions, storeTransactions } from "../utils/tx/storage"
-import { Transaction } from "../utils/tx/type"
+import { useEffect, useState } from 'react'
+import { ChainId } from '@dcl/schemas'
+import Time from '../utils/date/Time'
+import {
+  clearTransactions,
+  restoreTransactions,
+  storeTransactions,
+} from '../utils/tx/storage'
+import { Transaction } from '../utils/tx/type'
 import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { getTransaction } from 'decentraland-dapps/dist/modules/transaction/txUtils'
 
 type TransactionState = Transaction<any>[] | null
 
-export default function useTransaction(address?: string | null, chainId?: ChainId | null) {
-  const [ transactions, setTransactions ] = useState<TransactionState>(null)
+export default function useTransaction(
+  address?: string | null,
+  chainId?: ChainId | null
+) {
+  const [transactions, setTransactions] = useState<TransactionState>(null)
 
   // re-store tranasctions
   useEffect(() => {
@@ -18,7 +25,7 @@ export default function useTransaction(address?: string | null, chainId?: ChainI
     } else {
       setTransactions(restoreTransactions(address, chainId))
     }
-  }, [ address ])
+  }, [address])
 
   // track transactions
   useEffect(() => {
@@ -26,7 +33,7 @@ export default function useTransaction(address?: string | null, chainId?: ChainI
     let timer: number | null = null
 
     async function updateTransactions() {
-      if(!address || !chainId) {
+      if (!address || !chainId) {
         return
       }
 
@@ -34,18 +41,22 @@ export default function useTransaction(address?: string | null, chainId?: ChainI
       const updatedTransactions: Transaction[] = []
       for (const tx of txs) {
         if (isPending(tx.status)) {
-          const updatedTransaction = await getTransaction(address, tx.chainId, tx.hash)
+          const updatedTransaction = await getTransaction(
+            address,
+            tx.chainId,
+            tx.hash
+          )
           if (updatedTransaction) {
-            const hasChanges = Object.keys(updatedTransaction)
-              .some(key => (
+            const hasChanges = Object.keys(updatedTransaction).some(
+              (key) =>
                 tx[key] !== updatedTransaction[key] &&
                 String(tx[key]) !== String(updatedTransaction[key])
-              ))
+            )
 
             if (hasChanges) {
               updatedTransactions.push({
                 ...tx,
-                ...updatedTransaction
+                ...updatedTransaction,
               })
             }
           }
@@ -57,7 +68,7 @@ export default function useTransaction(address?: string | null, chainId?: ChainI
         setTransactions(txs)
       }
 
-      const pendingTransactions = txs.filter(tx => isPending(tx.status))
+      const pendingTransactions = txs.filter((tx) => isPending(tx.status))
       if (pendingTransactions.length > 0 && !closed) {
         timer = setTimeout(updateTransactions, Time.Second * 2) as any
       }
@@ -71,10 +82,10 @@ export default function useTransaction(address?: string | null, chainId?: ChainI
         clearTimeout(timer)
       }
     }
-  }, [ transactions ])
+  }, [transactions])
 
   function add(hash: string, payload: Record<string, any> = {}) {
-    if(address && chainId) {
+    if (address && chainId) {
       getTransaction(address, chainId, hash)
         .then((tx) => {
           if (!tx) {
@@ -88,7 +99,7 @@ export default function useTransaction(address?: string | null, chainId?: ChainI
             payload,
           }
 
-          const txs = storeTransactions(address, chainId, [ newTransaction ])
+          const txs = storeTransactions(address, chainId, [newTransaction])
           setTransactions(txs)
         })
         .catch((err) => console.error(err))
@@ -104,5 +115,5 @@ export default function useTransaction(address?: string | null, chainId?: ChainI
     clearTransactions(address, chainId)
   }
 
-  return [ transactions, { add, clear } ] as const
+  return [transactions, { add, clear }] as const
 }

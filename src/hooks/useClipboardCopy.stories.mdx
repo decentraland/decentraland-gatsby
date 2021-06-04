@@ -1,93 +1,126 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Source, ArgsTable } from '@storybook/components';
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
-import { Button } from 'decentraland-ui/dist/components/Button/Button';
+import { Source, ArgsTable } from '@storybook/components'
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { randomHexadecimal } from '../utils/string/random'
-import { Args } from '../components/Storybook/utils';
-import Container from '../components/Storybook/Container';
-import Divider from '../components/Text/Divider';
-import { Time } from '../components/Date/utils';
-import useClipboardCopy from './useClipboardCopy';
+import { Args } from '../components/Storybook/utils'
+import Container from '../components/Storybook/Container'
+import Divider from '../components/Text/Divider'
+import { Time } from '../components/Date/utils'
+import useClipboardCopy from './useClipboardCopy'
 
 <Meta title="Hooks/useClipboardCopy" />
 
 # Clipboard Copy Hook
 
-> The *clipboard copy hook* allows to copy an arbitrary string to the user clipboards.
+> The _clipboard copy hook_ allows to copy an arbitrary string to the user clipboards.
 
 ```ts
-const [ value, clipboard ] = useClipboardCopy(timeout)
+const [value, clipboard] = useClipboardCopy(timeout)
 ```
 
-<ArgsTable rows={[
-  Args.param('timeout', 'time, in milliseconds, when the value will be reset to `null`', 'number'),
-  Args.returns('value', 'latest value copied using `clipboard.copy`', `boolean | number | string | null`),
-  Args.returns('clipboard.copy', 'send value to the user clipboard', `(value: boolean | number | string) => void`),
-  Args.returns('clipboard.clear', 'reset clipboard value to `null`', `() => void`),
-]} />
+<ArgsTable
+  rows={[
+    Args.param(
+      'timeout',
+      'time, in milliseconds, when the value will be reset to `null`',
+      'number'
+    ),
+    Args.returns(
+      'value',
+      'latest value copied using `clipboard.copy`',
+      `boolean | number | string | null`
+    ),
+    Args.returns(
+      'clipboard.copy',
+      'send value to the user clipboard',
+      `(value: boolean | number | string) => void`
+    ),
+    Args.returns(
+      'clipboard.clear',
+      'reset clipboard value to `null`',
+      `() => void`
+    ),
+  ]}
+/>
 
 ## Preview without clipboard
 
 export const WithoutTimeout = () => {
-  const [ value, clipboard ] = useClipboardCopy()
-  return <Container>
-    <Button primary size="small" onClick={() => clipboard.copy(randomHexadecimal(24))}>
-      copy a random
-    </Button>
-    <Button primary size="small" onClick={() => clipboard.clear()}>
-      clear
-    </Button>
-    <Source language="json" code={JSON.stringify(value, null, 2)} />
-  </Container>
+  const [value, clipboard] = useClipboardCopy()
+  return (
+    <Container>
+      <Button
+        primary
+        size="small"
+        onClick={() => clipboard.copy(randomHexadecimal(24))}
+      >
+        copy a random
+      </Button>
+      <Button primary size="small" onClick={() => clipboard.clear()}>
+        clear
+      </Button>
+      <Source language="json" code={JSON.stringify(value, null, 2)} />
+    </Container>
+  )
 }
 
 <WithoutTimeout />
 
 ```tsx dark=true
-import React from "react"
+import React from 'react'
 import { randomHexadecimal } from 'decentraland-gatsby/dist/utils/string/random'
 
-export function Example () {
-  const [ value, clipboard ] = useClipboardCopy()
+export function Example() {
+  const [value, clipboard] = useClipboardCopy()
 
-  return <div>
-    <button onClick={() => clipboard.copy(randomHexadecimal())}>copy a random</button>
-    <button onClick={() => clipboard.clear()}>clear</button>
-    <pre>{JSON.stringify(value, null, 2)}</pre>
-  </div>
+  return (
+    <div>
+      <button onClick={() => clipboard.copy(randomHexadecimal())}>
+        copy a random
+      </button>
+      <button onClick={() => clipboard.clear()}>clear</button>
+      <pre>{JSON.stringify(value, null, 2)}</pre>
+    </div>
+  )
 }
-
 ```
 
 ## Preview with clipboard
 
 export const WithTimeout = () => {
-  const [ value, clipboard ] = useClipboardCopy(Time.Second)
-  return <Container>
-    <Button primary size="small" onClick={() => clipboard.copy(randomHexadecimal(24))}>
-      copy random with timeout
-    </Button>
-    <Source language="json" code={JSON.stringify(value, null, 2)} />
-  </Container>
+  const [value, clipboard] = useClipboardCopy(Time.Second)
+  return (
+    <Container>
+      <Button
+        primary
+        size="small"
+        onClick={() => clipboard.copy(randomHexadecimal(24))}
+      >
+        copy random with timeout
+      </Button>
+      <Source language="json" code={JSON.stringify(value, null, 2)} />
+    </Container>
+  )
 }
 
 <WithTimeout />
 
-
 ```tsx dark=true
-import React from "react"
+import React from 'react'
 import Time from 'decentraland-gatsby/dist/utils/date/Time'
 import { randomHexadecimal } from 'decentraland-gatsby/dist/utils/string/random'
 
-export function Example () {
-  const [ value, clipboard ] = useClipboardCopy(3 * Time.Second)
+export function Example() {
+  const [value, clipboard] = useClipboardCopy(3 * Time.Second)
 
-  return <div>
-    <button onClick={() => clipboard.copy(randomHexadecimal())}>
-      copy random with timeout
-    </button>
-    <pre>{JSON.stringify(value, null, 2)}</pre>
-  </div>
+  return (
+    <div>
+      <button onClick={() => clipboard.copy(randomHexadecimal())}>
+        copy random with timeout
+      </button>
+      <pre>{JSON.stringify(value, null, 2)}</pre>
+    </div>
+  )
 }
-
 ```

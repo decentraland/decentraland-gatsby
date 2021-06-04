@@ -1,6 +1,6 @@
 export type Snapshot = {
-  face: string,
-  body: string,
+  face: string
+  body: string
 }
 
 export type BodyColor = {
@@ -13,7 +13,7 @@ export type BodyColor = {
 }
 
 export type Avatar = {
-  userId: string,
+  userId: string
   email: string | null | undefined
   name: string | null | undefined
   hasClaimedName: boolean
@@ -21,16 +21,16 @@ export type Avatar = {
   ethAddress: string
   version: number
   avatar: {
-    bodyShape: string,
-    snapshots: Snapshot,
-    eyes: BodyColor,
-    hair: BodyColor,
-    skin: BodyColor,
-    wearables: string[],
+    bodyShape: string
+    snapshots: Snapshot
+    eyes: BodyColor
+    hair: BodyColor
+    skin: BodyColor
+    wearables: string[]
     version: number
-  },
-  inventory: string[],
-  blocked: string[],
+  }
+  inventory: string[]
+  blocked: string[]
   tutorialStep: number
 }
 
@@ -39,7 +39,7 @@ export type ProfileResponse = {
 }
 
 export type Layer = {
-  name: string,
+  name: string
   usersCount: number
   maxUsers: number
 }
@@ -48,13 +48,13 @@ export type Status = CommsStatus
 export type StatusWithLayers = CommsStatusWithLayers
 
 export type CommsStatus = {
-  name: string,
-  version: string,
-  currenTime: number,
+  name: string
+  version: string
+  currenTime: number
   env: {
-    secure: boolean,
+    secure: boolean
     commitHash: string
-  },
+  }
   ready: boolean
 }
 
@@ -63,98 +63,105 @@ export type CommsStatusWithLayers = CommsStatus & {
 }
 
 export type LambdasStatus = {
-  version: string,
-  currentTime: number,
-  contentServerUrl: string,
+  version: string
+  currentTime: number
+  contentServerUrl: string
   commitHash: string
 }
 
 export type ContentStatus = {
-  name: string,
-  version: string,
-  currentTime: number,
-  lastImmutableTime: number,
-  historySize: number,
+  name: string
+  version: string
+  currentTime: number
+  lastImmutableTime: number
+  historySize: number
   synchronizationStatus: {
     otherServers: {
-      address: string,
-      connectionState: "Connected" | "Connection lost" | "Could never be reached",
+      address: string
+      connectionState:
+        | 'Connected'
+        | 'Connection lost'
+        | 'Could never be reached'
       lastDeploymentTimestamp: number
-    }[],
-    lastSyncWithDAO: number,
-    synchronizationState: "Bootstrapping" | "Syncing" | "Synced" | "Failed to sync",
+    }[]
+    lastSyncWithDAO: number
+    synchronizationState:
+      | 'Bootstrapping'
+      | 'Syncing'
+      | 'Synced'
+      | 'Failed to sync'
     lastSyncWithOtherServers: number
-  },
-  commitHash: string,
+  }
+  commitHash: string
   ethNetwork: string
 }
 
 export type Position = [number, number]
 export type Position3D = {
-  x: number,
-  y: number,
-  z: number,
+  x: number
+  y: number
+  z: number
 }
 
 export type Servers = {
-  address: string,
-  owner: string,
+  address: string
+  owner: string
   id: string
 }
 
 export type LayerUser = {
-  id: string,
-  userId: string,
-  protocolVersion: number,
-  peerId: string,
-  parcel: [number, number],
-  position: [number, number, number],
-  lastPing: number,
+  id: string
+  userId: string
+  protocolVersion: number
+  peerId: string
+  parcel: [number, number]
+  position: [number, number, number]
+  lastPing: number
   address: string
 }
 
 export type EntityScene = {
-  id: string,
-  type: "scene",
-  timestamp: number,
-  pointers: string[],
+  id: string
+  type: 'scene'
+  timestamp: number
+  pointers: string[]
   content: {
-    file: string,
+    file: string
     hash: string
-  }[],
+  }[]
   metadata: {
     display: {
-      title: string | "interactive-text",
-      description?: string,
-      navmapThumbnail?: string,
-      favicon: "favicon_asset"
-    },
+      title: string | 'interactive-text'
+      description?: string
+      navmapThumbnail?: string
+      favicon: 'favicon_asset'
+    }
     contact: {
-      name: string,
+      name: string
       email: string
-    },
-    owner: string,
+    }
+    owner: string
     scene: {
-      parcels: string[],
+      parcels: string[]
       base: string
-    },
+    }
     communications: {
-      type: "webrtc",
+      type: 'webrtc'
       signalling: string
-    },
+    }
     policy: {
-      contentRating: "E" | "T" | "M",
-      fly: boolean,
-      voiceEnabled: boolean,
+      contentRating: 'E' | 'T' | 'M'
+      fly: boolean
+      voiceEnabled: boolean
       blacklist: []
-    },
-    main: string,
-    tags: string[],
+    }
+    main: string
+    tags: string[]
     spawnPoints: [
       {
-        name: "spawn1",
-        default: boolean,
-        position: Position3D,
+        name: 'spawn1'
+        default: boolean
+        position: Position3D
         cameraTarget: Position3D
       }
     ]

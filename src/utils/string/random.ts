@@ -1,21 +1,25 @@
 import randomNumber from '../number/random'
 
 export function randomFrom(raw: string, len: number = 1) {
-  return Array
-    .from(Array(len), () => raw[randomNumber(raw.length)])
-    .join('')
+  return Array.from(Array(len), () => raw[randomNumber(raw.length)]).join('')
 }
 
 export function randomPassword(len: number = 1) {
-  return randomFrom("abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()_+-=\|[]{};:,./<>?", len)
+  return randomFrom(
+    'abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()_+-=|[]{};:,./<>?',
+    len
+  )
 }
 
 export function randomCapitalAlphanumeric(len: number = 1) {
-  return randomFrom("abcdefghijkmnopqrstuvwxyzABCDEFGHIJKMNOPQRSTUVWXYZ0123456789", len)
+  return randomFrom(
+    'abcdefghijkmnopqrstuvwxyzABCDEFGHIJKMNOPQRSTUVWXYZ0123456789',
+    len
+  )
 }
 
 export function randomAlphanumeric(len: number = 1) {
-  return randomFrom("abcdefghijkmnopqrstuvwxyz0123456789", len)
+  return randomFrom('abcdefghijkmnopqrstuvwxyz0123456789', len)
 }
 
 export function randomHexadecimal(len: number = 1) {

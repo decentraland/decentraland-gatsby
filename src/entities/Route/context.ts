@@ -1,34 +1,44 @@
-import { Request, Response } from "express";
-import RequestError from "./error";
+import { Request, Response } from 'express'
+import RequestError from './error'
 
 export type ParamOptions<T> = {
-  validator?: (value: any) => boolean,
+  validator?: (value: any) => boolean
   parser?: (value: any) => T | null
   required?: boolean
   defaultValue?: T
 }
 
 export default class Context {
-  constructor(public readonly req: Request, public readonly res: Response) { }
+  constructor(public readonly req: Request, public readonly res: Response) {}
 
   header(name: string, defaultValue: string | undefined = undefined) {
-    return this.req.header(name) ?? defaultValue;
+    return this.req.header(name) ?? defaultValue
   }
 
-  value<T = string>(name: string, value: any, options: ParamOptions<T> = {}): T | null {
+  value<T = string>(
+    name: string,
+    value: any,
+    options: ParamOptions<T> = {}
+  ): T | null {
     if (value === undefined || value === null) {
       if (options.required) {
-        throw new RequestError(`Param ${name} is required`, RequestError.BadRequest);
+        throw new RequestError(
+          `Param ${name} is required`,
+          RequestError.BadRequest
+        )
       }
 
       return null
     }
 
-    let finalValue: T = options.parser ? options.parser(value) : value as any
+    let finalValue: T = options.parser ? options.parser(value) : (value as any)
 
     if (options.validator && !options.validator(finalValue)) {
       if (options.required) {
-        throw new RequestError(`Invalid param ${name}: "${value}"`, RequestError.BadRequest);
+        throw new RequestError(
+          `Invalid param ${name}: "${value}"`,
+          RequestError.BadRequest
+        )
       }
 
       return null
@@ -38,7 +48,8 @@ export default class Context {
   }
 
   param<T = string>(name: string, options: ParamOptions<T> = {}): T | null {
-    let value =  this.req.params[name] ?? this.req.body[name] ?? this.req.query[name];
+    let value =
+      this.req.params[name] ?? this.req.body[name] ?? this.req.query[name]
     return this.value(name, value, options)
   }
 
@@ -46,7 +57,10 @@ export default class Context {
     return this.value(name, this.req.params[name], options)
   }
 
-  searchParam<T = string>(name: string, options: ParamOptions<T> = {}): T | null {
+  searchParam<T = string>(
+    name: string,
+    options: ParamOptions<T> = {}
+  ): T | null {
     return this.value(name, this.req.query[name], options)
   }
 

@@ -1,22 +1,22 @@
-import { Router, RouterOptions } from "express"
+import { Router, RouterOptions } from 'express'
 
 export type RouterHandler = (router: Router) => void
 export type RoutesOptions = RouterOptions
 
 export type DDosOptions = {
-  limit: number,
-  maxcount: number,
-  burst: number,
-  maxexpiry: number,
-  checkinterval: number,
-  responseStatus: number,
+  limit: number
+  maxcount: number
+  burst: number
+  maxexpiry: number
+  checkinterval: number
+  responseStatus: number
 }
 
 export type CorsOptions = {
-  cors?: 'public' | '*' | 'default' | 'same-origin' | false,
-  corsOrigin?: boolean | string | RegExp | (string | RegExp)[];
-  allowedHeaders?: string | string[];
-  exposedHeaders?: string | string[];
+  cors?: 'public' | '*' | 'default' | 'same-origin' | false
+  corsOrigin?: boolean | string | RegExp | (string | RegExp)[]
+  allowedHeaders?: string | string[]
+  exposedHeaders?: string | string[]
 }
 
 export type BodyParserOptions = {
@@ -76,10 +76,7 @@ export const defaultOrigin = [
   /https:\/\/([a-zA-Z0-9\-_]+\.)*manaland\.cn/,
 ]
 
-export const defaultAllowedHeaders = [
-  'Content-Type',
-  'Authorization'
-]
+export const defaultAllowedHeaders = ['Content-Type', 'Authorization']
 
 export const defaultExposedHeaders = [
   'ETag',
@@ -88,5 +85,5 @@ export const defaultExposedHeaders = [
   'Content-Type',
   'Expires',
   'Last-Modified',
-  'Pragma'
+  'Pragma',
 ]

@@ -1,7 +1,7 @@
-import React from "react"
-import TokenList from "../../utils/dom/TokenList"
+import React from 'react'
+import TokenList from '../../utils/dom/TokenList'
 
-import "./Background.css"
+import './Background.css'
 
 export type BackgroundProps = React.Props<HTMLDivElement> &
   React.HTMLProps<HTMLDivElement> & {
@@ -12,7 +12,7 @@ export default function Background({ src, ...props }: BackgroundProps) {
   return (
     <div
       {...props}
-      className={TokenList.join(["Background", props.className])}
+      className={TokenList.join(['Background', props.className])}
       style={{
         ...props.style,
         backgroundImage: `url("${src}")`,

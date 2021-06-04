@@ -1,5 +1,5 @@
-import {useMemo} from 'react'
-import { useIntl } from "gatsby-plugin-intl"
+import { useMemo } from 'react'
+import { useIntl } from 'gatsby-plugin-intl'
 import { createFormatMessage } from '../utils/react/intl'
 
 export default function useFormatMessage() {

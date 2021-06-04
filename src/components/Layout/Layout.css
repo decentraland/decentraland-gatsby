@@ -15,7 +15,8 @@
   color: var(--text);
 }
 
-.dcl.navbar .ui.menu .item[href="https://avatars.decentraland.org"] {
+.dcl.navbar .ui.menu .item[href="https://avatars.decentraland.org"]
+{
   display: none;
 }
 

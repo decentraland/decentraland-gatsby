@@ -3,7 +3,7 @@ import { createHash } from 'crypto'
 import { readFile } from 'fs'
 import { promisify } from 'util'
 import { extname } from 'path'
-import handle from '../handle';
+import handle from '../handle'
 
 export default function file(path: string, status: number = 200) {
   let reader: Promise<readonly [Buffer, string]> | null = null
@@ -31,7 +31,10 @@ export default function file(path: string, status: number = 200) {
 const files = new Map<string, Promise<Buffer>>()
 export async function readOnce(path: string) {
   if (!files.has(path)) {
-    files.set(path, promisify(readFile)(path).catch(() => Buffer.alloc(0)))
+    files.set(
+      path,
+      promisify(readFile)(path).catch(() => Buffer.alloc(0))
+    )
   }
 
   return files.get(path)!

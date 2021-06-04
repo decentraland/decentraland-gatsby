@@ -1,6 +1,6 @@
-import React, { createContext } from "react"
+import React, { createContext } from 'react'
 import useAuth from '../../hooks/useAuth'
-import useTransaction from "../../hooks/useTransaction"
+import useTransaction from '../../hooks/useTransaction'
 
 const defaultAuthState: ReturnType<typeof useAuth> = [
   null,
@@ -12,26 +12,30 @@ const defaultAuthState: ReturnType<typeof useAuth> = [
     provider: null,
     select: () => {},
     connect: () => {},
-    disconnect: () => {}
-  }
+    disconnect: () => {},
+  },
 ]
 
 const defaultTransactionState: ReturnType<typeof useTransaction> = [
   null,
   {
     add: () => {},
-    clear: () => {}
-  }
+    clear: () => {},
+  },
 ]
 
 export const AuthContext = createContext(defaultAuthState)
 export const TransactionContext = createContext(defaultTransactionState)
-export default React.memo(function AuthProvider(props: React.PropsWithChildren<{}>) {
+export default React.memo(function AuthProvider(
+  props: React.PropsWithChildren<{}>
+) {
   const auth = useAuth()
   const transactions = useTransaction(auth[0], auth[1].chainId)
-  return <AuthContext.Provider value={auth}>
-    <TransactionContext.Provider value={transactions}>
-      {props.children}
-    </TransactionContext.Provider>
-  </AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={auth}>
+      <TransactionContext.Provider value={transactions}>
+        {props.children}
+      </TransactionContext.Provider>
+    </AuthContext.Provider>
+  )
 })

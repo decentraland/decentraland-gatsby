@@ -1,18 +1,18 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Source, ArgsTable } from '@storybook/components';
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
-import { ProviderType } from "decentraland-connect/dist/types"
-import { Button } from 'decentraland-ui/dist/components/Button/Button';
-import AuthProvider from './AuthProvider';
-import { Args } from '../../components/Storybook/utils';
-import Container from '../../components/Storybook/Container';
-import useAuthContext from './useAuthContext';
+import { Source, ArgsTable } from '@storybook/components'
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks'
+import { ProviderType } from 'decentraland-connect/dist/types'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import AuthProvider from './AuthProvider'
+import { Args } from '../../components/Storybook/utils'
+import Container from '../../components/Storybook/Container'
+import useAuthContext from './useAuthContext'
 
 <Meta title="Context/Auth/useAuthContext" />
 
 # Auth Hook (Context)
 
-> The *auth hook context* use the AuthProvider to provider a single instance of [`useAuth`](/?path=/story/hooks-useauth--page)
+> The _auth hook context_ use the AuthProvider to provider a single instance of [`useAuth`](/?path=/story/hooks-useauth--page)
 
 In order to use this hook you must include an `AuthProvider` in your `gatsby-browser.js`
 
@@ -32,22 +32,39 @@ After that you can use this hook in your components
 ```tsx dark=true
 // componenet.jsx
 import React from 'react'
-import { ProviderType, ChainId } from "decentraland-connect/dist/types"
+import { ProviderType, ChainId } from 'decentraland-connect/dist/types'
 
 export default function Component() {
-  const [ address, state ] = useAuthContext()
-  const connectInjected = () => state.connect(ProviderType.INJECTED, ChainId.ETHEREUM_MAINNET)
-  const connectFortmatic = () => state.connect(ProviderType.FORTMATIC, ChainId.ETHEREUM_MAINNET)
+  const [address, state] = useAuthContext()
+  const connectInjected = () =>
+    state.connect(ProviderType.INJECTED, ChainId.ETHEREUM_MAINNET)
+  const connectFortmatic = () =>
+    state.connect(ProviderType.FORTMATIC, ChainId.ETHEREUM_MAINNET)
   const disconnect = () => state.disconnect()
 
-  return <div>
-    <button disabled={!!account} loading={state.loading} onClick={connectInjected}>connect injected</button>
-    <button disabled={!!account} loading={state.loading} onClick={connectFortmatic}>connect fortmatic</button>
-    <button disabled={!account} loading={state.loading} onClick={disconnect}>disconnect</button>
-    <pre>{JSON.stringify(account, null, 2)}</pre>
-  </div>
+  return (
+    <div>
+      <button
+        disabled={!!account}
+        loading={state.loading}
+        onClick={connectInjected}
+      >
+        connect injected
+      </button>
+      <button
+        disabled={!!account}
+        loading={state.loading}
+        onClick={connectFortmatic}
+      >
+        connect fortmatic
+      </button>
+      <button disabled={!account} loading={state.loading} onClick={disconnect}>
+        disconnect
+      </button>
+      <pre>{JSON.stringify(account, null, 2)}</pre>
+    </div>
+  )
 }
-
 ```
 
 Read the [full documentation](/?path=/story/hooks-useauth--page)

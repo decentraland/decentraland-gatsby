@@ -1,40 +1,45 @@
 export type TemplateContent = {
   Body: {
     Html: {
-      Charset: string,
-      Data: string
-    },
-    Text: {
-      Charset: string,
+      Charset: string
       Data: string
     }
-  },
+    Text: {
+      Charset: string
+      Data: string
+    }
+  }
   Subject: {
-    Charset: string,
+    Charset: string
     Data: string
   }
 }
 
 export type TemplateProps = {
-  name?: string,
-  subject?: string,
-  text?: string,
+  name?: string
+  subject?: string
+  text?: string
 }
 
 export type Template = {
-  TemplateName: string,
-  SubjectPart: string,
-  HtmlPart: string,
-  TextPart: string,
+  TemplateName: string
+  SubjectPart: string
+  HtmlPart: string
+  TextPart: string
 }
 
-export type SendOptions<T extends string = string, R extends Record<string, string> = Record<string, string>> = {
-  destinations: (string | Destination<R>)[],
-  template: T,
+export type SendOptions<
+  T extends string = string,
+  R extends Record<string, string> = Record<string, string>
+> = {
+  destinations: (string | Destination<R>)[]
+  template: T
   defaultReplacement?: R
 }
 
-export type Destination<R extends Record<string, string> = Record<string, string>> = {
-  email: string,
+export type Destination<
+  R extends Record<string, string> = Record<string, string>
+> = {
+  email: string
   replacement: R
 }

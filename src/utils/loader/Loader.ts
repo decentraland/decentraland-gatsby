@@ -1,5 +1,4 @@
 export default class Loader<V, K = string | number> {
-
   cache: Map<K, Promise<V>> = new Map()
   data: Map<K, V> = new Map()
   readonly handle: (key: K) => Promise<V>
@@ -10,11 +9,11 @@ export default class Loader<V, K = string | number> {
 
   private async _handle(key: K): Promise<V> {
     return this.handle(key)
-      .then(result => {
+      .then((result) => {
         this.data.set(key, result)
         return result
       })
-      .catch(err => {
+      .catch((err) => {
         this.cache.delete(key)
         throw err
       })

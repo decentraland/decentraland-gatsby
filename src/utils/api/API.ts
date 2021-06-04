@@ -59,12 +59,15 @@ export default class API {
     return '?' + queryString
   }
 
-  async fetch<T extends object>(path: string, options: Options = new Options({})): Promise<T> {
-    let res: Response;
-    let body: string = '';
-    let json: T = null as any;
-    const url = this.url(path);
-    const opt = this.defaultOptions.merge(options);
+  async fetch<T extends object>(
+    path: string,
+    options: Options = new Options({})
+  ): Promise<T> {
+    let res: Response
+    let body: string = ''
+    let json: T = null as any
+    const url = this.url(path)
+    const opt = this.defaultOptions.merge(options)
 
     try {
       res = await fetch(url, opt.toObject())

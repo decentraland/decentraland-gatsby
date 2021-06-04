@@ -1,14 +1,21 @@
-import { ChainId, fetchEstateBalance } from "../utils/loader/estateBalance";
-import useAsyncMemo from "./useAsyncMemo";
+import { ChainId, fetchEstateBalance } from '../utils/loader/estateBalance'
+import useAsyncMemo from './useAsyncMemo'
 
-export default function useEstateBalance(account?: string | null, chainId?: ChainId | null) {
-  const [ [estates, lands], state ] = useAsyncMemo(async () => {
-    if (!account || !chainId) {
-      return [0, 0] as [number, number]
-    }
+export default function useEstateBalance(
+  account?: string | null,
+  chainId?: ChainId | null
+) {
+  const [[estates, lands], state] = useAsyncMemo(
+    async () => {
+      if (!account || !chainId) {
+        return [0, 0] as [number, number]
+      }
 
-    return fetchEstateBalance(account, chainId)
-  }, [ account, chainId ], { initialValue: [0, 0] as [number, number] })
+      return fetchEstateBalance(account, chainId)
+    },
+    [account, chainId],
+    { initialValue: [0, 0] as [number, number] }
+  )
 
-  return [ estates, lands, state ] as const
+  return [estates, lands, state] as const
 }

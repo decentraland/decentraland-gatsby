@@ -1,5 +1,4 @@
 export default class RequestError extends Error {
-
   static BadRequest = 400
   static Unauthorized = 401
   static Forbidden = 403
@@ -28,7 +27,11 @@ export default class RequestError extends Error {
     return result
   }
 
-  constructor(message: string, public statusCode: number = RequestError.InternalServerError, public data?: any) {
+  constructor(
+    message: string,
+    public statusCode: number = RequestError.InternalServerError,
+    public data?: any
+  ) {
     super(message)
   }
 }

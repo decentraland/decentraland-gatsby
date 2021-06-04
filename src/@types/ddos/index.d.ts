@@ -1,1 +1,1 @@
-declare module 'ddos';
+declare module 'ddos'

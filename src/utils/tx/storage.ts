@@ -1,24 +1,23 @@
-import type { ChainId } from '@dcl/schemas';
-import { PersistedKeys } from '../loader';
-import { Transaction } from './type';
+import type { ChainId } from '@dcl/schemas'
+import { PersistedKeys } from '../loader'
+import { Transaction } from './type'
 
 const transactions = new Map<string, Transaction[]>()
 
 function getKey(address: string, chainId: ChainId) {
-  return [
-    PersistedKeys.Transactions,
-    address,
-    chainId
-  ].join('.')
+  return [PersistedKeys.Transactions, address, chainId].join('.')
 }
 
-function injectTransaction(transaction: Transaction, transactions: Transaction[] = []): Transaction[] {
+function injectTransaction(
+  transaction: Transaction,
+  transactions: Transaction[] = []
+): Transaction[] {
   if (transactions.length === 0) {
-    return [ transaction ]
+    return [transaction]
   }
 
   let replaced = false
-  transactions = transactions.map(tx => {
+  transactions = transactions.map((tx) => {
     if (tx.hash === transaction.hash) {
       replaced = true
       return transaction
@@ -27,16 +26,19 @@ function injectTransaction(transaction: Transaction, transactions: Transaction[]
     return tx
   })
 
-  return replaced ? transactions : [
-    transaction,
-    ...transactions
-  ]
+  return replaced ? transactions : [transaction, ...transactions]
 }
 
-export function storeTransactions(address: string, chainId: ChainId, txs: Transaction[]) {
+export function storeTransactions(
+  address: string,
+  chainId: ChainId,
+  txs: Transaction[]
+) {
   const key = getKey(address, chainId)
   let memoryTransasctions: Transaction[] = transactions.get(key) || []
-  let storageTransactions: Transaction[] = JSON.parse(localStorage.getItem(key) || '[]')
+  let storageTransactions: Transaction[] = JSON.parse(
+    localStorage.getItem(key) || '[]'
+  )
   for (const tx of txs) {
     if (tx.chainId === chainId) {
       memoryTransasctions = injectTransaction(tx, memoryTransasctions)
@@ -50,7 +52,10 @@ export function storeTransactions(address: string, chainId: ChainId, txs: Transa
   return memoryTransasctions
 }
 
-export function restoreTransactions(address: string, chainId: ChainId): Transaction[] {
+export function restoreTransactions(
+  address: string,
+  chainId: ChainId
+): Transaction[] {
   const key = getKey(address, chainId)
   if (!transactions.has(key)) {
     const storedTransactions = JSON.parse(localStorage.getItem(key) || '[]')

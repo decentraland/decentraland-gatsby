@@ -2,74 +2,142 @@ import { useState, useMemo, useEffect } from 'react'
 import { Address } from 'web3x/address'
 import { Personal } from 'web3x/personal'
 import { LegacyProviderAdapter } from 'web3x/providers'
-import { Source, ArgsTable } from '@storybook/components';
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
-import { ChainId } from "@dcl/schemas"
-import { ProviderType } from "decentraland-connect/dist/types"
-import Grid from "semantic-ui-react/dist/commonjs/collections/Grid/Grid"
-import { Button } from 'decentraland-ui/dist/components/Button/Button';
-import { SelectField } from 'decentraland-ui/dist/components/SelectField/SelectField';
-import { Args } from '../components/Storybook/utils';
-import Container from '../components/Storybook/Container';
-import toObject from '../utils/errors/toObject';
-import random from '../utils/number/random';
-import delay from '../utils/promise/delay';
-import useAsyncMemo from './useAsyncMemo';
+import { Source, ArgsTable } from '@storybook/components'
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks'
+import { ChainId } from '@dcl/schemas'
+import { ProviderType } from 'decentraland-connect/dist/types'
+import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { SelectField } from 'decentraland-ui/dist/components/SelectField/SelectField'
+import { Args } from '../components/Storybook/utils'
+import Container from '../components/Storybook/Container'
+import toObject from '../utils/errors/toObject'
+import random from '../utils/number/random'
+import delay from '../utils/promise/delay'
+import useAsyncMemo from './useAsyncMemo'
 
 <Meta title="Hooks/useAsyncMemo" />
 
 # Async memo
 
-> The *async memo* allows to resolve and async function and stores its result in the component livecycle.
+> The _async memo_ allows to resolve and async function and stores its result in the component livecycle.
 
 ```ts
-const [ value, state ] = useAsyncMemo(resolver, deps, options)
+const [value, state] = useAsyncMemo(resolver, deps, options)
 ```
 
-<ArgsTable rows={[
-  Args.param('resolver', 'async resolver', `() => Promise<T>`),
-  Args.param('deps', 'dependencies', `React.DependencyList`),
-  Args.param('options.initialValue', 'initail value', `any`),
-  Args.param('options.callWithTruthyDeps', 'if `true` resolver will be call only when all the dependencies are evaluated as `true`', `boolean`),
-  Args.returns('value', 'value returned by the resolver', `T || options.initialValue || null`),
-  Args.returns('state.loading', '`true` when is waiting to be resolved', `boolean`),
-  Args.returns('state.version', '`true` when is waiting to be resolved', `boolean`),
-  Args.returns('state.time', 'the time (in milliseconds) that takes to call the resolver', `number`),
-  Args.returns('state.error', 'contains the error for the latest resolver call', `Error | null`),
-  Args.returns('state.reload', 're-execute the call to the resolver', `() => void`),
-  Args.returns('state.set', 'set an arbitrary value', `(value: T) => void`),
-]} />
+<ArgsTable
+  rows={[
+    Args.param('resolver', 'async resolver', `() => Promise<T>`),
+    Args.param('deps', 'dependencies', `React.DependencyList`),
+    Args.param('options.initialValue', 'initail value', `any`),
+    Args.param(
+      'options.callWithTruthyDeps',
+      'if `true` resolver will be call only when all the dependencies are evaluated as `true`',
+      `boolean`
+    ),
+    Args.returns(
+      'value',
+      'value returned by the resolver',
+      `T || options.initialValue || null`
+    ),
+    Args.returns(
+      'state.loading',
+      '`true` when is waiting to be resolved',
+      `boolean`
+    ),
+    Args.returns(
+      'state.version',
+      '`true` when is waiting to be resolved',
+      `boolean`
+    ),
+    Args.returns(
+      'state.time',
+      'the time (in milliseconds) that takes to call the resolver',
+      `number`
+    ),
+    Args.returns(
+      'state.error',
+      'contains the error for the latest resolver call',
+      `Error | null`
+    ),
+    Args.returns(
+      'state.reload',
+      're-execute the call to the resolver',
+      `() => void`
+    ),
+    Args.returns('state.set', 'set an arbitrary value', `(value: T) => void`),
+  ]}
+/>
 
 ## Preview
 
 export const Example = () => {
-  const [ value, state ] = useAsyncMemo(() => fetch('https://httpbin.org/get').then(r => r.json()), [], {})
-  return <Container>
-    <Button primary small onClick={() => state.reload()}>reload</Button>
-    <Button primary small onClick={() => state.set(random(1000, 9999))}>set random</Button>
-    <Source language="ts" code={'// value \n\n' + JSON.stringify(value, null, 2)} />
-    <Source language="ts" code={'// state \n\n' +JSON.stringify({ ...state, error: toObject(state.error) }, null, 2)} />
-  </Container>
+  const [value, state] = useAsyncMemo(
+    () => fetch('https://httpbin.org/get').then((r) => r.json()),
+    [],
+    {}
+  )
+  return (
+    <Container>
+      <Button primary small onClick={() => state.reload()}>
+        reload
+      </Button>
+      <Button primary small onClick={() => state.set(random(1000, 9999))}>
+        set random
+      </Button>
+      <Source
+        language="ts"
+        code={'// value \n\n' + JSON.stringify(value, null, 2)}
+      />
+      <Source
+        language="ts"
+        code={
+          '// state \n\n' +
+          JSON.stringify({ ...state, error: toObject(state.error) }, null, 2)
+        }
+      />
+    </Container>
+  )
 }
 
 <Example />
 
 ```tsx dark=true
-import React from "react"
+import React from 'react'
 ```
 
 export const ErrorExample = () => {
-  const [ value, state ] = useAsyncMemo(async () => {
-    const time = random(1000, 3000)
-    await delay(time)
-    throw new Error(`[Error: ${time}] random error`)
-  }, [], {})
-  return <Container>
-    <Button primary small onClick={() => state.reload()}>reload</Button>
-    <Button primary small onClick={() => state.set(random(1000, 9999))}>set random</Button>
-    <Source language="ts" code={'// value \n\n' + JSON.stringify(value, null, 2)} />
-    <Source language="ts" code={'// state \n\n' +JSON.stringify({ ...state, error: toObject(state.error) }, null, 2)} />
-  </Container>
+  const [value, state] = useAsyncMemo(
+    async () => {
+      const time = random(1000, 3000)
+      await delay(time)
+      throw new Error(`[Error: ${time}] random error`)
+    },
+    [],
+    {}
+  )
+  return (
+    <Container>
+      <Button primary small onClick={() => state.reload()}>
+        reload
+      </Button>
+      <Button primary small onClick={() => state.set(random(1000, 9999))}>
+        set random
+      </Button>
+      <Source
+        language="ts"
+        code={'// value \n\n' + JSON.stringify(value, null, 2)}
+      />
+      <Source
+        language="ts"
+        code={
+          '// state \n\n' +
+          JSON.stringify({ ...state, error: toObject(state.error) }, null, 2)
+        }
+      />
+    </Container>
+  )
 }
 
 <ErrorExample />

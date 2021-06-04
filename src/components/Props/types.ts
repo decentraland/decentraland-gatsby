@@ -1,5 +1,14 @@
 export type SizeProps = {
-  size?: 'mini' | 'tiny' | 'small' | 'medium' | 'large' | 'big' | 'huge' | 'massive' | 'full'
+  size?:
+    | 'mini'
+    | 'tiny'
+    | 'small'
+    | 'medium'
+    | 'large'
+    | 'big'
+    | 'huge'
+    | 'massive'
+    | 'full'
 }
 
 export enum Size {

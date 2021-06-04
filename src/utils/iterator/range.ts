@@ -1,5 +1,4 @@
 export default function* range(from: number, to: number, diff: number = 1) {
-
   diff = Math.abs(diff)
 
   if (diff === 0) {

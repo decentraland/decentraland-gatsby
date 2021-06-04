@@ -1,11 +1,11 @@
-import { Request } from "express";
+import { Request } from 'express'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
-import Catalyst, { Avatar } from "../../utils/api/Catalyst";
-import API from "../../utils/api/API";
-import RequestError from "../Route/error";
-import param from "../Route/param";
-import { WithAuth } from "../Auth/middleware";
-import { middleware } from "../Route/handle";
+import Catalyst, { Avatar } from '../../utils/api/Catalyst'
+import API from '../../utils/api/API'
+import RequestError from '../Route/error'
+import param from '../Route/param'
+import { WithAuth } from '../Auth/middleware'
+import { middleware } from '../Route/handle'
 
 export type WithProfile<R extends Request = Request> = R & {
   profile?: Avatar
@@ -16,7 +16,7 @@ export type WithAuthProfile<R extends Request = Request> = R & {
 }
 
 export type WithProfileOptions = {
-  optional?: boolean,
+  optional?: boolean
 }
 
 export function getUserParam(req: Request) {
@@ -26,11 +26,14 @@ export function getUserParam(req: Request) {
 export function withProfile(options: WithProfileOptions = {}) {
   return middleware(async (req) => {
     const user = getUserParam(req).toLowerCase()
-    const profiles = await API.catch(Catalyst.get().getProfiles([ user ]))
-    const profile = profiles && profiles[0] || undefined
+    const profiles = await API.catch(Catalyst.get().getProfiles([user]))
+    const profile = (profiles && profiles[0]) || undefined
 
     if (!profile && !options.optional) {
-      throw new RequestError(`Not found profile for "${user}"`, RequestError.NotFound)
+      throw new RequestError(
+        `Not found profile for "${user}"`,
+        RequestError.NotFound
+      )
     }
 
     Object.assign(req, { profile })
@@ -47,11 +50,14 @@ export function withAuthProfile(options: WithProfileOptions = {}) {
       return
     }
 
-    const authProfiles = await API.catch(Catalyst.get().getProfiles([ user ]))
-    const authProfile = authProfiles && authProfiles[0] || undefined
+    const authProfiles = await API.catch(Catalyst.get().getProfiles([user]))
+    const authProfile = (authProfiles && authProfiles[0]) || undefined
 
     if (!authProfile && !options.optional) {
-      throw new RequestError(`Not found profile for "${user}"`, RequestError.NotFound)
+      throw new RequestError(
+        `Not found profile for "${user}"`,
+        RequestError.NotFound
+      )
     }
 
     Object.assign(req, { authProfile })

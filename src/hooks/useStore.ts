@@ -1,6 +1,5 @@
-
-import React, { useState, useEffect, useMemo } from "react"
-import EntityStore, { EntityStoreState } from "../utils/EntityStore"
+import React, { useState, useEffect, useMemo } from 'react'
+import EntityStore, { EntityStoreState } from '../utils/EntityStore'
 
 const INITIAL_STATE = {}
 
@@ -8,7 +7,10 @@ export default function useStore<E extends object>(
   initialState: Partial<EntityStoreState<E>> = INITIAL_STATE,
   deps: React.DependencyList = []
 ) {
-  const store = useMemo(() => new EntityStore<E>({ initialState }), deps)
+  const store = useMemo(
+    () => new EntityStore<E>({ initialState }),
+    deps
+  )
   const [current, setState] = useState(store.getState())
 
   useEffect(() => {

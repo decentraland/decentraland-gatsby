@@ -1,5 +1,4 @@
-import retry from "./retry"
-
+import retry from './retry'
 
 describe('src/utils/promise', () => {
   test(`retry`, async () => {

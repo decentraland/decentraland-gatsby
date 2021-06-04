@@ -1,19 +1,22 @@
-import { useEffect, useMemo, useState } from 'react';
-import Time from '../utils/date/Time';
+import { useEffect, useMemo, useState } from 'react'
+import Time from '../utils/date/Time'
 
 type State<T> = {
-  executed: boolean,
-  value: T | null,
+  executed: boolean
+  value: T | null
   timeout: ReturnType<typeof setTimeout> | null
 }
 
-export default function useTimeout<T>(fun: () => T, at: Pick<Date, 'getTime'>): T | null {
+export default function useTimeout<T>(
+  fun: () => T,
+  at: Pick<Date, 'getTime'>
+): T | null {
   const initialValue: State<T> = useMemo(() => {
     if (at.getTime() <= Date.now()) {
       return {
         executed: true,
         value: fun(),
-        timeout: null
+        timeout: null,
       }
     }
 
@@ -35,14 +38,14 @@ export default function useTimeout<T>(fun: () => T, at: Pick<Date, 'getTime'>): 
       return setState({
         executed: false,
         value: null,
-        timeout: setTimeout(execute, Math.min(time, Time.Day))
+        timeout: setTimeout(execute, Math.min(time, Time.Day)),
       })
     }
 
     return setState({
       executed: true,
       value: fun(),
-      timeout: null
+      timeout: null,
     })
   }
 
@@ -58,7 +61,7 @@ export default function useTimeout<T>(fun: () => T, at: Pick<Date, 'getTime'>): 
         clearTimeout(state.timeout)
       }
     }
-  }, [ at.getTime() ])
+  }, [at.getTime()])
 
   return state.value
 }

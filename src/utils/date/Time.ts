@@ -38,8 +38,17 @@ Time.extend((_options, Dayjs, factory) => {
     Second: 1000 /* milliseconds */,
     Minute: 1000 /* milliseconds */ * 60 /* seconds */,
     Hour: 1000 /* milliseconds */ * 60 /* seconds */ * 60 /* minutes */,
-    Day: 1000 /* milliseconds */ * 60 /* seconds */ * 60 /* minutes */ * 24 /* hours */,
-    Week: 1000 /* milliseconds */ * 60 /* seconds */ * 60 /* minutes */ * 24 /* hours */ * 7 /* days */,
+    Day:
+      1000 /* milliseconds */ *
+      60 /* seconds */ *
+      60 /* minutes */ *
+      24 /* hours */,
+    Week:
+      1000 /* milliseconds */ *
+      60 /* seconds */ *
+      60 /* minutes */ *
+      24 /* hours */ *
+      7 /* days */,
   }
 
   const Formats = Object.freeze({
@@ -60,7 +69,12 @@ Time.extend((_options, Dayjs, factory) => {
     return Time(value).toDate()
   }
 
-  Object.assign(factory, Constants, { Formats, isTime: factory.isDayjs, date, from: factory })
+  Object.assign(factory, Constants, {
+    Formats,
+    isTime: factory.isDayjs,
+    date,
+    from: factory,
+  })
 
   // console.log(Dayjs.prototype as any)
   const parse = (Dayjs.prototype as any).parse
@@ -78,7 +92,7 @@ Time.extend((_options, Dayjs, factory) => {
       }
 
       parse.bind(this)(cfg)
-    }
+    },
   })
 
   Dayjs.prototype.getTime = function timeGetTime() {

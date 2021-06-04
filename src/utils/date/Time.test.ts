@@ -5,17 +5,23 @@ describe(`utils/date/Time`, () => {
     expect(Time('00:00', 'HH:mm').getTime()).toBe(0)
     expect(Time('00:01', 'HH:mm').getTime()).toBe(Time.Minute)
     expect(Time('01:00', 'HH:mm').getTime()).toBe(Time.Hour)
-    expect(Time('23:59', 'HH:mm').getTime()).toBe(23 * Time.Hour + 59 * Time.Minute)
+    expect(Time('23:59', 'HH:mm').getTime()).toBe(
+      23 * Time.Hour + 59 * Time.Minute
+    )
     expect(Time('24:00', 'HH:mm').getTime()).toBe(Time.Day)
     expect(Time.utc('00:00', 'HH:mm').getTime()).toBe(0)
     expect(Time.utc('00:01', 'HH:mm').getTime()).toBe(Time.Minute)
     expect(Time.utc('01:00', 'HH:mm').getTime()).toBe(Time.Hour)
-    expect(Time.utc('23:59', 'HH:mm').getTime()).toBe(23 * Time.Hour + 59 * Time.Minute)
+    expect(Time.utc('23:59', 'HH:mm').getTime()).toBe(
+      23 * Time.Hour + 59 * Time.Minute
+    )
     expect(Time.utc('24:00', 'HH:mm').getTime()).toBe(Time.Day)
   })
 
   test(`parse date input`, () => {
-    expect(Time.utc('2020-02-20', 'YYYY-MM-DD').toJSON()).toBe(`2020-02-20T00:00:00.000Z`)
+    expect(Time.utc('2020-02-20', 'YYYY-MM-DD').toJSON()).toBe(
+      `2020-02-20T00:00:00.000Z`
+    )
   })
 
   test(`combine date input and time input`, () => {
@@ -36,7 +42,4 @@ describe(`utils/date/Time`, () => {
     expect(Time.date(Time(date.getTime()))).toEqual(date)
     expect(Time.date(Time.utc(date.getTime()))).toEqual(date)
   })
-
-
-
 })

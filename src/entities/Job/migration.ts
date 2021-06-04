@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/camelcase */
-import { MigrationBuilder } from 'node-pg-migrate';
+import { MigrationBuilder } from 'node-pg-migrate'
 import Model from './model/model'
 
 export async function up(pgm: MigrationBuilder): Promise<void> {
-
   pgm.createTable(Model.tableName, {
     id: {
       type: 'TEXT',
@@ -16,17 +15,17 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
     },
     payload: {
       type: 'TEXT',
-      notNull: true
+      notNull: true,
     },
     run_at: {
       type: 'TIMESTAMPTZ',
-      notNull: true
+      notNull: true,
     },
     created_at: {
       type: 'TIMESTAMPTZ',
       notNull: true,
-      default: 'now()'
-    }
+      default: 'now()',
+    },
   })
 
   pgm.createIndex(Model.tableName, ['run_at'])

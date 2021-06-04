@@ -1,26 +1,26 @@
 import { SES } from 'aws-sdk'
-import chuck from '../../utils/array/chunk';
-import { registerMetric } from '../Prometheus/metrics';
-import { aws_ses_sent_total } from './metrics';
-import { readTemplate } from './utils';
-import { TemplateContent, SendOptions, Destination } from './types';
+import chuck from '../../utils/array/chunk'
+import { registerMetric } from '../Prometheus/metrics'
+import { aws_ses_sent_total } from './metrics'
+import { readTemplate } from './utils'
+import { TemplateContent, SendOptions, Destination } from './types'
 
 export type Options = SES.Types.ClientConfiguration & {
-  source?: string,
-  path?: string,
+  source?: string
+  path?: string
   bulk?: boolean
 }
 
 export default class Sender {
-  ses: SES;
-  templateLoaded: Map<string, boolean> = new Map
-  templateContent: Map<string, TemplateContent> = new Map
-  bulk: boolean;
-  metrics: boolean;
-  path: string;
-  source: string;
-  email: string;
-  region?: string;
+  ses: SES
+  templateLoaded: Map<string, boolean> = new Map()
+  templateContent: Map<string, TemplateContent> = new Map()
+  bulk: boolean
+  metrics: boolean
+  path: string
+  source: string
+  email: string
+  region?: string
 
   constructor({ path, bulk, source, ...options }: Options) {
     this.ses = new SES(options)
@@ -40,11 +40,14 @@ export default class Sender {
   }
 
   inc(value: number = 1) {
-    aws_ses_sent_total.inc({
-      bulk: this.bulk ? 1 : 0,
-      region: this.region || 'default',
-      email: this.email
-    }, value)
+    aws_ses_sent_total.inc(
+      {
+        bulk: this.bulk ? 1 : 0,
+        region: this.region || 'default',
+        email: this.email,
+      },
+      value
+    )
   }
 
   async send(options: SendOptions) {
@@ -52,21 +55,28 @@ export default class Sender {
   }
 
   async sendAll(options: SendOptions) {
-    const results: (SES.SendEmailResponse)[] = []
+    const results: SES.SendEmailResponse[] = []
     for (const destination of options.destinations) {
       const { email, replacement } = this.destination(destination)
-      const Message = await this.parseTemplate(options.template, { ...options.defaultReplacement, ...replacement })
+      const Message = await this.parseTemplate(options.template, {
+        ...options.defaultReplacement,
+        ...replacement,
+      })
       const params = {
         Destination: {
-          ToAddresses: [email]
+          ToAddresses: [email],
         },
         Message,
-        Source: this.source
-      };
+        Source: this.source,
+      }
 
-      const result = await new Promise<SES.SendEmailResponse>((resolve, reject) => {
-        this.ses.sendEmail(params, (err, result) => err ? reject(err) : resolve(result))
-      })
+      const result = await new Promise<SES.SendEmailResponse>(
+        (resolve, reject) => {
+          this.ses.sendEmail(params, (err, result) =>
+            err ? reject(err) : resolve(result)
+          )
+        }
+      )
 
       this.inc()
       results.push(result)
@@ -83,22 +93,25 @@ export default class Sender {
     const batch = 50
     for (const destinations of chuck(options.destinations, batch)) {
       const params = {
-        Destinations: destinations.map(destination => {
+        Destinations: destinations.map((destination) => {
           const { email, replacement } = this.destination(destination)
           return {
             Destination: { ToAddresses: [email] },
-            ReplacementTemplateData: JSON.stringify(replacement)
+            ReplacementTemplateData: JSON.stringify(replacement),
           }
         }),
         Source: this.source,
         Template: options.template,
-        DefaultTemplateData
+        DefaultTemplateData,
       }
 
-
-      const result = await new Promise<SES.SendBulkTemplatedEmailResponse>((resolve, reject) => {
-        this.ses.sendBulkTemplatedEmail(params, (err, data) => err ? reject(err) : resolve(data))
-      })
+      const result = await new Promise<SES.SendBulkTemplatedEmailResponse>(
+        (resolve, reject) => {
+          this.ses.sendBulkTemplatedEmail(params, (err, data) =>
+            err ? reject(err) : resolve(data)
+          )
+        }
+      )
 
       this.inc(destinations.length)
       results.push(result)
@@ -111,11 +124,11 @@ export default class Sender {
     if (!this.templateContent.has(name)) {
       const template = await readTemplate(this.path, name)
       this.templateContent.set(name, {
-        Subject: { Charset: "UTF-8", Data: template.SubjectPart },
+        Subject: { Charset: 'UTF-8', Data: template.SubjectPart },
         Body: {
-          Html: { Charset: "UTF-8", Data: template.HtmlPart },
-          Text: { Charset: "UTF-8", Data: template.TextPart },
-        }
+          Html: { Charset: 'UTF-8', Data: template.HtmlPart },
+          Text: { Charset: 'UTF-8', Data: template.TextPart },
+        },
       })
     }
 
@@ -167,19 +180,19 @@ export default class Sender {
       ...template,
       Subject: {
         ...template.Subject,
-        Data: this.replace(template.Subject.Data, replacements)
+        Data: this.replace(template.Subject.Data, replacements),
       },
       Body: {
         ...template.Body,
         Html: {
           ...template.Body.Html,
-          Data: this.replace(template.Body.Html.Data, replacements)
+          Data: this.replace(template.Body.Html.Data, replacements),
         },
         Text: {
           ...template.Body.Text,
-          Data: this.replace(template.Body.Text.Data, replacements)
-        }
-      }
+          Data: this.replace(template.Body.Text.Data, replacements),
+        },
+      },
     }
   }
 

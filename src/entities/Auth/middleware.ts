@@ -1,6 +1,9 @@
 import { Request } from 'express'
 import { AuthIdentity, AuthChain, AuthLinkType } from 'dcl-crypto/dist/types'
-import { Authenticator, parseEmphemeralPayload } from 'dcl-crypto/dist/Authenticator'
+import {
+  Authenticator,
+  parseEmphemeralPayload,
+} from 'dcl-crypto/dist/Authenticator'
 import { fromBase64 } from '../../utils/string/base64'
 import { HttpProvider } from 'web3x/providers'
 import RequestError from '../Route/error'
@@ -11,7 +14,7 @@ export type WithAuth<R extends Request = Request> = R & {
 }
 
 export type AuthOptions = {
-  optional?: boolean,
+  optional?: boolean
   allowInvalid?: boolean
 }
 
@@ -28,7 +31,10 @@ export function auth(options: AuthOptions = {}) {
     if (type.toLowerCase() !== 'bearer' && options.allowInvalid) {
       return
     } else if (type.toLowerCase() !== 'bearer') {
-      throw new RequestError(`Invalid authorization type: "${type}"`, RequestError.Unauthorized)
+      throw new RequestError(
+        `Invalid authorization type: "${type}"`,
+        RequestError.Unauthorized
+      )
     }
 
     // let identity: AuthIdentity
@@ -38,38 +44,56 @@ export function auth(options: AuthOptions = {}) {
       const data = fromBase64(token)
       const identity = JSON.parse(data) as AuthIdentity | AuthChain
       authChain = Array.isArray(identity) ? identity : identity.authChain
-      const ephemeralPayloadLink = authChain.find(link => [AuthLinkType.ECDSA_PERSONAL_EPHEMERAL, AuthLinkType.ECDSA_EIP_1654_EPHEMERAL].includes(link.type))
-      const ephemeralPayload = parseEmphemeralPayload(ephemeralPayloadLink && ephemeralPayloadLink.payload || '')
+      const ephemeralPayloadLink = authChain.find((link) =>
+        [
+          AuthLinkType.ECDSA_PERSONAL_EPHEMERAL,
+          AuthLinkType.ECDSA_EIP_1654_EPHEMERAL,
+        ].includes(link.type)
+      )
+      const ephemeralPayload = parseEmphemeralPayload(
+        (ephemeralPayloadLink && ephemeralPayloadLink.payload) || ''
+      )
       ephemeralAddress = ephemeralPayload.ephemeralAddress
     } catch (error) {
       console.log(error)
       if (options.allowInvalid) {
         return
       } else {
-        throw new RequestError(`Invalid authorization token`, RequestError.Unauthorized)
+        throw new RequestError(
+          `Invalid authorization token`,
+          RequestError.Unauthorized
+        )
       }
     }
 
-    let result: { ok: boolean, message?: string } = { ok: false }
+    let result: { ok: boolean; message?: string } = { ok: false }
     try {
       result = await Authenticator.validateSignature(
         ephemeralAddress,
         authChain,
-        new HttpProvider('https://mainnet.infura.io/v3/640777fe168f4b0091c93726b4f0463a')
+        new HttpProvider(
+          'https://mainnet.infura.io/v3/640777fe168f4b0091c93726b4f0463a'
+        )
       )
     } catch (error) {
       console.error(error)
       if (options.allowInvalid) {
         return
       } else {
-        throw new RequestError(`Invalid authorization token sign`, RequestError.Unauthorized)
+        throw new RequestError(
+          `Invalid authorization token sign`,
+          RequestError.Unauthorized
+        )
       }
     }
 
     if (!result.ok && options.allowInvalid) {
       return
     } else if (!result.ok) {
-      throw new RequestError(result.message || 'Invalid authorization data', RequestError.Forbidden)
+      throw new RequestError(
+        result.message || 'Invalid authorization data',
+        RequestError.Forbidden
+      )
     }
 
     const auth = Authenticator.ownerAddress(authChain).toLowerCase()

@@ -39,8 +39,7 @@ export {
 }
 
 export default class Catalyst extends API {
-
-  static Url = (
+  static Url =
     process.env.GATSBY_CATALYST_API ||
     process.env.REACT_APP_CATALYST_API ||
     process.env.STORYBOOK_CATALYST_API ||
@@ -50,7 +49,6 @@ export default class Catalyst extends API {
     process.env.STORYBOOK_PROFILE_URL ||
     process.env.PROFILE_URL ||
     'https://peer-ec1.decentraland.org'
-  )
 
   static Servers: Promise<void> | null = null
   static Cache = new Map<string, Catalyst>()
@@ -61,7 +59,8 @@ export default class Catalyst extends API {
 
   static async getAny() {
     if (!this.Servers) {
-      this.Servers = this.get().getServers()
+      this.Servers = this.get()
+        .getServers()
         .then((servers) => {
           for (const server of servers) {
             this.Cache.set(server.address, new Catalyst(server.address))
@@ -103,8 +102,10 @@ export default class Catalyst extends API {
   private available: boolean | null = null
 
   async getProfile(address: Address | string): Promise<Avatar | null> {
-    const result: ProfileResponse = await this.fetch(`/lambdas/profile/${address.toString().toLowerCase()}`)
-    return result && result.avatars && result.avatars[0] || null
+    const result: ProfileResponse = await this.fetch(
+      `/lambdas/profile/${address.toString().toLowerCase()}`
+    )
+    return (result && result.avatars && result.avatars[0]) || null
   }
 
   /**
@@ -120,7 +121,9 @@ export default class Catalyst extends API {
    * getProfiles([ `0x1234...`, 0x00000 ]) => Promise<[ { user: `0x1234...`, ...profile }, null ]>
    * ```
    */
-  async getProfiles(addresses: (Address | string)[]): Promise<(Avatar | null)[]> {
+  async getProfiles(
+    addresses: (Address | string)[]
+  ): Promise<(Avatar | null)[]> {
     if (addresses.length === 0) {
       return []
     }
@@ -130,13 +133,19 @@ export default class Catalyst extends API {
       params.append('id', address.toString().toLowerCase())
     }
 
-    const results: ProfileResponse[] = await this.fetch(`/lambdas/profiles/?` + params.toString())
-    const map = new Map(results.map(result => {
-      const avatar = result.avatars[0]!
-      return [ avatar.ethAddress.toLowerCase(), avatar ] as const
-    }))
+    const results: ProfileResponse[] = await this.fetch(
+      `/lambdas/profiles/?` + params.toString()
+    )
+    const map = new Map(
+      results.map((result) => {
+        const avatar = result.avatars[0]!
+        return [avatar.ethAddress.toLowerCase(), avatar] as const
+      })
+    )
 
-    return addresses.map(address => map.get(address.toString().toLowerCase()) || null)
+    return addresses.map(
+      (address) => map.get(address.toString().toLowerCase()) || null
+    )
   }
 
   async getStatus(): Promise<CommsStatus>
@@ -165,17 +174,23 @@ export default class Catalyst extends API {
     return this.fetch('/content/status')
   }
 
-  async getEntityScenes(pointers: string[] | [number, number][]): Promise<EntityScene[]> {
+  async getEntityScenes(
+    pointers: string[] | [number, number][]
+  ): Promise<EntityScene[]> {
     if (!pointers || pointers.length === 0) {
       return []
     }
 
-    return this.fetch(
-      '/content/entities/scene?' +
-      pointers
-        .map((point: string | [number, number]) => `pointer=${Array.isArray(point) ? point.slice(0,2).join(',') : point}`)
-        .join('&')
-    )
+    const params = pointers
+      .map((point: string | [number, number]) => {
+        return (
+          'pointer=' +
+          (Array.isArray(point) ? point.slice(0, 2).join(',') : point)
+        )
+      })
+      .join('&')
+
+    return this.fetch('/content/entities/scene?' + params)
   }
 
   async getServers() {
@@ -186,7 +201,9 @@ export default class Catalyst extends API {
     const results = await this.fetch<string[]>(`/lambdas/contracts/pois`)
     const pois: Position[] = []
     for (const result of results) {
-      const [x, y] = String(result || '').split(',').map(Number)
+      const [x, y] = String(result || '')
+        .split(',')
+        .map(Number)
       if (Number.isFinite(x) && Number.isFinite(y)) {
         pois.push([x, y] as Position)
       }

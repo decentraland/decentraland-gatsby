@@ -5,32 +5,44 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React from "react"
-import { DropdownProps } from "semantic-ui-react"
-import { changeLocale } from "gatsby-plugin-intl"
-import { PageProps } from "gatsby"
+import React from 'react'
+import { DropdownProps } from 'semantic-ui-react'
+import { changeLocale } from 'gatsby-plugin-intl'
+import { PageProps } from 'gatsby'
 
-import trackEvent from "../../utils/segment/trackEvent"
-import { Locale } from "decentraland-ui/dist/components/LanguageIcon/LanguageIcon"
-import { Footer, FooterProps } from "decentraland-ui/dist/components/Footer/Footer"
-import { Navbar, NavbarProps } from "decentraland-ui/dist/components/Navbar/Navbar"
+import trackEvent from '../../utils/segment/trackEvent'
+import { Locale } from 'decentraland-ui/dist/components/LanguageIcon/LanguageIcon'
+import {
+  Footer,
+  FooterProps,
+} from 'decentraland-ui/dist/components/Footer/Footer'
+import {
+  Navbar,
+  NavbarProps,
+} from 'decentraland-ui/dist/components/Navbar/Navbar'
 
-import WalletSelectorModal from "../Modal/WalletSelectorModal"
-import "./Layout.css"
-import useWindowScroll from "../../hooks/useWindowScroll"
-import TokenList from "../../utils/dom/TokenList"
+import WalletSelectorModal from '../Modal/WalletSelectorModal'
+import './Layout.css'
+import useWindowScroll from '../../hooks/useWindowScroll'
+import TokenList from '../../utils/dom/TokenList'
 
-export type LayoutProps = PageProps & NavbarProps & FooterProps & {
-  pageContext?: {
-    intl?: {
-      language?: Locale
-      languages?: Locale[]
-      originalPath?: string
+export type LayoutProps = PageProps &
+  NavbarProps &
+  FooterProps & {
+    pageContext?: {
+      intl?: {
+        language?: Locale
+        languages?: Locale[]
+        originalPath?: string
+      }
     }
   }
-}
 
-export default function Layout({ children, pageContext, ...props }: LayoutProps) {
+export default function Layout({
+  children,
+  pageContext,
+  ...props
+}: LayoutProps) {
   const language: Locale = pageContext?.intl?.language || 'en'
   const languages: Locale[] = pageContext?.intl?.languages || ['en']
   const currentPath: string = pageContext?.intl?.originalPath || '/'
@@ -59,12 +71,16 @@ export default function Layout({ children, pageContext, ...props }: LayoutProps)
         isSignIn={props.isSignIn}
         isFullscreen={props.isFullscreen}
         isOverlay={props.isOverlay}
-        className={TokenList.join([ 'LayoutNavbarContainer', props.className, isScrolled && "initial"])}
+        className={TokenList.join([
+          'LayoutNavbarContainer',
+          props.className,
+          isScrolled && 'initial',
+        ])}
         onSignIn={props.onSignIn}
         onClickAccount={props.onClickAccount}
       />
       <main
-        className={TokenList.join([ 'LayoutMainContainer', props.className])}
+        className={TokenList.join(['LayoutMainContainer', props.className])}
       >
         {children}
       </main>
@@ -73,7 +89,7 @@ export default function Layout({ children, pageContext, ...props }: LayoutProps)
         locale={language}
         locales={languages}
         isFullscreen={props.isFullscreen}
-        className={TokenList.join([ 'LayoutFooterContainer', props.className ])}
+        className={TokenList.join(['LayoutFooterContainer', props.className])}
         i18n={props.i18n}
         onChange={trackEvent(handleChangeLocal)}
       />

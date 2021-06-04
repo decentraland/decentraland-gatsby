@@ -1,6 +1,9 @@
 import React from 'react'
 
-export type CreateIdProps = Pick<React.HTMLProps<HTMLElement>, 'id' | 'children'>
+export type CreateIdProps = Pick<
+  React.HTMLProps<HTMLElement>,
+  'id' | 'children'
+>
 
 export function createId(props: CreateIdProps): string | undefined {
   if (props.id) {

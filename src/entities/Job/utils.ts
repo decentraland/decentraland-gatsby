@@ -1,5 +1,5 @@
-import JobContext from "./context";
-import { NextFunction } from "./types";
+import JobContext from './context'
+import { NextFunction } from './types'
 
 export function reschedule(time: number) {
   return async (ctx: JobContext<any>, next: NextFunction) => {
@@ -16,7 +16,11 @@ export function log() {
     await next()
     const time = Date.now() - startAt
     if (ctx.name) {
-      console.log(`Job "${ctx.name}" (id: "${ctx.id}") completed! time: ${(time / 1000).toFixed(3)}s`)
+      console.log(
+        `Job "${ctx.name}" (id: "${ctx.id}") completed! time: ${(
+          time / 1000
+        ).toFixed(3)}s`
+      )
     } else {
       console.log(`Cron completed! time: ${(time / 1000).toFixed(3)}s`)
     }

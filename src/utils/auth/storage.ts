@@ -1,8 +1,8 @@
 import { AuthLinkType } from 'dcl-crypto/dist/types'
-import SingletonListener from '../dom/SingletonListener';
-import { Identity } from './types';
+import SingletonListener from '../dom/SingletonListener'
+import { Identity } from './types'
 import Time from '../date/Time'
-import { PersistedKeys } from '../loader/types';
+import { PersistedKeys } from '../loader/types'
 
 const STORE_LEGACY_KEY = 'auth'
 let CURRENT_IDENTITY: Identity | null = null
@@ -42,11 +42,11 @@ export function isValid(identity?: Identity) {
     return false
   }
 
-  const link = identity.authChain
-    .find(link => (
+  const link = identity.authChain.find(
+    (link) =>
       link.type === AuthLinkType.ECDSA_PERSONAL_EPHEMERAL ||
       link.type === AuthLinkType.ECDSA_EIP_1654_EPHEMERAL
-    ))
+  )
 
   if (link && link.signature && typeof link.signature === 'string') {
     return true

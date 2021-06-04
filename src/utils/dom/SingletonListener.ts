@@ -1,11 +1,17 @@
 import { hash } from 'immutable'
 
-export type TargetListener = Pick<HTMLElement, 'addEventListener' | 'removeEventListener'>
+export type TargetListener = Pick<
+  HTMLElement,
+  'addEventListener' | 'removeEventListener'
+>
 
 export type EventMap = HTMLElementEventMap & WindowEventMap
 export type Event = keyof EventMap
 
-export type Listener<K extends Event = any> = (this: HTMLElement, ev: EventMap[K]) => any
+export type Listener<K extends Event = any> = (
+  this: HTMLElement,
+  ev: EventMap[K]
+) => any
 export type Callback<D extends {}> = (this: HTMLElement, data: D) => any
 
 /**
@@ -14,7 +20,6 @@ export type Callback<D extends {}> = (this: HTMLElement, data: D) => any
  * An event handler manager to minimize the number of subscription to DOM objects
  */
 export default class SingletonListener<T extends TargetListener> {
-
   /**
    * instance store
    */
@@ -117,12 +122,11 @@ export default class SingletonListener<T extends TargetListener> {
   dispatch<K extends Event>(event: K, data: EventMap[K]): Promise<void> {
     const target = this.target
     const callback = this.callbacks.get(event as Event)
-    return Promise.resolve()
-      .then(() => {
-        if (callback) {
-          callback.call(target, data)
-        }
-      })
+    return Promise.resolve().then(() => {
+      if (callback) {
+        callback.call(target, data)
+      }
+    })
   }
 
   /**
@@ -156,7 +160,7 @@ export default class SingletonListener<T extends TargetListener> {
       return this.unsubscribe(event)
     }
 
-    const newListeners = listeners.filter(l => l !== listener)
+    const newListeners = listeners.filter((l) => l !== listener)
 
     if (newListeners.length === 0) {
       return this.unsubscribe(event)

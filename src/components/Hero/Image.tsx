@@ -1,8 +1,8 @@
-import React from "react"
-import { motion, MotionProps } from "framer-motion"
-import TokenList from "../../utils/dom/TokenList"
+import React from 'react'
+import { motion, MotionProps } from 'framer-motion'
+import TokenList from '../../utils/dom/TokenList'
 
-import "./Image.css"
+import './Image.css'
 
 export type ImageProps = MotionProps & {
   className?: string
@@ -24,18 +24,17 @@ export default function Image({
   backgroundSize,
   ...props
 }: ImageProps) {
-
   return (
     <motion.div
       {...props}
       className={TokenList.join([
-        background ? "HeroBackground" : "HeroImage",
+        background ? 'HeroBackground' : 'HeroImage',
         className,
       ])}
       style={{
         ...props.style,
         backgroundImage: `url("${src}")`,
-        backgroundSize: backgroundSize
+        backgroundSize: backgroundSize,
       }}
     />
   )

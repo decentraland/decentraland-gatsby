@@ -2,84 +2,132 @@ import { useState, useMemo, useEffect } from 'react'
 import { Address } from 'web3x/address'
 import { Personal } from 'web3x/personal'
 import { LegacyProviderAdapter } from 'web3x/providers'
-import { Source, ArgsTable } from '@storybook/components';
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
-import { ChainId } from "@dcl/schemas"
-import { ProviderType } from "decentraland-connect/dist/types"
-import Grid from "semantic-ui-react/dist/commonjs/collections/Grid/Grid"
-import { Button } from 'decentraland-ui/dist/components/Button/Button';
-import { Args } from '../components/Storybook/utils';
-import Container from '../components/Storybook/Container';
-import Textarea from '../components/Form/Textarea';
-import Blockquote from '../components/Text/Blockquote';
-import Paragraph from '../components/Text/Paragraph';
-import Link from '../components/Text/Link';
-import useAuth from './useAuth';
-import useSign from './useSign';
+import { Source, ArgsTable } from '@storybook/components'
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks'
+import { ChainId } from '@dcl/schemas'
+import { ProviderType } from 'decentraland-connect/dist/types'
+import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Args } from '../components/Storybook/utils'
+import Container from '../components/Storybook/Container'
+import Textarea from '../components/Form/Textarea'
+import Blockquote from '../components/Text/Blockquote'
+import Paragraph from '../components/Text/Paragraph'
+import Link from '../components/Text/Link'
+import useAuth from './useAuth'
+import useSign from './useSign'
 
 <Meta title="Hooks/useSign" />
 
 # Sign Hook
 
-> The *sign hook* allow to sign message usign a pair address and provider
+> The _sign hook_ allow to sign message usign a pair address and provider
 
 ```ts
-const [ sign, state ] = useSing(address, provider)
+const [sign, state] = useSing(address, provider)
 ```
 
-<ArgsTable rows={[
-  Args.param('address', 'ethereum address ', `string | null`),
-  Args.param('provider', 'ethereum provider ', `Provider | null`),
-  Args.returns('sign', 'sign result', `object`),
-  Args.returns('sign.signature', 'signature of `sign.message`', `string | null`),
-  Args.returns('sign.message', 'message signed at `sign.signature` ', `string | null`),
-  Args.returns('state.signing', '`true` when is waiting for a user initeraction', `boolean`),
-  Args.returns('state.sign', 'asks user to sign a message', `(mesage: string) => void`)
-]} />
+<ArgsTable
+  rows={[
+    Args.param('address', 'ethereum address ', `string | null`),
+    Args.param('provider', 'ethereum provider ', `Provider | null`),
+    Args.returns('sign', 'sign result', `object`),
+    Args.returns(
+      'sign.signature',
+      'signature of `sign.message`',
+      `string | null`
+    ),
+    Args.returns(
+      'sign.message',
+      'message signed at `sign.signature` ',
+      `string | null`
+    ),
+    Args.returns(
+      'state.signing',
+      '`true` when is waiting for a user initeraction',
+      `boolean`
+    ),
+    Args.returns(
+      'state.sign',
+      'asks user to sign a message',
+      `(mesage: string) => void`
+    ),
+  ]}
+/>
 
 ## Example
 
 export const Sign = () => {
-  const [ account, accountState ] = useAuth()
-  const [ signature, signatureState ] = useSign(account, accountState.provider)
-  const [ message, setState ] = useState('This a the original message')
-  return <Container>
-    <Grid>
-      {!account && <Grid.Row>
-        <Grid.Column tablet="16">
-          <Blockquote>
-            <Paragraph small secondary>This feature requires to login, try to connect using the <Link href="/?path=/story/hooks-useauth--page#connect-preview">`useAuth`</Link> hook.</Paragraph>
-          </Blockquote>
-        </Grid.Column>
-      </Grid.Row>}
-      <Grid.Row>
-        <Grid.Column tablet="8">
-          <Textarea value={message} minHeight={170} onChange={(e, { value }) => setState(value || '') } />
-        </Grid.Column>
-        <Grid.Column tablet="8">
-          <Button primary size="small" style={{ minWidth: '200px', margin: '0 auto' }} disabled={!account} loading={signatureState.signing} onClick={() => signatureState.sign(message)}>Sign</Button>
-          <Source language="ts" code={JSON.stringify(signature, null, 2)} />
-        </Grid.Column>
-      </Grid.Row>
-    </Grid>
-  </Container>
+  const [account, accountState] = useAuth()
+  const [signature, signatureState] = useSign(account, accountState.provider)
+  const [message, setState] = useState('This a the original message')
+  return (
+    <Container>
+      <Grid>
+        {!account && (
+          <Grid.Row>
+            <Grid.Column tablet="16">
+              <Blockquote>
+                <Paragraph small secondary>
+                  This feature requires to login, try to connect using the{' '}
+                  <Link href="/?path=/story/hooks-useauth--page#connect-preview">
+                    `useAuth`
+                  </Link>{' '}
+                  hook.
+                </Paragraph>
+              </Blockquote>
+            </Grid.Column>
+          </Grid.Row>
+        )}
+        <Grid.Row>
+          <Grid.Column tablet="8">
+            <Textarea
+              value={message}
+              minHeight={170}
+              onChange={(e, { value }) => setState(value || '')}
+            />
+          </Grid.Column>
+          <Grid.Column tablet="8">
+            <Button
+              primary
+              size="small"
+              style={{ minWidth: '200px', margin: '0 auto' }}
+              disabled={!account}
+              loading={signatureState.signing}
+              onClick={() => signatureState.sign(message)}
+            >
+              Sign
+            </Button>
+            <Source language="ts" code={JSON.stringify(signature, null, 2)} />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </Container>
+  )
 }
 
 <Sign />
 
 ```tsx dark=true
-import React from "react"
+import React from 'react'
 
-export function Sign () {
-  const [ address, state ] = useAuth()
-  const [ signature, signatureState ] = useTransaction(account, state.provider)
-  const [ message, setMessage ] = useState('This is the original message')
+export function Sign() {
+  const [address, state] = useAuth()
+  const [signature, signatureState] = useTransaction(account, state.provider)
+  const [message, setMessage] = useState('This is the original message')
 
-  return <div>
-    <textarea value={message} onChange={(e) => setMessage(e.currentTarget.value)}></textarea>
-    <button disabled={!account} onClick={() => signatureState.sign(message)}>sign</button>
-    <pre>{JSON.stringify(signature, null, 2)}</pre>
-  </div>
+  return (
+    <div>
+      <textarea
+        value={message}
+        onChange={(e) => setMessage(e.currentTarget.value)}
+      ></textarea>
+      <button disabled={!account} onClick={() => signatureState.sign(message)}>
+        sign
+      </button>
+      <pre>{JSON.stringify(signature, null, 2)}</pre>
+    </div>
+  )
 }
 ```
 

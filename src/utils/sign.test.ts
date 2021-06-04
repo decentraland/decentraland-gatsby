@@ -1,7 +1,10 @@
-import { sign, decode, verify } from './sign';
+import { sign, decode, verify } from './sign'
 
 describe('utils/sign', () => {
-  test(`sign`, () => expect(sign({}, '123456')).toBe('e30=.65X0tumNLI9khJR9B7cM1yZHTKndoWU1n3tlRkBqfkI='))
+  test(`sign`, () =>
+    expect(sign({}, '123456')).toBe(
+      'e30=.65X0tumNLI9khJR9B7cM1yZHTKndoWU1n3tlRkBqfkI='
+    ))
   test(`decode`, () => {
     const secret = '123456'
     const data1 = { random: Math.random() }

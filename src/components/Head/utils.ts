@@ -1,4 +1,3 @@
-
 /**
  * Extract the extension from a file path
  *
@@ -12,7 +11,7 @@ export function extension(file: string) {
     file = file.slice(0, questionMarkPosition)
   }
 
-  let dotPosition = file.lastIndexOf('.');
+  let dotPosition = file.lastIndexOf('.')
   if (dotPosition >= 0) {
     return file.slice(dotPosition + 1)
   }

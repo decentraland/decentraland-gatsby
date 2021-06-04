@@ -4,20 +4,24 @@ export default class BatchLoader<V, K = string | number> {
   private loader: Dataloader<K, V>
   cache: Map<K, Promise<V>> = new Map()
   data: Map<K, V> = new Map()
-  readonly handle: (key: (K)[]) => Promise<V[]>
+  readonly handle: (key: K[]) => Promise<V[]>
 
-  constructor(handle: (key: (K)[]) => Promise<V[]>, options: Dataloader.Options<K, V> = {}) {
+  constructor(
+    handle: (key: K[]) => Promise<V[]>,
+    options: Dataloader.Options<K, V> = {}
+  ) {
     this.handle = handle
     this.loader = new Dataloader(handle, options)
   }
 
   private async _handle(key: K): Promise<V> {
-    return this.loader.load(key)
-      .then(result => {
+    return this.loader
+      .load(key)
+      .then((result) => {
         this.data.set(key, result)
         return result
       })
-      .catch(err => {
+      .catch((err) => {
         this.cache.delete(key)
         throw err
       })

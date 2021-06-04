@@ -1,4 +1,3 @@
-
 import { defaultOrigin } from './types'
 
 const validOriginCases = [

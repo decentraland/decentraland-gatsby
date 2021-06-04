@@ -1,8 +1,8 @@
 .MarkdownTextarea {
-  position: relative
+  position: relative;
 }
 
-.MarkdownTextarea__Preview  {
+.MarkdownTextarea__Preview {
   padding-top: 4px;
   padding-bottom: 12px;
 }

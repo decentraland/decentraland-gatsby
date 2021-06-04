@@ -2,50 +2,54 @@ import { useState, useMemo, useEffect } from 'react'
 import { Address } from 'web3x/address'
 import { Personal } from 'web3x/personal'
 import { LegacyProviderAdapter } from 'web3x/providers'
-import { Source, ArgsTable } from '@storybook/components';
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
-import { ChainId } from "@dcl/schemas"
-import { ProviderType } from "decentraland-connect/dist/types"
-import Grid from "semantic-ui-react/dist/commonjs/collections/Grid/Grid"
-import { Button } from 'decentraland-ui/dist/components/Button/Button';
-import { SelectField } from 'decentraland-ui/dist/components/SelectField/SelectField';
-import { Args } from '../components/Storybook/utils';
-import Container from '../components/Storybook/Container';
-import Textarea from '../components/Form/Textarea';
-import useAuth from './useAuth';
+import { Source, ArgsTable } from '@storybook/components'
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks'
+import { ChainId } from '@dcl/schemas'
+import { ProviderType } from 'decentraland-connect/dist/types'
+import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { SelectField } from 'decentraland-ui/dist/components/SelectField/SelectField'
+import { Args } from '../components/Storybook/utils'
+import Container from '../components/Storybook/Container'
+import Textarea from '../components/Form/Textarea'
+import useAuth from './useAuth'
 
 <Meta title="Hooks/useAuth" />
 
 # Auth Hook
 
-> The *auth hook* allows to create a user session using one of the availables providers.
+> The _auth hook_ allows to create a user session using one of the availables providers.
 
 ```ts
-const [ account, state ] = useAuth()
+const [account, state] = useAuth()
 ```
 
-<ArgsTable rows={[
-  Args.returns('account', 'ethereum address ', `string | null`),
-  Args.returns('state.loading', '`true` when is waiting for a user initeraction', `boolean`),
-  Args.returns('state.selecting', '`true` when is showing the wallet selector modal', `boolean`),
-  Args.returns(
-    'state.providerType',
-    'type of provider conneceted to, `null` if not connected. \n\n imported from [decentraland-connect](https://www.npmjs.com/package/decentraland-connect)',
-    Args.definedTypes(
-      `ProviderType | null`,
-      [
+<ArgsTable
+  rows={[
+    Args.returns('account', 'ethereum address ', `string | null`),
+    Args.returns(
+      'state.loading',
+      '`true` when is waiting for a user initeraction',
+      `boolean`
+    ),
+    Args.returns(
+      'state.selecting',
+      '`true` when is showing the wallet selector modal',
+      `boolean`
+    ),
+    Args.returns(
+      'state.providerType',
+      'type of provider conneceted to, `null` if not connected. \n\n imported from [decentraland-connect](https://www.npmjs.com/package/decentraland-connect)',
+      Args.definedTypes(`ProviderType | null`, [
         'ProviderType.INJECTED',
         'ProviderType.FORTMATIC',
-        null
-      ]
-    )
-  ),
-  Args.returns(
-    'state.chainId',
-    'chain id connected to, `null` if not connected. \n\n imported from [decentraland-connect](https://www.npmjs.com/package/decentraland-connect)',
-    Args.definedTypes(
-      `ChainId | null`,
-      [
+        null,
+      ])
+    ),
+    Args.returns(
+      'state.chainId',
+      'chain id connected to, `null` if not connected. \n\n imported from [decentraland-connect](https://www.npmjs.com/package/decentraland-connect)',
+      Args.definedTypes(`ChainId | null`, [
         'ChainId.ETHEREUM_MAINNET',
         'ChainId.ETHEREUM_ROPSTEN',
         'ChainId.ETHEREUM_RINKEBY',
@@ -53,74 +57,160 @@ const [ account, state ] = useAuth()
         'ChainId.ETHEREUM_KOVAN',
         'ChainId.MATIC_MUMBAI',
         'ChainId.MATIC_MAINNET',
-        null
-      ]
-    )
-  ),
-  {/* Args.returns('clipboard.copy', 'send value to the user clipboard', `(value: boolean | number | string) => void`),
-  Args.returns('clipboard.clear', 'reset clipboard value to `null`', `() => void`), */}
-]} />
+        null,
+      ])
+    ),
+    {
+      /* Args.returns('clipboard.copy', 'send value to the user clipboard', `(value: boolean | number | string) => void`),
+  Args.returns('clipboard.clear', 'reset clipboard value to `null`', `() => void`), */
+    },
+  ]}
+/>
 
 ## Connect Preview
 
 export const Example = () => {
-  const [ account, state ] = useAuth()
-  const [ chain, setChain ] = useState(ChainId.ETHEREUM_MAINNET)
+  const [account, state] = useAuth()
+  const [chain, setChain] = useState(ChainId.ETHEREUM_MAINNET)
   const selectChain = (_, { value }) => setChain(value)
   const connectInjected = () => state.connect(ProviderType.INJECTED, chain)
   const connectFortmatic = () => state.connect(ProviderType.FORTMATIC, chain)
   const connectWalletConnect = () => null
   const connectWalletLink = () => null
   const disconnect = () => state.disconnect()
-  return <Container>
-    <div style={{ display: 'flex' }}>
-      <div>
-        <SelectField value={chain} label="chain" onChange={selectChain} options={[
-          { key: ChainId.ETHEREUM_MAINNET, value: ChainId.ETHEREUM_MAINNET, text: 'ETHEREUM_MAINNET' },
-          { key: ChainId.ETHEREUM_ROPSTEN, value: ChainId.ETHEREUM_ROPSTEN, text: 'ETHEREUM_ROPSTEN' },
-          { key: ChainId.ETHEREUM_RINKEBY, value: ChainId.ETHEREUM_RINKEBY, text: 'ETHEREUM_RINKEBY' },
-          { key: ChainId.ETHEREUM_GOERLI, value: ChainId.ETHEREUM_GOERLI, text: 'ETHEREUM_GOERLI' },
-          { key: ChainId.ETHEREUM_KOVAN, value: ChainId.ETHEREUM_KOVAN, text: 'ETHEREUM_KOVAN' },
-          { key: ChainId.MATIC_MUMBAI, value: ChainId.MATIC_MUMBAI, text: 'MATIC_MUMBAI' },
-          { key: ChainId.MATIC_MAINNET, value: ChainId.MATIC_MAINNET, text: 'MATIC_MAINNET' },
-        ]}/>
+  return (
+    <Container>
+      <div style={{ display: 'flex' }}>
+        <div>
+          <SelectField
+            value={chain}
+            label="chain"
+            onChange={selectChain}
+            options={[
+              {
+                key: ChainId.ETHEREUM_MAINNET,
+                value: ChainId.ETHEREUM_MAINNET,
+                text: 'ETHEREUM_MAINNET',
+              },
+              {
+                key: ChainId.ETHEREUM_ROPSTEN,
+                value: ChainId.ETHEREUM_ROPSTEN,
+                text: 'ETHEREUM_ROPSTEN',
+              },
+              {
+                key: ChainId.ETHEREUM_RINKEBY,
+                value: ChainId.ETHEREUM_RINKEBY,
+                text: 'ETHEREUM_RINKEBY',
+              },
+              {
+                key: ChainId.ETHEREUM_GOERLI,
+                value: ChainId.ETHEREUM_GOERLI,
+                text: 'ETHEREUM_GOERLI',
+              },
+              {
+                key: ChainId.ETHEREUM_KOVAN,
+                value: ChainId.ETHEREUM_KOVAN,
+                text: 'ETHEREUM_KOVAN',
+              },
+              {
+                key: ChainId.MATIC_MUMBAI,
+                value: ChainId.MATIC_MUMBAI,
+                text: 'MATIC_MUMBAI',
+              },
+              {
+                key: ChainId.MATIC_MAINNET,
+                value: ChainId.MATIC_MAINNET,
+                text: 'MATIC_MAINNET',
+              },
+            ]}
+          />
+        </div>
+        <div style={{ paddingTop: '20px', paddingLeft: '20px' }}>
+          <Button
+            primary
+            size="small"
+            disabled={!!account}
+            loading={state.loading}
+            onClick={connectInjected}
+          >
+            connect injected
+          </Button>
+          <Button
+            primary
+            size="small"
+            disabled={!!account}
+            loading={state.loading}
+            onClick={connectFortmatic}
+          >
+            connect fortmatic
+          </Button>
+          {/* <Button primary size="small" disabled={true} loading={state.loading} onClick={connectWalletConnect}>connect wallet connect</Button> */}
+          {/* <Button primary size="small" disabled={true} loading={state.loading} onClick={connectWalletLink}>connect wallet link</Button> */}
+          <Button
+            primary
+            size="small"
+            disabled={!account}
+            loading={state.loading}
+            onClick={disconnect}
+          >
+            disconnect
+          </Button>
+        </div>
       </div>
-      <div style={{ paddingTop: '20px', paddingLeft: '20px' }}>
-        <Button primary size="small" disabled={!!account} loading={state.loading} onClick={connectInjected}>connect injected</Button>
-        <Button primary size="small" disabled={!!account} loading={state.loading} onClick={connectFortmatic}>connect fortmatic</Button>
-        {/* <Button primary size="small" disabled={true} loading={state.loading} onClick={connectWalletConnect}>connect wallet connect</Button> */}
-        {/* <Button primary size="small" disabled={true} loading={state.loading} onClick={connectWalletLink}>connect wallet link</Button> */}
-        <Button primary size="small" disabled={!account} loading={state.loading} onClick={disconnect}>disconnect</Button>
-      </div>
-    </div>
-    <Source language="ts" code={JSON.stringify(account, null, 2)} />
-    <Source language="ts" code={JSON.stringify({
-      loading: state.loading,
-      providerType: state.providerType,
-      chainId: state.chainId,
-    }, null, 2)} />
-  </Container>
+      <Source language="ts" code={JSON.stringify(account, null, 2)} />
+      <Source
+        language="ts"
+        code={JSON.stringify(
+          {
+            loading: state.loading,
+            providerType: state.providerType,
+            chainId: state.chainId,
+          },
+          null,
+          2
+        )}
+      />
+    </Container>
+  )
 }
 
 <Example />
 
 ```tsx dark=true
-import React from "react"
-import { ProviderType, ChainId } from "decentraland-connect/dist/types"
+import React from 'react'
+import { ProviderType, ChainId } from 'decentraland-connect/dist/types'
 
-export function Example () {
-  const [ account, state ] = useAuth()
+export function Example() {
+  const [account, state] = useAuth()
 
-  const connectInjected = () => state.connect(ProviderType.INJECTED, ChainId.ETHEREUM_MAINNET)
-  const connectFortmatic = () => state.connect(ProviderType.FORTMATIC, ChainId.ETHEREUM_MAINNET)
+  const connectInjected = () =>
+    state.connect(ProviderType.INJECTED, ChainId.ETHEREUM_MAINNET)
+  const connectFortmatic = () =>
+    state.connect(ProviderType.FORTMATIC, ChainId.ETHEREUM_MAINNET)
   const disconnect = () => state.disconnect()
 
-  return <div>
-    <button disabled={!!account} loading={state.loading} onClick={connectInjected}>connect injected</button>
-    <button disabled={!!account} loading={state.loading} onClick={connectFortmatic}>connect fortmatic</button>
-    <button disabled={!account} loading={state.loading} onClick={disconnect}>disconnect</button>
-    <pre>{JSON.stringify(account, null, 2)}</pre>
-  </div>
+  return (
+    <div>
+      <button
+        disabled={!!account}
+        loading={state.loading}
+        onClick={connectInjected}
+      >
+        connect injected
+      </button>
+      <button
+        disabled={!!account}
+        loading={state.loading}
+        onClick={connectFortmatic}
+      >
+        connect fortmatic
+      </button>
+      <button disabled={!account} loading={state.loading} onClick={disconnect}>
+        disconnect
+      </button>
+      <pre>{JSON.stringify(account, null, 2)}</pre>
+    </div>
+  )
 }
 ```
 

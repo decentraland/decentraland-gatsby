@@ -1,12 +1,12 @@
-import SingletonListener from "./dom/SingletonListener"
+import SingletonListener from './dom/SingletonListener'
 
 /**
  * @deprecated
  */
 export type EntityStoreState<E extends object> = {
   error: string | null
-  loading: boolean,
-  data: Record<string, E>,
+  loading: boolean
+  data: Record<string, E>
   lists: Record<string, string[] | null>
 }
 
@@ -16,13 +16,13 @@ export type EntityStoreOptions<E extends object> = {
 }
 
 export interface EntityStoreConstructor<E extends object> {
-  new(): EntityStore<E>
+  new (): EntityStore<E>
 }
 
 export default class EntityStore<E extends object> {
   private config: EntityStoreOptions<E> = {
     identifier: (entity: E) => (entity as any).id,
-    initialState: {}
+    initialState: {},
   }
 
   private listener = new SingletonListener()
@@ -31,7 +31,7 @@ export default class EntityStore<E extends object> {
     error: null,
     loading: false,
     data: {},
-    lists: {}
+    lists: {},
   }
 
   constructor(config: Partial<EntityStoreOptions<E>> = {}) {
@@ -39,11 +39,17 @@ export default class EntityStore<E extends object> {
     Object.assign(this.state, this.config.initialState)
   }
 
-  addEventListener(event: string, callback: (entity: EntityStoreState<E>) => void) {
+  addEventListener(
+    event: string,
+    callback: (entity: EntityStoreState<E>) => void
+  ) {
     this.listener.addEventListener(event as any, callback as any)
   }
 
-  removeEventListener(event: string, callback: (entity: EntityStoreState<E>) => void) {
+  removeEventListener(
+    event: string,
+    callback: (entity: EntityStoreState<E>) => void
+  ) {
     this.listener.removeEventListener(event as any, callback as any)
   }
 
@@ -58,7 +64,7 @@ export default class EntityStore<E extends object> {
   getList(listName: string = 'default') {
     if (this.state.lists[listName]) {
       const list = this.state.lists[listName]!
-      return list.map(id => this.state.data[id])
+      return list.map((id) => this.state.data[id])
     }
 
     return null
@@ -69,8 +75,9 @@ export default class EntityStore<E extends object> {
     this.state = {
       ...this.state,
       data: {
-        ...this.state.data, [id]: entity
-      }
+        ...this.state.data,
+        [id]: entity,
+      },
     }
 
     this.listener.dispatch('change' as any, this.state)
@@ -90,12 +97,12 @@ export default class EntityStore<E extends object> {
       ...this.state,
       data: {
         ...this.state.data,
-        ...data
+        ...data,
       },
       lists: {
         ...this.state.lists,
-        [listName]: list
-      }
+        [listName]: list,
+      },
     }
 
     this.listener.dispatch('change' as any, this.state)
@@ -104,7 +111,7 @@ export default class EntityStore<E extends object> {
   setError(error: Error) {
     this.state = {
       ...this.state,
-      error: error.message
+      error: error.message,
     }
 
     this.listener.dispatch('change' as any, this.state)
@@ -128,10 +135,12 @@ export default class EntityStore<E extends object> {
   }
 
   clearList(listName: string = 'default') {
-    const lists = listName ? { ...this.state.lists, [listName]: null } : this.state.lists;
+    const lists = listName
+      ? { ...this.state.lists, [listName]: null }
+      : this.state.lists
     this.state = {
       ...this.state,
-      lists
+      lists,
     }
 
     this.listener.dispatch('change' as any, this.state)
@@ -142,7 +151,7 @@ export default class EntityStore<E extends object> {
       ...this.state,
       error: null,
       data: {},
-      lists: {}
+      lists: {},
     }
 
     this.listener.dispatch('change' as any, this.state)

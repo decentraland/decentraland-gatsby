@@ -104,7 +104,7 @@ Promise.resolve()
     projectPkg.scripts = Object.assign(projectPkg.scripts || {}, {
       build: 'gatsby build && tsc -p .',
       develop: 'gatsby develop --https -H 0.0.0.0',
-      format: 'prettier --write "**/*.{js,jsx,json,md}"',
+      format: 'prettier --write \'./src/**/*.{ts,tsx,js,jsx,json,md}\'',
       start:
         "concurrently -c blue,green -n SERVER,FRONT 'npm run serve' 'npm run develop'",
       serve:

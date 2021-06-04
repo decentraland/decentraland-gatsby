@@ -21,9 +21,9 @@ export type Variant = {
 }
 
 export type UnleashOptions = {
-  debug: boolean,
-  address: string,
-  referer: string,
+  debug: boolean
+  address: string
+  referer: string
 }
 
 export const DEFAULT_FEATURE_FLAG: FeatureFlagsResponse = {
@@ -31,7 +31,10 @@ export const DEFAULT_FEATURE_FLAG: FeatureFlagsResponse = {
   variants: {},
 }
 
-export default async function unleash(endpoint?: string | null, options: Partial<UnleashOptions> = {}) {
+export default async function unleash(
+  endpoint?: string | null,
+  options: Partial<UnleashOptions> = {}
+) {
   if (!endpoint) {
     return DEFAULT_FEATURE_FLAG
   }

@@ -4,7 +4,16 @@ describe('TokenList', () => {
   test('#join', () => {
     expect(TokenList.join([])).toEqual('')
     expect(TokenList.join(['token1'])).toEqual('token1')
-    expect(TokenList.join(['token1', null, undefined, false, false && 'token2', true && 'token3'])).toEqual('token1 token3')
+    expect(
+      TokenList.join([
+        'token1',
+        null,
+        undefined,
+        false,
+        false && 'token2',
+        true && 'token3',
+      ])
+    ).toEqual('token1 token3')
   })
 
   test('constructor', () => {
@@ -32,13 +41,21 @@ describe('TokenList', () => {
 
   test('add', () => {
     expect(new TokenList('token1').add('token2').value).toEqual('token1 token2')
-    expect(new TokenList('token1').add('token1 token2', 'token3').add('token2 token4').value).toEqual('token1 token2 token3 token4')
+    expect(
+      new TokenList('token1')
+        .add('token1 token2', 'token3')
+        .add('token2 token4').value
+    ).toEqual('token1 token2 token3 token4')
   })
 
   test('remove', () => {
     expect(new TokenList('token1').remove('token2').value).toEqual('token1')
-    expect(new TokenList('token1 token2').remove('token2').value).toEqual('token1')
-    expect(new TokenList('token1 token2 token3').remove('token2').value).toEqual('token1 token3')
+    expect(new TokenList('token1 token2').remove('token2').value).toEqual(
+      'token1'
+    )
+    expect(
+      new TokenList('token1 token2 token3').remove('token2').value
+    ).toEqual('token1 token3')
   })
 
   test('replace', () => {
@@ -63,7 +80,10 @@ describe('TokenList', () => {
 
   test('entries', () => {
     const tokens = new TokenList('token1 token2')
-    expect(Array.from(tokens.entries())).toEqual([[0, 'token1'], [1, 'token2']])
+    expect(Array.from(tokens.entries())).toEqual([
+      [0, 'token1'],
+      [1, 'token2'],
+    ])
   })
 
   test('keys', () => {

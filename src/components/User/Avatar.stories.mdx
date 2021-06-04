@@ -1,13 +1,19 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Source, ArgsTable } from '@storybook/components';
-import { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs/blocks';
-import Avatar from './Avatar';
-import { Size } from '../Props/types';
-import { Args } from '../Storybook/utils';
-import Container from '../Storybook/Container';
-import Divider from '../Text/Divider';
-import { Time } from '../../utils/date/Time';
-import useAuth from '../../hooks/useAuth.ts';
+import { Source, ArgsTable } from '@storybook/components'
+import {
+  Meta,
+  Story,
+  Preview,
+  Canvas,
+  Subtitle,
+} from '@storybook/addon-docs/blocks'
+import Avatar from './Avatar'
+import { Size } from '../Props/types'
+import { Args } from '../Storybook/utils'
+import Container from '../Storybook/Container'
+import Divider from '../Text/Divider'
+import { Time } from '../../utils/date/Time'
+import useAuth from '../../hooks/useAuth.ts'
 
 <Meta title="Components/User/Avatar" />
 
@@ -16,36 +22,84 @@ import useAuth from '../../hooks/useAuth.ts';
 > Render the user faces using their wallet address
 
 export const PreviewAvatar = () => {
-  const [ auth ] = useAuth()
-  const [ state, setState ] = useState({ address: '0x05d48ee3e815bf376fc79d283301cfdef872e280', size: Size.Full, source: '' })
-  useEffect(() => { auth && setState(current => ({ ...current, address: auth })) }, [ auth ])
-  return <Container>
-    <div style={{ display:'flex' }}>
-      <div style={{ flex: '0 0 40%', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-        <Avatar src={state.source} address={state.address} size={state.size} />
-      </div>
-      <div style={{ flex: '0 0 60%' }}>
-        <ArgsTable
-          compact={true}
-          updateArgs={(value) => setState((current) => ({ ...current, ...value })) }
-          rows={{
-            address: { name: 'address', control: { type: 'text', value: state.address } },
-            size: { name: 'size', control: { type: 'select', value: state.size, options: [
-              Size.Mini, Size.Tiny, Size.Small, Size.Medium, Size.Large, Size.Big, Size.Huge, Size.Massive, Size.Full
-            ] } },
-            source: { name: 'source', control: { type: 'text', value: state.source, placeholder:"https://...."  } },
+  const [auth] = useAuth()
+  const [state, setState] = useState({
+    address: '0x05d48ee3e815bf376fc79d283301cfdef872e280',
+    size: Size.Full,
+    source: '',
+  })
+  useEffect(() => {
+    auth && setState((current) => ({ ...current, address: auth }))
+  }, [auth])
+  return (
+    <Container>
+      <div style={{ display: 'flex' }}>
+        <div
+          style={{
+            flex: '0 0 40%',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
           }}
-        />
+        >
+          <Avatar
+            src={state.source}
+            address={state.address}
+            size={state.size}
+          />
+        </div>
+        <div style={{ flex: '0 0 60%' }}>
+          <ArgsTable
+            compact={true}
+            updateArgs={(value) =>
+              setState((current) => ({ ...current, ...value }))
+            }
+            rows={{
+              address: {
+                name: 'address',
+                control: { type: 'text', value: state.address },
+              },
+              size: {
+                name: 'size',
+                control: {
+                  type: 'select',
+                  value: state.size,
+                  options: [
+                    Size.Mini,
+                    Size.Tiny,
+                    Size.Small,
+                    Size.Medium,
+                    Size.Large,
+                    Size.Big,
+                    Size.Huge,
+                    Size.Massive,
+                    Size.Full,
+                  ],
+                },
+              },
+              source: {
+                name: 'source',
+                control: {
+                  type: 'text',
+                  value: state.source,
+                  placeholder: 'https://....',
+                },
+              },
+            }}
+          />
+        </div>
       </div>
-    </div>
-    <Source language="ts" dark code={
-      `<Address${[
-        state.source ? ` src="${state.source}"` : ``,
-        state.address ? ` address="${state.address}"` : ``,
-        state.size ? ` size="${state.size}"` : ``,
-      ].join('')}/>`
-    } />
-  </Container>
+      <Source
+        language="ts"
+        dark
+        code={`<Address${[
+          state.source ? ` src="${state.source}"` : ``,
+          state.address ? ` address="${state.address}"` : ``,
+          state.size ? ` size="${state.size}"` : ``,
+        ].join('')}/>`}
+      />
+    </Container>
+  )
 }
 
 <PreviewAvatar />
@@ -57,8 +111,14 @@ When an avatar doesn't exists this component will show the default avatar image,
 
 <Canvas isExpanded>
   <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-    <Avatar address={'0xffffffffffffffffffffffffffffffffffffffff'} size="full" />
-    <Avatar address={'0x05d48ee3e815bf376fc79d283301cfdef872e280'} size="full" />
+    <Avatar
+      address={'0xffffffffffffffffffffffffffffffffffffffff'}
+      size="full"
+    />
+    <Avatar
+      address={'0x05d48ee3e815bf376fc79d283301cfdef872e280'}
+      size="full"
+    />
   </div>
 </Canvas>
 
@@ -92,7 +152,13 @@ When an avatar doesn't exists this component will show the default avatar image,
 ## Sizes
 
 <Canvas isExpanded>
-  <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
+  <div
+    style={{
+      display: 'flex',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+    }}
+  >
     <Avatar size="mini" />
     <Avatar size="tiny" />
     <Avatar size="small" />
@@ -110,9 +176,24 @@ When an avatar doesn't exists this component will show the default avatar image,
 ## Custom sources
 
 <Canvas isExpanded>
-  <div style={{ display: 'flex', justifyContent: 'space-around', alignItems: 'center' }}>
-    <Avatar size="massive" src="https://wearable-api.decentraland.org/v2/collections/halloween_2020/wearables/hwn_2020_ghostblaster_tiara/thumbnail" />
-    <Avatar size="massive" src="https://wearable-api.decentraland.org/v2/collections/halloween_2020/wearables/hwn_2020_ghostblaster_upper_body/thumbnail" />
-    <Avatar size="massive" src="https://wearable-api.decentraland.org/v2/collections/halloween_2020/wearables/hwn_2020_ghostblaster_lower_body/thumbnail" />
+  <div
+    style={{
+      display: 'flex',
+      justifyContent: 'space-around',
+      alignItems: 'center',
+    }}
+  >
+    <Avatar
+      size="massive"
+      src="https://wearable-api.decentraland.org/v2/collections/halloween_2020/wearables/hwn_2020_ghostblaster_tiara/thumbnail"
+    />
+    <Avatar
+      size="massive"
+      src="https://wearable-api.decentraland.org/v2/collections/halloween_2020/wearables/hwn_2020_ghostblaster_upper_body/thumbnail"
+    />
+    <Avatar
+      size="massive"
+      src="https://wearable-api.decentraland.org/v2/collections/halloween_2020/wearables/hwn_2020_ghostblaster_lower_body/thumbnail"
+    />
   </div>
 </Canvas>

@@ -1,12 +1,17 @@
 import { useState, useEffect } from 'react'
 
 type AsyncTaskState<A extends any[] = []> = {
-  loading: boolean,
+  loading: boolean
   args: A | null
 }
 
-export default function useAsyncTask<A extends any[] = []>(callback: (...args: A) => Promise<any>) {
-  const [ { loading, args }, setLoading ] = useState<AsyncTaskState<A>>({ loading: false, args: null })
+export default function useAsyncTask<A extends any[] = []>(
+  callback: (...args: A) => Promise<any>
+) {
+  const [{ loading, args }, setLoading] = useState<AsyncTaskState<A>>({
+    loading: false,
+    args: null,
+  })
 
   useEffect(() => {
     if (!loading) {
@@ -36,13 +41,15 @@ export default function useAsyncTask<A extends any[] = []>(callback: (...args: A
         setLoading({ loading: false, args: null })
       })
 
-    return () => { cancelled = true }
-  }, [ loading ])
+    return () => {
+      cancelled = true
+    }
+  }, [loading])
 
   return [
     loading,
     (...args: A) => {
       setLoading({ loading: true, args })
-    }
+    },
   ] as const
 }

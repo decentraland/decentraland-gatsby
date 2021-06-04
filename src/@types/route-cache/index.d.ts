@@ -1,1 +1,1 @@
-declare module 'route-cache';
+declare module 'route-cache'

@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react"
-import { useMotionValue } from "framer-motion"
-import SingletonListener from "../utils/dom/SingletonListener"
+import { useEffect, useState } from 'react'
+import { useMotionValue } from 'framer-motion'
+import SingletonListener from '../utils/dom/SingletonListener'
 
 export default function useWindowScroll() {
   const scrollX = useMotionValue(0)
@@ -25,18 +25,18 @@ export default function useWindowScroll() {
         scrollX,
         scrollY,
         height,
-        width
+        width,
       }))
     }
 
     const listener = SingletonListener.from(window)
 
-    listener.addEventListener("resize", updateScrollValues)
-    listener.addEventListener("scroll", updateScrollValues)
+    listener.addEventListener('resize', updateScrollValues)
+    listener.addEventListener('scroll', updateScrollValues)
 
     return () => {
-      listener.removeEventListener("resize", updateScrollValues)
-      listener.removeEventListener("scroll", updateScrollValues)
+      listener.removeEventListener('resize', updateScrollValues)
+      listener.removeEventListener('scroll', updateScrollValues)
     }
   })
 

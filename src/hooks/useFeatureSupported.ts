@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 
 const features = {
   Crypto: () => 'crypto' in window,
-  File: () => 'File' in window && 'FileList' in window && 'FileReader' in window,
+  File: () =>
+    'File' in window && 'FileList' in window && 'FileReader' in window,
   FileSystem: () => 'requestFileSystem' in window,
   Notification: () => 'Notification' in window && 'permission' in Notification,
   PushManager: () => 'PushManager' in window,

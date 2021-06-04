@@ -1,22 +1,22 @@
-import { ChainId } from "@dcl/schemas"
+import { ChainId } from '@dcl/schemas'
 import { useState, useMemo, useEffect } from 'react'
-import { Source, ArgsTable } from '@storybook/components';
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
-import Label from "semantic-ui-react/dist/commonjs/elements/Label"
-import { ProviderType } from "decentraland-connect/dist/types"
-import { Button } from 'decentraland-ui/dist/components/Button/Button';
-import { Field } from 'decentraland-ui/dist/components/Field/Field';
-import { Loader } from 'decentraland-ui/dist/components/Loader/Loader';
-import { Card } from 'decentraland-ui/dist/components/Card/Card';
-import { Stats } from 'decentraland-ui/dist/components/Stats/Stats';
-import { Args } from '../../components/Storybook/utils';
-import Container from '../../components/Storybook/Container';
-import Divider from '../../components/Text/Divider';
-import Link from '../../components/Text/Link';
-import Avatar from '../../components/User/Avatar';
-import useAsyncMemo from '../../hooks/useAsyncMemo';
-import useAuth from '../../hooks/useAuth';
-import Catalyst from './Catalyst';
+import { Source, ArgsTable } from '@storybook/components'
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks'
+import Label from 'semantic-ui-react/dist/commonjs/elements/Label'
+import { ProviderType } from 'decentraland-connect/dist/types'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Field } from 'decentraland-ui/dist/components/Field/Field'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import { Card } from 'decentraland-ui/dist/components/Card/Card'
+import { Stats } from 'decentraland-ui/dist/components/Stats/Stats'
+import { Args } from '../../components/Storybook/utils'
+import Container from '../../components/Storybook/Container'
+import Divider from '../../components/Text/Divider'
+import Link from '../../components/Text/Link'
+import Avatar from '../../components/User/Avatar'
+import useAsyncMemo from '../../hooks/useAsyncMemo'
+import useAuth from '../../hooks/useAuth'
+import Catalyst from './Catalyst'
 
 <Meta title="Check/Catalyst" />
 
@@ -27,87 +27,205 @@ import Catalyst from './Catalyst';
 <Divider size="small" />
 
 export const CatalystLoader = React.memo((props) => {
-  const [ comms, commsState ] = useAsyncMemo(() => Catalyst.from(props.address).getCommsStatus(true), [props.address])
-  const [ lambdas, lambdasState ] = useAsyncMemo(() => Catalyst.from(props.address).getLambdasStatus(), [props.address])
-  const [ content, contentState ] = useAsyncMemo(() => Catalyst.from(props.address).getContentStatus(), [props.address])
-  const [ profile, profileState ] = useAsyncMemo(() => Catalyst.from(props.address).getProfile(props.user), [props.user], { callWithTruthyDeps: true })
-  return <Card style={{ width: '100%', marginRight: 0 }}>
-    <Card.Content>
-      <div style={{ display: 'flex', alignItems: 'top' }}>
-        <div style={{ position: 'relative', flex: '0 0 20%', minHeight: '5rem' }}>
-          {commsState.loading && <Loader active />}
-          {!commsState.loading && <div style={{paddingBottom: '16px'}}><Stats title="Catalyst">{comms?.name || 'Unknown'}</Stats></div>}
-          {comms && <div style={{paddingBottom: '16px'}}><Stats title="Users">{comms.layers && comms.layers.reduce((total, layer) => total + layer.usersCount, 0).toString() || '0'}</Stats></div>}
+  const [comms, commsState] = useAsyncMemo(
+    () => Catalyst.from(props.address).getCommsStatus(true),
+    [props.address]
+  )
+  const [lambdas, lambdasState] = useAsyncMemo(
+    () => Catalyst.from(props.address).getLambdasStatus(),
+    [props.address]
+  )
+  const [content, contentState] = useAsyncMemo(
+    () => Catalyst.from(props.address).getContentStatus(),
+    [props.address]
+  )
+  const [profile, profileState] = useAsyncMemo(
+    () => Catalyst.from(props.address).getProfile(props.user),
+    [props.user],
+    { callWithTruthyDeps: true }
+  )
+  return (
+    <Card style={{ width: '100%', marginRight: 0 }}>
+      <Card.Content>
+        <div style={{ display: 'flex', alignItems: 'top' }}>
+          <div
+            style={{ position: 'relative', flex: '0 0 20%', minHeight: '5rem' }}
+          >
+            {commsState.loading && <Loader active />}
+            {!commsState.loading && (
+              <div style={{ paddingBottom: '16px' }}>
+                <Stats title="Catalyst">{comms?.name || 'Unknown'}</Stats>
+              </div>
+            )}
+            {comms && (
+              <div style={{ paddingBottom: '16px' }}>
+                <Stats title="Users">
+                  {(comms.layers &&
+                    comms.layers
+                      .reduce((total, layer) => total + layer.usersCount, 0)
+                      .toString()) ||
+                    '0'}
+                </Stats>
+              </div>
+            )}
+          </div>
+          <div
+            style={{ position: 'relative', flex: '0 0 30%', minHeight: '5rem' }}
+          >
+            {contentState.loading && <Loader active />}
+            {content && (
+              <div style={{ paddingBottom: '16px' }}>
+                <Stats title="Content network">
+                  {`${content.version} - ${content.ethNetwork || 'Unknown'}`}
+                </Stats>
+              </div>
+            )}
+            {content && (
+              <div style={{ paddingBottom: '16px' }}>
+                <Stats title="Synchronization State">
+                  {content.synchronizationStatus?.synchronizationState ||
+                    'Unknown'}
+                </Stats>
+              </div>
+            )}
+          </div>
+          <div
+            style={{ position: 'relative', flex: '0 0 25%', minHeight: '5rem' }}
+          >
+            {profileState.loading && <Loader active />}
+            {profile && (
+              <div style={{ paddingBottom: '16px' }}>
+                <Stats title="Profile versioni">
+                  {profile.version.toString() || '0'}
+                </Stats>
+              </div>
+            )}
+            {profile && (
+              <div style={{ paddingBottom: '16px' }}>
+                <Stats title="Profile name">{profile.name || 'Unknown'}</Stats>
+              </div>
+            )}
+            {profile && (
+              <div style={{ paddingBottom: '16px' }}>
+                <Stats title="Has Claimed Name">
+                  {(profile.hasClaimedName && 'Yes') || 'No'}
+                </Stats>
+              </div>
+            )}
+          </div>
+          <div
+            style={{
+              position: 'relative',
+              flex: '0 0 25%',
+              minHeight: '5rem',
+              display: 'flex',
+              justifyContent: 'center',
+            }}
+          >
+            {profileState.loading && <Loader active />}
+            {!profileState.loading && profile && (
+              <div>
+                <img
+                  src={profile?.avatar?.snapshots?.face}
+                  width="100"
+                  height="100"
+                  style={{ width: '100%', height: 'auto' }}
+                />
+              </div>
+            )}
+          </div>
         </div>
-        <div style={{ position: 'relative', flex: '0 0 30%', minHeight: '5rem' }}>
-          {contentState.loading && <Loader active />}
-          {content && <div style={{paddingBottom: '16px'}}><Stats title="Content network">
-            {`${content.version} - ${content.ethNetwork || 'Unknown'}`}
-          </Stats></div>}
-          {content && <div style={{paddingBottom: '16px'}}><Stats title="Synchronization State">{content.synchronizationStatus?.synchronizationState || 'Unknown'}</Stats></div>}
-        </div>
-        <div style={{ position: 'relative', flex: '0 0 25%', minHeight: '5rem' }}>
-          {profileState.loading && <Loader active />}
-          {profile && <div style={{paddingBottom: '16px'}}>
-            <Stats title="Profile versioni">{profile.version.toString() || '0'}</Stats>
-          </div>}
-          {profile && <div style={{paddingBottom: '16px'}}>
-            <Stats title="Profile name">{profile.name || 'Unknown'}</Stats>
-          </div>}
-          {profile && <div style={{paddingBottom: '16px'}}>
-            <Stats title="Has Claimed Name">{profile.hasClaimedName && 'Yes' || 'No'}</Stats>
-          </div>}
-        </div>
-        <div style={{ position: 'relative', flex: '0 0 25%', minHeight: '5rem', display: 'flex', justifyContent: 'center' }}>
-          {profileState.loading && <Loader active />}
-          {!profileState.loading && profile && <div>
-            <img src={profile?.avatar?.snapshots?.face} width="100" height="100" style={{ width: '100%', height: 'auto' }} />
-          </div>}
-        </div>
-      </div>
-    </Card.Content>
-    <Card.Content>
-      <Card.Meta>
-        <div style={{ display: 'flex', alignItems: 'center' }}>
-          <pre>{props.address}</pre>
-          <div style={{ flex: 1 }} />
-          <a href={props.address + `/comms/status`} target="_blank">
-            {commsState.loading && <Label>comms</Label>}
-            {commsState.error && <Label color="red">comms</Label>}
-            {comms && <Label color={commsState.time > 1000 ? 'orange' : 'green'}>comms ({commsState.time > 1000 ?  (commsState.time / 1000) + `s`: commsState.time + `ms`})</Label>}
-          </a>
-          <a href={props.address + `/lambdas/status`} target="_blank">
-            {lambdasState.loading && <Label>lambdas</Label>}
-            {lambdasState.error && <Label color="red">lambdas</Label>}
-            {lambdas && <Label color={lambdasState.time > 1000 ? 'orange' : 'green'}>lambdas ({lambdasState.time > 1000 ?  (lambdasState.time / 1000) + `s`: lambdasState.time + `ms`})</Label>}
-          </a>
-          <a href={props.address + `/content/status`} target="_blank">
-            {contentState.loading && <Label>content</Label>}
-            {contentState.error && <Label color="red">content</Label>}
-            {content && <Label color={contentState.time > 1000 ? 'orange' : 'green'}>content ({contentState.time > 1000 ?  (contentState.time / 1000) + `s`: contentState.time + `ms`})</Label>}
-          </a>
-        </div>
-      </Card.Meta>
-    </Card.Content>
-  </Card>
+      </Card.Content>
+      <Card.Content>
+        <Card.Meta>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <pre>{props.address}</pre>
+            <div style={{ flex: 1 }} />
+            <a href={props.address + `/comms/status`} target="_blank">
+              {commsState.loading && <Label>comms</Label>}
+              {commsState.error && <Label color="red">comms</Label>}
+              {comms && (
+                <Label color={commsState.time > 1000 ? 'orange' : 'green'}>
+                  comms (
+                  {commsState.time > 1000
+                    ? commsState.time / 1000 + `s`
+                    : commsState.time + `ms`}
+                  )
+                </Label>
+              )}
+            </a>
+            <a href={props.address + `/lambdas/status`} target="_blank">
+              {lambdasState.loading && <Label>lambdas</Label>}
+              {lambdasState.error && <Label color="red">lambdas</Label>}
+              {lambdas && (
+                <Label color={lambdasState.time > 1000 ? 'orange' : 'green'}>
+                  lambdas (
+                  {lambdasState.time > 1000
+                    ? lambdasState.time / 1000 + `s`
+                    : lambdasState.time + `ms`}
+                  )
+                </Label>
+              )}
+            </a>
+            <a href={props.address + `/content/status`} target="_blank">
+              {contentState.loading && <Label>content</Label>}
+              {contentState.error && <Label color="red">content</Label>}
+              {content && (
+                <Label color={contentState.time > 1000 ? 'orange' : 'green'}>
+                  content (
+                  {contentState.time > 1000
+                    ? contentState.time / 1000 + `s`
+                    : contentState.time + `ms`}
+                  )
+                </Label>
+              )}
+            </a>
+          </div>
+        </Card.Meta>
+      </Card.Content>
+    </Card>
+  )
 })
 
 export const PreviewLoader = () => {
-  const [ auth ] = useAuth()
-  const [ address, setAddress ] = useState('0x05d48ee3e815bf376fc79d283301cfdef872e280')
-  const [ servers, { loading } ] = useAsyncMemo(() => Catalyst.get().getServers(), [])
-  useEffect(() => { auth && setAddress(auth) }, [ auth ])
-  return <Container>
-    <div style={{ maxWidth: '525px' }}>
-      <Field type="address" value={address || ''} onChange={(e, { value }) => setAddress((value || '').toLowerCase())} />
-    </div>
-    <div style={{ minHeight: '200px', position: 'relative', padding: '3rem 0' }}>
-      {loading && <Loader active />}
-      {servers && <Card.Group>
-        {servers.map(server =>  <CatalystLoader key={server.id} {...server} user={address || ''} />)}
-      </Card.Group>}
-    </div>
-  </Container>
+  const [auth] = useAuth()
+  const [address, setAddress] = useState(
+    '0x05d48ee3e815bf376fc79d283301cfdef872e280'
+  )
+  const [servers, { loading }] = useAsyncMemo(
+    () => Catalyst.get().getServers(),
+    []
+  )
+  useEffect(() => {
+    auth && setAddress(auth)
+  }, [auth])
+  return (
+    <Container>
+      <div style={{ maxWidth: '525px' }}>
+        <Field
+          type="address"
+          value={address || ''}
+          onChange={(e, { value }) => setAddress((value || '').toLowerCase())}
+        />
+      </div>
+      <div
+        style={{ minHeight: '200px', position: 'relative', padding: '3rem 0' }}
+      >
+        {loading && <Loader active />}
+        {servers && (
+          <Card.Group>
+            {servers.map((server) => (
+              <CatalystLoader
+                key={server.id}
+                {...server}
+                user={address || ''}
+              />
+            ))}
+          </Card.Group>
+        )}
+      </div>
+    </Container>
+  )
 }
 
 <PreviewLoader />

@@ -1,69 +1,109 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Source, ArgsTable } from '@storybook/components';
-import { Meta, Story, Canvas } from '@storybook/addon-docs/blocks';
+import { Source, ArgsTable } from '@storybook/components'
+import { Meta, Story, Canvas } from '@storybook/addon-docs/blocks'
 import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid'
-import { Button } from 'decentraland-ui/dist/components/Button/Button';
-import { Args } from '../components/Storybook/utils';
-import Container from '../components/Storybook/Container';
-import Time from '../utils/date/Time';
-import Divider from '../components/Text/Divider';
-import useCountdown from './useCountdown';
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Args } from '../components/Storybook/utils'
+import Container from '../components/Storybook/Container'
+import Time from '../utils/date/Time'
+import Divider from '../components/Text/Divider'
+import useCountdown from './useCountdown'
 
 <Meta title="Hooks/useCountdown" />
 
 # Countdown Hook
 
-> The *countdown hook* update a countdown using a time interval.
+> The _countdown hook_ update a countdown using a time interval.
 
 ```ts
 const countdown = useCountdown(until)
 ```
 
-<ArgsTable rows={[
-  Args.requiredParam('until', 'the moment at which point the countdown has to reach `0`', Args.type('Pick<Date, \'getTime\'>')),
-  Args.returns('countdown', '', Args.type('Countdown')),
-  Args.returns('countdown.days', 'days until the countdown finish', Args.Types.Uint),
-  Args.returns('countdown.hours', 'hours until days prop decreases', Args.Types.Uint),
-  Args.returns('countdown.minutes', 'minutes until hours prop decreases', Args.Types.Uint),
-  Args.returns('countdown.seconds', 'seconds until minutes prop decreases', Args.Types.Uint),
-  Args.returns('countdown.milliseconds', 'milliseconds until seconds decreases', Args.Types.Uint),
-  Args.returns('countdown.time', 'milliseconds until the countdown finish', Args.Types.Uint),
-]}/>
+<ArgsTable
+  rows={[
+    Args.requiredParam(
+      'until',
+      'the moment at which point the countdown has to reach `0`',
+      Args.type("Pick<Date, 'getTime'>")
+    ),
+    Args.returns('countdown', '', Args.type('Countdown')),
+    Args.returns(
+      'countdown.days',
+      'days until the countdown finish',
+      Args.Types.Uint
+    ),
+    Args.returns(
+      'countdown.hours',
+      'hours until days prop decreases',
+      Args.Types.Uint
+    ),
+    Args.returns(
+      'countdown.minutes',
+      'minutes until hours prop decreases',
+      Args.Types.Uint
+    ),
+    Args.returns(
+      'countdown.seconds',
+      'seconds until minutes prop decreases',
+      Args.Types.Uint
+    ),
+    Args.returns(
+      'countdown.milliseconds',
+      'milliseconds until seconds decreases',
+      Args.Types.Uint
+    ),
+    Args.returns(
+      'countdown.time',
+      'milliseconds until the countdown finish',
+      Args.Types.Uint
+    ),
+  ]}
+/>
 
 ## Example
 
 export const Live = () => {
-    const [ date, setDate ] = useState(new Date())
-    const setTime = (ms) => setDate(new Date(Date.now() + ms))
-    const countdown = useCountdown(date)
-    useEffect(() => setTime(1 * Time.Day), [])
-    return <Container>
-      <Button primary size="small" onClick={() => setTime(10 * Time.Second)}>10 seconds</Button>
-      <Button primary size="small" onClick={() => setTime(10 * Time.Minute)}>10 minutes</Button>
-      <Button primary size="small" onClick={() => setTime(10 * Time.Hour)}>10 hours</Button>
-      <Button primary size="small" onClick={() => setTime(10 * Time.Day)}>10 days</Button>
+  const [date, setDate] = useState(new Date())
+  const setTime = (ms) => setDate(new Date(Date.now() + ms))
+  const countdown = useCountdown(date)
+  useEffect(() => setTime(1 * Time.Day), [])
+  return (
+    <Container>
+      <Button primary size="small" onClick={() => setTime(10 * Time.Second)}>
+        10 seconds
+      </Button>
+      <Button primary size="small" onClick={() => setTime(10 * Time.Minute)}>
+        10 minutes
+      </Button>
+      <Button primary size="small" onClick={() => setTime(10 * Time.Hour)}>
+        10 hours
+      </Button>
+      <Button primary size="small" onClick={() => setTime(10 * Time.Day)}>
+        10 days
+      </Button>
       <Source language="json" code={JSON.stringify(countdown, null, 2)} />
     </Container>
-  }
+  )
+}
 
 <Live />
 
-
 ```tsx dark=true
-import React from "react"
+import React from 'react'
 
-export function Example () {
-  const [ date, setDate ] = useState(new Date(0))
-  const setTime = (ms: number) => setDate(new Date(Date. now() + ms))
+export function Example() {
+  const [date, setDate] = useState(new Date(0))
+  const setTime = (ms: number) => setDate(new Date(Date.now() + ms))
   const countdown = useCountdown(date)
 
-  return <div>
-    <button onClick={() => setTime(10 * Time.Second)}>10 seconds</button>
-    <button onClick={() => setTime(10 * Time.Minute)}>10 minutes</button>
-    <button onClick={() => setTime(10 * Time.Hour)}>10 hours</button>
-    <button onClick={() => setTime(10 * Time.Day)}>10 days</button>
-    <pre>{JSON.stringify(countdown, null, 2)}</pre>
-  </div>
+  return (
+    <div>
+      <button onClick={() => setTime(10 * Time.Second)}>10 seconds</button>
+      <button onClick={() => setTime(10 * Time.Minute)}>10 minutes</button>
+      <button onClick={() => setTime(10 * Time.Hour)}>10 hours</button>
+      <button onClick={() => setTime(10 * Time.Day)}>10 days</button>
+      <pre>{JSON.stringify(countdown, null, 2)}</pre>
+    </div>
+  )
 }
-
 ```

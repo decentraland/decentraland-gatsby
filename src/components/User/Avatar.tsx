@@ -13,40 +13,51 @@ type Props = SizeProps & {
   address?: string
 }
 
-export type AvatarProps = Omit<React.HTMLProps<HTMLImageElement>, 'height' | 'width' | 'size' | 'src'> & Props
+export type AvatarProps = Omit<
+  React.HTMLProps<HTMLImageElement>,
+  'height' | 'width' | 'size' | 'src'
+> &
+  Props
 
-export default React.memo(function Avatar({ address, size, src, ...props }: AvatarProps) {
-  const [ failed, setFailed ] = useState(false)
-  const [ profile, { loading } ] = useAsyncMemo(
+export default React.memo(function Avatar({
+  address,
+  size,
+  src,
+  ...props
+}: AvatarProps) {
+  const [failed, setFailed] = useState(false)
+  const [profile, { loading }] = useAsyncMemo(
     () => profiles.load(address || ''),
-    [ address ],
+    [address],
     { callWithTruthyDeps: true }
   )
 
   const target = useMemo(() => {
     if (src) {
       return src
-    } else if (failed || !(profile?.avatar?.snapshots?.face)) {
+    } else if (failed || !profile?.avatar?.snapshots?.face) {
       return DEFAULT_AVATAR
     } else {
       return profile?.avatar?.snapshots?.face
     }
-  }, [ profile, failed ])
+  }, [profile, failed])
 
-  return <img
-    loading="lazy"
-    {...props as any}
-    src={target}
-    onError={() => setFailed(true)}
-    width="128"
-    height="128"
-    className={TokenList.join([
-      StyleNamespace,
-      'dcl-avatar',
-      `dcl-avatar--${size}`,
-      `dcl-avatar--${((address || '')[2] || '').toLowerCase()}`,
-      !src && loading && `dcl-avatar--loading`,
-      props.className
-    ])}
-  />
+  return (
+    <img
+      loading="lazy"
+      {...(props as any)}
+      src={target}
+      onError={() => setFailed(true)}
+      width="128"
+      height="128"
+      className={TokenList.join([
+        StyleNamespace,
+        'dcl-avatar',
+        `dcl-avatar--${size}`,
+        `dcl-avatar--${((address || '')[2] || '').toLowerCase()}`,
+        !src && loading && `dcl-avatar--loading`,
+        props.className,
+      ])}
+    />
+  )
 })

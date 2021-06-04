@@ -1,5 +1,7 @@
-import React, { createContext } from "react"
-import useFeatureFlag, { DEFAULT_FEATURE_FLAG  } from "../../hooks/useFeatureFlag"
+import React, { createContext } from 'react'
+import useFeatureFlag, {
+  DEFAULT_FEATURE_FLAG,
+} from '../../hooks/useFeatureFlag'
 
 const defaultTransactionState: ReturnType<typeof useFeatureFlag> = [
   DEFAULT_FEATURE_FLAG,
@@ -9,14 +11,18 @@ const defaultTransactionState: ReturnType<typeof useFeatureFlag> = [
     time: 0,
     version: 0,
     set: () => null,
-    reload: () => null
-  }
+    reload: () => null,
+  },
 ]
 
 export const FeatureFlagContext = createContext(defaultTransactionState)
-export default React.memo(function AuthProvider(props: React.PropsWithChildren<{}> & { endpoint: string }) {
+export default React.memo(function AuthProvider(
+  props: React.PropsWithChildren<{}> & { endpoint: string }
+) {
   const ff = useFeatureFlag(props.endpoint)
-  return <FeatureFlagContext.Provider value={ff}>
-    {props.children}
-  </FeatureFlagContext.Provider>
+  return (
+    <FeatureFlagContext.Provider value={ff}>
+      {props.children}
+    </FeatureFlagContext.Provider>
+  )
 })

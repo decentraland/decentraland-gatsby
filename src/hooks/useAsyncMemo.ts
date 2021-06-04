@@ -1,10 +1,10 @@
 import { DependencyList, useState, useEffect } from 'react'
 
 type AsyncMemoState<T, I = null> = {
-  version: number,
-  loading: boolean,
-  value: T | I,
-  time: number,
+  version: number
+  loading: boolean
+  value: T | I
+  time: number
   error: Error | null
 }
 
@@ -32,20 +32,29 @@ export default function useAsyncMemo<T, I = null>(
   const [state, setState] = useState<AsyncMemoState<T, I>>({
     version: 0,
     loading: false,
-    value: (options.initialValue ?? null)  as I,
+    value: (options.initialValue ?? null) as I,
     time: 0,
-    error: null
+    error: null,
   })
 
   function load() {
-    if (options.callWithTruthyDeps && deps.some(dep => Boolean(dep) === false)) {
+    if (
+      options.callWithTruthyDeps &&
+      deps.some((dep) => Boolean(dep) === false)
+    ) {
       return
     }
 
-    setState((current) => ({ ...current, loading: true, version: current.version + 1 }))
+    setState((current) => ({
+      ...current,
+      loading: true,
+      version: current.version + 1,
+    }))
   }
 
-  useEffect(() => { load() }, deps)
+  useEffect(() => {
+    load()
+  }, deps)
 
   useEffect(() => {
     if (!state.loading) {
@@ -63,7 +72,11 @@ export default function useAsyncMemo<T, I = null>(
         }
 
         setState((current) => ({
-          ...current, value, error: null, loading, time: Date.now() - initial
+          ...current,
+          value,
+          error: null,
+          loading,
+          time: Date.now() - initial,
         }))
       })
       .catch((error) => {
@@ -73,16 +86,24 @@ export default function useAsyncMemo<T, I = null>(
         }
 
         setState((current) => ({
-          ...current, value: current.value, error, loading, time: Date.now() - initial
+          ...current,
+          value: current.value,
+          error,
+          loading,
+          time: Date.now() - initial,
         }))
       })
 
-    return () => { cancelled = true }
-
-  }, [ state.version, state.loading ])
+    return () => {
+      cancelled = true
+    }
+  }, [state.version, state.loading])
 
   function set(value: ((current: T | I) => T) | T) {
-    const newValue: T = typeof value === 'function' ? (value as (current: T | I) => T)(state.value) : value
+    const newValue: T =
+      typeof value === 'function'
+        ? (value as (current: T | I) => T)(state.value)
+        : value
     setState((current) => ({ ...current, value: newValue }))
   }
 
@@ -95,6 +116,6 @@ export default function useAsyncMemo<T, I = null>(
       time: state.time,
       reload: load,
       set,
-    }
+    },
   ] as const
 }

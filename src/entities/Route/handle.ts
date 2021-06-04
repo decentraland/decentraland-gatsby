@@ -1,13 +1,20 @@
-import { Request, Response, NextFunction } from "express";
-import { NextHandleFunction } from "connect";
-import Context from "./context";
-import RequestError from "./error";
-import isStream from "../../utils/stream/isStream";
-import { http_request_pool_size, http_request_duration_seconds } from "./metrics";
+import { Request, Response, NextFunction } from 'express'
+import { NextHandleFunction } from 'connect'
+import Context from './context'
+import RequestError from './error'
+import isStream from '../../utils/stream/isStream'
+import {
+  http_request_pool_size,
+  http_request_duration_seconds,
+} from './metrics'
 
-export type AsyncHandler = (req: Request & any, res: Response & any, ctx: Context) => Promise<any> | any
+export type AsyncHandler = (
+  req: Request & any,
+  res: Response & any,
+  ctx: Context
+) => Promise<any> | any
 
-export default handleAPI;
+export default handleAPI
 
 export function handleAPI(handler: AsyncHandler) {
   return handleIncommingMessage(handler, (data, _req, res) => {
@@ -22,19 +29,20 @@ export function handleJSON(handler: AsyncHandler) {
 }
 
 export function handleRaw(handler: AsyncHandler, type?: string) {
-  return handleIncommingMessage(
-    handler,
-    (data, _req, res) => {
-      if (type) {
-        res.type(type)
-      }
-
-      res.send(data)
+  return handleIncommingMessage(handler, (data, _req, res) => {
+    if (type) {
+      res.type(type)
     }
-  )
+
+    res.send(data)
+  })
 }
 
-export function handleExpressError(err: RequestError, req: Request, res: Response) {
+export function handleExpressError(
+  err: RequestError,
+  req: Request,
+  res: Response
+) {
   const data = {
     ...err,
     message: err.message,
@@ -49,8 +57,8 @@ export function handleExpressError(err: RequestError, req: Request, res: Respons
 
   console.error(
     `error executing request ${req.method} ${req.path} : `,
-    process.env.NODE_ENV === 'production' && JSON.stringify(data) || data
-  );
+    (process.env.NODE_ENV === 'production' && JSON.stringify(data)) || data
+  )
 
   if (!res.headersSent) {
     res.status(err.statusCode || RequestError.InternalServerError)
@@ -106,10 +114,16 @@ export function middleware(handler: AsyncHandler): NextHandleFunction {
 }
 
 /** @deprecated */
-export async function useMiddlaware(middlaware: NextHandleFunction, req: Request, res: Response) {
+export async function useMiddlaware(
+  middlaware: NextHandleFunction,
+  req: Request,
+  res: Response
+) {
   return new Promise<void>((resolve, reject) => {
     try {
-      middlaware(req, res, (err?: any) => { err ? reject(err) : resolve() })
+      middlaware(req, res, (err?: any) => {
+        err ? reject(err) : resolve()
+      })
     } catch (error) {
       reject(error)
     }

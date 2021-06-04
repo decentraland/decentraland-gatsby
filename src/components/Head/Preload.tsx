@@ -1,5 +1,5 @@
-import React from 'react';
-import { extension } from './utils';
+import React from 'react'
+import { extension } from './utils'
 
 export type PreloadProps = {
   href?: string
@@ -13,12 +13,19 @@ export default function Preload(props: PreloadProps) {
     return null
   }
 
-  return <link rel="preload" href={props.href} as={props.as ?? preloadAs(props.href)} type={props.type ?? preloadType(props.href)} media={props.media} />
+  return (
+    <link
+      rel="preload"
+      href={props.href}
+      as={props.as ?? preloadAs(props.href)}
+      type={props.type ?? preloadType(props.href)}
+      media={props.media}
+    />
+  )
 }
 
-
 export function preloadAs(href: string) {
-  const ext = extension(href);
+  const ext = extension(href)
 
   switch (ext) {
     case 'aac':
@@ -73,7 +80,7 @@ export function preloadAs(href: string) {
 }
 
 export function preloadType(href: string) {
-  const ext = extension(href);
+  const ext = extension(href)
 
   switch (ext) {
     case 'apng':

@@ -1,10 +1,9 @@
-import { useState, useEffect } from "react"
-import EntityStore, { EntityStoreState } from "../utils/EntityStore"
+import { useState, useEffect } from 'react'
+import EntityStore, { EntityStoreState } from '../utils/EntityStore'
 
 export default function useEntityStore<E extends object>(
   store: EntityStore<E>
 ) {
-
   const [state, setState] = useState(store.getState())
 
   useEffect(() => {

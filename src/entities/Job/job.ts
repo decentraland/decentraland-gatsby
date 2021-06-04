@@ -11,11 +11,11 @@ export interface Job<P extends object = {}> {
 }
 
 export default class JobManager {
-  memory: boolean = false;
+  memory: boolean = false
   runningJobs = new Set<string>()
   jobs: Map<string, Job<any>[]> = new Map()
   crons: CronJob[] = []
-  pool: Pool<any>;
+  pool: Pool<any>
   interval: NodeJS.Timeout
   initialInterval: NodeJS.Timeout
   running: boolean = false
@@ -49,7 +49,7 @@ export default class JobManager {
       available: this.pool.available,
       running: this.pool.borrowed,
       pending: this.pool.pending,
-      ids: Array.from(this.runningJobs.values())
+      ids: Array.from(this.runningJobs.values()),
     }
   }
 
@@ -60,27 +60,31 @@ export default class JobManager {
   }
 
   cron(cronTime: CronTime, job: Job<any>, ...extraJobs: Job<any>[]) {
-    this.crons.push(new CronJob(this.time(cronTime), () => {
-      this.runJobs(null, 'cron', {}, [job, ...extraJobs])
-    }))
+    this.crons.push(
+      new CronJob(this.time(cronTime), () => {
+        this.runJobs(null, 'cron', {}, [job, ...extraJobs])
+      })
+    )
   }
 
   start() {
-    this.crons.forEach(cron => cron.start())
+    this.crons.forEach((cron) => cron.start())
     this.running = true
   }
 
   stop() {
-    this.crons.forEach(cron => cron.stop())
+    this.crons.forEach((cron) => cron.stop())
     this.running = false
   }
 
   async check() {
     const jobs = await this.getModel().getPending()
-    const pendingJobs = jobs.filter(job => !this.runningJobs.has(job.id))
+    const pendingJobs = jobs.filter((job) => !this.runningJobs.has(job.id))
 
     if (pendingJobs.length) {
-      Promise.all(pendingJobs.map(job => this.run(job.id, job.name, job.payload)))
+      Promise.all(
+        pendingJobs.map((job) => this.run(job.id, job.name, job.payload))
+      )
     }
   }
 
@@ -109,8 +113,13 @@ export default class JobManager {
     await this.runJobs(id, name, payload, this.jobs.get(name) as Job<any>[])
   }
 
-  async runJobs(id: string | null, name: string | null, payload: any, jobs: Job<any>[]): Promise<void> {
-    let current = 0;
+  async runJobs(
+    id: string | null,
+    name: string | null,
+    payload: any,
+    jobs: Job<any>[]
+  ): Promise<void> {
+    let current = 0
 
     const context = new JobContext(
       id,
@@ -132,7 +141,6 @@ export default class JobManager {
     if (id) {
       this.runningJobs.add(id)
     }
-
 
     let error = 0
     const labels = { job: name || 'uknown' }

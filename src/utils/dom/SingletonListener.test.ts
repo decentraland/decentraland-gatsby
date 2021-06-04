@@ -1,4 +1,4 @@
-import SingletonListener from "./SingletonListener"
+import SingletonListener from './SingletonListener'
 
 const createTarget = () => {
   let target = new SingletonListener({
@@ -9,12 +9,10 @@ const createTarget = () => {
   jest.spyOn(target, 'addEventListener')
   jest.spyOn(target, 'removeEventListener')
 
-  return target as (
-    SingletonListener<any> & {
-      addEventListener: jest.SpyInstance<any>,
-      removeEventListener: jest.SpyInstance<any>
-    }
-  )
+  return target as SingletonListener<any> & {
+    addEventListener: jest.SpyInstance<any>
+    removeEventListener: jest.SpyInstance<any>
+  }
 }
 
 describe(SingletonListener.name, () => {

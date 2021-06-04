@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react"
-import { ChainId } from "@dcl/schemas"
-import { Provider, ProviderType } from "decentraland-connect/dist/types"
-import { connection } from "decentraland-connect/dist/ConnectionManager"
-import { getCurrentIdentity, setCurrentIdentity } from "../utils/auth/storage"
-import segment from "../utils/segment/segment"
-import { identify, Identity } from "../utils/auth"
-import { PersistedKeys } from "../utils/loader/types"
-import SingletonListener from "../utils/dom/SingletonListener"
-import { ownerAddress } from "../utils/auth/identify"
+import { useEffect, useState } from 'react'
+import { ChainId } from '@dcl/schemas'
+import { Provider, ProviderType } from 'decentraland-connect/dist/types'
+import { connection } from 'decentraland-connect/dist/ConnectionManager'
+import { getCurrentIdentity, setCurrentIdentity } from '../utils/auth/storage'
+import segment from '../utils/segment/segment'
+import { identify, Identity } from '../utils/auth'
+import { PersistedKeys } from '../utils/loader/types'
+import SingletonListener from '../utils/dom/SingletonListener'
+import { ownerAddress } from '../utils/auth/identify'
 
 enum AuthEvent {
   Connect = 'Connect',
@@ -25,12 +25,12 @@ enum AuthStatus {
 
 type AuthState = {
   selecting: boolean
-  account: string | null,
-  identity: Identity | null,
-  provider: Provider | null,
-  providerType: ProviderType | null,
-  chainId: ChainId | null,
-  status: AuthStatus,
+  account: string | null
+  identity: Identity | null
+  provider: Provider | null
+  providerType: ProviderType | null
+  chainId: ChainId | null
+  status: AuthStatus
 }
 
 export const initialState: AuthState = Object.freeze({
@@ -65,8 +65,7 @@ async function restoreConnection(): Promise<AuthState> {
 
     // drop connection when identity is missing
     if (!identity && connectionData) {
-      await connection.disconnect()
-        .catch(err => console.error(err))
+      await connection.disconnect().catch((err) => console.error(err))
     }
 
     if (identity && connectionData) {
@@ -77,7 +76,10 @@ async function restoreConnection(): Promise<AuthState> {
       }
 
       if (!provider) {
-        const connectConnection = await connection.connect(connectionData!.providerType, connectionData!.chainId)
+        const connectConnection = await connection.connect(
+          connectionData!.providerType,
+          connectionData!.chainId
+        )
         provider = connectConnection.provider
       }
 
@@ -125,7 +127,7 @@ async function createConnection(providerType: ProviderType, chainId: ChainId) {
         providerType,
         status: AuthStatus.Connected,
         provider: previousConnection.provider,
-        selecting: false
+        selecting: false,
       }
     }
   } catch (err) {
@@ -137,7 +139,7 @@ async function createConnection(providerType: ProviderType, chainId: ChainId) {
 }
 
 function isLoading(status: AuthStatus) {
-  switch(status) {
+  switch (status) {
     case AuthStatus.Connected:
     case AuthStatus.Disconnected:
       return false
@@ -148,10 +150,10 @@ function isLoading(status: AuthStatus) {
 }
 
 export default function useAuth() {
-  const [ state, setState ] = useState<AuthState>({ ...initialState })
+  const [state, setState] = useState<AuthState>({ ...initialState })
 
   function select(selecting: boolean = true) {
-    if(isLoading(state.status)) {
+    if (isLoading(state.status)) {
       return
     }
 
@@ -206,7 +208,7 @@ export default function useAuth() {
       provider: null,
       selecting: false,
       providerType: null,
-      chainId: null
+      chainId: null,
     })
   }
 
@@ -228,7 +230,7 @@ export default function useAuth() {
               identity: null,
               provider: null,
               providerType: null,
-              chainId: null
+              chainId: null,
             }
           }
 
@@ -239,7 +241,7 @@ export default function useAuth() {
             identity: null,
             provider: null,
             providerType: null,
-            chainId: null
+            chainId: null,
           }
         })
       }
@@ -248,7 +250,10 @@ export default function useAuth() {
     getListener().addEventListener(PersistedKeys.Identity as any, updateIdetity)
     return () => {
       cancelled = true
-      getListener().removeEventListener(PersistedKeys.Identity as any, updateIdetity)
+      getListener().removeEventListener(
+        PersistedKeys.Identity as any,
+        updateIdetity
+      )
     }
   }, [])
 
@@ -257,56 +262,61 @@ export default function useAuth() {
     let cancelled = false
     if (state.status === AuthStatus.Restoring) {
       CONNECTION_PROMISE = restoreConnection()
-      Promise.resolve(CONNECTION_PROMISE)
-        .then((result) => {
-          if (!cancelled) {
-            setState(result)
-          }
-        })
+      Promise.resolve(CONNECTION_PROMISE).then((result) => {
+        if (!cancelled) {
+          setState(result)
+        }
+      })
     }
 
     // connect
-    if (state.status === AuthStatus.Connecting && state.providerType && state.chainId) {
+    if (
+      state.status === AuthStatus.Connecting &&
+      state.providerType &&
+      state.chainId
+    ) {
       CONNECTION_PROMISE = createConnection(state.providerType, state.chainId)
-      Promise.resolve(CONNECTION_PROMISE)
-        .then((result) => {
-          if (!cancelled) {
-            if (result.status === AuthStatus.Connected) {
-              const conn = {
-                account: result.account,
-                providerType: state.providerType,
-                chainId: state.chainId,
-              }
-
-              segment((analytics) => {
-                analytics.identify(conn.account!)
-                analytics.track(AuthEvent.Connected, conn)
-              })
-            } else {
-              result.selecting = state.selecting
+      Promise.resolve(CONNECTION_PROMISE).then((result) => {
+        if (!cancelled) {
+          if (result.status === AuthStatus.Connected) {
+            const conn = {
+              account: result.account,
+              providerType: state.providerType,
+              chainId: state.chainId,
             }
 
-            setState(result)
+            segment((analytics) => {
+              analytics.identify(conn.account!)
+              analytics.track(AuthEvent.Connected, conn)
+            })
+          } else {
+            result.selecting = state.selecting
           }
-        })
+
+          setState(result)
+        }
+      })
     }
 
     // disconnect
-    if (state.status === AuthStatus.Disconnecting && state.providerType === null && state.chainId === null) {
+    if (
+      state.status === AuthStatus.Disconnecting &&
+      state.providerType === null &&
+      state.chainId === null
+    ) {
       setCurrentIdentity(null)
       connection.disconnect().catch((err) => console.error(err))
       segment((analytics) => analytics.track(AuthEvent.Disconnected, {}))
       setState({
         ...initialState,
-        status: AuthStatus.Disconnected
+        status: AuthStatus.Disconnected,
       })
     }
 
     return () => {
       cancelled = true
     }
-
-  }, [ state.status, state.providerType, state.chainId ])
+  }, [state.status, state.providerType, state.chainId])
 
   const loading = isLoading(state.status)
   return [
@@ -317,9 +327,9 @@ export default function useAuth() {
       select,
       loading,
       selecting: state.selecting,
-      provider: !loading ? state.provider: null,
-      providerType: !loading ? state.providerType: null,
-      chainId: !loading ? state.chainId: null,
-    }
+      provider: !loading ? state.provider : null,
+      providerType: !loading ? state.providerType : null,
+      chainId: !loading ? state.chainId : null,
+    },
   ] as const
 }

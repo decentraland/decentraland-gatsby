@@ -21,7 +21,7 @@ database.connect = async () => {
       await client.query(`SET search_path TO ${url.searchParams.get('schema')}`)
     }
 
-    if(url.username || url.password) {
+    if (url.username || url.password) {
       url.username = '******'
       url.password = ''
     }
@@ -34,4 +34,4 @@ database.connect = async () => {
   return client
 }
 
-export default database;
+export default database

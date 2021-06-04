@@ -1,7 +1,6 @@
 import random from './random'
 
 describe('random', () => {
-
   test(`positive values`, () => {
     const mock = jest.fn(Math.random)
     Math.random = mock

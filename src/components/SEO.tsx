@@ -5,10 +5,10 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React from "react"
-import PropTypes from "prop-types"
-import Helmet from "react-helmet"
-import { Locale } from "decentraland-ui/dist/components/Language/Language"
+import React from 'react'
+import PropTypes from 'prop-types'
+import Helmet from 'react-helmet'
+import { Locale } from 'decentraland-ui/dist/components/Language/Language'
 
 export type MetaProps = JSX.IntrinsicElements['meta']
 
@@ -36,7 +36,7 @@ function useValue(value: string | null | undefined, defaultValue: string) {
 }
 
 function preloadAs(file: string) {
-  const ext = file.slice(file.lastIndexOf('.') + 1);
+  const ext = file.slice(file.lastIndexOf('.') + 1)
 
   switch (ext) {
     case 'aac':
@@ -87,7 +87,7 @@ function preloadAs(file: string) {
 }
 
 function preloadType(file: string) {
-  const ext = file.slice(file.lastIndexOf('.') + 1);
+  const ext = file.slice(file.lastIndexOf('.') + 1)
 
   switch (ext) {
     case 'apng':
@@ -164,8 +164,15 @@ function preloadType(file: string) {
   }
 }
 
-export default function SEO({ description, lang, meta, title, titleTemplate, author, preload }: SEOProps) {
-
+export default function SEO({
+  description,
+  lang,
+  meta,
+  title,
+  titleTemplate,
+  author,
+  preload,
+}: SEOProps) {
   const currentAuthor = useValue(author, DEFAULT_AUTHOR)
   const currentDescription = useValue(description, DEFAULT_DESCRIPTION)
   const currentTitleTemplate = useValue(titleTemplate, DEFAULT_TITLE_TEMPLATE)
@@ -202,9 +209,8 @@ export default function SEO({ description, lang, meta, title, titleTemplate, aut
       name: `twitter:title`,
       content: title,
     },
-    ...meta
-  ]
-    .filter<MetaProps>(Boolean as any)
+    ...meta,
+  ].filter<MetaProps>(Boolean as any)
 
   return (
     <Helmet
@@ -215,7 +221,15 @@ export default function SEO({ description, lang, meta, title, titleTemplate, aut
       titleTemplate={currentTitleTemplate || ''}
       meta={currentMeta}
     >
-      {(preload || []).map(file => <link key={file} rel="preload" href={file} as={preloadAs(file)} type={preloadType(file)} />)}
+      {(preload || []).map((file) => (
+        <link
+          key={file}
+          rel="preload"
+          href={file}
+          as={preloadAs(file)}
+          type={preloadType(file)}
+        />
+      ))}
     </Helmet>
   )
 }

@@ -6,7 +6,8 @@ export default function useLocation() {
 
   useEffect(() => {
     const listener = SingletonListener.from(window)
-    const changeLocation = () => setLocation(new URL(window.location.toString()))
+    const changeLocation = () =>
+      setLocation(new URL(window.location.toString()))
 
     listener.addEventListener('hashchange' as any, changeLocation)
     listener.addEventListener('popstate' as any, changeLocation)

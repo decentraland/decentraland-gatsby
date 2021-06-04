@@ -1,4 +1,4 @@
-export default function roundRobin<T>(items:T[]) {
+export default function roundRobin<T>(items: T[]) {
   if (items.length === 0) {
     throw new Error(`Round Robin required at least 1 item`)
   }
@@ -10,4 +10,3 @@ export default function roundRobin<T>(items:T[]) {
     return result
   }
 }
-

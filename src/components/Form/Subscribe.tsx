@@ -1,49 +1,52 @@
-import React from 'react';
-import fetch from 'isomorphic-fetch';
-import Input from './Input';
-import TokenList from '../../utils/dom/TokenList';
-import { StyleNamespace } from '../../variables';
-import { Button } from 'decentraland-ui/dist/components/Button/Button';
-import usePatchState from '../../hooks/usePatchState';
-import isEmail from 'validator/lib/isEmail';
+import React from 'react'
+import fetch from 'isomorphic-fetch'
+import Input from './Input'
+import TokenList from '../../utils/dom/TokenList'
+import { StyleNamespace } from '../../variables'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import usePatchState from '../../hooks/usePatchState'
+import isEmail from 'validator/lib/isEmail'
 
 import './Subscribe.css'
 
 export type SubscribeData = {
-  email: string,
-  interest?: string,
-  lang?: string,
+  email: string
+  interest?: string
+  lang?: string
 }
 
 export type SubscribeProps = {
-  className?: string,
-  action?: string,
+  className?: string
+  action?: string
   method?: 'POST' | 'GET'
   intl?: {
-    cta?: string,
-    inputError?: string,
-    serverError?: string,
-  },
+    cta?: string
+    inputError?: string
+    serverError?: string
+  }
 
-  lang?: string,
-  interest?: string,
-  placeholder?: string,
-  defaultValue?: string,
+  lang?: string
+  interest?: string
+  placeholder?: string
+  defaultValue?: string
 
-  onSubmit?: (event: React.FormEvent<HTMLFormElement>, data: SubscribeData) => void
+  onSubmit?: (
+    event: React.FormEvent<HTMLFormElement>,
+    data: SubscribeData
+  ) => void
   onSubscribe?: (data: SubscribeData) => void
 
-  disabled?: boolean,
-  loading?: boolean,
-  primary?: boolean,
-  inverted?: boolean,
+  disabled?: boolean
+  loading?: boolean
+  primary?: boolean
+  inverted?: boolean
   basic?: boolean
   error?: ErrorKind
 }
 
 export type SubscribeState = {
-  email: string,
-  loading: boolean,
+  email: string
+  loading: boolean
   error: ErrorKind
 }
 
@@ -53,16 +56,20 @@ export enum ErrorKind {
   ServerError,
 }
 
-const DEFAULT_ACTION = process.env.GATSBY_SUBSCRIBE_TARGET || 'https://decentraland.org/v2/subscribe'
+const DEFAULT_ACTION =
+  process.env.GATSBY_SUBSCRIBE_TARGET || 'https://decentraland.org/v2/subscribe'
 
 export default function Subscribe(props: SubscribeProps) {
-
-  const [state, patchState] = usePatchState({ email: '', loading: false, error: ErrorKind.None })
+  const [state, patchState] = usePatchState({
+    email: '',
+    loading: false,
+    error: ErrorKind.None,
+  })
   const intl = {
     cta: 'Sign up',
     inputError: 'Invalid email',
     serverError: 'Server error',
-    ...props.intl
+    ...props.intl,
   }
 
   const placeholder = props.placeholder || 'email@domain.com'
@@ -94,26 +101,35 @@ export default function Subscribe(props: SubscribeProps) {
       }
     }
 
-    event.preventDefault();
+    event.preventDefault()
     if (!isEmail(data.email)) {
       patchState({ error: ErrorKind.InvalidEmail })
       return
     }
 
     patchState({ loading: true })
-    const req = props.method === 'GET' ?
-      fetch(action + '?' + new URLSearchParams(data as Record<string, string>).toString()) :
-      fetch(action, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-      })
+    const req =
+      props.method === 'GET'
+        ? fetch(
+            action +
+              '?' +
+              new URLSearchParams(data as Record<string, string>).toString()
+          )
+        : fetch(action, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          })
 
     req
       .then((response) => {
-        patchState({ loading: false, error: response.status >= 400 ? ErrorKind.ServerError : ErrorKind.None })
+        patchState({
+          loading: false,
+          error:
+            response.status >= 400 ? ErrorKind.ServerError : ErrorKind.None,
+        })
         if (props.onSubscribe) {
           props.onSubscribe(data)
         }
@@ -121,34 +137,41 @@ export default function Subscribe(props: SubscribeProps) {
       .catch(() => patchState({ loading: false, error: ErrorKind.ServerError }))
   }
 
-  let inputMessage: string | undefined;
+  let inputMessage: string | undefined
   switch (error) {
     case ErrorKind.InvalidEmail:
-      inputMessage = intl.inputError;
-      break;
+      inputMessage = intl.inputError
+      break
     case ErrorKind.ServerError:
-      inputMessage = intl.serverError;
-      break;
+      inputMessage = intl.serverError
+      break
   }
 
-  return <form className={TokenList.join([StyleNamespace, 'Subscribe', props.className])} action={action} onSubmit={handleSubmit}>
-    <Input
-      defaultValue={props.defaultValue}
-      placeholder={placeholder}
-      error={!!inputMessage}
-      message={inputMessage}
-      disabled={props.disabled || loading}
-      value={state.email}
-      onChange={handleChange}
-    />
-    <Button
-      primary={props.primary}
-      inverted={props.inverted}
-      basic={props.basic}
-      disabled={props.disabled}
-      loading={loading}
-      type="submit">
-      {intl.cta}
-    </Button>
-  </form>
+  return (
+    <form
+      className={TokenList.join([StyleNamespace, 'Subscribe', props.className])}
+      action={action}
+      onSubmit={handleSubmit}
+    >
+      <Input
+        defaultValue={props.defaultValue}
+        placeholder={placeholder}
+        error={!!inputMessage}
+        message={inputMessage}
+        disabled={props.disabled || loading}
+        value={state.email}
+        onChange={handleChange}
+      />
+      <Button
+        primary={props.primary}
+        inverted={props.inverted}
+        basic={props.basic}
+        disabled={props.disabled}
+        loading={loading}
+        type="submit"
+      >
+        {intl.cta}
+      </Button>
+    </form>
+  )
 }

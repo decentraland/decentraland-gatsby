@@ -1,13 +1,21 @@
-import { Response } from "express";
-import isURL from "validator/lib/isURL";
-import routes from "../Route/routes";
-import { withProfile, WithProfile } from "./middleware";
+import { Response } from 'express'
+import isURL from 'validator/lib/isURL'
+import routes from '../Route/routes'
+import { withProfile, WithProfile } from './middleware'
 
 const DEFAULT_AVATAR = 'https://decentraland.org/images/male.png'
 
 export default routes((router) => {
-  router.get('/profile/:user/face.png', withProfile({ optional: true }), redirectToFace)
-  router.get('/profile/:user/body.png', withProfile({ optional: true }), redirectToBody)
+  router.get(
+    '/profile/:user/face.png',
+    withProfile({ optional: true }),
+    redirectToFace
+  )
+  router.get(
+    '/profile/:user/body.png',
+    withProfile({ optional: true }),
+    redirectToBody
+  )
 })
 
 export function redirectTo(res: Response, url?: string | null) {

@@ -14,7 +14,11 @@ function log(protocol: string, host: string, port: string | number) {
   console.log(`running server on:`, yellow(`${protocol}${host}:${port}`))
 }
 
-export async function listen(app: Application, port: number | string = DEFAULT_PORT, host: string = DEFAULT_HOST) {
+export async function listen(
+  app: Application,
+  port: number | string = DEFAULT_PORT,
+  host: string = DEFAULT_HOST
+) {
   port = Number(port)
 
   if (!Number.isFinite(port)) {

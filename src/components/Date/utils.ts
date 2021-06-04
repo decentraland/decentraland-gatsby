@@ -18,13 +18,13 @@ export enum Time {
 }
 
 const days = [
-  "SUNDAY",
-  "MONDAY",
-  "TUESDAY",
-  "WEDNESDAY",
-  "THURSDAY",
-  "FRIDAY",
-  "SATURDAY",
+  'SUNDAY',
+  'MONDAY',
+  'TUESDAY',
+  'WEDNESDAY',
+  'THURSDAY',
+  'FRIDAY',
+  'SATURDAY',
 ]
 
 const months = [
@@ -57,7 +57,7 @@ export function toDateOptions(date: Date): DateOptions {
 export function date(options: Partial<DateOptions> = {}) {
   const final: DateOptions = {
     ...toDateOptions(new Date()),
-    ...options
+    ...options,
   }
 
   return new Date(
@@ -88,8 +88,8 @@ function capitalize(value: string) {
 }
 
 export type ToNameOptions = {
-  short?: boolean,
-  capitalized?: boolean,
+  short?: boolean
+  capitalized?: boolean
   utc?: boolean
 }
 
@@ -126,7 +126,7 @@ export function toPrefixedNumber(value: number, length: number = 0) {
 /** @deprecated use `utils/Datetime#getDatePadded` instead */
 export function toDayNumber(date: Date, options: ToNumberOptions = {}) {
   const day = options.utc ? date.getUTCDate() : date.getDate()
-  return (day)
+  return day
 }
 
 /** @deprecated use `utils/Datetime#getDateName` instead */
@@ -142,7 +142,7 @@ export function toDayName(date: Date, options: ToNameOptions = {}) {
     result = capitalize(result)
   }
 
-  return result;
+  return result
 }
 
 /** @deprecated use `utils/Datetime#getMonthName` instead */
@@ -158,7 +158,7 @@ export function toMonthName(date: Date, options: ToNameOptions = {}) {
     result = capitalize(result)
   }
 
-  return result;
+  return result
 }
 
 /** @deprecated use `utils/Datetime#getTimezoneName` instead */
@@ -180,11 +180,7 @@ export function toInputDate(date: Date): string {
   const year = date.getFullYear()
   const month = date.getMonth() + 1
   const day = date.getDate()
-  return [
-    year,
-    toFixedNumber(month),
-    toFixedNumber(day),
-  ].join('-')
+  return [year, toFixedNumber(month), toFixedNumber(day)].join('-')
 }
 
 /** @deprecated use `utils/Datetime#toInputDate` instead */
@@ -196,11 +192,7 @@ export function toUTCInputDate(date: Date): string {
   const year = date.getUTCFullYear()
   const month = date.getUTCMonth() + 1
   const day = date.getUTCDate()
-  return [
-    year,
-    toFixedNumber(month),
-    toFixedNumber(day),
-  ].join('-')
+  return [year, toFixedNumber(month), toFixedNumber(day)].join('-')
 }
 
 /** @deprecated use `utils/Datetime@fromInputDate` instead */
@@ -240,10 +232,7 @@ export function toInputTime(date: Date): string {
   const hours = date.getHours()
   const minutes = date.getMinutes()
 
-  return [
-    toFixedNumber(hours),
-    toFixedNumber(minutes),
-  ].join(':')
+  return [toFixedNumber(hours), toFixedNumber(minutes)].join(':')
 }
 
 /** @deprecated use `utils/Datetime#toInputTime` instead */
@@ -255,10 +244,7 @@ export function toUTCInputTime(date: Date): string {
   const hours = date.getUTCHours()
   const minutes = date.getUTCMinutes()
 
-  return [
-    toFixedNumber(hours),
-    toFixedNumber(minutes),
-  ].join(':')
+  return [toFixedNumber(hours), toFixedNumber(minutes)].join(':')
 }
 
 /** @deprecated use `utils/Datetime@fromInputTime` instead */
@@ -303,6 +289,6 @@ export function toCalendarDate(date: Date) {
     toFixedNumber(hours),
     toFixedNumber(minutes),
     toFixedNumber(seconds),
-    'Z'
+    'Z',
   ].join('')
 }

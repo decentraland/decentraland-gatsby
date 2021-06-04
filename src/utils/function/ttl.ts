@@ -1,12 +1,15 @@
-export default function ttl<F extends (...args: any[]) => any>(f: F, time: number): F {
+export default function ttl<F extends (...args: any[]) => any>(
+  f: F,
+  time: number
+): F {
   const execution = {
     latest: 0,
-    result: undefined as any
+    result: undefined as any,
   }
 
   return function (...args: any[]) {
     const now = Date.now()
-    if ((execution.latest + time) > now) {
+    if (execution.latest + time > now) {
       return execution.result
     }
 

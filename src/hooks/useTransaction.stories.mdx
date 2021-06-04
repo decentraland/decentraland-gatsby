@@ -3,56 +3,73 @@ import { Eth } from 'web3x/eth'
 import { Address } from 'web3x/address'
 import { Personal } from 'web3x/personal'
 import { LegacyProviderAdapter } from 'web3x/providers'
-import { Source, ArgsTable } from '@storybook/components';
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks';
-import { ChainId } from "@dcl/schemas"
-import { ProviderType } from "decentraland-connect/dist/types"
-import Grid from "semantic-ui-react/dist/commonjs/collections/Grid/Grid"
-import { Button } from 'decentraland-ui/dist/components/Button/Button';
-import { Args } from '../components/Storybook/utils';
-import Container from '../components/Storybook/Container';
-import Textarea from '../components/Form/Textarea';
-import Blockquote from '../components/Text/Blockquote';
-import Paragraph from '../components/Text/Paragraph';
-import Link from '../components/Text/Link';
-import useAuth from './useAuth';
-import useTransaction from './useTransaction';
+import { Source, ArgsTable } from '@storybook/components'
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks'
+import { ChainId } from '@dcl/schemas'
+import { ProviderType } from 'decentraland-connect/dist/types'
+import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Args } from '../components/Storybook/utils'
+import Container from '../components/Storybook/Container'
+import Textarea from '../components/Form/Textarea'
+import Blockquote from '../components/Text/Blockquote'
+import Paragraph from '../components/Text/Paragraph'
+import Link from '../components/Text/Link'
+import useAuth from './useAuth'
+import useTransaction from './useTransaction'
 
 <Meta title="Hooks/useTransaction" />
 
 # Sign Hook
 
-> The *sign hook* allow to sign message usign a pair address and provider
+> The _sign hook_ allow to sign message usign a pair address and provider
 
 ```ts
-const [ transactions, state ] = useTransaction(address, chainId)
+const [transactions, state] = useTransaction(address, chainId)
 ```
 
-<ArgsTable rows={[
-  Args.param('address', 'ethereum address', `string | null`),
-  Args.param('chainId', 'ethereum chain ID', `ChainId | null`),
-  Args.returns('transactions', 'list of transactions', `null | Transaction[]`),
-  Args.returns('state.add', 'add a transaction using it hash and a payload', `(tx: string, payload: Record<string, any>) => void`),
-  Args.returns('state.get', 'get the latest transaction usgin the id property in the payload', `(id: string) => Transaction | null`),
-  Args.returns('state.clear', 'remove all the transactions', `() => void`),
-]} />
+<ArgsTable
+  rows={[
+    Args.param('address', 'ethereum address', `string | null`),
+    Args.param('chainId', 'ethereum chain ID', `ChainId | null`),
+    Args.returns(
+      'transactions',
+      'list of transactions',
+      `null | Transaction[]`
+    ),
+    Args.returns(
+      'state.add',
+      'add a transaction using it hash and a payload',
+      `(tx: string, payload: Record<string, any>) => void`
+    ),
+    Args.returns(
+      'state.get',
+      'get the latest transaction usgin the id property in the payload',
+      `(id: string) => Transaction | null`
+    ),
+    Args.returns('state.clear', 'remove all the transactions', `() => void`),
+  ]}
+/>
 
 ## Example
 
 export const SendTransaction = () => {
-  const [ account, accountState ] = useAuth()
-  const [ transactions, transactionState ] = useTransaction(account, accountState.chainId)
-  const [ sending, setSending ] = useState(false)
+  const [account, accountState] = useAuth()
+  const [transactions, transactionState] = useTransaction(
+    account,
+    accountState.chainId
+  )
+  const [sending, setSending] = useState(false)
   useEffect(() => {
     if (sending) {
       Promise.resolve()
-        .then(() => new Eth(accountState.provider)
-          .sendTransaction({
-            from: account,
-            to: account,
-            value: 1
-          })
-          .txHashPromise
+        .then(
+          () =>
+            new Eth(accountState.provider).sendTransaction({
+              from: account,
+              to: account,
+              value: 1,
+            }).txHashPromise
         )
         .then((tx) => {
           transactionState.add(tx)
@@ -63,25 +80,56 @@ export const SendTransaction = () => {
           setSending(false)
         })
     }
-  }, [ sending ])
-  return <Container>
-    <Grid>
-      {!account && <Grid.Row>
-        <Grid.Column tablet="16">
-          <Blockquote>
-            <Paragraph small secondary>This feature requires to login, try to connect using the <Link href="/?path=/story/hooks-useauth--page#connect-preview">`useAuth`</Link> hook.</Paragraph>
-          </Blockquote>
-        </Grid.Column>
-      </Grid.Row>}
-      <Grid.Row>
-        <Grid.Column tablet="16">
-          <Button primary size="small" style={{ minWidth: '200px', margin: '0 1em 0 0' }} disabled={!account} loading={sending} onClick={() => setSending(true)}>Send transaction</Button>
-          <Button primary size="small" style={{ minWidth: '200px', margin: '0 1em 0 0' }} disabled={!account || transactions.length === 0} loading={sending} onClick={() => transactionState.clear()}>Clear</Button>
-          <Source language="ts" code={JSON.stringify(transactions, null, 2)} />
-        </Grid.Column>
-      </Grid.Row>
-    </Grid>
-  </Container>
+  }, [sending])
+  return (
+    <Container>
+      <Grid>
+        {!account && (
+          <Grid.Row>
+            <Grid.Column tablet="16">
+              <Blockquote>
+                <Paragraph small secondary>
+                  This feature requires to login, try to connect using the{' '}
+                  <Link href="/?path=/story/hooks-useauth--page#connect-preview">
+                    `useAuth`
+                  </Link>{' '}
+                  hook.
+                </Paragraph>
+              </Blockquote>
+            </Grid.Column>
+          </Grid.Row>
+        )}
+        <Grid.Row>
+          <Grid.Column tablet="16">
+            <Button
+              primary
+              size="small"
+              style={{ minWidth: '200px', margin: '0 1em 0 0' }}
+              disabled={!account}
+              loading={sending}
+              onClick={() => setSending(true)}
+            >
+              Send transaction
+            </Button>
+            <Button
+              primary
+              size="small"
+              style={{ minWidth: '200px', margin: '0 1em 0 0' }}
+              disabled={!account || transactions.length === 0}
+              loading={sending}
+              onClick={() => transactionState.clear()}
+            >
+              Clear
+            </Button>
+            <Source
+              language="ts"
+              code={JSON.stringify(transactions, null, 2)}
+            />
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </Container>
+  )
 }
 
 <SendTransaction />

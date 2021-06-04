@@ -1,8 +1,7 @@
 export default function once<F extends (...args: any[]) => any>(f: F): F {
-
   const execution = {
     executed: false,
-    result: undefined as any
+    result: undefined as any,
   }
 
   return function (...args: any[]) {

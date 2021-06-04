@@ -1,4 +1,4 @@
-import handle, { AsyncHandler } from '../handle';
+import handle, { AsyncHandler } from '../handle'
 
 export default function single(handler: AsyncHandler) {
   let loaders = new Map<string, Promise<any>>()

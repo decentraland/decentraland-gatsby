@@ -2,13 +2,18 @@ import { Request, Router } from 'express'
 import bodyParser from 'body-parser'
 import Ddos from 'ddos'
 import expressCors from 'cors'
-import { middleware } from './handle';
-import { DDosOptions, createCorsOptions, CorsOptions, BodyParserOptions } from './types';
+import { middleware } from './handle'
+import {
+  DDosOptions,
+  createCorsOptions,
+  CorsOptions,
+  BodyParserOptions,
+} from './types'
 import RequestError from './error'
 
 export function withBody(options: BodyParserOptions = {}) {
   const router = Router()
-  if (options.urlencode !== false ) {
+  if (options.urlencode !== false) {
     router.use(bodyParser.urlencoded({ extended: false }))
   }
 
@@ -32,7 +37,7 @@ export function withLogs() {
         status: res.statusCode,
         time: (Date.now() - start) / 1000,
         ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-        auth: req.auth
+        auth: req.auth,
       }
 
       if (req.headers['referer']) {
@@ -49,9 +54,11 @@ export function withDDosProtection(options: Partial<DDosOptions> = {}) {
     checkinterval: 5,
     limit: 500,
     ...options,
-    errormessage: JSON.stringify(RequestError.toJSON(
-      new RequestError('Too many requests', RequestError.TooManyRequests)
-    ))
+    errormessage: JSON.stringify(
+      RequestError.toJSON(
+        new RequestError('Too many requests', RequestError.TooManyRequests)
+      )
+    ),
   }
   const protection = new Ddos(config)
   return protection.express

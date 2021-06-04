@@ -1,21 +1,26 @@
-import React from "react"
-import TokenList from "../../utils/dom/TokenList"
-import { StyleNamespace } from "../../variables"
+import React from 'react'
+import TokenList from '../../utils/dom/TokenList'
+import { StyleNamespace } from '../../variables'
 
-import "./Link.css"
+import './Link.css'
 
 export type LinkProps = React.Props<HTMLAnchorElement> &
   React.HTMLProps<HTMLAnchorElement> & {
     secondary?: boolean
   }
 
-export default React.memo(function Link({ secondary, href, rel, target, ...props }: LinkProps) {
-
-  const external = href && (
-    href.startsWith('https://') ||
-    href.startsWith('http://') ||
-    href.startsWith('//')
-  )
+export default React.memo(function Link({
+  secondary,
+  href,
+  rel,
+  target,
+  ...props
+}: LinkProps) {
+  const external =
+    href &&
+    (href.startsWith('https://') ||
+      href.startsWith('http://') ||
+      href.startsWith('//'))
 
   if (!target && external) {
     target = '_blank'
@@ -28,7 +33,12 @@ export default React.memo(function Link({ secondary, href, rel, target, ...props
   return (
     <a
       {...props}
-      className={TokenList.join([StyleNamespace, "Link", (props.onClick || href) && 'Link--pointer', props.className])}
+      className={TokenList.join([
+        StyleNamespace,
+        'Link',
+        (props.onClick || href) && 'Link--pointer',
+        props.className,
+      ])}
       href={href || undefined}
       target={target || undefined}
       rel={rel || undefined}

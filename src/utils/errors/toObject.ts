@@ -1,4 +1,4 @@
-export default function toObject (err?: Error | null) {
+export default function toObject(err?: Error | null) {
   if (!err) {
     return err
   }

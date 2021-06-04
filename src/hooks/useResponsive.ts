@@ -1,4 +1,6 @@
-import Responsive, { ResponsiveWidthShorthand } from 'semantic-ui-react/dist/commonjs/addons/Responsive'
+import Responsive, {
+  ResponsiveWidthShorthand,
+} from 'semantic-ui-react/dist/commonjs/addons/Responsive'
 import { useState, useEffect } from 'react'
 import SingletonListener from '../utils/dom/SingletonListener'
 
@@ -9,7 +11,7 @@ export default function useResponsive() {
 
   useEffect(() => {
     function updateWidth() {
-      const currentWidth = window.innerWidth;
+      const currentWidth = window.innerWidth
 
       if (CURRENT_WIDTH !== currentWidth) {
         CURRENT_WIDTH = currentWidth

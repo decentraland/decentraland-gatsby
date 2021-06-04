@@ -1,7 +1,7 @@
-import React from "react"
-import TokenList from "../../utils/dom/TokenList"
-import { StyleNamespace } from "../../variables"
-import "./Italic.css"
+import React from 'react'
+import TokenList from '../../utils/dom/TokenList'
+import { StyleNamespace } from '../../variables'
+import './Italic.css'
 
 export type ItalicProps = React.Props<HTMLSpanElement> &
   React.HTMLProps<HTMLSpanElement> & {
@@ -9,15 +9,19 @@ export type ItalicProps = React.Props<HTMLSpanElement> &
     secondary?: boolean
   }
 
-export default React.memo(function Italic({ primary, secondary, ...props }: ItalicProps) {
+export default React.memo(function Italic({
+  primary,
+  secondary,
+  ...props
+}: ItalicProps) {
   return (
     <span
       {...props}
       className={TokenList.join([
         StyleNamespace,
-        "Italic",
-        primary && "Italic--primary",
-        secondary && "Italic--secondary",
+        'Italic',
+        primary && 'Italic--primary',
+        secondary && 'Italic--secondary',
         props.className,
       ])}
     />

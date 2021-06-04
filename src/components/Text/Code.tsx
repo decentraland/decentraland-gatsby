@@ -1,34 +1,43 @@
-import React from "react"
-import TokenList from "../../utils/dom/TokenList"
+import React from 'react'
+import TokenList from '../../utils/dom/TokenList'
 import Highlight from 'react-highlight'
-import { StyleNamespace } from "../../variables"
+import { StyleNamespace } from '../../variables'
 
 import 'highlight.js/styles/github-gist.css'
-import "./Code.css"
+import './Code.css'
 
 export type CodeProps = React.Props<HTMLPreElement> &
   React.HTMLProps<HTMLSpanElement> & {
     inline?: boolean
     note?: React.ReactNode
-    language?: "json" | "typescript" | "javascript" | string
+    language?: 'json' | 'typescript' | 'javascript' | string
   }
 
-export default React.memo(function Code({ inline, children, note, value, language, ...props }: CodeProps) {
+export default React.memo(function Code({
+  inline,
+  children,
+  note,
+  value,
+  language,
+  ...props
+}: CodeProps) {
   return (
     <pre
       {...props}
       className={TokenList.join([
         StyleNamespace,
-        "Code",
-        !!note && "Code--with-note",
-        !inline && "Code--block",
-        inline && "Code--inline",
+        'Code',
+        !!note && 'Code--with-note',
+        !inline && 'Code--block',
+        inline && 'Code--inline',
         props.className,
       ])}
     >
       {!inline && note && <div className={'Code__Note'}>{note}</div>}
       {!language && <pre>{children ?? value}</pre>}
-      {language && <Highlight className={language}>{children ?? value}</Highlight>}
+      {language && (
+        <Highlight className={language}>{children ?? value}</Highlight>
+      )}
     </pre>
   )
 })

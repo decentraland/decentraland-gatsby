@@ -1,6 +1,6 @@
-import React from "react"
-import PropTypes from "prop-types"
-import Segment from "./Segment/Segment"
+import React from 'react'
+import PropTypes from 'prop-types'
+import Segment from './Segment/Segment'
 
 export default function HTML(props: any) {
   return (
@@ -25,7 +25,11 @@ export default function HTML(props: any) {
           dangerouslySetInnerHTML={{ __html: props.body }}
         />
         {props.postBodyComponents}
-        <Segment analyticsKey={process.env.SEGMENT_KEY || process.env.GATSBY_SEGMENT_KEY} />
+        <Segment
+          analyticsKey={
+            process.env.SEGMENT_KEY || process.env.GATSBY_SEGMENT_KEY
+          }
+        />
       </body>
     </html>
   )

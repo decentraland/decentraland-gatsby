@@ -1,6 +1,9 @@
-import segment from "./segment"
+import segment from './segment'
 
-export type HandleEvent = (event: React.SyntheticEvent<HTMLElement>, ...extra: any[]) => any
+export type HandleEvent = (
+  event: React.SyntheticEvent<HTMLElement>,
+  ...extra: any[]
+) => any
 
 export default function trackEvent<H extends HandleEvent>(handle: H) {
   return (event: React.MouseEvent<HTMLElement>, ...extra: any[]) => {

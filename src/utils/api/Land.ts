@@ -24,26 +24,26 @@ export type GetMapImageOptions = GetImageOptions & {
 }
 
 type Token = {
-  id: string,
-  name: string,
-  description: string,
-  image: string,
-  external_url: string,
-  background_color: string,
+  id: string
+  name: string
+  description: string
+  image: string
+  external_url: string
+  background_color: string
 }
 
 export type Parcel = Token & {
   attributes: {
-    trait_type: "X" | "Y" | "Distance to District" | "Distance to Road",
-    value: number,
+    trait_type: 'X' | 'Y' | 'Distance to District' | 'Distance to Road'
+    value: number
     display_type: 'number'
   }[]
 }
 
 export type Estate = Token & {
   attributes: {
-    trait_type: "Size" | "Distance to District" | "Distance to Road",
-    value: number,
+    trait_type: 'Size' | 'Distance to District' | 'Distance to Road'
+    value: number
     display_type: 'number'
   }[]
 }
@@ -65,21 +65,27 @@ export type Tile = {
 }
 
 export type MapContent = {
-  "assets": {
-    "parcels": Parcel[],
-    "estates": Estate[]
-  },
-  "total": number
+  assets: {
+    parcels: Parcel[]
+    estates: Estate[]
+  }
+  total: number
 }
 
-const CLEAR_LOW = toBN('0xffffffffffffffffffffffffffffffff00000000000000000000000000000000');
-const CLEAR_HIGH = toBN('0x00000000000000000000000000000000ffffffffffffffffffffffffffffffff');
-const FACTOR = toBN('0x100000000000000000000000000000000');
-const FACTOR_LOW = toBN('0x10000000000000000000000000000000000000000000000000000000000000000');
-const REVERSE_FACTOR = toBN('0x1000000000000000000000000000000');
+const CLEAR_LOW = toBN(
+  '0xffffffffffffffffffffffffffffffff00000000000000000000000000000000'
+)
+const CLEAR_HIGH = toBN(
+  '0x00000000000000000000000000000000ffffffffffffffffffffffffffffffff'
+)
+const FACTOR = toBN('0x100000000000000000000000000000000')
+const FACTOR_LOW = toBN(
+  '0x10000000000000000000000000000000000000000000000000000000000000000'
+)
+const REVERSE_FACTOR = toBN('0x1000000000000000000000000000000')
 
 export default class Land extends API {
-  static Url = (
+  static Url =
     process.env.GATSBY_LAND_API ||
     process.env.REACT_APP_LAND_API ||
     process.env.STORYBOOK_LAND_API ||
@@ -89,7 +95,6 @@ export default class Land extends API {
     process.env.STORYBOOK_LAND_URL ||
     process.env.LAND_URL ||
     'https://api.decentraland.org'
-  )
 
   static Cache = new Map<string, Land>()
 
@@ -106,7 +111,7 @@ export default class Land extends API {
   }
 
   static encodeParcelId(coordinates: [number, number]): string {
-    const [ x, y ] = coordinates
+    const [x, y] = coordinates
     if (
       !Number.isFinite(x) ||
       !Number.isFinite(y) ||
@@ -123,7 +128,7 @@ export default class Land extends API {
     const uintX = x < 0 ? FACTOR_LOW.sub(absX) : absX
     const uintY = y < 0 ? FACTOR.sub(absY) : absY
 
-    let bX = (toBN(uintX).mul(FACTOR)).and(CLEAR_LOW)
+    let bX = toBN(uintX).mul(FACTOR).and(CLEAR_LOW)
     let bY = toBN(uintY).and(CLEAR_HIGH)
     return bX.or(bY).toString()
   }
@@ -132,8 +137,12 @@ export default class Land extends API {
     const bn = toBN(parcelId)
     const bnX = bn.div(FACTOR)
     const bnY = bn.mod(FACTOR)
-    const x = bnX.gte(REVERSE_FACTOR) ? bnX.sub(FACTOR).toNumber() : bnX.toNumber()
-    const y = bnY.gte(REVERSE_FACTOR) ? bnY.sub(FACTOR).toNumber() : bnY.toNumber()
+    const x = bnX.gte(REVERSE_FACTOR)
+      ? bnX.sub(FACTOR).toNumber()
+      : bnX.toNumber()
+    const y = bnY.gte(REVERSE_FACTOR)
+      ? bnY.sub(FACTOR).toNumber()
+      : bnY.toNumber()
 
     if (
       !Number.isFinite(x) ||
@@ -149,8 +158,11 @@ export default class Land extends API {
     return [x, y]
   }
 
-  async fetch<T extends object>(url: string, options: Options = new Options({})) {
-    const result = await super.fetch<{ ok: boolean, data: T }>(url, options)
+  async fetch<T extends object>(
+    url: string,
+    options: Options = new Options({})
+  ) {
+    const result = await super.fetch<{ ok: boolean; data: T }>(url, options)
     return result.data
   }
 
@@ -161,7 +173,11 @@ export default class Land extends API {
     }
 
     const parcel = await this.getParcel(position)
-    if (parcel && parcel.name && parcel.name !== `Parcel ${position.join(',')}`) {
+    if (
+      parcel &&
+      parcel.name &&
+      parcel.name !== `Parcel ${position.join(',')}`
+    ) {
       return parcel.name
     }
 
@@ -179,16 +195,23 @@ export default class Land extends API {
 
   async getParcels(options: GetListOptions = {}): Promise<Parcel[]> {
     const { sortBy: sort_by, sortOrder: sort_order } = options
-    return this.fetch(`/v2/parcels` + this.query({ ...options, sort_by, sort_order }))
+    return this.fetch(
+      `/v2/parcels` + this.query({ ...options, sort_by, sort_order })
+    )
   }
 
   async getEstates(options: GetListOptions = {}): Promise<Estate[]> {
     const { sortBy: sort_by, sortOrder: sort_order } = options
-    return this.fetch(`/v2/estates` + this.query({ ...options, sort_by, sort_order }))
+    return this.fetch(
+      `/v2/estates` + this.query({ ...options, sort_by, sort_order })
+    )
   }
 
   /** @deprecated */
-  async getMapContent(nw: [number, number], se: [number, number]): Promise<MapContent> {
+  async getMapContent(
+    nw: [number, number],
+    se: [number, number]
+  ): Promise<MapContent> {
     throw new Error(`Endpoint /v1/map is deprecated`)
   }
 
@@ -199,7 +222,11 @@ export default class Land extends API {
    * @param options
    * @returns
    */
-  async getTiles(position1: [number, number], position2: [number, number], options: { include?: (keyof Tile)[], exclude?: (keyof Tile)[] } = {}): Promise<Record<string, Tile>> {
+  async getTiles(
+    position1: [number, number],
+    position2: [number, number],
+    options: { include?: (keyof Tile)[]; exclude?: (keyof Tile)[] } = {}
+  ): Promise<Record<string, Tile>> {
     const params = new URLSearchParams({
       x1: String(position1[0]),
       y1: String(position1[1]),
@@ -218,7 +245,10 @@ export default class Land extends API {
     return this.fetch(`/v2/tiles?` + params.toString())
   }
 
-  async getTile(position: [number, number], options: { include?: (keyof Tile)[], exclude?: (keyof Tile)[] } = {}): Promise<Tile | null> {
+  async getTile(
+    position: [number, number],
+    options: { include?: (keyof Tile)[]; exclude?: (keyof Tile)[] } = {}
+  ): Promise<Tile | null> {
     const tiles = await this.getTiles(position, position, options)
     return tiles[position.join(',')] || null
   }
@@ -233,7 +263,8 @@ export default class Land extends API {
 
   getImage(options: GetMapImageOptions = {}) {
     const { selected: rawSelected } = options
-    const selected = rawSelected && rawSelected.map((position) => position.join(',')).join(';')
+    const selected =
+      rawSelected && rawSelected.map((position) => position.join(',')).join(';')
     return this.url(`/v1/map.png` + this.query({ ...options, selected }))
   }
 

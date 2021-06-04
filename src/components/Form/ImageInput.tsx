@@ -5,18 +5,29 @@ import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
 
 import './ImageInput.css'
 
-export type ImageInputProps = Omit<React.HTMLProps<HTMLInputElement>, 'value'> & {
+export type ImageInputProps = Omit<
+  React.HTMLProps<HTMLInputElement>,
+  'value'
+> & {
   onFileChange?: (file: File) => void
   value?: string
   label?: string
   message?: React.ReactNode
   error?: boolean
   loading?: boolean
-  dimension?: ImgFixedProps["dimension"]
+  dimension?: ImgFixedProps['dimension']
 }
 
-export default function ImageInput({ value, error, loading, label, message, dimension, className, ...props }: ImageInputProps) {
-
+export default function ImageInput({
+  value,
+  error,
+  loading,
+  label,
+  message,
+  dimension,
+  className,
+  ...props
+}: ImageInputProps) {
   const hasDocument = typeof document !== 'undefined'
   const input = useMemo(() => {
     if (document) {
@@ -54,17 +65,28 @@ export default function ImageInput({ value, error, loading, label, message, dime
     }
   }, [input])
 
-
-  return <div className={TokenList.join(['ImageInput', error && 'ImageInput--error', loading && 'ImageInput--loading', value && 'ImageInput--with-value', className])}>
-    <div className="ImageInput__Label">{label}</div>
-    <div className="ImageInput__Value">
-      <ImgFixed dimension={dimension || "wide"} src={value} />
-      <div className="ImageInput__Background" />
-      {loading && <Loader size="medium" active />}
-      {!loading && <div className="ImageInput__Content" onClick={handleClick}>
-        {props.children}
-      </div>}
+  return (
+    <div
+      className={TokenList.join([
+        'ImageInput',
+        error && 'ImageInput--error',
+        loading && 'ImageInput--loading',
+        value && 'ImageInput--with-value',
+        className,
+      ])}
+    >
+      <div className="ImageInput__Label">{label}</div>
+      <div className="ImageInput__Value">
+        <ImgFixed dimension={dimension || 'wide'} src={value} />
+        <div className="ImageInput__Background" />
+        {loading && <Loader size="medium" active />}
+        {!loading && (
+          <div className="ImageInput__Content" onClick={handleClick}>
+            {props.children}
+          </div>
+        )}
+      </div>
+      <div className="ImageInput__Message">{message}</div>
     </div>
-    <div className="ImageInput__Message">{message}</div>
-  </div>
+  )
 }

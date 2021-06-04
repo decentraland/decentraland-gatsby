@@ -3,9 +3,11 @@ import { ChainId } from '@dcl/schemas'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
 
 const DECENTRALAND_MARKETPLACE_SUBGRAPH_URL = {
-  [ChainId.ETHEREUM_MAINNET]: 'https://api.thegraph.com/subgraphs/name/decentraland/marketplace',
-  [ChainId.ETHEREUM_ROPSTEN]: 'https://api.thegraph.com/subgraphs/name/decentraland/marketplaceropsten'
-};
+  [ChainId.ETHEREUM_MAINNET]:
+    'https://api.thegraph.com/subgraphs/name/decentraland/marketplace',
+  [ChainId.ETHEREUM_ROPSTEN]:
+    'https://api.thegraph.com/subgraphs/name/decentraland/marketplaceropsten',
+}
 
 const QUERY = `
 query ($address: String!, $first: Int!, $skip: Int!) {
@@ -31,15 +33,18 @@ export async function fetchLandBalance(address: string, chainId: ChainId) {
     let lands = 0
     let hasNext = true
     const first = 1000
-    while(hasNext) {
-      const response = await fetch(DECENTRALAND_MARKETPLACE_SUBGRAPH_URL[chainId], {
-        method: 'post',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          query: QUERY,
-          variables: { address: address.toLowerCase(), first, skip }
-        })
-      })
+    while (hasNext) {
+      const response = await fetch(
+        DECENTRALAND_MARKETPLACE_SUBGRAPH_URL[chainId],
+        {
+          method: 'post',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            query: QUERY,
+            variables: { address: address.toLowerCase(), first, skip },
+          }),
+        }
+      )
 
       const body = await response.json()
       const nfts = (body?.data?.nfts || []) as {}[]
@@ -49,7 +54,7 @@ export async function fetchLandBalance(address: string, chainId: ChainId) {
     }
 
     return lands
-  }  catch (err) {
+  } catch (err) {
     console.error(err)
     return 0
   }

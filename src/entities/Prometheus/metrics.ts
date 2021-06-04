@@ -14,7 +14,7 @@ if (process.env.SERVICE_URL) {
 }
 
 export default client
-export const registry = new client.Registry();
+export const registry = new client.Registry()
 registry.setDefaultLabels(defaultLabels)
 
 const alreadyRegisted = new Set<client.Metric<string>>()

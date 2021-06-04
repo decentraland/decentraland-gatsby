@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react'
-import clipboardCopy from "clipboard-copy"
+import clipboardCopy from 'clipboard-copy'
 
 export default function useClipboardCopy(timeout?: number) {
-
-  const [ state, setState ] = useState<string | number | boolean | null>(null)
+  const [state, setState] = useState<string | number | boolean | null>(null)
 
   function copy(value: string | number | boolean | null) {
     clipboardCopy(String(value ?? ''))
@@ -25,7 +24,7 @@ export default function useClipboardCopy(timeout?: number) {
         clearTimeout(copyTimeout)
       }
     }
-  }, [ state, timeout ])
+  }, [state, timeout])
 
-  return [ state, { copy, clear } ] as const
+  return [state, { copy, clear }] as const
 }

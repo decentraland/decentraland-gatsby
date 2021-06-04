@@ -5,9 +5,9 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React from "react"
-import Helmet from "react-helmet"
-import { Locale } from "decentraland-ui/dist/components/Language/Language"
+import React from 'react'
+import Helmet from 'react-helmet'
+import { Locale } from 'decentraland-ui/dist/components/Language/Language'
 
 export type MetaProps = JSX.IntrinsicElements['meta']
 
@@ -56,7 +56,7 @@ export default function Head(props: HeadProps) {
     'og:image': props.image || '',
     'twitter:image': props.image || '',
     'twitter:card': 'summary',
-    ...props.meta
+    ...props.meta,
   }
 
   return (
@@ -66,15 +66,19 @@ export default function Head(props: HeadProps) {
       defaultTitle={props.defaultTitle || ''}
     >
       {props.title && <title>{props.title}</title>}
-      {props.description && <meta name="description" content={props.description} />}
+      {props.description && (
+        <meta name="description" content={props.description} />
+      )}
       {props.image && <meta name="image" content={props.image} />}
 
-      {Object.keys(meta).filter((name) => Boolean(meta[name])).map((name) => {
-        if (name.startsWith('og:')) {
-          return <meta key={name} property={name} content={meta[name]} />
-        }
-        return <meta key={name} name={name} content={meta[name]} />
-      })}
+      {Object.keys(meta)
+        .filter((name) => Boolean(meta[name]))
+        .map((name) => {
+          if (name.startsWith('og:')) {
+            return <meta key={name} property={name} content={meta[name]} />
+          }
+          return <meta key={name} name={name} content={meta[name]} />
+        })}
 
       {props.children}
     </Helmet>

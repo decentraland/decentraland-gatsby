@@ -25,8 +25,8 @@ export async function fetchManaBalance(address: string, chainId: ChainId) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         query: QUERY,
-        variables: { address: address.toLowerCase() }
-      })
+        variables: { address: address.toLowerCase() },
+      }),
     })
 
     const body = await response.json()
@@ -34,7 +34,7 @@ export async function fetchManaBalance(address: string, chainId: ChainId) {
     const account = accounts[0]
     const mana = account?.mana || '0'
     return parseFloat(fromWei(mana, 'ether'))
-  }  catch (err) {
+  } catch (err) {
     console.error(err)
     return 0
   }

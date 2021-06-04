@@ -1,6 +1,6 @@
-import React from "react"
-import { IntlShape } from "gatsby-plugin-intl"
-import Markdown from "../../components/Text/Markdown"
+import React from 'react'
+import { IntlShape } from 'gatsby-plugin-intl'
+import Markdown from '../../components/Text/Markdown'
 
 export function createFormatMessage(shape: IntlShape) {
   const isEmpty = (id: string) => {
@@ -35,7 +35,7 @@ export function createFormatMessage(shape: IntlShape) {
     }
 
     return <Markdown key={id} source={message} />
-  };
+  }
 
   return Object.assign(str, { markdown, optional, isEmpty })
 }

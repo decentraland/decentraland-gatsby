@@ -8,7 +8,6 @@ export type Token = string | undefined | null | false
  * @see https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList
  */
 export default class TokenList {
-
   static join(tokens: Token[]) {
     return new TokenList().add(...tokens).value
   }
@@ -38,11 +37,10 @@ export default class TokenList {
       return false
     }
 
-    return token.split(/\s+/).every(current => this.tokens.includes(current))
+    return token.split(/\s+/).every((current) => this.tokens.includes(current))
   }
 
   add(...tokens: Token[]) {
-
     for (const token of tokens) {
       if (typeof token === 'string') {
         for (const each of token.split(/\s+/)) {
@@ -61,7 +59,7 @@ export default class TokenList {
       if (typeof token === 'string') {
         for (const each of token.split(' ')) {
           if (Boolean(each)) {
-            this.tokens = this.tokens.filter(current => current !== each)
+            this.tokens = this.tokens.filter((current) => current !== each)
           }
         }
       }
@@ -120,7 +118,7 @@ export default class TokenList {
       // ignore
     }
 
-    const newTokens = this.tokens.filter(current => current !== token)
+    const newTokens = this.tokens.filter((current) => current !== token)
 
     // token was removed
     if (newTokens.length !== this.tokens.length) {
@@ -136,7 +134,10 @@ export default class TokenList {
     return this.tokens.entries()
   }
 
-  forEach(callback: (value: string, index: number, arr: string[]) => void, thisArg?: any) {
+  forEach(
+    callback: (value: string, index: number, arr: string[]) => void,
+    thisArg?: any
+  ) {
     return this.tokens.forEach(callback, thisArg)
   }
 
