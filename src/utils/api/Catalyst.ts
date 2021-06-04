@@ -2,7 +2,7 @@ import type { Address } from 'web3x/address'
 import random from '../number/random'
 import env from '../env'
 import API from './API'
-import type {
+export type {
   Snapshot,
   BodyColor,
   Avatar,
@@ -10,6 +10,20 @@ import type {
   Layer,
   Status,
   StatusWithLayers,
+  CommsStatus,
+  CommsStatusWithLayers,
+  LambdasStatus,
+  ContentStatus,
+  Position,
+  Servers,
+  LayerUser,
+  EntityScene,
+} from './Catalyst.types'
+
+import type {
+  Avatar,
+  ProfileResponse,
+  Layer,
   CommsStatus,
   CommsStatusWithLayers,
   LambdasStatus,
@@ -205,22 +219,4 @@ export default class Catalyst extends API {
   async getLayerUsers(layer: string) {
     return this.fetch<LayerUser[]>(`/comms/layers/${layer}/users`)
   }
-}
-
-export {
-  Snapshot,
-  BodyColor,
-  Avatar,
-  ProfileResponse,
-  Layer,
-  Status,
-  StatusWithLayers,
-  CommsStatus,
-  CommsStatusWithLayers,
-  LambdasStatus,
-  ContentStatus,
-  Position,
-  Servers,
-  LayerUser,
-  EntityScene,
 }
