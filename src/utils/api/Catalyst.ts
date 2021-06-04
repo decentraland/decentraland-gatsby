@@ -175,14 +175,14 @@ export default class Catalyst extends API {
   }
 
   async getEntityScenes(
-    pointers: string[] | [number, number][]
+    pointers: (string | [number, number])[]
   ): Promise<EntityScene[]> {
     if (!pointers || pointers.length === 0) {
       return []
     }
 
     const params = pointers
-      .map((point: string | [number, number]) => {
+      .map((point) => {
         return (
           'pointer=' +
           (Array.isArray(point) ? point.slice(0, 2).join(',') : point)
