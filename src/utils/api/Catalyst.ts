@@ -20,24 +20,6 @@ import type {
   EntityScene,
 } from './Catalyst.types'
 
-export {
-  Snapshot,
-  BodyColor,
-  Avatar,
-  ProfileResponse,
-  Layer,
-  Status,
-  StatusWithLayers,
-  CommsStatus,
-  CommsStatusWithLayers,
-  LambdasStatus,
-  ContentStatus,
-  Position,
-  Servers,
-  LayerUser,
-  EntityScene,
-}
-
 export default class Catalyst extends API {
   static Url =
     process.env.GATSBY_CATALYST_API ||
@@ -223,4 +205,22 @@ export default class Catalyst extends API {
   async getLayerUsers(layer: string) {
     return this.fetch<LayerUser[]>(`/comms/layers/${layer}/users`)
   }
+}
+
+export {
+  Snapshot,
+  BodyColor,
+  Avatar,
+  ProfileResponse,
+  Layer,
+  Status,
+  StatusWithLayers,
+  CommsStatus,
+  CommsStatusWithLayers,
+  LambdasStatus,
+  ContentStatus,
+  Position,
+  Servers,
+  LayerUser,
+  EntityScene,
 }
