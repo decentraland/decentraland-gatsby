@@ -170,7 +170,7 @@ export default class Catalyst extends API {
     return this.fetch('/content/status')
   }
 
-  async getContentUrl(hash: string) {
+  getContentUrl(hash: string) {
     return this.url(`/content/contents/${hash}`)
   }
 
