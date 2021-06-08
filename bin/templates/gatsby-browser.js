@@ -19,13 +19,15 @@ import Layout from "decentraland-gatsby/dist/components/Layout/Layout"
 import UserMenu from "decentraland-gatsby/dist/components/User/UserMenu"
 import segment from "decentraland-gatsby/dist/utils/segment/segment"
 
-export const wrapRootElement = ({ element }) => (
+export const registerServiceWorker = () => true
+
+export const wrapRootElement = ({ element }) => (<>
   <AuthProvider>
     {/* <FeatureFlagProvider endpoint="https://feature-flags.decentraland.org/[PROYECT].json"> */}
       {element}
     {/* </FeatureFlagProvider> */}
   </AuthProvider>
-)
+</>)
 
 export const wrapPageElement = ({ element, props }) => {
   return <Layout
