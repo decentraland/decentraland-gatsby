@@ -1,5 +1,5 @@
 import React from 'react'
-import { Network } from '@dcl/schemas'
+import { Network, ChainId } from '@dcl/schemas'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import {
   UserMenu as BaseUserMenu,
@@ -10,6 +10,8 @@ import useAuthContext from '../../context/Auth/useAuthContext'
 import useProfileInjected from '../../context/Auth/useProfileContext'
 import useAsyncMemo from '../../hooks/useAsyncMemo'
 import './UserMenu.css'
+import useChainId from '../../hooks/useChainId'
+import { fetchManaBalance } from '../../utils/loader/manaBalance'
 
 type UserMenuBalances = Partial<Record<Network, number>>
 
@@ -31,12 +33,45 @@ export default function UserMenu(props: UserMenuProps) {
   }
   const [user, userState] = useAuthContext()
   const [profile, profileState] = useProfileInjected()
+  const chainId = useChainId()
   const loading = userState.loading || profileState.loading
-  const [manaBalances] = useAsyncMemo(async () => {
-    const result: UserMenuBalances = {}
-    // TODO: load balance
-    return result
-  }, [user, userState.chainId])
+  const [ manaBalances ] = useAsyncMemo<UserMenuBalances>(async () => {
+    if (!user) {
+      return {}
+    }
+
+    switch(chainId) {
+      case ChainId.ETHEREUM_MAINNET: {
+        const [ETHEREUM, MATIC] = await Promise.all([
+          fetchManaBalance(user, chainId),
+          fetchManaBalance(user, ChainId.MATIC_MAINNET)
+        ])
+
+        return { ETHEREUM, MATIC }
+      }
+
+      case ChainId.ETHEREUM_GOERLI:
+      case ChainId.ETHEREUM_RINKEBY:
+      case ChainId.ETHEREUM_ROPSTEN: {
+        const [ETHEREUM, MATIC] = await Promise.all([
+          fetchManaBalance(user, chainId),
+          fetchManaBalance(user, ChainId.MATIC_MUMBAI)
+        ])
+
+        return { ETHEREUM, MATIC }
+      }
+
+      case ChainId.MATIC_MAINNET:
+      case ChainId.MATIC_MUMBAI:{
+        const MATIC = await fetchManaBalance(user, chainId)
+        return { MATIC }
+      }
+
+      default:
+        return {}
+    }
+
+  }, [ user, chainId ])
 
   if (!user || loading) {
     return (
