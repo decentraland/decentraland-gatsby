@@ -1,0 +1,12 @@
+body {
+  background: var(--background)
+}
+
+.dcl.navbar.LayoutNavbarContainer {
+  margin-bottom: 0;
+  border-bottom: 0;
+}
+
+.dcl.navbar.LayoutNavbarContainer.initial {
+  background-color: var(--background);
+}
