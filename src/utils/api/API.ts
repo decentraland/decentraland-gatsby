@@ -11,6 +11,27 @@ export default class API {
     })
   }
 
+  static url(base: string, path: string, query: Record<string, string> | URLSearchParams = {}) {
+    if (base.endsWith('/')) {
+      base = base.slice(0, -1)
+    }
+
+    if (!path.startsWith('/')) {
+      path = '/' + path
+    }
+
+    let params = new URLSearchParams(query).toString()
+    if (params) {
+      if (path.includes('?')) {
+        params = '&' + params
+      } else {
+        params = '?' + params
+      }
+    }
+
+    return base + path + params
+  }
+
   readonly baseUrl: string = ''
   readonly defaultOptions: Options = new Options({})
 
@@ -19,18 +40,8 @@ export default class API {
     this.defaultOptions = defaultOptions
   }
 
-  url(path: string) {
-    let baseUrl = this.baseUrl
-
-    if (baseUrl.endsWith('/')) {
-      baseUrl = baseUrl.slice(0, -1)
-    }
-
-    if (!path.startsWith('/')) {
-      path = '/' + path
-    }
-
-    return baseUrl + path
+  url(path: string, query: Record<string, string> | URLSearchParams = {}) {
+    return API.url(this.baseUrl, path, query)
   }
 
   options(options: RequestOptions = {}) {
