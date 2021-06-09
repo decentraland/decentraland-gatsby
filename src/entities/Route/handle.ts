@@ -8,6 +8,16 @@ import {
   http_request_duration_seconds,
 } from './metrics'
 
+const DEFAULT_API_HEADERS: Record<string, string> = {
+  'Content-Security-Policy': `default-src 'none'; frame-ancestors 'none'`,
+  'X-Content-Type-Options': 'nosniff',
+  'X-Frame-Options': 'DENY',
+}
+
+if (process.env.STRICT_TRANSPORT_SECURITY === 'true') {
+  DEFAULT_API_HEADERS['Strict-Transport-Security'] = 'max-age=63072000'
+}
+
 export type AsyncHandler = (
   req: Request & any,
   res: Response & any,
@@ -17,25 +27,33 @@ export type AsyncHandler = (
 export default handleAPI
 
 export function handleAPI(handler: AsyncHandler) {
-  return handleIncommingMessage(handler, (data, _req, res) => {
-    res.json({ ok: true, data })
-  })
+  return handleIncommingMessage(
+    handler,
+    {
+      defaultHeaders: DEFAULT_API_HEADERS,
+      api: true,
+      // onSuccess: (data, _req, res) => {
+      //   res.json({ ok: true, data })
+      // }
+    }
+  )
 }
 
 export function handleJSON(handler: AsyncHandler) {
-  return handleIncommingMessage(handler, (data, _req, res) => {
-    res.json(data)
-  })
+  return handleIncommingMessage(
+    handler,
+    {
+      defaultHeaders: DEFAULT_API_HEADERS,
+      type: 'application/json'
+    }
+  )
 }
 
 export function handleRaw(handler: AsyncHandler, type?: string) {
-  return handleIncommingMessage(handler, (data, _req, res) => {
-    if (type) {
-      res.type(type)
-    }
-
-    res.send(data)
-  })
+  return handleIncommingMessage(
+    handler,
+    { type }
+  )
 }
 
 export function handleExpressError(
@@ -71,7 +89,12 @@ export function handleExpressError(
 
 function handleIncommingMessage(
   handler: AsyncHandler,
-  onSuccess: (data: any, req: Request, res: Response) => void
+  options: Partial<{
+    defaultHeaders: Record<string, string>,
+    api?: boolean,
+    type?: string,
+    // onSuccess: (data: any, req: Request, res: Response) => void
+  }>
 ) {
   return function (req: Request, res: Response) {
     const labels = {
@@ -86,7 +109,19 @@ function handleIncommingMessage(
       http_request_pool_size.dec(labels)
     })
 
-    handler(req, res, new Context(req, res))
+    Promise.resolve()
+      .then(() => {
+        if (options.defaultHeaders) {
+          res.set(options.defaultHeaders)
+        }
+
+        if (options.api) {
+          res.type('application/json')
+        } else if (options.type) {
+          res.type(options.type)
+        }
+      })
+      .then(() => handler(req, res, new Context(req, res)))
       .then(function handleResponseOk(data: any) {
         if (!res.headersSent) {
           res.status(defaultStatusCode(req))
@@ -96,7 +131,14 @@ function handleIncommingMessage(
           if (isStream(data)) {
             return data.pipe(res)
           } else {
-            onSuccess(data, req, res)
+            if (options.api) {
+              res.json({ ok: true, data })
+            } else if (options.type === 'application/json') {
+              res.json(data)
+            } else {
+              res.send(data)
+            }
+
             return data
           }
         }
