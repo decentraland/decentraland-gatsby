@@ -99,6 +99,7 @@
     "gatsby": "^2.26.1",
     "gatsby-plugin-intl": "^0.3.3",
     "gatsby-plugin-react-redux": "^1.1.0",
+    "gatsby-plugin-sri": "^1.1.0",
     "generic-pool": "^3.7.1",
     "glob": "^7.1.6",
     "highlight.js": "^10.4.1",
