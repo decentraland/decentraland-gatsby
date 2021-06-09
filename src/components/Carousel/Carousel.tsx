@@ -32,7 +32,7 @@ export function Next() {
 export function Prev() {
   return (
     <svg width="48" height="48" viewBox="0 0 48 48">
-      <g fill="none" fill-rule="evenodd" opacity=".32">
+      <g fill="none" fillRule="evenodd" opacity=".32">
         <path d="M0 0H48V48H0z" transform="matrix(-1 0 0 1 48 0)" />
         <path
           fill="#736E7D"
