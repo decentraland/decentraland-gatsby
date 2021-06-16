@@ -74,7 +74,7 @@ export default function Layout({
         className={TokenList.join([
           'LayoutNavbarContainer',
           props.className,
-          isScrolled && 'initial',
+          !isScrolled && 'initial',
         ])}
         onSignIn={props.onSignIn}
         onClickAccount={props.onClickAccount}
