@@ -7,8 +7,17 @@ import {
 } from '@storybook/addon-docs/blocks'
 import Markdown from './Markdown'
 
-<Meta title="Components/Markdown" />
+<Meta title="Components/Text/Markdown" />
 
+# Markdown component
+
+<Canvas>
+  <Markdown source={"`this is makrdown!`"} />
+</Canvas>
+
+## Markdown Cheat Sheet
+
+<Canvas>
 <Markdown
   source={`
 # Welcome to my React Markdown Editor!
@@ -61,3 +70,4 @@ And here. | Okay. | I think we get it.
 ![React Logo w/ Text](https://goo.gl/Umyytc)
 `}
 />
+</Canvas>

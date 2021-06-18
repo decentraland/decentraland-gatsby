@@ -1,20 +1,35 @@
 import React, { useState } from 'react'
 import { Radio } from 'decentraland-ui/dist/components/Radio/Radio'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import TokenList from '../../utils/dom/TokenList'
 import Textarea, { TextareaProps } from './Textarea'
 import Markdown from '../Text/Markdown'
-import Label from './Label'
+// import Label from './Label'
 import './MarkdownTextarea.css'
 
-type MarkdownTextarea = TextareaProps & { preview?: boolean }
+type MarkdownTextarea = TextareaProps & {
+  preview?: boolean
+  previewLabel?: string
+}
 
 export default function MarkdownTextarea({
   preview,
   label,
+  previewLabel,
   className,
   ...props
 }: MarkdownTextarea) {
+  const [ value, setValue ] = useState(props.initialValue ?? '')
   const [previewing, setPreviewing] = useState(preview)
+  function handleChange(e: React.FormEvent<any>, data: any) {
+    if(props.onChange) {
+      props.onChange(e, data)
+    }
+
+    if (!e.defaultPrevented) {
+      setValue(data.value || '')
+    }
+  }
 
   return (
     <div
@@ -26,21 +41,21 @@ export default function MarkdownTextarea({
         className,
       ])}
     >
+      <Header sub>{label || ''} &nbsp; </Header>
       <Radio
         toggle
-        label="PREVIEW"
+        label={previewLabel ?? "PREVIEW"}
         checked={preview ?? previewing}
         onChange={() => setPreviewing(!previewing)}
         style={{ position: 'absolute', right: 0, top: 0 }}
       />
-      <Label>{props.label || ''} &nbsp; </Label>
-      {!previewing && <Textarea {...props} />}
+      {!previewing && <Textarea {...props} value={props.value ?? value} onChange={handleChange}/>}
       {previewing && (
         <div
           className="MarkdownTextarea__Preview"
           style={{ minHeight: (props.minHeight || 72) + 'px' }}
         >
-          <Markdown source={props.value} />
+          <Markdown source={props.value ?? value} />
         </div>
       )}
       {previewing && <p className="message"> {props.message} &nbsp; </p>}
