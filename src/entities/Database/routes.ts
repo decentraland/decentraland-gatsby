@@ -6,8 +6,8 @@ import { QUERY_HASHES } from './model'
 
 export default routes((router) => {
   const auth = withPrometheusToken({ optional: true })
-  router.get('/database/hashes', auth, handleRaw(getDatabaseHashes, 'text'))
-  router.get('/database/hashes/:hash', auth, handleRaw(getDatabaseHash, 'text'))
+  router.get('/metrics/database/hashes', auth, handleRaw(getDatabaseHashes, 'text'))
+  router.get('/metrics/database/hashes/:hash', auth, handleRaw(getDatabaseHash, 'text'))
 })
 
 async function getDatabaseHashes(_: Request, res: Response) {
