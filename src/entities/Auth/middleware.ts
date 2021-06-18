@@ -112,9 +112,11 @@ export function withBearerToken(tokens: string[]) {
       throw new RequestError(`Ivalid Authorization`, RequestError.BadRequest)
     }
 
-    const token = authorization.slice('Bearer '.length)
-    if (!tokens.includes(token)) {
+    const auth = authorization.slice('Bearer '.length)
+    if (!tokens.includes(auth)) {
       throw new RequestError('Unauthorized', RequestError.Unauthorized)
     }
+
+    Object.assign(req, { auth })
   })
 }
