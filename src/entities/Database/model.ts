@@ -1,3 +1,4 @@
+import { createHash } from 'crypto'
 import {
   Model as BaseModel,
   OnConflict,
@@ -5,52 +6,40 @@ import {
   QueryPart,
   SQLStatement,
 } from 'decentraland-server'
-import { database_duration_seconds, database_pool_size } from './metrics'
+import { withDatabaseMetrics } from './metrics'
 
-async function messureWithParams<T>(
-  exec: () => Promise<T>,
-  params: { queryId: string; [key: string]: any }
-): Promise<T> {
-  database_pool_size.inc({ query: params.queryId })
-  const complete = database_duration_seconds.startTimer({
-    query: params.queryId,
-  })
-  try {
-    const result = await exec()
-    database_pool_size.dec({ query: params.queryId })
-    complete({ error: 0 })
-    return result
-  } catch (err) {
-    database_pool_size.dec({ query: params.queryId })
-    complete({ error: 1 })
-    Object.assign(err, params)
-    throw err
+
+export const QUERY_HASHES = new Map<string, string>()
+function hash(query: SQLStatement) {
+  const hash = createHash('sha1').update(query.text).digest('hex')
+  if (!QUERY_HASHES.has(hash)) {
+    QUERY_HASHES.set(hash, query.text)
   }
-}
 
-function getQueryId(methodName: string, table: string) {
-  return (
-    methodName[0] +
-    (methodName.match(/[A-Z]/g) || []).join('') +
-    table
-      .split('_')
-      .map((word) => word[0])
-      .join('')
-  ).toLowerCase()
+  return hash
 }
 
 export class Model<T extends {}> extends BaseModel<T> {
+
+
   static async find<U extends {} = any>(
     conditions?: Partial<U>,
     orderBy?: Partial<U>,
     extra?: string
   ): Promise<U[]> {
-    const queryId = getQueryId('find', this.tableName)
-    return messureWithParams(() => super.find(conditions, orderBy, extra), {
-      queryId,
-      conditions,
-      orderBy,
-      extra,
+    let props: string[] = []
+    if (conditions) {
+      props.push('conditions=' + Object.keys(conditions).sort().join(','))
+    }
+
+    if (orderBy) {
+      props.push('orderBy=' + Object.keys(orderBy).sort().join(','))
+    }
+
+    return withDatabaseMetrics(() => super.find(conditions, orderBy, extra), {
+      table: this.tableName,
+      method: 'find',
+      props: props.join('; ')
     })
   }
 
@@ -66,10 +55,22 @@ export class Model<T extends {}> extends BaseModel<T> {
     conditions: PrimaryKey | Partial<U>,
     orderBy?: Partial<P>
   ): Promise<U | undefined> {
-    const queryId = getQueryId('findOne', this.tableName)
-    return messureWithParams(
+    let props: string[] = []
+    if (conditions) {
+      props.push('conditions=' + Object.keys(conditions).sort().join(','))
+    }
+
+    if (orderBy) {
+      props.push('orderBy=' + Object.keys(orderBy).sort().join(','))
+    }
+
+    return withDatabaseMetrics(
       () => super.findOne(conditions as PrimaryKey, orderBy),
-      { queryId, conditions, orderBy }
+      {
+        table: this.tableName,
+        method: 'findOne',
+        props: props.join('; ')
+      }
     )
   }
 
@@ -77,76 +78,107 @@ export class Model<T extends {}> extends BaseModel<T> {
     conditions: Partial<U>,
     extra?: string
   ): Promise<number> {
-    const queryId = getQueryId('count', this.tableName)
+    let props: string[] = []
+    if (conditions) {
+      props.push('conditions=' + Object.keys(conditions).sort().join(','))
+    }
 
-    return messureWithParams(() => super.count(conditions, extra), {
-      queryId,
-      conditions,
-      extra,
-    })
+    return withDatabaseMetrics(
+      () => super.count(conditions, extra),
+      {
+        table: this.tableName,
+        method: 'count',
+        props: props.join('; ')
+      }
+    )
   }
 
   static async create<U extends QueryPart = any>(row: U): Promise<U> {
-    const queryId = getQueryId('create', this.tableName)
-    return messureWithParams(() => super.create(row), { queryId, row })
+    return withDatabaseMetrics(
+      () => super.create(row),
+      {
+        table: this.tableName,
+        method: 'create',
+        props: 'row=' + Object.keys(row).sort().join(',')
+      }
+    )
   }
 
   static async upsert<U extends QueryPart = any>(
     row: U,
     onConflict?: OnConflict<U>
   ): Promise<U> {
-    const queryId = getQueryId('upsert', this.tableName)
-    return messureWithParams(() => super.upsert(row), {
-      queryId,
-      row,
-      onConflict,
-    })
+    return withDatabaseMetrics(
+      () => super.upsert(row, onConflict),
+      {
+        table: this.tableName,
+        method: 'upsert',
+        props: 'row=' + Object.keys(row).sort().join(',')
+      }
+    )
   }
 
   static async update<U extends QueryPart = any, P extends QueryPart = any>(
     changes: Partial<U>,
     conditions: Partial<P>
   ): Promise<any> {
-    const queryId = getQueryId('update', this.tableName)
+    let props: string[] = []
+    if (changes) {
+      props.push('changes=' + Object.keys(changes).sort().join(','))
+    }
 
-    return messureWithParams(() => super.update(changes, conditions), {
-      queryId,
-      changes,
-      conditions,
-    })
+    if (conditions) {
+      props.push('conditions=' + Object.keys(conditions).sort().join(','))
+    }
+
+    return withDatabaseMetrics(
+      () => super.update(changes, conditions),
+      {
+        table: this.tableName,
+        method: 'update',
+        props: props.join('; ')
+      }
+    )
   }
 
   static async delete<U extends QueryPart = any>(
     conditions: Partial<U>
   ): Promise<any> {
-    const queryId = getQueryId('update', this.tableName)
-
-    return messureWithParams(() => super.delete(conditions), {
-      queryId,
-      conditions,
-    })
+    return withDatabaseMetrics(
+      () => super.delete(conditions),
+      {
+        table: this.tableName,
+        method: 'delete',
+        props: 'conditions=' + Object.keys(conditions).sort().join(',')
+      }
+    )
   }
 
   static async query<U extends {} = any>(query: SQLStatement): Promise<U[]> {
-    const queryId = getQueryId('query', this.tableName)
-    return messureWithParams(() => super.query(query.text, query.values), {
-      queryId,
-      query: query.text,
-      values: query.values,
-    })
+    return withDatabaseMetrics(
+      () => super.query(query.text, query.values),
+      {
+        table: this.tableName,
+        method: 'query',
+        props: `hash=` + hash(query)
+      }
+    )
   }
 
   /**
    * Execute a query and returns the number of row affected
    */
   static async rowCount(query: SQLStatement): Promise<number> {
-    const queryId = getQueryId('rowCount', this.tableName)
-    return messureWithParams(
+    return withDatabaseMetrics(
       async () => {
         const result = await this.db.client.query(query)
         return result.rowCount
       },
-      { queryId, query: query.text, values: query.values }
+      {
+        table: this.tableName,
+        method: 'rowCount',
+        props: `hash=` + hash(query)
+      }
     )
   }
 }

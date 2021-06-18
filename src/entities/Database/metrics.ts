@@ -6,14 +6,14 @@ export const database_pool_size = new client.Gauge({
   name: 'database_pool_size',
   help: 'The number of queries that are running at the same time',
   registers: [],
-  labelNames: ['query'],
+  labelNames: ['table', 'method', 'props'],
 })
 
 export const database_duration_seconds = new client.Histogram({
   name: 'database_duration_seconds',
   help: 'The time (in seconds) it takes for a query to complete',
   registers: [],
-  labelNames: ['query', 'error'],
+  labelNames: ['table', 'method', 'props', 'error'],
   buckets: [
     0.005,
     0.01,
@@ -34,3 +34,23 @@ export const database_duration_seconds = new client.Histogram({
 
 registerMetric(database_pool_size)
 registerMetric(database_duration_seconds)
+
+
+export async function withDatabaseMetrics<T>(
+  exec: () => Promise<T>,
+  params: { table: string, method: string, props: string }
+): Promise<T> {
+  database_pool_size.inc(params)
+  const complete = database_duration_seconds.startTimer(params)
+  try {
+    const result = await exec()
+    database_pool_size.dec(params)
+    complete({ error: 0 })
+    return result
+  } catch (err) {
+    database_pool_size.dec(params)
+    complete({ error: 1 })
+    Object.assign(err, params)
+    throw err
+  }
+}
