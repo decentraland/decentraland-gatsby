@@ -16,6 +16,7 @@ if (process.env.SERVICE_URL) {
 export default client
 export const registry = new client.Registry()
 registry.setDefaultLabels(defaultLabels)
+client.collectDefaultMetrics({ register: registry })
 
 const alreadyRegisted = new Set<client.Metric<string>>()
 export function registerMetric(metric: client.Metric<string>) {
