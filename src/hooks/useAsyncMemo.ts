@@ -13,6 +13,18 @@ type AsyncMemoOptions<T = any, I = null> = {
   callWithTruthyDeps: boolean
 }
 
+export type AsyncMemoResult<T, I = null> = readonly [
+  T | I,
+  {
+    version: number,
+    time: number,
+    error: Error | null,
+    loading: boolean,
+    reload: () => void,
+    set: (value: ((current: T | I) => T) | T) => void
+  }
+]
+
 /**
  * Execute and async function and save the result in the component memory,
  * it will execute again each time deps change, and it return only the result
@@ -28,7 +40,7 @@ export default function useAsyncMemo<T, I = null>(
   callback: () => Promise<T>,
   deps: DependencyList = [],
   options: Partial<AsyncMemoOptions<T, I>> = {}
-) {
+): AsyncMemoResult<T, I> {
   const [state, setState] = useState<AsyncMemoState<T, I>>({
     version: 0,
     loading: false,
