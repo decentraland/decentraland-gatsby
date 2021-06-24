@@ -5,6 +5,7 @@ export default function useFileDrop(callback: (event: DragEvent) => void) {
   const [ dragging, setDragging ] = useState(false)
 
   useEffect(() => {
+    let canceled = false
     const listener = SingletonListener.from(document)
     function onDragStart(event: DragEvent) {
       event.preventDefault()
@@ -22,7 +23,9 @@ export default function useFileDrop(callback: (event: DragEvent) => void) {
 
     function onDrop(event: DragEvent) {
       event.preventDefault()
-      callback(event)
+      if (!canceled) {
+        callback(event)
+      }
     }
 
     listener.addEventListener('dragstart', onDragStart)
@@ -31,6 +34,7 @@ export default function useFileDrop(callback: (event: DragEvent) => void) {
     listener.addEventListener('drop', onDrop)
 
     return () => {
+      canceled = true
       listener.removeEventListener('dragstart', onDragStart)
       listener.removeEventListener('dragend', onDragEnd)
       listener.removeEventListener('dragover', onDragOver)
