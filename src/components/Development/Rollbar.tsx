@@ -13,6 +13,7 @@ export default React.memo(function Rollbar({
   captureUncaught,
   captureUnhandledRejections,
   payload,
+  src,
   ...props
 }: RollbarProps) {
   accessToken = accessToken || process.env.GATSBY_ROLLBAR_TOKEN
@@ -25,6 +26,7 @@ export default React.memo(function Rollbar({
     accessToken,
     captureUncaught: !!captureUncaught,
     captureUnhandledRejections: !!captureUnhandledRejections,
+    rollbarJsUrl: src,
     payload: {
       environment: process.env.GATSBY_ENVIRONMENT || 'local',
       COMMIT_SHA: process.env.GATSBY_COMMIT_SHA || '0000000000000000000000000000000000000000',
