@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import Segment from './Segment/Segment'
+import Segment from './Development/Segment'
 
 export default function HTML(props: any) {
   return (
