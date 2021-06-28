@@ -24,6 +24,7 @@ export type UserMenuProps = Pick<
   | 'onClickSettings'
 > & {
   i18n?: Partial<UserMenuI18N>
+  hideBalance?: boolean
 }
 
 export default function UserMenu(props: UserMenuProps) {
@@ -36,7 +37,7 @@ export default function UserMenu(props: UserMenuProps) {
   const chainId = useChainId()
   const loading = userState.loading || profileState.loading
   const [ manaBalances ] = useAsyncMemo<UserMenuBalances>(async () => {
-    if (!user) {
+    if (props.hideBalance || !user) {
       return {}
     }
 
@@ -71,7 +72,7 @@ export default function UserMenu(props: UserMenuProps) {
         return {}
     }
 
-  }, [ user, chainId ])
+  }, [ user, chainId, props.hideBalance ])
 
   if (!user || loading) {
     return (
