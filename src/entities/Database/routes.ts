@@ -17,7 +17,7 @@ async function getDatabaseHashes(_: Request, res: Response) {
 async function getDatabaseHash(req: Request, res: Response) {
   const hash = req.params.hash
   if (QUERY_HASHES.has(hash)) {
-    res.status(200).send(QUERY_HASHES.has(hash))
+    res.status(200).send(QUERY_HASHES.get(hash))
   } else {
     res.status(404).send('Not found')
   }

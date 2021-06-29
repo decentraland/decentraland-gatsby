@@ -35,7 +35,6 @@ export const database_duration_seconds = new client.Histogram({
 registerMetric(database_pool_size)
 registerMetric(database_duration_seconds)
 
-
 export async function withDatabaseMetrics<T>(
   exec: () => Promise<T>,
   params: { table: string, method: string, props: string }
