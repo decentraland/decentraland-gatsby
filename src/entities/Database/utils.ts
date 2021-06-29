@@ -1,4 +1,6 @@
 import { Model, raw, SQLStatement, SQL } from 'decentraland-server'
+import { ServiceStartHandler } from '../Server/types'
+import database from './database'
 import { LimitOptions } from './types'
 
 export interface ModelConstructor {
@@ -7,6 +9,15 @@ export interface ModelConstructor {
 }
 
 export { raw, SQL, SQLStatement }
+
+export const databaseInitializer = (): ServiceStartHandler => {
+  return async () => {
+    await database.connect()
+    return async () => {
+      await database.close()
+    }
+  }
+}
 
 export function table(model: ModelConstructor) {
   return raw(model.tableName)

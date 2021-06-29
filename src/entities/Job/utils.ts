@@ -1,4 +1,6 @@
+import { ServiceStartHandler } from '../Server/types'
 import JobContext from './context'
+import JobManager from './job'
 import { NextFunction } from './types'
 
 export function reschedule(time: number) {
@@ -23,6 +25,15 @@ export function log() {
       )
     } else {
       console.log(`Cron completed! time: ${(time / 1000).toFixed(3)}s`)
+    }
+  }
+}
+
+export const jobInitializer = (manager: JobManager): ServiceStartHandler => {
+  return async () => {
+    manager.start()
+    return async () => {
+      manager.stop()
     }
   }
 }
