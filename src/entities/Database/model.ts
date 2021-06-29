@@ -6,7 +6,7 @@ import {
   QueryPart,
   SQLStatement,
 } from 'decentraland-server'
-import { withDatabaseMetrics } from './metrics'
+import { DatabaseMetricParams, withDatabaseMetrics } from './metrics'
 
 
 export const QUERY_HASHES = new Map<string, string>()
@@ -27,20 +27,20 @@ export class Model<T extends {}> extends BaseModel<T> {
     orderBy?: Partial<U>,
     extra?: string
   ): Promise<U[]> {
-    let props: string[] = []
+    const params: Partial<DatabaseMetricParams> = {
+      table: this.tableName,
+      method: 'find',
+    }
+
     if (conditions) {
-      props.push('conditions=' + Object.keys(conditions).sort().join(','))
+      params.conditions = Object.keys(conditions).sort().join(',')
     }
 
     if (orderBy) {
-      props.push('orderBy=' + Object.keys(orderBy).sort().join(','))
+      params.orderBy = Object.keys(orderBy).sort().join(',')
     }
 
-    return withDatabaseMetrics(() => super.find(conditions, orderBy, extra), {
-      table: this.tableName,
-      method: 'find',
-      props: props.join('; ')
-    })
+    return withDatabaseMetrics(() => super.find(conditions, orderBy, extra), params)
   }
 
   static findOne<U extends {} = any, P extends QueryPart = any>(
@@ -55,42 +55,36 @@ export class Model<T extends {}> extends BaseModel<T> {
     conditions: PrimaryKey | Partial<U>,
     orderBy?: Partial<P>
   ): Promise<U | undefined> {
-    let props: string[] = []
+    const params: Partial<DatabaseMetricParams> = {
+      table: this.tableName,
+      method: 'findOne',
+    }
+
     if (conditions) {
-      props.push('conditions=' + Object.keys(conditions).sort().join(','))
+      params.conditions = Object.keys(conditions).sort().join(',')
     }
 
     if (orderBy) {
-      props.push('orderBy=' + Object.keys(orderBy).sort().join(','))
+      params.orderBy = Object.keys(orderBy).sort().join(',')
     }
 
-    return withDatabaseMetrics(
-      () => super.findOne(conditions as PrimaryKey, orderBy),
-      {
-        table: this.tableName,
-        method: 'findOne',
-        props: props.join('; ')
-      }
-    )
+    return withDatabaseMetrics(() => super.findOne(conditions as PrimaryKey, orderBy), params)
   }
 
   static async count<U extends QueryPart = any>(
     conditions: Partial<U>,
     extra?: string
   ): Promise<number> {
-    let props: string[] = []
-    if (conditions) {
-      props.push('conditions=' + Object.keys(conditions).sort().join(','))
+    const params: Partial<DatabaseMetricParams> = {
+      table: this.tableName,
+      method: 'count',
     }
 
-    return withDatabaseMetrics(
-      () => super.count(conditions, extra),
-      {
-        table: this.tableName,
-        method: 'count',
-        props: props.join('; ')
-      }
-    )
+    if (conditions) {
+      params.conditions = Object.keys(conditions).sort().join(',')
+    }
+
+    return withDatabaseMetrics(() => super.count(conditions, extra), params)
   }
 
   static async create<U extends QueryPart = any>(row: U): Promise<U> {
@@ -99,7 +93,7 @@ export class Model<T extends {}> extends BaseModel<T> {
       {
         table: this.tableName,
         method: 'create',
-        props: 'row=' + Object.keys(row).sort().join(',')
+        rows: Object.keys(row).sort().join(',')
       }
     )
   }
@@ -113,7 +107,7 @@ export class Model<T extends {}> extends BaseModel<T> {
       {
         table: this.tableName,
         method: 'upsert',
-        props: 'row=' + Object.keys(row).sort().join(',')
+        rows: Object.keys(row).sort().join(',')
       }
     )
   }
@@ -122,23 +116,20 @@ export class Model<T extends {}> extends BaseModel<T> {
     changes: Partial<U>,
     conditions: Partial<P>
   ): Promise<any> {
-    let props: string[] = []
+    const params: Partial<DatabaseMetricParams> = {
+      table: this.tableName,
+      method: 'update',
+    }
+
     if (changes) {
-      props.push('changes=' + Object.keys(changes).sort().join(','))
+      params.updates = Object.keys(changes).sort().join(',')
     }
 
     if (conditions) {
-      props.push('conditions=' + Object.keys(conditions).sort().join(','))
+      params.conditions = Object.keys(conditions).sort().join(',')
     }
 
-    return withDatabaseMetrics(
-      () => super.update(changes, conditions),
-      {
-        table: this.tableName,
-        method: 'update',
-        props: props.join('; ')
-      }
-    )
+    return withDatabaseMetrics(() => super.update(changes, conditions), params)
   }
 
   static async delete<U extends QueryPart = any>(
@@ -149,7 +140,7 @@ export class Model<T extends {}> extends BaseModel<T> {
       {
         table: this.tableName,
         method: 'delete',
-        props: 'conditions=' + Object.keys(conditions).sort().join(',')
+        conditions: Object.keys(conditions).sort().join(',')
       }
     )
   }
@@ -160,7 +151,7 @@ export class Model<T extends {}> extends BaseModel<T> {
       {
         table: this.tableName,
         method: 'query',
-        props: `hash=` + hash(query)
+        hash: hash(query)
       }
     )
   }
@@ -177,7 +168,7 @@ export class Model<T extends {}> extends BaseModel<T> {
       {
         table: this.tableName,
         method: 'rowCount',
-        props: `hash=` + hash(query)
+        hash: hash(query)
       }
     )
   }
