@@ -8,7 +8,7 @@ export type Profile = Omit<Avatar, 'avatar'> &
     isDefaultProfile?: boolean
   }
 
-const defaultProfile = (address: string): Profile => ({
+export const createDefaultProfile = (address: string): Profile => ({
   userId: address,
   ethAddress: address,
   hasClaimedName: false,
@@ -66,11 +66,11 @@ export default new BatchLoader<Profile>(
         addresses.map((address) => address.toLowerCase())
       )
       return profiles.map(
-        (profile, i) => profile || defaultProfile(addresses[i])
+        (profile, i) => profile || createDefaultProfile(addresses[i])
       )
     } catch (err) {
       console.error(err)
-      return addresses.map((address) => defaultProfile(address))
+      return addresses.map((address) => createDefaultProfile(address))
     }
   },
   { maxBatchSize: 100 }
