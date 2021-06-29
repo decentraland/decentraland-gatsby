@@ -41,7 +41,17 @@ function render(ref: RefObject<HTMLCanvasElement>) {
     }),
   ]
 
-  const renderer = new THREE.WebGLRenderer({ antialias: true, canvas })
+  let renderer: THREE.WebGLRenderer | null = null
+  try {
+    renderer = new THREE.WebGLRenderer({ antialias: true, canvas })
+  } catch (err) {
+    console.error(err)
+  }
+
+  if (!renderer) {
+    return
+  }
+
   renderer.setSize(
     (canvas.parentElement as HTMLDivElement).clientWidth,
     (canvas.parentElement as HTMLDivElement).clientHeight
@@ -184,7 +194,7 @@ function render(ref: RefObject<HTMLCanvasElement>) {
 
   //------------------------------------------------------------- DOM EVENTS
   function onWindowResize() {
-    if (!ref.current) {
+    if (!ref.current || !renderer) {
       return
     }
 
