@@ -21,5 +21,7 @@ export async function initializeServices(serviceInitializers: (ServiceStartHandl
         throw err
       }
     }
+
+    process.exit(0)
   })
 }
