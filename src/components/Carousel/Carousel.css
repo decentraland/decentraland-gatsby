@@ -36,6 +36,7 @@
 
 .Carousel .Carousel__List {
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   padding: 12px;
 }
