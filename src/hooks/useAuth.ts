@@ -3,7 +3,8 @@ import { ChainId } from '@dcl/schemas'
 import { Provider, ProviderType } from 'decentraland-connect/dist/types'
 import { connection } from 'decentraland-connect/dist/ConnectionManager'
 import { getCurrentIdentity, setCurrentIdentity } from '../utils/auth/storage'
-import segment from '../utils/segment/segment'
+import segment from '../utils/development/segment'
+import rollbar from '../utils/development/rollbar'
 import { identify, Identity } from '../utils/auth'
 import { PersistedKeys } from '../utils/loader/types'
 import SingletonListener from '../utils/dom/SingletonListener'
@@ -65,7 +66,10 @@ async function restoreConnection(): Promise<AuthState> {
 
     // drop connection when identity is missing
     if (!identity && connectionData) {
-      await connection.disconnect().catch((err) => console.error(err))
+      await connection.disconnect().catch((err) => {
+        console.error(err)
+        rollbar((rollbar) => rollbar.error(err))
+      })
     }
 
     if (identity && connectionData) {
@@ -103,6 +107,7 @@ async function restoreConnection(): Promise<AuthState> {
     }
   } catch (err) {
     console.error(err)
+    rollbar((rollbar) => rollbar.error(err))
   }
 
   return { ...initialState, status: AuthStatus.Disconnected }
@@ -132,6 +137,7 @@ async function createConnection(providerType: ProviderType, chainId: ChainId) {
     }
   } catch (err) {
     console.error(err)
+    rollbar((rollbar) => rollbar.error(err))
   }
 
   setCurrentIdentity(null)
@@ -177,10 +183,11 @@ export default function useAuth() {
     const conn = { providerType: providerType, chainId: chainId }
     if (!providerType || !chainId) {
       console.error(`Invalid connection params: ${JSON.stringify(conn)}`)
+      rollbar((rollbar) => rollbar.error(`Invalid connection params: ${JSON.stringify(conn)}`))
       return
     }
 
-    segment((analytics) => analytics.track(AuthEvent.Connect, conn))
+    segment((analytics, context) => analytics.track(AuthEvent.Connect, { ...context, ...conn }))
     setState({
       account: null,
       identity: null,
@@ -285,9 +292,19 @@ export default function useAuth() {
               chainId: state.chainId,
             }
 
-            segment((analytics) => {
+            segment((analytics, context) => {
               analytics.identify(conn.account!)
-              analytics.track(AuthEvent.Connected, conn)
+              analytics.track(AuthEvent.Connected, { ...context, ...conn })
+            })
+
+            rollbar((rollbar) => {
+              rollbar.configure({
+                payload: {
+                  person: {
+                    id: conn.account!
+                  }
+                }
+              })
             })
           } else {
             result.selecting = state.selecting
@@ -305,8 +322,12 @@ export default function useAuth() {
       state.chainId === null
     ) {
       setCurrentIdentity(null)
-      connection.disconnect().catch((err) => console.error(err))
-      segment((analytics) => analytics.track(AuthEvent.Disconnected, {}))
+      connection.disconnect().catch((err) => {
+        console.error(err)
+        rollbar((rollbar) => rollbar.error(err))
+      })
+      segment((analytics, context) => analytics.track(AuthEvent.Disconnected, context))
+      rollbar((rollbar) => rollbar.configure({ payload: { person: { id: null } } }))
       setState({
         ...initialState,
         status: AuthStatus.Disconnected,

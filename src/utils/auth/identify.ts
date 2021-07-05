@@ -2,6 +2,7 @@ import type { ConnectionResponse } from 'decentraland-connect/dist/types'
 import type { AuthChain } from 'dcl-crypto/dist/types'
 import EmptyAccountsError from '../errors/EmptyAccountsError'
 import once from '../function/once'
+import rollbar from '../development/rollbar'
 
 const dependencies = once(async () =>
   Promise.all([
@@ -52,6 +53,7 @@ export default async function identify(connection: ConnectionResponse) {
     return identity
   } catch (err) {
     console.error(err)
+    rollbar((rollbar) => rollbar.error(err))
     return null
   }
 }

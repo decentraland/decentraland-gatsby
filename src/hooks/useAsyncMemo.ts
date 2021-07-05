@@ -1,4 +1,5 @@
 import { DependencyList, useState, useEffect } from 'react'
+import rollbar from '../utils/development/rollbar'
 
 type AsyncMemoState<T, I = null> = {
   version: number
@@ -91,8 +92,9 @@ export default function useAsyncMemo<T, I = null>(
           time: Date.now() - initial,
         }))
       })
-      .catch((error) => {
-        console.error(error)
+      .catch((err) => {
+        console.error(err)
+        rollbar((rollbar) => rollbar.error(err))
         if (cancelled) {
           return
         }
@@ -100,7 +102,7 @@ export default function useAsyncMemo<T, I = null>(
         setState((current) => ({
           ...current,
           value: current.value,
-          error,
+          error: err,
           loading,
           time: Date.now() - initial,
         }))

@@ -9,6 +9,7 @@ import {
 import { Transaction } from '../utils/tx/type'
 import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { getTransaction } from 'decentraland-dapps/dist/modules/transaction/txUtils'
+import rollbar from '../utils/development/rollbar'
 
 type TransactionState = Transaction<any>[] | null
 
@@ -102,7 +103,10 @@ export default function useTransaction(
           const txs = storeTransactions(address, chainId, [newTransaction])
           setTransactions(txs)
         })
-        .catch((err) => console.error(err))
+        .catch((err) => {
+          console.error(err)
+          rollbar((rollbar) => rollbar.error(err))
+        })
     }
   }
 

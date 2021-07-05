@@ -1,4 +1,5 @@
 import fetch from 'isomorphic-fetch'
+import rollbar from '../development/rollbar'
 import FetchError from '../errors/FetchError'
 import RequestError from '../errors/RequestError'
 import Options, { RequestOptions } from './Options'
@@ -7,6 +8,7 @@ export default class API {
   static catch<T>(prom: Promise<T>) {
     return prom.catch((err) => {
       console.error(err)
+      rollbar((rollbar) => rollbar.error(err))
       return null
     })
   }

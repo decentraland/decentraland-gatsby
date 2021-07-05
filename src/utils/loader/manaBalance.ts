@@ -1,6 +1,7 @@
 import { MANA_GRAPH_BY_CHAIN_ID } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
 import { fromWei } from 'web3x/utils/units'
+import rollbar from '../development/rollbar'
 import Loader from './Loader'
 
 export type ChainId = keyof typeof MANA_GRAPH_BY_CHAIN_ID
@@ -36,6 +37,7 @@ export async function fetchManaBalance(address: string, chainId: ChainId) {
     return parseFloat(fromWei(mana, 'ether'))
   } catch (err) {
     console.error(err)
+    rollbar((rollbar) => rollbar.error(err))
     return 0
   }
 }

@@ -1,4 +1,5 @@
 import { hash } from 'immutable'
+import rollbar from '../development/rollbar'
 
 export type TargetListener = Pick<
   HTMLElement,
@@ -77,6 +78,7 @@ export default class SingletonListener<T extends TargetListener> {
           listener.call(this as any, data)
         } catch (error) {
           console.error(`Error executing listener: ${error.message}`, error)
+          rollbar((rollbar) => rollbar.error(`Error executing listener: ${error.message}`, error))
         }
       }
     }

@@ -121,6 +121,7 @@
     "react-redux": "^7.2.2",
     "redux": "^4.0.5",
     "redux-logger": "^3.0.6",
+    "rollbar": "^2.24.0",
     "semantic-release": "^17.3.0",
     "three": "^0.115.0",
     "toml": "^3.0.0",

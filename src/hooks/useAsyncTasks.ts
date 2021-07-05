@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react'
+import rollbar from '../utils/development/rollbar'
 
 export type AsyncTaskIdenfity = (id: string, ...extra: any[]) => Promise<any>
 
@@ -18,6 +19,7 @@ export default function useAsyncTasks<C extends AsyncTaskIdenfity = AsyncTaskIde
       })
       .catch((err) => {
         console.error(err)
+        rollbar((rollbar) => rollbar.error(err))
         setTasks((current) => current.filter(([currentId]) => currentId !== id))
       })
 

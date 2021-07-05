@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import rollbar from '../utils/development/rollbar'
 
 type AsyncTaskState<A extends any[] = []> = {
   loading: boolean
@@ -34,6 +35,7 @@ export default function useAsyncTask<A extends any[] = []>(
       })
       .catch((err) => {
         console.error(err)
+        rollbar((rollbar) => rollbar.error(err))
         if (cancelled) {
           return
         }

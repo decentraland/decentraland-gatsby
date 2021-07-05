@@ -1,4 +1,5 @@
 import Catalyst, { Avatar } from '../api/Catalyst'
+import rollbar from '../development/rollbar'
 import BatchLoader from './BatchLoader'
 
 const DEFAULT_AVATAR = 'https://decentraland.org/images/male.png'
@@ -70,6 +71,7 @@ export default new BatchLoader<Profile>(
       )
     } catch (err) {
       console.error(err)
+      rollbar((rollbar) => rollbar.error(err))
       return addresses.map((address) => createDefaultProfile(address))
     }
   },
