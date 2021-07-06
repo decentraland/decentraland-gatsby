@@ -9,8 +9,12 @@ export default class JobContext<P extends object = {}> {
     private _update: UpdatePayloadFunction
   ) {}
 
-  log(...args: any[]) {
-    console.log(`[${this.name || 'cron'}]`, ...args)
+  log(message: string, data: Record<string, any>) {
+    console.log(`[${this.name || 'cron'}] ${message}`, {
+      type: this.name ? 'job' : 'cron',
+      name: this.name || 'cron',
+      ...data
+    })
   }
 
   async updatePayload(payload: object = {}) {

@@ -8,6 +8,7 @@ import { fromBase64 } from '../../utils/string/base64'
 import { HttpProvider } from 'web3x/providers'
 import RequestError from '../Route/error'
 import { middleware } from '../Route/handle'
+import logger from '../Development/logger'
 
 export type WithAuth<R extends Request = Request> = R & {
   auth: string | null
@@ -55,7 +56,7 @@ export function auth(options: AuthOptions = {}) {
       )
       ephemeralAddress = ephemeralPayload.ephemeralAddress
     } catch (error) {
-      console.log(error)
+      logger.error(`Error decoding authChain`, error)
       if (options.allowInvalid) {
         return
       } else {

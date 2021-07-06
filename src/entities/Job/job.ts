@@ -5,6 +5,7 @@ import { createVoidPool, Pool } from '../Pool/utils'
 import MemoryModel from './model/memory'
 import DatabaseModel from './model/model'
 import { job_manager_duration_seconds, job_manager_pool_size } from './metrics'
+import logger from '../Development/logger'
 
 export interface Job<P extends object = {}> {
   (ctx: JobContext<P>, next: NextFunction): Promise<void>
@@ -100,13 +101,14 @@ export default class JobManager {
   }
 
   async run(id: string | null, name: string, payload: any): Promise<void> {
+    const context = { type: 'job', id, name, payload }
     if (!this.jobs.has(name)) {
-      console.log(`Missing job: ${name} (id: "${id}")`)
+      logger.error(`Missing job: ${name} (id: "${id}")`, context)
       return
     }
 
     if (id && this.runningJobs.has(id)) {
-      console.log(`Job ${name} (id: "${id}") is already running`)
+      logger.log(`Job ${name} (id: "${id}") is already running`, context)
       return
     }
 
@@ -154,7 +156,16 @@ export default class JobManager {
         await this.getModel().complete(id)
       }
     } catch (err) {
-      context.log(`error running job "${name}": `, err)
+      logger.error(`Error running job "${name}"`, {
+        type: 'cron',
+        id,
+        name,
+        payload,
+        message: err.message,
+        stack: err.stack,
+        ...err
+      })
+
       error = 1
     }
 

@@ -10,6 +10,7 @@ import {
   BodyParserOptions,
 } from './types'
 import RequestError from './error'
+import logger from '../Development/logger'
 
 export function withBody(options: BodyParserOptions = {}) {
   const router = Router()
@@ -44,7 +45,12 @@ export function withLogs() {
         data.referer = req.headers['referer']
       }
 
-      console.log(`[${req.method}] ${req.originalUrl} ${JSON.stringify(data)}`)
+      logger.log(`[${req.method}] ${req.originalUrl} ${JSON.stringify(data)}`, {
+        type: 'http',
+        method: req.method,
+        url: req.originalUrl,
+        ...data,
+      })
     })
   })
 }

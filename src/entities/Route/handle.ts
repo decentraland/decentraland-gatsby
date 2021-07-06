@@ -7,6 +7,7 @@ import {
   http_request_pool_size,
   http_request_duration_seconds,
 } from './metrics'
+import logger from '../Development/logger'
 
 const DEFAULT_API_HEADERS: Record<string, string> = {
   'Content-Security-Policy': `default-src 'none'; frame-ancestors 'none'`,
@@ -73,10 +74,11 @@ export function handleExpressError(
     body: (req as any).body,
   }
 
-  console.error(
-    `error executing request ${req.method} ${req.path} : `,
-    (process.env.NODE_ENV === 'production' && JSON.stringify(data)) || data
-  )
+  logger.error(`error executing request ${req.method} ${req.path}`, {
+    type: 'http',
+    ...data,
+    error: err
+  })
 
   if (!res.headersSent) {
     res.status(err.statusCode || RequestError.InternalServerError)

@@ -1,3 +1,4 @@
+import logger from '../Development/logger'
 import { ServiceStartHandler } from '../Server/types'
 import JobContext from './context'
 import JobManager from './job'
@@ -17,14 +18,15 @@ export function log() {
     const startAt = Date.now()
     await next()
     const time = Date.now() - startAt
+    const seconds = (time / 1000).toFixed(3)
     if (ctx.name) {
-      console.log(
-        `Job "${ctx.name}" (id: "${ctx.id}") completed! time: ${(
-          time / 1000
-        ).toFixed(3)}s`
-      )
+      logger.log(`Job "${ctx.name}" (id: "${ctx.id}") completed! time: ${seconds}s`, {
+        id: ctx.id,
+        name: ctx.name,
+        time
+      })
     } else {
-      console.log(`Cron completed! time: ${(time / 1000).toFixed(3)}s`)
+      logger.log(`Cron completed! time: ${seconds}s`, { name: 'cron', time })
     }
   }
 }
