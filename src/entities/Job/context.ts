@@ -9,7 +9,7 @@ export default class JobContext<P extends object = {}> {
     private _update: UpdatePayloadFunction
   ) {}
 
-  log(message: string, data: Record<string, any>) {
+  log(message: string, data?: Record<string, any>) {
     console.log(`[${this.name || 'cron'}] ${message}`, {
       type: this.name ? 'job' : 'cron',
       name: this.name || 'cron',
