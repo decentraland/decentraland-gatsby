@@ -1,3 +1,4 @@
+import logger from '../Development/logger'
 import { ScheduleFunction, UpdatePayloadFunction } from './types'
 
 export default class JobContext<P extends object = {}> {
@@ -10,11 +11,31 @@ export default class JobContext<P extends object = {}> {
   ) {}
 
   log(message: string, data?: Record<string, any>) {
-    console.log(`[${this.name || 'cron'}] ${message}`, {
+    logger.log(`[${this.name || 'cron'}] ${message}`, {
       type: this.name ? 'job' : 'cron',
       name: this.name || 'cron',
       ...data
     })
+  }
+
+  error(error: Error): void;
+  error(message: string): void;
+  error(message: string, data: Record<string, any>): void;
+  error(message: string | Error, data: Record<string, any> = {}) {
+    let msg: string
+    if (message instanceof Error) {
+      msg = message.message
+      data = {
+        ...message,
+        ...data,
+        message: message.message,
+        stack: message.stack,
+      }
+    } else {
+      msg = message as string
+    }
+
+    logger.error(msg, data)
   }
 
   async updatePayload(payload: object = {}) {
