@@ -45,7 +45,8 @@ export function withLogs() {
         data.referer = req.headers['referer']
       }
 
-      logger.log(`[${req.method}] ${req.originalUrl} ${JSON.stringify(data)}`, {
+
+      logger.log(`[${req.method}] ${req.originalUrl}`, {
         type: 'http',
         method: req.method,
         url: req.originalUrl,

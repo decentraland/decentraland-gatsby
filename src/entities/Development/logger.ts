@@ -1,17 +1,17 @@
 export class Logger {
   log(log: string, data: Record<string, any> = {}): void {
     if (process.env.NODE_ENV === 'production') {
-      console.error(JSON.stringify({ level: 'info', log, ...data }))
+      console.log(JSON.stringify({ level: 'info', log, ...data }))
     } else {
-      console.log(log, data)
+      console.log(log, JSON.stringify(data))
     }
   }
 
   warning(log: string, data: Record<string, any> = {}): void {
     if (process.env.NODE_ENV === 'production') {
-      console.error(JSON.stringify({ level: 'warning', log, ...data }))
+      console.warn(JSON.stringify({ level: 'warning', log, ...data }))
     } else {
-      console.log(log, data)
+      console.warn(log, JSON.stringify(data))
     }
   }
 
@@ -26,7 +26,7 @@ export class Logger {
       }
       console.error(JSON.stringify({ level: 'error', log, ...data }))
     } else {
-      console.log(log, data)
+      console.error(log, JSON.stringify(data))
     }
   }
 }
