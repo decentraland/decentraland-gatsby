@@ -118,6 +118,6 @@ export function withBearerToken(tokens: string[]) {
       throw new RequestError('Unauthorized', RequestError.Unauthorized)
     }
 
-    Object.assign(req, { auth })
+    Object.assign(req, { auth: auth.slice(0, 10) })
   })
 }
