@@ -100,24 +100,24 @@ export default class JobManager {
     }
   }
 
-  async run(id: string | null, name: string, payload: any): Promise<void> {
-    const context = { type: 'job', id, name, payload }
-    if (!this.jobs.has(name)) {
-      logger.error(`Missing job: ${name} (id: "${id}")`, context)
+  async run(id: string | null, handler: string, payload: any): Promise<void> {
+    const context = { type: 'job', id, name: handler, payload }
+    if (!this.jobs.has(handler)) {
+      logger.error(`Missing job: ${handler} (id: "${id}")`, context)
       return
     }
 
     if (id && this.runningJobs.has(id)) {
-      logger.log(`Job ${name} (id: "${id}") is already running`, context)
+      logger.log(`Job ${handler} (id: "${id}") is already running`, context)
       return
     }
 
-    await this.runJobs(id, name, payload, this.jobs.get(name) as Job<any>[])
+    await this.runJobs(id, handler, payload, this.jobs.get(handler) as Job<any>[])
   }
 
   async runJobs(
     id: string | null,
-    name: string | null,
+    handler: string | null,
     payload: any,
     jobs: Job<any>[]
   ): Promise<void> {
@@ -125,7 +125,7 @@ export default class JobManager {
 
     const context = new JobContext(
       id,
-      name,
+      handler,
       payload || {},
       this.schedule,
       this.updatePayload
@@ -145,7 +145,7 @@ export default class JobManager {
     }
 
     let error = 0
-    const labels = { job: name || 'uknown' }
+    const labels = { job: handler || 'uknown' }
     job_manager_pool_size.inc(labels)
     const completeJob = job_manager_duration_seconds.startTimer(labels)
     const resource = await this.pool.acquire()
@@ -156,10 +156,10 @@ export default class JobManager {
         await this.getModel().complete(id)
       }
     } catch (err) {
-      logger.error(`Error running job "${name}"`, {
+      logger.error(`Error running job "${handler}"`, {
         type: 'cron',
         id,
-        name,
+        handler,
         payload,
         message: err.message,
         stack: err.stack,

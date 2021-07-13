@@ -4,16 +4,16 @@ import { ScheduleFunction, UpdatePayloadFunction } from './types'
 export default class JobContext<P extends object = {}> {
   constructor(
     public id: string | null,
-    public name: string | null,
+    public handler: string | null,
     public payload: P = {} as P,
     private _schedule: ScheduleFunction,
     private _update: UpdatePayloadFunction
   ) {}
 
   log(message: string, data?: Record<string, any>) {
-    logger.log(`[${this.name || 'cron'}] ${message}`, {
-      type: this.name ? 'job' : 'cron',
-      name: this.name || 'cron',
+    logger.log(`[${this.handler || 'cron'}] ${message}`, {
+      type: this.handler ? 'job' : 'cron',
+      name: this.handler || 'cron',
       ...data
     })
   }

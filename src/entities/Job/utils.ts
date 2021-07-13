@@ -7,8 +7,8 @@ import { NextFunction } from './types'
 export function reschedule(time: number) {
   return async (ctx: JobContext<any>, next: NextFunction) => {
     await next()
-    if (ctx.name) {
-      await ctx.schedule(ctx.name, new Date(Date.now() + time), ctx.payload)
+    if (ctx.handler) {
+      await ctx.schedule(ctx.handler, new Date(Date.now() + time), ctx.payload)
     }
   }
 }
@@ -19,14 +19,14 @@ export function log() {
     await next()
     const time = Date.now() - startAt
     const seconds = (time / 1000).toFixed(3)
-    if (ctx.name) {
-      logger.log(`Job "${ctx.name}" (id: "${ctx.id}") completed! time: ${seconds}s`, {
+    if (ctx.handler) {
+      logger.log(`Job "${ctx.handler}" (id: "${ctx.id}") completed! time: ${seconds}s`, {
         id: ctx.id,
-        name: ctx.name,
+        handler: ctx.handler,
         time
       })
     } else {
-      logger.log(`Cron completed! time: ${seconds}s`, { name: 'cron', time })
+      logger.log(`Cron completed! time: ${seconds}s`, { handler: 'cron', time })
     }
   }
 }
