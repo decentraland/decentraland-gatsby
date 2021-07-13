@@ -28,7 +28,7 @@ export default React.memo(function Rollbar({
     captureUnhandledRejections: captureUnhandledRejections !== false,
     rollbarJsUrl: src,
     payload: {
-      environment: process.env.GATSBY_ENVIRONMENT || 'local',
+      environment: process.env.GATSBY_ENVIRONMENT === 'prd' ? 'production' : process.env.GATSBY_ENVIRONMENT || 'local',
       COMMIT_SHA: process.env.GATSBY_COMMIT_SHA || '0000000000000000000000000000000000000000',
       COMMIT_SHORT_SHA: process.env.GATSBY_COMMIT_SHORT_SHA || '00000000',
       COMMIT_REF_NAME: process.env.GATSBY_COMMIT_REF_NAME || 'missing',
