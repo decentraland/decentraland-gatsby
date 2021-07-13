@@ -14,25 +14,28 @@ type AsyncMemoOptions<T = any, I = null> = {
   callWithTruthyDeps: boolean
 }
 
+export type AsyncMemoResultState<T, I = null> = {
+  version: number,
+  time: number,
+  error: Error | null,
+  loading: boolean,
+  reload: () => void,
+  set: (value: ((current: T | I) => T) | T) => void
+}
+
 export type AsyncMemoResult<T, I = null> = readonly [
   T | I,
-  {
-    version: number,
-    time: number,
-    error: Error | null,
-    loading: boolean,
-    reload: () => void,
-    set: (value: ((current: T | I) => T) | T) => void
-  }
+  AsyncMemoResultState<T, I>
 ]
 
-export function createAsyncMemoState<T, I = null>(value: T | I): AsyncMemoState<T, I> {
+export function createAsyncMemoState<T, I = null>(value: T | I): AsyncMemoResultState<T, I> {
   return {
     version: 0,
     loading: false,
-    value,
     time: 0,
     error: null,
+    reload: () => {},
+    set: () => {},
   }
 }
 
