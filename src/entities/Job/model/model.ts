@@ -1,7 +1,6 @@
 import { Model, SQL, raw } from 'decentraland-server'
 import { JobAttributes } from '../types'
 import isUUID from 'validator/lib/isUUID'
-import { v4 as uuid } from 'uuid'
 
 export default class Job extends Model<JobAttributes> {
   static tableName = 'jobs'
@@ -43,9 +42,9 @@ export default class Job extends Model<JobAttributes> {
     }
   }
 
-  static async schedule(name: string, date: Date, payload: object = {}) {
+  static async schedule(id: string, name: string, date: Date, payload: object = {}) {
     const job: JobAttributes = {
-      id: uuid(),
+      id,
       name,
       payload: payload,
       run_at: date,

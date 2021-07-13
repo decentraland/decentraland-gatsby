@@ -1,4 +1,3 @@
-import { v4 as uuid } from 'uuid'
 import { JobAttributes } from '../types'
 
 export default class MemoryModel {
@@ -11,9 +10,9 @@ export default class MemoryModel {
     )
   }
 
-  static async schedule(name: string, date: Date, payload: object = {}) {
+  static async schedule(id: string, name: string, date: Date, payload: object = {}) {
     const job: JobAttributes = {
-      id: uuid(),
+      id,
       name,
       run_at: date,
       payload,
