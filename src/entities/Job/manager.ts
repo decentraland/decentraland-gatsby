@@ -63,7 +63,7 @@ export default class JobManager {
   use(options: Partial<{ handler: string, cron: CronTime }>, job: Job<any>) {
     const handler = options.handler || job.jobName || job.name
     if (this.jobs.has(handler)) {
-      logger.warning('replacing job "${handler}"', { handler, type: 'job' })
+      logger.warning(`replacing job "${handler}"`, { handler, type: 'job' })
     }
 
     this.jobs.set(handler, job)
