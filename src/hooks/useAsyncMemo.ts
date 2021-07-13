@@ -26,6 +26,16 @@ export type AsyncMemoResult<T, I = null> = readonly [
   }
 ]
 
+export function createAsyncMemoState<T, I = null>(value: T | I): AsyncMemoState<T, I> {
+  return {
+    version: 0,
+    loading: false,
+    value,
+    time: 0,
+    error: null,
+  }
+}
+
 /**
  * Execute and async function and save the result in the component memory,
  * it will execute again each time deps change, and it return only the result
