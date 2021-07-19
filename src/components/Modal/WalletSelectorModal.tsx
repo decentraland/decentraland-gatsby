@@ -11,6 +11,7 @@ import { connection } from 'decentraland-connect/dist/ConnectionManager'
 import { ProviderType } from 'decentraland-connect/dist/types'
 import useAuthContext from '../../context/Auth/useAuthContext'
 import useChainId from '../../hooks/useChainId'
+import './WalletSelectorModal.css'
 
 const enabledProviders = new Set([
   ProviderType.INJECTED,

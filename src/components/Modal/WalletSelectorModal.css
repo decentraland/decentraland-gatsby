@@ -1,0 +1,13 @@
+.ui.modal.dcl.login-modal {
+  width: 90%;
+  max-width: 520px;
+}
+
+.ui.modal.dcl.login-modal .content {
+  margin: 28px auto;
+}
+
+.ui.modal.dcl.login-modal .dcl.option {
+  width: 100%;
+  max-width: 360px;
+}
