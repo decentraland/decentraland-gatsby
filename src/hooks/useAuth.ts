@@ -65,12 +65,12 @@ async function restoreConnection(): Promise<AuthState> {
     }
 
     // drop connection when identity is missing
-    if (!identity && connectionData) {
-      await connection.disconnect().catch((err) => {
-        console.error(err)
-        rollbar((rollbar) => rollbar.error(err))
-      })
-    }
+    // if (!identity && connectionData) {
+    //   await connection.disconnect().catch((err) => {
+    //     console.error(err)
+    //     rollbar((rollbar) => rollbar.error(err))
+    //   })
+    // }
 
     if (identity && connectionData) {
       const data = await connection.connect(
