@@ -22,9 +22,9 @@ import {
 } from 'decentraland-ui/dist/components/Navbar/Navbar'
 
 import WalletSelectorModal from '../Modal/WalletSelectorModal'
-import './Layout.css'
 import useWindowScroll from '../../hooks/useWindowScroll'
 import TokenList from '../../utils/dom/TokenList'
+import './Layout.css'
 
 export type LayoutProps = PageProps &
   NavbarProps &
