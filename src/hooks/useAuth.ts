@@ -9,6 +9,7 @@ import { identify, Identity } from '../utils/auth'
 import { PersistedKeys } from '../utils/loader/types'
 import SingletonListener from '../utils/dom/SingletonListener'
 import { ownerAddress } from '../utils/auth/identify'
+import logger from '../entities/Development/logger'
 
 enum AuthEvent {
   Connect = 'Connect',
@@ -263,12 +264,22 @@ export default function useAuth() {
   useEffect(() => {
     let cancelled = false
     if (state.status === AuthStatus.Restoring) {
-      CONNECTION_PROMISE = restoreConnection()
-      Promise.resolve(CONNECTION_PROMISE).then((result) => {
-        if (!cancelled) {
-          setState(result)
-        }
-      })
+      if (!CONNECTION_PROMISE) {
+        CONNECTION_PROMISE = restoreConnection()
+      }
+
+      Promise.resolve(CONNECTION_PROMISE)
+        .then((result) => {
+          if (!cancelled) {
+            setState(result)
+          }
+
+          CONNECTION_PROMISE = null
+        })
+        .catch((err) => {
+          logger.error('Error restoring session', err)
+          CONNECTION_PROMISE = null
+        })
     }
 
     // connect
@@ -277,37 +288,47 @@ export default function useAuth() {
       state.providerType &&
       state.chainId
     ) {
-      CONNECTION_PROMISE = createConnection(state.providerType, state.chainId)
-      Promise.resolve(CONNECTION_PROMISE).then((result) => {
-        if (!cancelled) {
-          if (result.status === AuthStatus.Connected) {
-            const conn = {
-              account: result.account,
-              providerType: state.providerType,
-              chainId: state.chainId,
+      if (!CONNECTION_PROMISE) {
+        CONNECTION_PROMISE = createConnection(state.providerType, state.chainId)
+      }
+
+      Promise.resolve(CONNECTION_PROMISE)
+        .then((result) => {
+          if (!cancelled) {
+            if (result.status === AuthStatus.Connected) {
+              const conn = {
+                account: result.account,
+                providerType: state.providerType,
+                chainId: state.chainId,
+              }
+
+              segment((analytics, context) => {
+                analytics.identify(conn.account!)
+                analytics.track(AuthEvent.Connected, { ...context, ...conn })
+              })
+
+              rollbar((rollbar) => {
+                rollbar.configure({
+                  payload: {
+                    person: {
+                      id: conn.account!
+                    }
+                  }
+                })
+              })
+            } else {
+              result.selecting = state.selecting
             }
 
-            segment((analytics, context) => {
-              analytics.identify(conn.account!)
-              analytics.track(AuthEvent.Connected, { ...context, ...conn })
-            })
-
-            rollbar((rollbar) => {
-              rollbar.configure({
-                payload: {
-                  person: {
-                    id: conn.account!
-                  }
-                }
-              })
-            })
-          } else {
-            result.selecting = state.selecting
+            setState(result)
           }
 
-          setState(result)
-        }
-      })
+          CONNECTION_PROMISE = null
+        })
+        .catch((err) => {
+          CONNECTION_PROMISE = null
+          logger.error('Error creating session', err)
+        })
     }
 
     // disconnect
