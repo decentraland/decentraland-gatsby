@@ -73,7 +73,6 @@ async function restoreConnection(): Promise<AuthState> {
     }
 
     if (identity && connectionData) {
-      connection.getConnectionData()
       const data = await connection.connect(
         connectionData.providerType,
         connectionData.chainId
@@ -110,7 +109,6 @@ async function restoreConnection(): Promise<AuthState> {
 
 async function createConnection(providerType: ProviderType, chainId: ChainId) {
   try {
-    connection.getConnectionData()
     connection.getConnectionData()
     const data = await connection.connect(providerType, chainId)
     const identity = await identify(data)
