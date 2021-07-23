@@ -73,13 +73,14 @@ async function restoreConnection(): Promise<AuthState> {
     }
 
     if (identity && connectionData) {
-      await connection.connect(
+      connection.getConnectionData()
+      const data = await connection.connect(
         connectionData.providerType,
         connectionData.chainId
       )
 
-      const previousConnection = await connection.tryPreviousConnection()
-      const provider = previousConnection.provider
+      // const previousConnection = await connection.tryPreviousConnection()
+      const provider = data.provider
 
       if (!provider) {
         throw new Error(`Error getting provider`)
@@ -109,12 +110,14 @@ async function restoreConnection(): Promise<AuthState> {
 
 async function createConnection(providerType: ProviderType, chainId: ChainId) {
   try {
+    connection.getConnectionData()
+    connection.getConnectionData()
     const data = await connection.connect(providerType, chainId)
     const identity = await identify(data)
 
     if (identity && identity.authChain) {
       const account = await ownerAddress(identity.authChain)
-      const previousConnection = await connection.tryPreviousConnection()
+      // const previousConnection = await connection.tryPreviousConnection()
       Promise.resolve().then(() => {
         setCurrentIdentity(identity)
       })
@@ -125,7 +128,7 @@ async function createConnection(providerType: ProviderType, chainId: ChainId) {
         chainId,
         providerType,
         status: AuthStatus.Connected,
-        provider: previousConnection.provider,
+        provider: data.provider,
         selecting: false,
       }
     }
