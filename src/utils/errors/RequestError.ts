@@ -11,7 +11,8 @@ export default class RequestError extends Error {
   ) {
     super(
       `Error fetching data from "${url}"${
-        body && body.message ? ': ' + body.message : ''
+        body && body.message ? ': ' + body.message :
+        body && body.error ? ': ' + body.error : ''
       }`
     )
     res.headers.forEach((value, key) => {
