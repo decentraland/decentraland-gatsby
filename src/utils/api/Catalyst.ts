@@ -33,6 +33,7 @@ import type {
   LayerUser,
   EntityScene,
 } from './Catalyst.types'
+import rollbar from '../development/rollbar'
 
 export default class Catalyst extends API {
   static Url =
@@ -132,11 +133,22 @@ export default class Catalyst extends API {
     const results: ProfileResponse[] = await this.fetch(
       `/lambdas/profiles/?` + params.toString()
     )
+
     const map = new Map(
-      results.map((result) => {
-        const avatar = result.avatars[0]!
-        return [avatar.ethAddress.toLowerCase(), avatar] as const
-      })
+      results
+        .filter((result) => {
+          const avatar = result.avatars[0]!
+          if (!avatar.ethAddress) {
+            rollbar((logger) => logger.error(`Error loading profiles`, { avatar, addresses }))
+            return false
+          }
+
+          return true
+        })
+        .map((result) => {
+          const avatar = result.avatars[0]!
+          return [avatar.ethAddress.toLowerCase(), avatar] as const
+        })
     )
 
     return addresses.map(
