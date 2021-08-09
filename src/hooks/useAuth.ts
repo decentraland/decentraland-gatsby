@@ -103,6 +103,11 @@ async function restoreConnection(): Promise<AuthState> {
   } catch (err) {
     console.error(err)
     rollbar((rollbar) => rollbar.error(err))
+    segment((analytics) => analytics.track('error', {
+      ...err,
+      message: err.message,
+      stack: err.stack,
+    }))
   }
 
   return { ...initialState, status: AuthStatus.Disconnected }
@@ -134,6 +139,11 @@ async function createConnection(providerType: ProviderType, chainId: ChainId) {
   } catch (err) {
     console.error(err)
     rollbar((rollbar) => rollbar.error(err))
+    segment((analytics) => analytics.track('error', {
+      ...err,
+      message: err.message,
+      stack: err.stack,
+    }))
   }
 
   setCurrentIdentity(null)
@@ -180,6 +190,10 @@ export default function useAuth() {
     if (!providerType || !chainId) {
       console.error(`Invalid connection params: ${JSON.stringify(conn)}`)
       rollbar((rollbar) => rollbar.error(`Invalid connection params: ${JSON.stringify(conn)}`))
+      segment((analytics) => analytics.track('error', {
+        message: `Invalid connection params: ${JSON.stringify(conn)}`,
+        conn,
+      }))
       return
     }
 
@@ -341,6 +355,11 @@ export default function useAuth() {
       connection.disconnect().catch((err) => {
         console.error(err)
         rollbar((rollbar) => rollbar.error(err))
+        segment((analytics) => analytics.track('error', {
+          ...err,
+          message: err.message,
+          stack: err.stack,
+        }))
       })
       segment((analytics, context) => analytics.track(AuthEvent.Disconnected, context))
       rollbar((rollbar) => rollbar.configure({ payload: { person: { id: null } } }))

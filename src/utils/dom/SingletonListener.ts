@@ -1,5 +1,6 @@
 import { hash } from 'immutable'
 import rollbar from '../development/rollbar'
+import segment from '../development/segment'
 
 export type TargetListener = Pick<
   HTMLElement,
@@ -76,9 +77,14 @@ export default class SingletonListener<T extends TargetListener> {
       for (const listener of listeners) {
         try {
           listener.call(this as any, data)
-        } catch (error) {
-          console.error(`Error executing listener: ${error.message}`, error)
-          rollbar((rollbar) => rollbar.error(`Error executing listener: ${error.message}`, error))
+        } catch (err) {
+          console.error(`Error executing listener: ${err.message}`, err)
+          rollbar((rollbar) => rollbar.error(`Error executing listener: ${err.message}`, err))
+          segment((analytics) => analytics.track('error', {
+            ...err,
+            message: `Error executing listener: ${err.message}`,
+            stack: err.stack,
+          }))
         }
       }
     }

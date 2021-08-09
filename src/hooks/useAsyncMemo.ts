@@ -1,5 +1,6 @@
 import { DependencyList, useState, useEffect } from 'react'
 import rollbar from '../utils/development/rollbar'
+import segment from '../utils/development/segment'
 
 type AsyncMemoState<T, I = null> = {
   version: number
@@ -108,6 +109,11 @@ export default function useAsyncMemo<T, I = null>(
       .catch((err) => {
         console.error(err)
         rollbar((rollbar) => rollbar.error(err))
+        segment((analytics) => analytics.track('error', {
+          ...err,
+          message: err.message,
+          stack: err.stack,
+        }))
         if (cancelled) {
           return
         }

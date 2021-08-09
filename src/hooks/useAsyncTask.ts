@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import rollbar from '../utils/development/rollbar'
+import segment from '../utils/development/segment'
 
 type AsyncTaskState<A extends any[] = []> = {
   loading: boolean
@@ -36,6 +37,11 @@ export default function useAsyncTask<A extends any[] = []>(
       .catch((err) => {
         console.error(err)
         rollbar((rollbar) => rollbar.error(err))
+        segment((analytics) => analytics.track('error', {
+          ...err,
+          message: err.message,
+          stack: err.stack,
+        }))
         if (cancelled) {
           return
         }

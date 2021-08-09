@@ -1,5 +1,6 @@
 import fetch from 'isomorphic-fetch'
 import rollbar from '../development/rollbar'
+import segment from '../development/segment'
 import FetchError from '../errors/FetchError'
 import RequestError from '../errors/RequestError'
 import Options, { RequestOptions } from './Options'
@@ -9,6 +10,11 @@ export default class API {
     return prom.catch((err) => {
       console.error(err)
       rollbar((rollbar) => rollbar.error(err))
+      segment((analytics) => analytics.track('error', {
+        ...err,
+        message: err.message,
+        stack: err.stack,
+      }))
       return null
     })
   }

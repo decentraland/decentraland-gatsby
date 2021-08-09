@@ -3,6 +3,7 @@ import type { AuthChain } from 'dcl-crypto/dist/types'
 import EmptyAccountsError from '../errors/EmptyAccountsError'
 import once from '../function/once'
 import rollbar from '../development/rollbar'
+import segment from '../development/segment'
 
 const dependencies = once(async () =>
   Promise.all([
@@ -54,6 +55,11 @@ export default async function identify(connection: ConnectionResponse) {
   } catch (err) {
     console.error(err)
     rollbar((rollbar) => rollbar.error(err))
+    segment((analytics) => analytics.track('error', {
+      ...err,
+      message: err.message,
+      stack: err.stack,
+    }))
     return null
   }
 }

@@ -1,0 +1,46 @@
+import { useState, useMemo, useEffect } from 'react'
+import { Source, ArgsTable } from '@storybook/components'
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks'
+import { ProviderType } from 'decentraland-connect/dist/types'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import FeatureFlagProvider from './FeatureFlagProvider'
+import { Args } from '../../components/Storybook/utils'
+import Container from '../../components/Storybook/Container'
+import useFeatureFlagContext from './useFeatureFlagContext'
+
+<Meta title="Context/FeatureFlag/useFeatureFlagContext" />
+
+# Feature Flag (Context)
+
+> The _feature flag hook context_ use the Provider load feature flag data
+
+In order to use this hook you must include an `FeatureFlagProvider` in your `gatsby-browser.js` and define and endpoint
+
+```tsx dark=true
+// gatsby-browser.js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import FeatureFlagProvider from 'decentraland-gatsby/dist/context/FeatureFlag/FeatureFlag'
+
+export const wrapRootElement = ({ element }) => (
+  <FeatureFlagProvider endpoint="https://feature-flags.decentraland.org/test.json">
+    {element}
+  </FeatureFlagProvider>
+)
+```
+
+After that you can use this hook in your components
+
+```tsx dark=true
+// componenet.jsx
+import React from 'react'
+import { ProviderType, ChainId } from 'decentraland-connect/dist/types'
+
+export default function Component() {
+  const [ ff ] = useFeatureFlagContext()
+
+  return (
+    <div>{ff.flag['test'] ? 'feature is enabled' : 'feature is disabled'}</div>
+  )
+}
+```

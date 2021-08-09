@@ -10,6 +10,7 @@ import { Transaction } from '../utils/tx/type'
 import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
 import { getTransaction } from 'decentraland-dapps/dist/modules/transaction/txUtils'
 import rollbar from '../utils/development/rollbar'
+import segment from '../utils/development/segment'
 
 type TransactionState = Transaction<any>[] | null
 
@@ -106,6 +107,11 @@ export default function useTransaction(
         .catch((err) => {
           console.error(err)
           rollbar((rollbar) => rollbar.error(err))
+          segment((analytics) => analytics.track('error', {
+            ...err,
+            message: err.message,
+            stack: err.stack,
+          }))
         })
     }
   }

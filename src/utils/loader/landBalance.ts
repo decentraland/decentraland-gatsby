@@ -2,6 +2,7 @@ import fetch from 'isomorphic-fetch'
 import { ChainId } from '@dcl/schemas'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
 import rollbar from '../development/rollbar'
+import segment from '../development/segment'
 
 const DECENTRALAND_MARKETPLACE_SUBGRAPH_URL = {
   [ChainId.ETHEREUM_MAINNET]:
@@ -58,6 +59,11 @@ export async function fetchLandBalance(address: string, chainId: ChainId) {
   } catch (err) {
     console.error(err)
     rollbar((rollbar) => rollbar.error(err))
+    segment((analytics) => analytics.track('error', {
+      ...err,
+      message: err.message,
+      stack: err.stack,
+    }))
     return 0
   }
 }

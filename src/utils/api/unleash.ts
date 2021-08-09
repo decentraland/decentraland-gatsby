@@ -1,6 +1,7 @@
 import fetch from 'isomorphic-fetch'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
 import rollbar from '../development/rollbar'
+import segment from '../development/segment'
 
 export type FeatureFlagsResponse = {
   // whether a feature flag is active.
@@ -60,6 +61,11 @@ export default async function unleash(
   } catch (err) {
     console.error(err)
     rollbar((rollbar) => rollbar.error(err))
+    segment((analytics) => analytics.track('error', {
+      ...err,
+      message: err.message,
+      stack: err.stack,
+    }))
     return DEFAULT_FEATURE_FLAG
   }
 }
