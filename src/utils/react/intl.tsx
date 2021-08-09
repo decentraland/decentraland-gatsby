@@ -1,5 +1,5 @@
 import React from 'react'
-import { IntlShape } from 'gatsby-plugin-intl'
+import type { IntlShape } from 'gatsby-plugin-intl'
 import Markdown from '../../components/Text/Markdown'
 
 export function createFormatMessage(shape: IntlShape) {
