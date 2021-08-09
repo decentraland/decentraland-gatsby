@@ -44,6 +44,8 @@ export type Layer = {
   maxUsers: number
 }
 
+export type CommsStatusOptions = boolean | {} | { includeLayers: boolean } | { includeUsersParcels: boolean }
+
 export type Status = CommsStatus
 export type StatusWithLayers = CommsStatusWithLayers
 
@@ -60,6 +62,11 @@ export type CommsStatus = {
 
 export type CommsStatusWithLayers = CommsStatus & {
   layers: (Layer & { usersParcels: Position[] })[]
+}
+
+export type CommsStatusWithUsers = CommsStatus & {
+  usersCount: number,
+  usersParcels: [number, number][]
 }
 
 export type LambdasStatus = {

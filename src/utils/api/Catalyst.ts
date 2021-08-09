@@ -32,8 +32,11 @@ import type {
   Servers,
   LayerUser,
   EntityScene,
+  CommsStatusOptions,
+  CommsStatusWithUsers,
 } from './Catalyst.types'
 import rollbar from '../development/rollbar'
+import segment from '../development/segment'
 
 export default class Catalyst extends API {
   static Url =
@@ -45,7 +48,7 @@ export default class Catalyst extends API {
     process.env.REACT_APP_PROFILE_URL ||
     process.env.STORYBOOK_PROFILE_URL ||
     process.env.PROFILE_URL ||
-    'https://peer-ec1.decentraland.org'
+    'https://peer-lb.decentraland.org'
 
   static Servers: Promise<void> | null = null
   static Cache = new Map<string, Catalyst>()
@@ -139,7 +142,13 @@ export default class Catalyst extends API {
         .filter((result) => {
           const avatar = result.avatars[0]!
           if (!avatar.ethAddress) {
-            rollbar((logger) => logger.error(`Error loading profiles`, { avatar, addresses }))
+            rollbar((logger) => logger.error(`Error loading profiles`, { avatar, addresses, server: this.baseUrl }))
+            segment((analytics) => analytics.track('error', {
+              message: `Error loading profiles`,
+              server: this.baseUrl,
+              addresses,
+              avatar,
+            }))
             return false
           }
 
@@ -164,13 +173,31 @@ export default class Catalyst extends API {
   }
 
   async getCommsStatus(): Promise<CommsStatus>
+  async getCommsStatus(includeLayers: { }): Promise<CommsStatus>
   async getCommsStatus(includeLayers: false): Promise<CommsStatus>
   async getCommsStatus(includeLayers: true): Promise<CommsStatusWithLayers>
-  async getCommsStatus(includeLayers?: boolean) {
-    let target = '/comms/status'
-    if (includeLayers) {
-      target += '?includeLayers=true'
+  async getCommsStatus(includeLayers: { includeLayers: true }): Promise<CommsStatusWithLayers>
+  async getCommsStatus(includeLayers: { includeUsersParcels: true }): Promise<CommsStatusWithUsers>
+  async getCommsStatus(options?: CommsStatusOptions) {
+    const params = new URLSearchParams()
+
+    if (options) {
+      if (typeof options === 'boolean') {
+        params.append('includeLayers', 'true')
+      } else if (typeof options === 'object') {
+        if ((options as { includeLayers: boolean }).includeLayers) {
+          params.append('includeLayers', 'true')
+        } else if ((options as { includeUsersParcels: boolean }).includeUsersParcels) {
+          params.append('includeUsersParcels', 'true')
+        }
+      }
     }
+
+    let target = '/comms/status'
+    if (params.toString()) {
+      target += '?' + params.toString()
+    }
+
     return this.fetch(target)
   }
 
@@ -228,10 +255,20 @@ export default class Catalyst extends API {
     return this.fetch<string[]>(`/lambdas/contracts/denylisted-names`)
   }
 
+  /**
+   * @deprecated by the archipelago update
+   * @see https://decentraland.org/blog/project-updates/communication-protocol-improvements/
+   * @see https://github.com/decentraland/adr/blob/main/docs/ADR-35-coms-protocol-optimizations.md
+   */
   async getLayers() {
     return this.fetch<Layer[]>('/comms/layers')
   }
 
+  /**
+   * @deprecated by the archipelago update
+   * @see https://decentraland.org/blog/project-updates/communication-protocol-improvements/
+   * @see https://github.com/decentraland/adr/blob/main/docs/ADR-35-coms-protocol-optimizations.md
+   */
   async getLayerUsers(layer: string) {
     return this.fetch<LayerUser[]>(`/comms/layers/${layer}/users`)
   }
