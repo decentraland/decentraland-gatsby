@@ -69,6 +69,7 @@ Promise.resolve()
       'gatsby-source-filesystem@2',
       'gatsby-transformer-sharp@2',
       'node-pg-migrate@4',
+      'react-helmet@5',
       'pg@7',
     ])
   )
