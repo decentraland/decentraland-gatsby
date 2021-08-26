@@ -1,28 +1,22 @@
-import fetch from 'isomorphic-fetch'
-import rollbar from '../development/rollbar'
-import segment from '../development/segment'
+import logger from '../../entities/Development/logger'
 import FetchError from '../errors/FetchError'
 import RequestError from '../errors/RequestError'
 import Options, { RequestOptions } from './Options'
+import 'isomorphic-fetch'
 
 export default class API {
   static catch<T>(prom: Promise<T>) {
     return prom.catch((err) => {
-      console.error(err)
-      rollbar((rollbar) => rollbar.error(err))
-      segment((analytics) => analytics.track('error', {
-        ...err,
-        message: err.message,
-        stack: err.stack,
-      }))
+      logger.error(err)
       return null
     })
   }
 
-  static url(base: string, path: string, query: Record<string, string> | URLSearchParams = {}) {
+  static url(base: string, path: string = '', query: Record<string, string> | URLSearchParams = {}) {
     if (base.endsWith('/')) {
       base = base.slice(0, -1)
     }
+
 
     if (!path.startsWith('/')) {
       path = '/' + path
@@ -91,14 +85,20 @@ export default class API {
     try {
       res = await fetch(url, opt.toObject())
     } catch (error) {
+      console.error()
       throw new FetchError(url, opt.toObject(), error.message)
     }
 
     try {
       body = await res.text()
+    } catch (error) {
+      throw new RequestError(url, opt.toObject(), res, body)
+    }
+
+    try {
       json = JSON.parse(body || '{}') as T
     } catch (error) {
-      throw new RequestError(url, opt.toObject(), res, json || body)
+      throw new RequestError(url, opt.toObject(), res, error.message + ' at ' + body)
     }
 
     if (res.status >= 400) {

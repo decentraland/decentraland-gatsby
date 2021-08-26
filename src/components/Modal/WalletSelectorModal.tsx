@@ -20,50 +20,59 @@ const enabledProviders = new Set([
   // ProviderType.WALLET_CONNECT,
 ])
 
-export default React.memo(function WalletSelector() {
+export type WalletSelectorProps = {
+  open?: boolean
+  loading?: boolean
+  availableProviders?: ProviderType[]
+}
+
+export default React.memo(function WalletSelector(props: WalletSelectorProps) {
   const [availableProviders, setAvailableProviders] = useState<
-    (readonly [ProviderType, LoginModalOptionType])[]
-  >([])
+    (readonly [ProviderType, LoginModalOptionType])[] | null
+  >(null)
   const [auth, state] = useAuthContext()
   const chainId = useChainId()
 
   // Detect available providers
   useEffect(() => {
-    setAvailableProviders(
-      connection
-        .getAvailableProviders()
-        .filter((providerType) => enabledProviders.has(providerType))
-        .map((providerType) => {
-          switch (providerType) {
-            case ProviderType.INJECTED:
-              if (isCucumberProvider()) {
-                return [providerType, LoginModalOptionType.SAMSUNG] as const
-              } else if (isDapperProvider()) {
-                return [providerType, LoginModalOptionType.DAPPER] as const
-              } else {
-                return [providerType, LoginModalOptionType.METAMASK] as const
-              }
-            case ProviderType.NETWORK:
-              return [providerType, LoginModalOptionType.METAMASK] as const
-            case ProviderType.WALLET_CONNECT:
-              return [
-                providerType,
-                LoginModalOptionType.WALLET_CONNECT,
-              ] as const
-            case ProviderType.FORTMATIC:
-              return [providerType, LoginModalOptionType.FORTMATIC] as const
-          }
-        })
+    const providerTypes = (
+      props.availableProviders ??
+      (connection.getAvailableProviders()
+        .filter((providerType) => enabledProviders.has(providerType)))
     )
+
+    const providers = providerTypes.map((providerType) => {
+      switch (providerType) {
+        case ProviderType.INJECTED:
+          if (isCucumberProvider()) {
+            return [providerType, LoginModalOptionType.SAMSUNG] as const
+          } else if (isDapperProvider()) {
+            return [providerType, LoginModalOptionType.DAPPER] as const
+          } else {
+            return [providerType, LoginModalOptionType.METAMASK] as const
+          }
+        case ProviderType.NETWORK:
+          return [providerType, LoginModalOptionType.METAMASK] as const
+        case ProviderType.WALLET_CONNECT:
+          return [
+            providerType,
+            LoginModalOptionType.WALLET_CONNECT,
+          ] as const
+        case ProviderType.FORTMATIC:
+          return [providerType, LoginModalOptionType.FORTMATIC] as const
+      }
+    })!
+
+    setAvailableProviders(providers)
   }, [])
 
   return (
     <LoginModal
-      open={!auth && state.selecting}
-      loading={availableProviders.length === 0 || state.loading}
+      open={props.open ?? (!auth && state.selecting)}
+      loading={props.loading ?? (availableProviders === null || state.loading)}
       onClose={() => state.select(false)}
     >
-      {availableProviders.map(([providerType, optionType]) => {
+      {(availableProviders || []).map(([providerType, optionType]) => {
         switch (providerType) {
           case ProviderType.INJECTED:
             return (
@@ -74,6 +83,14 @@ export default React.memo(function WalletSelector() {
               />
             )
           case ProviderType.FORTMATIC:
+            return (
+              <LoginModal.Option
+                key={providerType}
+                type={optionType}
+                onClick={() => state.connect(providerType, chainId)}
+              />
+            )
+          case ProviderType.WALLET_CONNECT:
             return (
               <LoginModal.Option
                 key={providerType}

@@ -166,10 +166,13 @@ export default class Catalyst extends API {
   }
 
   async getStatus(): Promise<CommsStatus>
+  async getStatus(includeLayers: { }): Promise<CommsStatus>
   async getStatus(includeLayers: false): Promise<CommsStatus>
   async getStatus(includeLayers: true): Promise<CommsStatusWithLayers>
-  async getStatus(includeLayers?: boolean) {
-    return this.getCommsStatus(includeLayers as any)
+  async getStatus(includeLayers: { includeLayers: true }): Promise<CommsStatusWithLayers>
+  async getStatus(includeLayers: { includeUsersParcels: true }): Promise<CommsStatusWithUsers>
+  async getStatus(options?: CommsStatusOptions) {
+    return this.getCommsStatus(options as any)
   }
 
   async getCommsStatus(): Promise<CommsStatus>
@@ -180,7 +183,6 @@ export default class Catalyst extends API {
   async getCommsStatus(includeLayers: { includeUsersParcels: true }): Promise<CommsStatusWithUsers>
   async getCommsStatus(options?: CommsStatusOptions) {
     const params = new URLSearchParams()
-
     if (options) {
       if (typeof options === 'boolean') {
         params.append('includeLayers', 'true')

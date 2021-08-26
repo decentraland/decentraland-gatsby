@@ -1,8 +1,8 @@
-import fetch from 'isomorphic-fetch'
 import { ChainId } from '@dcl/schemas'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
+import 'isomorphic-fetch'
 
 const DECENTRALAND_MARKETPLACE_SUBGRAPH_URL = {
   [ChainId.ETHEREUM_MAINNET]:
