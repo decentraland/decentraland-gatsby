@@ -1,14 +1,14 @@
 import { Request } from 'express'
+import { getConfiguration } from 'decentraland-connect/dist/configuration'
 import { AuthIdentity, AuthChain, AuthLinkType } from 'dcl-crypto/dist/types'
-import {
-  Authenticator,
-  parseEmphemeralPayload,
-} from 'dcl-crypto/dist/Authenticator'
+import { Authenticator, parseEmphemeralPayload } from 'dcl-crypto/dist/Authenticator'
 import { fromBase64 } from '../../utils/string/base64'
 import { HttpProvider } from 'web3x/providers'
 import RequestError from '../Route/error'
 import { middleware } from '../Route/handle'
 import logger from '../Development/logger'
+import once from '../../utils/function/once'
+import { ChainId } from '../../utils/loader/ensBalance'
 
 export type WithAuth<R extends Request = Request> = R & {
   auth: string | null
@@ -18,6 +18,12 @@ export type AuthOptions = {
   optional?: boolean
   allowInvalid?: boolean
 }
+
+const getProvider = once(() => {
+  const configuration = getConfiguration()
+  const provider = new HttpProvider(configuration.wallet_connect.urls[ChainId.ETHEREUM_MAINNET])
+  return provider
+})
 
 export function auth(options: AuthOptions = {}) {
   return middleware(async (req) => {
@@ -69,15 +75,9 @@ export function auth(options: AuthOptions = {}) {
 
     let result: { ok: boolean; message?: string } = { ok: false }
     try {
-      result = await Authenticator.validateSignature(
-        ephemeralAddress,
-        authChain,
-        new HttpProvider(
-          'https://mainnet.infura.io/v3/640777fe168f4b0091c93726b4f0463a'
-        )
-      )
+      result = await Authenticator.validateSignature(ephemeralAddress, authChain, getProvider())
     } catch (error) {
-      console.error(error)
+      logger.error(error)
       if (options.allowInvalid) {
         return
       } else {

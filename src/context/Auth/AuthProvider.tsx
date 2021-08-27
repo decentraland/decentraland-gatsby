@@ -10,6 +10,8 @@ const defaultAuthState: ReturnType<typeof useAuth> = [
     chainId: null,
     providerType: null,
     provider: null,
+    error: null,
+    switchTo: () => {},
     select: () => {},
     connect: () => {},
     disconnect: () => {},

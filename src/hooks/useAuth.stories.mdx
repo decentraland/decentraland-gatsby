@@ -75,7 +75,8 @@ export const Example = () => {
   const selectChain = (_, { value }) => setChain(value)
   const connectInjected = () => state.connect(ProviderType.INJECTED, chain)
   const connectFortmatic = () => state.connect(ProviderType.FORTMATIC, chain)
-  const connectWalletConnect = () => null
+  const connectWalletConnect = () =>
+    state.connect(ProviderType.WALLET_CONNECT, chain)
   const connectWalletLink = () => null
   const disconnect = () => state.disconnect()
   return (
@@ -133,7 +134,7 @@ export const Example = () => {
             loading={state.loading}
             onClick={connectInjected}
           >
-            connect injected
+            injected
           </Button>
           <Button
             primary
@@ -142,9 +143,17 @@ export const Example = () => {
             loading={state.loading}
             onClick={connectFortmatic}
           >
-            connect fortmatic
+            fortmatic
           </Button>
-          {/* <Button primary size="small" disabled={true} loading={state.loading} onClick={connectWalletConnect}>connect wallet connect</Button> */}
+          <Button
+            primary
+            size="small"
+            disabled={!!account}
+            loading={state.loading}
+            onClick={connectWalletConnect}
+          >
+            wallet connect
+          </Button>
           {/* <Button primary size="small" disabled={true} loading={state.loading} onClick={connectWalletLink}>connect wallet link</Button> */}
           <Button
             primary
@@ -165,6 +174,7 @@ export const Example = () => {
             loading: state.loading,
             providerType: state.providerType,
             chainId: state.chainId,
+            error: state.error,
           },
           null,
           2
@@ -187,6 +197,8 @@ export function Example() {
     state.connect(ProviderType.INJECTED, ChainId.ETHEREUM_MAINNET)
   const connectFortmatic = () =>
     state.connect(ProviderType.FORTMATIC, ChainId.ETHEREUM_MAINNET)
+  const connectWalletConnect = () =>
+    state.connect(ProviderType.WALLET_CONNECT, ChainId.ETHEREUM_MAINNET)
   const disconnect = () => state.disconnect()
 
   return (
@@ -204,6 +216,13 @@ export function Example() {
         onClick={connectFortmatic}
       >
         connect fortmatic
+      </button>
+      <button
+        disabled={!!account}
+        loading={state.loading}
+        onClick={connectWalletConnect}
+      >
+        connect wallet connect
       </button>
       <button disabled={!account} loading={state.loading} onClick={disconnect}>
         disconnect

@@ -4,10 +4,14 @@
 }
 
 .ui.modal.dcl.login-modal .content {
-  margin: 28px auto;
+  margin: 28px 32px;
 }
 
 .ui.modal.dcl.login-modal .dcl.option {
   width: 100%;
   max-width: 360px;
+}
+
+.ui.modal.dcl.login-modal p.error {
+  margin-bottom: 0;
 }

@@ -1,0 +1,44 @@
+import { useState, useMemo, useEffect } from 'react'
+import { ChainId } from '@dcl/schemas'
+import { Source, ArgsTable } from '@storybook/components'
+import {
+  Meta,
+  Story,
+  Preview,
+  Canvas,
+  Subtitle,
+} from '@storybook/addon-docs/blocks'
+import { ProviderType } from 'decentraland-connect/dist/types'
+import WalletSelectorModal from './WalletSelectorModal.tsx'
+
+<Meta title="Components/Modal/WalletSelectorModal" />
+
+<Canvas isExpanded>
+  <Story name="All providers">
+    <div>
+      <WalletSelectorModal open availableProviders={[
+        ProviderType.INJECTED,
+        ProviderType.FORTMATIC,
+        ProviderType.NETWORK,
+        ProviderType.WALLET_CONNECT,
+      ]} />
+    </div>
+  </Story>
+  <Story name="Detected providers">
+    <div>
+      <WalletSelectorModal open />
+    </div>
+  </Story>
+  <Story name="Loading">
+    <div>
+      <WalletSelectorModal open loading={true} />
+    </div>
+  </Story>
+  <Story name="Error">
+    <div>
+      <WalletSelectorModal open error={'Could not connect wallet'} />
+    </div>
+  </Story>
+</Canvas>
+
+<Divider size="small" />

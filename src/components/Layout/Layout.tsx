@@ -5,7 +5,7 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React from 'react'
+import React, { useCallback } from 'react'
 import { DropdownProps } from 'semantic-ui-react'
 import { changeLocale } from 'gatsby-plugin-intl'
 import { PageProps } from 'gatsby'
@@ -22,9 +22,12 @@ import {
 } from 'decentraland-ui/dist/components/Navbar/Navbar'
 
 import WalletSelectorModal from '../Modal/WalletSelectorModal'
+import WrongNetworkModal from '../Modal/WrongNetworkModal'
 import useWindowScroll from '../../hooks/useWindowScroll'
+import useAuthContext from '../../context/Auth/useAuthContext'
 import TokenList from '../../utils/dom/TokenList'
 import './Layout.css'
+import { getSupportedChainIds } from '../../context/Auth/utils'
 
 export type LayoutProps = PageProps &
   NavbarProps &
@@ -46,6 +49,7 @@ export default function Layout({
   const language: Locale = pageContext?.intl?.language || 'en'
   const languages: Locale[] = pageContext?.intl?.languages || ['en']
   const currentPath: string = pageContext?.intl?.originalPath || '/'
+  const [ _account, state ] = useAuthContext()
   const scroll = useWindowScroll()
   const isScrolled = scroll.scrollY.get() > 0
 
@@ -84,7 +88,17 @@ export default function Layout({
       >
         {children}
       </main>
-      <WalletSelectorModal />
+      <WrongNetworkModal
+        currentNetwork={state.chainId}
+        expectedNetwork={getSupportedChainIds()}
+        onSwitchNetwork={undefined /* (chainId) => state.switchTo(chainId) */}
+      />
+      <WalletSelectorModal
+        open={state.selecting}
+        loading={state.loading}
+        onConnect={(providerType, chainId) => state.connect(providerType, chainId)}
+        onClose={() => state.select(false)}
+      />
       <Footer
         locale={language}
         locales={languages}

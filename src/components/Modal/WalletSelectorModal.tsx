@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import { getChainName } from '@dcl/schemas'
 import {
   LoginModal,
   LoginModalOptionType,
@@ -9,29 +10,31 @@ import {
 } from 'decentraland-dapps/dist/lib/eth'
 import { connection } from 'decentraland-connect/dist/ConnectionManager'
 import { ProviderType } from 'decentraland-connect/dist/types'
-import useAuthContext from '../../context/Auth/useAuthContext'
-import useChainId from '../../hooks/useChainId'
 import './WalletSelectorModal.css'
+import { ChainId } from '../../utils/loader/ensBalance'
+import { getChainId } from '../../context/Auth/utils'
+import Paragraph from '../Text/Paragraph'
 
 const enabledProviders = new Set([
   ProviderType.INJECTED,
   ProviderType.FORTMATIC,
   // ProviderType.NETWORK,
-  // ProviderType.WALLET_CONNECT,
+  ProviderType.WALLET_CONNECT,
 ])
 
 export type WalletSelectorProps = {
   open?: boolean
   loading?: boolean
+  error?: string | null
   availableProviders?: ProviderType[]
+  onConnect?: (providerType: ProviderType, chainId: ChainId) => void
+  onClose?: () => void
 }
 
 export default React.memo(function WalletSelector(props: WalletSelectorProps) {
   const [availableProviders, setAvailableProviders] = useState<
     (readonly [ProviderType, LoginModalOptionType])[] | null
   >(null)
-  const [auth, state] = useAuthContext()
-  const chainId = useChainId()
 
   // Detect available providers
   useEffect(() => {
@@ -66,11 +69,17 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
     setAvailableProviders(providers)
   }, [])
 
+  function handleConnect(providerType: ProviderType, chainId: ChainId) {
+    if (props.onConnect) {
+      props.onConnect(providerType, chainId)
+    }
+  }
+
   return (
     <LoginModal
-      open={props.open ?? (!auth && state.selecting)}
-      loading={props.loading ?? (availableProviders === null || state.loading)}
-      onClose={() => state.select(false)}
+      open={props.open}
+      loading={props.loading}
+      onClose={props.onClose}
     >
       {(availableProviders || []).map(([providerType, optionType]) => {
         switch (providerType) {
@@ -79,7 +88,7 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
               <LoginModal.Option
                 key={providerType}
                 type={optionType}
-                onClick={() => state.connect(providerType, chainId)}
+                onClick={() => handleConnect(providerType, getChainId())}
               />
             )
           case ProviderType.FORTMATIC:
@@ -87,7 +96,7 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
               <LoginModal.Option
                 key={providerType}
                 type={optionType}
-                onClick={() => state.connect(providerType, chainId)}
+                onClick={() => handleConnect(providerType, getChainId())}
               />
             )
           case ProviderType.WALLET_CONNECT:
@@ -95,13 +104,18 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
               <LoginModal.Option
                 key={providerType}
                 type={optionType}
-                onClick={() => state.connect(providerType, chainId)}
+                onClick={() => handleConnect(providerType, getChainId())}
               />
             )
           default:
             return null
         }
       })}
+      <small className="message">
+        Trezor and smart contract wallets (like Dapper or Argent) cannot interact Polygon.
+        Read more about the Trezor support status <a href="https://github.com/trezor/trezor-firmware/pull/1568" target="_blank" rel="noopener noreferrer">here</a>
+      </small>
+      {props.error && <p className="error visible">{props.error}</p>}
     </LoginModal>
   )
 })

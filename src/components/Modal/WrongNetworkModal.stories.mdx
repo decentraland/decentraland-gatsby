@@ -1,0 +1,32 @@
+import { useState, useMemo, useEffect } from 'react'
+import { ChainId } from '@dcl/schemas'
+import { Source, ArgsTable } from '@storybook/components'
+import {
+  Meta,
+  Story,
+  Preview,
+  Canvas,
+  Subtitle,
+} from '@storybook/addon-docs/blocks'
+import WrongNetworkModal from './WrongNetworkModal.tsx'
+
+<Meta title="Components/Modal/WrongNetworkModal" />
+
+
+<Canvas isExpanded>
+  <Story name="Wrong Network">
+    <div>
+      <WrongNetworkModal open currentNetwork={ChainId.MATIC_MUMBAI} expectedNetwork={ChainId.ETHEREUM_MAINNET} />
+    </div>
+  </Story>
+</Canvas>
+
+<Canvas isExpanded>
+  <Story name="Multi Network Support">
+    <div>
+      <WrongNetworkModal open currentNetwork={ChainId.MATIC_MUMBAI} expectedNetwork={[ChainId.ETHEREUM_MAINNET, ChainId.MATIC_MAINNET]} />
+    </div>
+  </Story>
+</Canvas>
+
+<Divider size="small" />
