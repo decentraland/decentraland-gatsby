@@ -96,6 +96,7 @@ export default function Layout({
       <WalletSelectorModal
         open={state.selecting}
         loading={state.loading}
+        error={state.error}
         onConnect={(providerType, chainId) => state.connect(providerType, chainId)}
         onClose={() => state.select(false)}
       />
