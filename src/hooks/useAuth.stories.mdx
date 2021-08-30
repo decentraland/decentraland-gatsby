@@ -4,7 +4,7 @@ import { Personal } from 'web3x/personal'
 import { LegacyProviderAdapter } from 'web3x/providers'
 import { Source, ArgsTable } from '@storybook/components'
 import { Meta, Story, Preview } from '@storybook/addon-docs/blocks'
-import { ChainId } from '@dcl/schemas'
+import { ChainId, getChainName } from '@dcl/schemas'
 import { ProviderType } from 'decentraland-connect/dist/types'
 import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
@@ -13,6 +13,7 @@ import { Args } from '../components/Storybook/utils'
 import Container from '../components/Storybook/Container'
 import Textarea from '../components/Form/Textarea'
 import useAuth from './useAuth'
+import { chains } from './useAuth.utils'
 
 <Meta title="Hooks/useAuth" />
 
@@ -69,7 +70,7 @@ const [account, state] = useAuth()
 
 ## Connect Preview
 
-export const Example = () => {
+export const ConnectExample = () => {
   const [account, state] = useAuth()
   const [chain, setChain] = useState(ChainId.ETHEREUM_MAINNET)
   const selectChain = (_, { value }) => setChain(value)
@@ -130,6 +131,7 @@ export const Example = () => {
           <Button
             primary
             size="small"
+            style={{ margin: '0 .5em .5em 0' }}
             disabled={!!account}
             loading={state.loading}
             onClick={connectInjected}
@@ -139,6 +141,7 @@ export const Example = () => {
           <Button
             primary
             size="small"
+            style={{ margin: '0 .5em .5em 0' }}
             disabled={!!account}
             loading={state.loading}
             onClick={connectFortmatic}
@@ -148,16 +151,27 @@ export const Example = () => {
           <Button
             primary
             size="small"
+            style={{ margin: '0 .5em .5em 0' }}
             disabled={!!account}
             loading={state.loading}
             onClick={connectWalletConnect}
           >
             wallet connect
           </Button>
-          {/* <Button primary size="small" disabled={true} loading={state.loading} onClick={connectWalletLink}>connect wallet link</Button> */}
+          {/* <Button
+            primary
+            size="small"
+            style={{ margin: '0 .5em .5em 0' }}
+            disabled={true}
+            loading={state.loading}
+            onClick={connectWalletLink}
+            >
+              connect wallet link
+            </Button>*/}
           <Button
             primary
             size="small"
+            style={{ margin: '0 .5em .5em 0' }}
             disabled={!account}
             loading={state.loading}
             onClick={disconnect}
@@ -184,13 +198,13 @@ export const Example = () => {
   )
 }
 
-<Example />
+<ConnectExample />
 
 ```tsx dark=true
 import React from 'react'
 import { ProviderType, ChainId } from 'decentraland-connect/dist/types'
 
-export function Example() {
+export function ConnectExample() {
   const [account, state] = useAuth()
 
   const connectInjected = () =>
@@ -232,6 +246,30 @@ export function Example() {
   )
 }
 ```
+
+## Switch network Preview
+
+export const SwitchExample = () => {
+  const [account, state] = useAuth()
+  return <Container>
+    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+      {chains.map(chainId => {
+        return <Button
+          key={chainId}
+          size="small"
+          style={{ margin: '0 .5em .5em 0' }}
+          disabled={!account || state.chainId === chainId}
+          primary={state.chainId !== chainId}
+          basic={state.chainId === chainId}
+          onClick={() => state.switchTo(chainId)}>
+            Switch to {getChainName(chainId)}
+          </Button>
+      })}
+    </div>
+  </Container>
+}
+
+<SwitchExample />
 
 ## Related hooks
 

@@ -10,6 +10,16 @@ import { ownerAddress } from '../utils/auth/identify'
 import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import { AddEthereumChainParameters } from 'decentraland-dapps/dist/modules/wallet/types'
 
+export const chains = [
+  ChainId.ETHEREUM_MAINNET,
+  ChainId.ETHEREUM_ROPSTEN,
+  ChainId.ETHEREUM_GOERLI,
+  ChainId.ETHEREUM_KOVAN,
+  ChainId.ETHEREUM_RINKEBY,
+  ChainId.MATIC_MAINNET,
+  ChainId.MATIC_MUMBAI,
+]
+
 export enum AuthEvent {
   Connect = 'Connect',
   Connected = 'Connected',
@@ -190,7 +200,7 @@ export async function switchToChainId(provider: Provider | null, chainId: ChainI
   if (provider) {
     try {
       await provider.request({
-        method: 'wallet_addEthereumChain',
+        method: 'wallet_switchEthereumChain',
         params: [{ chainId: '0x' + chainId.toString(16) }]
       })
     } catch (switchError) {
