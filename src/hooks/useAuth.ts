@@ -87,7 +87,7 @@ export default function useAuth() {
 
   const [switching, switchTo] = useAsyncTask(async (chainId: ChainId) => {
     try {
-      switchToChainId(state.provider, chainId)
+      await switchToChainId(state.provider, chainId)
     } catch (err) {
       setState({ ...state, error: err.message })
     }

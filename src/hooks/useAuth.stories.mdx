@@ -258,9 +258,9 @@ export const SwitchExample = () => {
           key={chainId}
           size="small"
           style={{ margin: '0 .5em .5em 0' }}
+          loading={state.loading}
           disabled={!account || state.chainId === chainId}
           primary={state.chainId !== chainId}
-          basic={state.chainId === chainId}
           onClick={() => state.switchTo(chainId)}>
             Switch to {getChainName(chainId)}
           </Button>
