@@ -18,4 +18,10 @@ afterEach(() => {
   mock.warning.mockClear()
 })
 
+test('logger should be a mock', () => {
+  expect((logger as any).log.mock.calls).toEqual([])
+  expect((logger as any).error.mock.calls).toEqual([])
+  expect((logger as any).warning.mock.calls).toEqual([])
+})
+
 export default mock

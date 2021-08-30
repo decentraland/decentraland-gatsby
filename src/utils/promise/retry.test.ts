@@ -1,3 +1,4 @@
+import "../../entities/Development/logger.test"
 import retry from './retry'
 
 describe('src/utils/promise', () => {
@@ -8,7 +9,7 @@ describe('src/utils/promise', () => {
       return ++i
     })
 
-    await expect(complete).resolves.toBe(1)
+  await expect(complete).resolves.toBe(1)
 
     const eventual = retry(3, async () => {
       ++i

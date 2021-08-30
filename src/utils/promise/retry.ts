@@ -1,3 +1,5 @@
+import logger from "../../entities/Development/logger"
+
 export default async function retry<T>(
   times: number,
   fun: () => Promise<T>
@@ -7,7 +9,7 @@ export default async function retry<T>(
       const result = await fun()
       return result
     } catch (err) {
-      console.error(err)
+      logger.error(err)
       if (times === 1) {
         throw err
       }

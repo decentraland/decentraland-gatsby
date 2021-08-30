@@ -55,7 +55,7 @@ describe('utils/api/API', () => {
 
     test('.fetch(): http get as default method', async () => {
       const api = new API(HTTPBIN_ENDPOINT)
-      fetch.once('https://httpbin.org/anything', 200, { response: '{}' })
+      fetch.once('https://httpbin.org/anything', new Response('{}', { status: 200 }))
       await api.fetch('/anything')
       expect(fetch.lastUrl()).toBe('https://httpbin.org/anything')
       expect(fetch.lastOptions()).toEqual({})
@@ -63,7 +63,7 @@ describe('utils/api/API', () => {
 
     test('.fetch(): http get method', async () => {
       const api = new API(HTTPBIN_ENDPOINT)
-      fetch.once('https://httpbin.org/anything', 200, { response: '{}' })
+      fetch.once('https://httpbin.org/anything', new Response('{}', { status: 200 }))
       await api.fetch('/anything', api.options().method('get'))
       expect(fetch.lastUrl()).toBe('https://httpbin.org/anything')
       expect(fetch.lastOptions()).toEqual({ method: 'get' })
@@ -71,7 +71,7 @@ describe('utils/api/API', () => {
 
     test('.fetch(): http delete method', async () => {
       const api = new API(HTTPBIN_ENDPOINT)
-      fetch.once('https://httpbin.org/anything', 200, { response: '{}' })
+      fetch.once('https://httpbin.org/anything', new Response('{}', { status: 200 }))
       await api.fetch('/anything', api.options().method('delete'))
       expect(fetch.lastUrl()).toBe('https://httpbin.org/anything')
       expect(fetch.lastOptions()).toEqual({ method: 'delete' })
@@ -80,7 +80,7 @@ describe('utils/api/API', () => {
     for (const method of [ 'get', 'post', 'put', 'patch', 'delete', 'head', 'options' ]) {
       test(`.fetch(): http ${method} method`, async () => {
         const api = new API(HTTPBIN_ENDPOINT)
-        fetch.once('https://httpbin.org/anything', 200, { response: '{}' })
+        fetch.once('https://httpbin.org/anything', new Response('{}', { status: 200 }))
         await api.fetch('/anything', api.options().method(method))
         expect(fetch.lastUrl()).toBe('https://httpbin.org/anything')
         expect(fetch.lastOptions()).toEqual({ method })
