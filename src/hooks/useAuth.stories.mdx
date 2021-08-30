@@ -39,6 +39,11 @@ const [account, state] = useAuth()
       `boolean`
     ),
     Args.returns(
+      'state.error',
+      'contains the error message when a connection fails',
+      `string`
+    ),
+    Args.returns(
       'state.providerType',
       'type of provider conneceted to, `null` if not connected. \n\n imported from [decentraland-connect](https://www.npmjs.com/package/decentraland-connect)',
       Args.definedTypes(`ProviderType | null`, [
@@ -61,10 +66,6 @@ const [account, state] = useAuth()
         null,
       ])
     ),
-    {
-      /* Args.returns('clipboard.copy', 'send value to the user clipboard', `(value: boolean | number | string) => void`),
-  Args.returns('clipboard.clear', 'reset clipboard value to `null`', `() => void`), */
-    },
   ]}
 />
 
