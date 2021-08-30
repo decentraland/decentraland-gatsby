@@ -124,7 +124,7 @@
     "redux-logger": "^3.0.6",
     "rollbar": "^2.24.0",
     "semantic-release": "^17.3.0",
-    "three": "^0.115.0",
+    "three": "^0.125.0",
     "toml": "^3.0.0",
     "typesafe-actions": "^5.1.0",
     "uuid": "^8.3.1",
