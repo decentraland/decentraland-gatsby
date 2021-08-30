@@ -5,7 +5,7 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React, { useCallback } from 'react'
+import React from 'react'
 import { DropdownProps } from 'semantic-ui-react'
 import { changeLocale } from 'gatsby-plugin-intl'
 import { PageProps } from 'gatsby'
@@ -49,7 +49,7 @@ export default function Layout({
   const language: Locale = pageContext?.intl?.language || 'en'
   const languages: Locale[] = pageContext?.intl?.languages || ['en']
   const currentPath: string = pageContext?.intl?.originalPath || '/'
-  const [ _account, state ] = useAuthContext()
+  const [ , state ] = useAuthContext()
   const scroll = useWindowScroll()
   const isScrolled = scroll.scrollY.get() > 0
 

@@ -1,5 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import { getChainName } from '@dcl/schemas'
+import React, { useEffect, useState } from 'react'
 import {
   LoginModal,
   LoginModalOptionType,
@@ -13,7 +12,6 @@ import { ProviderType } from 'decentraland-connect/dist/types'
 import './WalletSelectorModal.css'
 import { ChainId } from '../../utils/loader/ensBalance'
 import { getChainId } from '../../context/Auth/utils'
-import Paragraph from '../Text/Paragraph'
 
 const enabledProviders = new Set([
   ProviderType.INJECTED,
