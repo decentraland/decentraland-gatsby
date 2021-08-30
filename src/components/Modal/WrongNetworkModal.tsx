@@ -45,7 +45,7 @@ export default React.memo(function WrongNetworkModal({ open, currentNetwork, exp
   }, [ expectedNetwork ])
 
   const isOpen = useMemo(
-    () => open ?? (!!currentNetwork && expectedNetworks.includes(currentNetwork)),
+    () => open ?? (!!currentNetwork && !expectedNetworks.includes(currentNetwork)),
     [ open, currentNetwork, expectedNetworks]
   )
 
