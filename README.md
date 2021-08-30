@@ -1,5 +1,7 @@
 # decentraland-gatsby
 
+[![Coverage Status](https://coveralls.io/repos/github/decentraland/decentraland-gatsby/badge.svg?branch=master)](https://coveralls.io/github/decentraland/decentraland-gatsby?branch=master)
+
 Common Gatsby project
 
 ## Setup new project
