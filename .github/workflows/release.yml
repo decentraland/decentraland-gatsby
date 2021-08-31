@@ -16,14 +16,18 @@ jobs:
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
+
       - name: installing
         run: npm ci
+
       - name: testing
         run: npm test -- --coverage
+
       - name: coveralls
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v1.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: building
         run: npm run build
 
