@@ -8,7 +8,6 @@ on:
 jobs:
 
   test:
-    needs: setup
     runs-on: ubuntu-20.04
 
     steps:
@@ -33,7 +32,7 @@ jobs:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
 
-  build:
+  release:
     needs: test
     runs-on: ubuntu-20.04
 
@@ -56,45 +55,11 @@ jobs:
       - name: building documents
         run: npm run build-storybook
 
-  release_package:
-    needs: build
-    runs-on: ubuntu-20.04
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: node.js 12
-        uses: actions/setup-node@v2
-        with:
-          node-version: 12
-          registry-url: https://registry.npmjs.org/
-          cache: 'npm'
-
-      - name: installing
-        run: npm ci
-
       - name: releasing
         run: npm run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-
-  release_documentation:
-    needs: build
-    runs-on: ubuntu-20.04
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: node.js 12
-        uses: actions/setup-node@v2
-        with:
-          node-version: 12
-          registry-url: https://registry.npmjs.org/
-          cache: 'npm'
-
-      - name: installing
-        run: npm ci
 
       # publish to gh pages
       - name: publishing documents
