@@ -48,8 +48,8 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
-  release:
-    needs: test
+  release_package:
+    needs: build
     runs-on: ubuntu-20.04
 
     steps:
@@ -58,6 +58,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
+
+  release_documentation:
+    needs: build
+    runs-on: ubuntu-20.04
+
+    steps:
 
       # publish to gh pages
       - name: publishing documents
