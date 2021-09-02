@@ -76,6 +76,7 @@ export default React.memo(function WrongNetworkModal({ open, currentNetwork, exp
       {expectedNetworks.map((chainId: ChainId, index: number) => {
         return <Button
           fluid
+          key={chainId}
           basic={index !== 0}
           primary={index === 0}
           style={index === 0 ? {} : { marginTop: '1em' }}
