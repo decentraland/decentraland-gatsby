@@ -17,7 +17,7 @@ const enabledProviders = new Set([
   ProviderType.INJECTED,
   ProviderType.FORTMATIC,
   // ProviderType.NETWORK,
-  ProviderType.WALLET_CONNECT,
+  // ProviderType.WALLET_CONNECT,
 ])
 
 export type WalletSelectorProps = {
