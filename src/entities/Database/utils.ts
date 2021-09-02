@@ -12,6 +12,10 @@ export { raw, SQL, SQLStatement }
 
 export const databaseInitializer = (): ServiceStartHandler => {
   return async () => {
+    if (process.env.DATABASE === 'false') {
+      return async () => {}
+    }
+
     await database.connect()
     return async () => {
       await database.close()
