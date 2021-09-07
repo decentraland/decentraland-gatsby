@@ -23,7 +23,6 @@ export function getDefaultChainId(): ChainId {
   return CHAIN_ID[0]
 }
 
-
 export function getChainId(): ChainId {
   return CHAIN_ID[0]
 }

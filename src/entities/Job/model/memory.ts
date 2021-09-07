@@ -10,7 +10,12 @@ export default class MemoryModel {
     )
   }
 
-  static async schedule(id: string, name: string, date: Date, payload: object = {}) {
+  static async schedule(
+    id: string,
+    name: string,
+    date: Date,
+    payload: object = {}
+  ) {
     const job: JobAttributes = {
       id,
       name,

@@ -9,7 +9,17 @@ import { Identity } from '../utils/auth'
 import { PersistedKeys } from '../utils/loader/types'
 import logger from '../entities/Development/logger'
 import useAsyncTask from './useAsyncTask'
-import { AuthEvent, AuthState, AuthStatus, createConnection, getListener, initialState, isLoading, restoreConnection, switchToChainId } from './useAuth.utils'
+import {
+  AuthEvent,
+  AuthState,
+  AuthStatus,
+  createConnection,
+  getListener,
+  initialState,
+  isLoading,
+  restoreConnection,
+  switchToChainId,
+} from './useAuth.utils'
 
 export { initialState }
 
@@ -43,15 +53,21 @@ export default function useAuth() {
     const conn = { providerType: providerType, chainId: chainId }
     if (!providerType || !chainId) {
       console.error(`Invalid connection params: ${JSON.stringify(conn)}`)
-      rollbar((rollbar) => rollbar.error(`Invalid connection params: ${JSON.stringify(conn)}`))
-      segment((analytics) => analytics.track('error', {
-        message: `Invalid connection params: ${JSON.stringify(conn)}`,
-        conn,
-      }))
+      rollbar((rollbar) =>
+        rollbar.error(`Invalid connection params: ${JSON.stringify(conn)}`)
+      )
+      segment((analytics) =>
+        analytics.track('error', {
+          message: `Invalid connection params: ${JSON.stringify(conn)}`,
+          conn,
+        })
+      )
       return
     }
 
-    segment((analytics, context) => analytics.track(AuthEvent.Connect, { ...context, ...conn }))
+    segment((analytics, context) =>
+      analytics.track(AuthEvent.Connect, { ...context, ...conn })
+    )
     setState({
       account: null,
       identity: null,
@@ -192,9 +208,9 @@ export default function useAuth() {
                 rollbar.configure({
                   payload: {
                     person: {
-                      id: conn.account!
-                    }
-                  }
+                      id: conn.account!,
+                    },
+                  },
                 })
               })
             } else {
@@ -222,14 +238,20 @@ export default function useAuth() {
       connection.disconnect().catch((err) => {
         console.error(err)
         rollbar((rollbar) => rollbar.error(err))
-        segment((analytics) => analytics.track('error', {
-          ...err,
-          message: err.message,
-          stack: err.stack,
-        }))
+        segment((analytics) =>
+          analytics.track('error', {
+            ...err,
+            message: err.message,
+            stack: err.stack,
+          })
+        )
       })
-      segment((analytics, context) => analytics.track(AuthEvent.Disconnected, context))
-      rollbar((rollbar) => rollbar.configure({ payload: { person: { id: null } } }))
+      segment((analytics, context) =>
+        analytics.track(AuthEvent.Disconnected, context)
+      )
+      rollbar((rollbar) =>
+        rollbar.configure({ payload: { person: { id: null } } })
+      )
       setState({
         ...initialState,
         status: AuthStatus.Disconnected,
@@ -244,7 +266,8 @@ export default function useAuth() {
   useEffect(() => {
     const provider = state.provider
     const onDisconnect = () => disconnect()
-    const onChainChanged = (chainId: ChainId) => setState({ ...state, chainId: Number(chainId) })
+    const onChainChanged = (chainId: ChainId) =>
+      setState({ ...state, chainId: Number(chainId) })
 
     if (provider) {
       provider.on('chainChanged', onChainChanged)

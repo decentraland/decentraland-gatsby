@@ -1,4 +1,4 @@
-import { middleware } from "../Route/handle"
+import { middleware } from '../Route/handle'
 import env from '../../utils/env'
 import { withBearerToken } from '../Auth/middleware'
 

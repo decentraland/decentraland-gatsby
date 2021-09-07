@@ -8,7 +8,11 @@ const PROMETHEUS_REGISTRIES = [registry, client.register]
 let PROMETHEUS_REGISTRY: client.Registry | null = null
 
 export default routes((router) => {
-  router.get('/metrics', withPrometheusToken({ optional: true }), handleRaw(getMetrics, 'text'))
+  router.get(
+    '/metrics',
+    withPrometheusToken({ optional: true }),
+    handleRaw(getMetrics, 'text')
+  )
 })
 
 export function exposeRegistry(registry: client.Registry) {

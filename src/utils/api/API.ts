@@ -12,11 +12,14 @@ export default class API {
     })
   }
 
-  static url(base: string, path: string = '', query: Record<string, string> | URLSearchParams = {}) {
+  static url(
+    base: string,
+    path: string = '',
+    query: Record<string, string> | URLSearchParams = {}
+  ) {
     if (base.endsWith('/')) {
       base = base.slice(0, -1)
     }
-
 
     if (!path.startsWith('/')) {
       path = '/' + path
@@ -98,7 +101,12 @@ export default class API {
     try {
       json = JSON.parse(body || '{}') as T
     } catch (error) {
-      throw new RequestError(url, opt.toObject(), res, error.message + ' at ' + body)
+      throw new RequestError(
+        url,
+        opt.toObject(),
+        res,
+        error.message + ' at ' + body
+      )
     }
 
     if (res.status >= 400) {

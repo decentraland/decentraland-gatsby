@@ -19,10 +19,10 @@ export default function MarkdownTextarea({
   className,
   ...props
 }: MarkdownTextarea) {
-  const [ value, setValue ] = useState(props.initialValue ?? '')
+  const [value, setValue] = useState(props.initialValue ?? '')
   const [previewing, setPreviewing] = useState(preview)
   function handleChange(e: React.FormEvent<any>, data: any) {
-    if(props.onChange) {
+    if (props.onChange) {
       props.onChange(e, data)
     }
 
@@ -44,12 +44,18 @@ export default function MarkdownTextarea({
       <Header sub>{label || ''} &nbsp; </Header>
       <Radio
         toggle
-        label={previewLabel ?? "PREVIEW"}
+        label={previewLabel ?? 'PREVIEW'}
         checked={preview ?? previewing}
         onChange={() => setPreviewing(!previewing)}
         style={{ position: 'absolute', right: 0, top: 0 }}
       />
-      {!previewing && <Textarea {...props} value={props.value ?? value} onChange={handleChange}/>}
+      {!previewing && (
+        <Textarea
+          {...props}
+          value={props.value ?? value}
+          onChange={handleChange}
+        />
+      )}
       {previewing && (
         <div
           className="MarkdownTextarea__Preview"

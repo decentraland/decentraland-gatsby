@@ -60,7 +60,10 @@ export default class JobManager {
     return this.use(job, { cron })
   }
 
-  use(job: Job<any>, options: Partial<{ handler: string, cron: CronTime }> = {} ) {
+  use(
+    job: Job<any>,
+    options: Partial<{ handler: string; cron: CronTime }> = {}
+  ) {
     const handler = options.handler || job.jobName || job.name
     if (this.jobs.has(handler)) {
       logger.warning(`replacing job "${handler}"`, { handler, type: 'job' })
@@ -133,7 +136,6 @@ export default class JobManager {
     payload: any,
     job: Job<any>
   ): Promise<void> {
-
     const context = new JobContext(
       id,
       handler || job.name,
@@ -165,7 +167,7 @@ export default class JobManager {
         payload,
         message: err.message,
         stack: err.stack,
-        ...err
+        ...err,
       })
 
       error = 1

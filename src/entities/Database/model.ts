@@ -8,7 +8,6 @@ import {
 } from 'decentraland-server'
 import { DatabaseMetricParams, withDatabaseMetrics } from './metrics'
 
-
 export const QUERY_HASHES = new Map<string, string>()
 function hash(query: SQLStatement) {
   const hash = createHash('sha1').update(query.text).digest('hex')
@@ -20,8 +19,6 @@ function hash(query: SQLStatement) {
 }
 
 export class Model<T extends {}> extends BaseModel<T> {
-
-
   static async find<U extends {} = any>(
     conditions?: Partial<U>,
     orderBy?: Partial<U>,
@@ -40,7 +37,10 @@ export class Model<T extends {}> extends BaseModel<T> {
       params.orderBy = Object.keys(orderBy).sort().join(',')
     }
 
-    return withDatabaseMetrics(() => super.find(conditions, orderBy, extra), params)
+    return withDatabaseMetrics(
+      () => super.find(conditions, orderBy, extra),
+      params
+    )
   }
 
   static findOne<U extends {} = any, P extends QueryPart = any>(
@@ -68,7 +68,10 @@ export class Model<T extends {}> extends BaseModel<T> {
       params.orderBy = Object.keys(orderBy).sort().join(',')
     }
 
-    return withDatabaseMetrics(() => super.findOne(conditions as PrimaryKey, orderBy), params)
+    return withDatabaseMetrics(
+      () => super.findOne(conditions as PrimaryKey, orderBy),
+      params
+    )
   }
 
   static async count<U extends QueryPart = any>(
@@ -88,28 +91,22 @@ export class Model<T extends {}> extends BaseModel<T> {
   }
 
   static async create<U extends QueryPart = any>(row: U): Promise<U> {
-    return withDatabaseMetrics(
-      () => super.create(row),
-      {
-        table: this.tableName,
-        method: 'create',
-        rows: Object.keys(row).sort().join(',')
-      }
-    )
+    return withDatabaseMetrics(() => super.create(row), {
+      table: this.tableName,
+      method: 'create',
+      rows: Object.keys(row).sort().join(','),
+    })
   }
 
   static async upsert<U extends QueryPart = any>(
     row: U,
     onConflict?: OnConflict<U>
   ): Promise<U> {
-    return withDatabaseMetrics(
-      () => super.upsert(row, onConflict),
-      {
-        table: this.tableName,
-        method: 'upsert',
-        rows: Object.keys(row).sort().join(',')
-      }
-    )
+    return withDatabaseMetrics(() => super.upsert(row, onConflict), {
+      table: this.tableName,
+      method: 'upsert',
+      rows: Object.keys(row).sort().join(','),
+    })
   }
 
   static async update<U extends QueryPart = any, P extends QueryPart = any>(
@@ -135,25 +132,19 @@ export class Model<T extends {}> extends BaseModel<T> {
   static async delete<U extends QueryPart = any>(
     conditions: Partial<U>
   ): Promise<any> {
-    return withDatabaseMetrics(
-      () => super.delete(conditions),
-      {
-        table: this.tableName,
-        method: 'delete',
-        conditions: Object.keys(conditions).sort().join(',')
-      }
-    )
+    return withDatabaseMetrics(() => super.delete(conditions), {
+      table: this.tableName,
+      method: 'delete',
+      conditions: Object.keys(conditions).sort().join(','),
+    })
   }
 
   static async query<U extends {} = any>(query: SQLStatement): Promise<U[]> {
-    return withDatabaseMetrics(
-      () => super.query(query.text, query.values),
-      {
-        table: this.tableName,
-        method: 'query',
-        hash: hash(query)
-      }
-    )
+    return withDatabaseMetrics(() => super.query(query.text, query.values), {
+      table: this.tableName,
+      method: 'query',
+      hash: hash(query),
+    })
   }
 
   /**
@@ -168,7 +159,7 @@ export class Model<T extends {}> extends BaseModel<T> {
       {
         table: this.tableName,
         method: 'rowCount',
-        hash: hash(query)
+        hash: hash(query),
       }
     )
   }

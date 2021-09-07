@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import SingletonListener from '../utils/dom/SingletonListener'
 
 export default function useFileDrop(callback: (event: DragEvent) => void) {
-  const [ dragging, setDragging ] = useState(false)
+  const [dragging, setDragging] = useState(false)
 
   useEffect(() => {
     let canceled = false
@@ -40,7 +40,6 @@ export default function useFileDrop(callback: (event: DragEvent) => void) {
       listener.removeEventListener('dragover', onDragOver)
       listener.removeEventListener('drop', onDrop)
     }
-
   }, [])
 
   return dragging

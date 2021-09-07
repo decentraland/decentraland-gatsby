@@ -1,4 +1,4 @@
-import Catalyst from "./Catalyst"
+import Catalyst from './Catalyst'
 
 describe('utils/api/Catalyst', () => {
   test(`Has a default url`, () => {

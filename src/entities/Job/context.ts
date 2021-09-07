@@ -14,13 +14,13 @@ export default class JobContext<P extends object = {}> {
     logger.log(`[${this.handler || 'cron'}] ${message}`, {
       type: this.handler ? 'job' : 'cron',
       name: this.handler || 'cron',
-      ...data
+      ...data,
     })
   }
 
-  error(error: Error): void;
-  error(message: string): void;
-  error(message: string, data: Record<string, any>): void;
+  error(error: Error): void
+  error(message: string): void
+  error(message: string, data: Record<string, any>): void
   error(message: string | Error, data: Record<string, any> = {}) {
     let msg: string
     if (message instanceof Error) {

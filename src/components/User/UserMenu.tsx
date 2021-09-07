@@ -36,16 +36,16 @@ export default function UserMenu(props: UserMenuProps) {
   const [profile, profileState] = useProfileInjected()
   const chainId = useChainId()
   const loading = userState.loading || profileState.loading
-  const [ manaBalances ] = useAsyncMemo<UserMenuBalances>(async () => {
+  const [manaBalances] = useAsyncMemo<UserMenuBalances>(async () => {
     if (props.hideBalance || !user) {
       return {}
     }
 
-    switch(chainId) {
+    switch (chainId) {
       case ChainId.ETHEREUM_MAINNET: {
         const [ETHEREUM, MATIC] = await Promise.all([
           fetchManaBalance(user, chainId),
-          fetchManaBalance(user, ChainId.MATIC_MAINNET)
+          fetchManaBalance(user, ChainId.MATIC_MAINNET),
         ])
 
         return { ETHEREUM, MATIC }
@@ -56,14 +56,14 @@ export default function UserMenu(props: UserMenuProps) {
       case ChainId.ETHEREUM_ROPSTEN: {
         const [ETHEREUM, MATIC] = await Promise.all([
           fetchManaBalance(user, chainId),
-          fetchManaBalance(user, ChainId.MATIC_MUMBAI)
+          fetchManaBalance(user, ChainId.MATIC_MUMBAI),
         ])
 
         return { ETHEREUM, MATIC }
       }
 
       case ChainId.MATIC_MAINNET:
-      case ChainId.MATIC_MUMBAI:{
+      case ChainId.MATIC_MUMBAI: {
         const MATIC = await fetchManaBalance(user, chainId)
         return { MATIC }
       }
@@ -71,8 +71,7 @@ export default function UserMenu(props: UserMenuProps) {
       default:
         return {}
     }
-
-  }, [ user, chainId, props.hideBalance ])
+  }, [user, chainId, props.hideBalance])
 
   if (!user || loading) {
     return (

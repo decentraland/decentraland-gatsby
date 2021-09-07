@@ -16,11 +16,11 @@ type AsyncMemoOptions<T = any, I = null> = {
 }
 
 export type AsyncMemoResultState<T, I = null> = {
-  version: number,
-  time: number,
-  error: Error | null,
-  loading: boolean,
-  reload: () => void,
+  version: number
+  time: number
+  error: Error | null
+  loading: boolean
+  reload: () => void
   set: (value: ((current: T | I) => T) | T) => void
 }
 
@@ -29,7 +29,9 @@ export type AsyncMemoResult<T, I = null> = readonly [
   AsyncMemoResultState<T, I>
 ]
 
-export function createAsyncMemoState<T, I = null>(value: T | I): AsyncMemoResultState<T, I> {
+export function createAsyncMemoState<T, I = null>(
+  value: T | I
+): AsyncMemoResultState<T, I> {
   return {
     version: 0,
     loading: false,
@@ -109,11 +111,13 @@ export default function useAsyncMemo<T, I = null>(
       .catch((err) => {
         console.error(err)
         rollbar((rollbar) => rollbar.error(err))
-        segment((analytics) => analytics.track('error', {
-          ...err,
-          message: err.message,
-          stack: err.stack,
-        }))
+        segment((analytics) =>
+          analytics.track('error', {
+            ...err,
+            message: err.message,
+            stack: err.stack,
+          })
+        )
         if (cancelled) {
           return
         }

@@ -1,4 +1,4 @@
-import React, { useMemo }from 'react'
+import React, { useMemo } from 'react'
 import { ChainId, getChainName } from '@dcl/schemas'
 import { Modal, ModalProps } from 'decentraland-ui/dist/components/Modal/Modal'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
@@ -6,11 +6,12 @@ import { ModalNavigation } from 'decentraland-ui/dist/components/ModalNavigation
 import useLocalFormatMessage from '../../hooks/useLocalFormatMessage'
 
 const defaultI18n = {
-  "header": "Wrong Network",
-  "message": "You need to be connected to {expectedChainName} to use this app, but you are currently connected to {currentChainName}.",
-  "change_chain": "switch to {expectedChainName}",
-  "separator": " or ",
-  "unknown_chain": "Unknown"
+  header: 'Wrong Network',
+  message:
+    'You need to be connected to {expectedChainName} to use this app, but you are currently connected to {currentChainName}.',
+  change_chain: 'switch to {expectedChainName}',
+  separator: ' or ',
+  unknown_chain: 'Unknown',
 }
 
 export type WrongNetworkModalProps = ModalProps & {
@@ -27,10 +28,17 @@ const anyNetwork = [
   ChainId.ETHEREUM_RINKEBY,
   ChainId.ETHEREUM_ROPSTEN,
   ChainId.MATIC_MAINNET,
-  ChainId.MATIC_MUMBAI
+  ChainId.MATIC_MUMBAI,
 ]
 
-export default React.memo(function WrongNetworkModal({ open, currentNetwork, expectedNetwork, onSwitchNetwork, i18n, ...props }: WrongNetworkModalProps) {
+export default React.memo(function WrongNetworkModal({
+  open,
+  currentNetwork,
+  expectedNetwork,
+  onSwitchNetwork,
+  i18n,
+  ...props
+}: WrongNetworkModalProps) {
   const l = useLocalFormatMessage(i18n, defaultI18n, 'WrongNetworkModal')
   const expectedNetworks = useMemo(() => {
     if (!expectedNetwork) {
@@ -41,12 +49,13 @@ export default React.memo(function WrongNetworkModal({ open, currentNetwork, exp
       return expectedNetwork
     }
 
-    return [ expectedNetwork ]
-  }, [ expectedNetwork ])
+    return [expectedNetwork]
+  }, [expectedNetwork])
 
   const isOpen = useMemo(
-    () => open ?? (!!currentNetwork && !expectedNetworks.includes(currentNetwork)),
-    [ open, currentNetwork, expectedNetworks]
+    () =>
+      open ?? (!!currentNetwork && !expectedNetworks.includes(currentNetwork)),
+    [open, currentNetwork, expectedNetworks]
   )
 
   const expectedChainName = useMemo(() => {
@@ -56,35 +65,66 @@ export default React.memo(function WrongNetworkModal({ open, currentNetwork, exp
       case 1:
         return <b>{getChainName(expectedNetworks[0])}</b>
       default:
-        return <span>
-          {expectedNetworks.map((chainId, i, list) => <span key={chainId}>
-            <b>{getChainName(chainId)}</b>
-            {i === (list.length - 1) ? ', ' : l('@growth.WrongNetworkModal.separator')}
-          </span>)}
-        </span>
+        return (
+          <span>
+            {expectedNetworks.map((chainId, i, list) => (
+              <span key={chainId}>
+                <b>{getChainName(chainId)}</b>
+                {i === list.length - 1
+                  ? ', '
+                  : l('@growth.WrongNetworkModal.separator')}
+              </span>
+            ))}
+          </span>
+        )
     }
-  }, [ expectedNetworks ])
+  }, [expectedNetworks])
 
-  const currentChainName = useMemo(() => <b>{currentNetwork ? getChainName(currentNetwork) : l('@growth.WrongNetworkModal.unknown_chain')}</b>, [ currentNetwork ])
+  const currentChainName = useMemo(
+    () => (
+      <b>
+        {currentNetwork
+          ? getChainName(currentNetwork)
+          : l('@growth.WrongNetworkModal.unknown_chain')}
+      </b>
+    ),
+    [currentNetwork]
+  )
 
-  return <Modal size="tiny" {...props} open={isOpen} style={{  position: 'absolute' }}>
-    <ModalNavigation title={l('@growth.WrongNetworkModal.header')} />
-    <Modal.Content>
-      {l('@growth.WrongNetworkModal.message', { currentChainName, expectedChainName })}
-    </Modal.Content>
-    {expectedNetworks.length > 0 && <Modal.Content>
-      {expectedNetworks.map((chainId: ChainId, index: number) => {
-        return <Button
-          fluid
-          key={chainId}
-          basic={index !== 0}
-          primary={index === 0}
-          style={index === 0 ? {} : { marginTop: '1em' }}
-          onClick={() => onSwitchNetwork && onSwitchNetwork(chainId)}
-        >
-          {l('@growth.WrongNetworkModal.change_chain', { expectedChainName: <b>{getChainName(chainId)}</b> })}
-        </Button>
-      })}
-    </Modal.Content>}
-  </Modal>
+  return (
+    <Modal
+      size="tiny"
+      {...props}
+      open={isOpen}
+      style={{ position: 'absolute' }}
+    >
+      <ModalNavigation title={l('@growth.WrongNetworkModal.header')} />
+      <Modal.Content>
+        {l('@growth.WrongNetworkModal.message', {
+          currentChainName,
+          expectedChainName,
+        })}
+      </Modal.Content>
+      {expectedNetworks.length > 0 && (
+        <Modal.Content>
+          {expectedNetworks.map((chainId: ChainId, index: number) => {
+            return (
+              <Button
+                fluid
+                key={chainId}
+                basic={index !== 0}
+                primary={index === 0}
+                style={index === 0 ? {} : { marginTop: '1em' }}
+                onClick={() => onSwitchNetwork && onSwitchNetwork(chainId)}
+              >
+                {l('@growth.WrongNetworkModal.change_chain', {
+                  expectedChainName: <b>{getChainName(chainId)}</b>,
+                })}
+              </Button>
+            )
+          })}
+        </Modal.Content>
+      )}
+    </Modal>
+  )
 })

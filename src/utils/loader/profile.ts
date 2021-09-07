@@ -72,11 +72,13 @@ export default new BatchLoader<Profile>(
     } catch (err) {
       console.error(err)
       rollbar((rollbar) => rollbar.error(err))
-      segment((analytics) => analytics.track('error', {
-        ...err,
-        message: err.message,
-        stack: err.stack,
-      }))
+      segment((analytics) =>
+        analytics.track('error', {
+          ...err,
+          message: err.message,
+          stack: err.stack,
+        })
+      )
       return addresses.map((address) => createDefaultProfile(address))
     }
   },

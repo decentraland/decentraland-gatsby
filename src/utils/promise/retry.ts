@@ -1,4 +1,4 @@
-import logger from "../../entities/Development/logger"
+import logger from '../../entities/Development/logger'
 
 export default async function retry<T>(
   times: number,

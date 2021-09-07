@@ -28,33 +28,24 @@ export type AsyncHandler = (
 export default handleAPI
 
 export function handleAPI(handler: AsyncHandler) {
-  return handleIncommingMessage(
-    handler,
-    {
-      defaultHeaders: DEFAULT_API_HEADERS,
-      api: true,
-      // onSuccess: (data, _req, res) => {
-      //   res.json({ ok: true, data })
-      // }
-    }
-  )
+  return handleIncommingMessage(handler, {
+    defaultHeaders: DEFAULT_API_HEADERS,
+    api: true,
+    // onSuccess: (data, _req, res) => {
+    //   res.json({ ok: true, data })
+    // }
+  })
 }
 
 export function handleJSON(handler: AsyncHandler) {
-  return handleIncommingMessage(
-    handler,
-    {
-      defaultHeaders: DEFAULT_API_HEADERS,
-      type: 'application/json'
-    }
-  )
+  return handleIncommingMessage(handler, {
+    defaultHeaders: DEFAULT_API_HEADERS,
+    type: 'application/json',
+  })
 }
 
 export function handleRaw(handler: AsyncHandler, type?: string) {
-  return handleIncommingMessage(
-    handler,
-    { type }
-  )
+  return handleIncommingMessage(handler, { type })
 }
 
 export function handleExpressError(
@@ -77,7 +68,7 @@ export function handleExpressError(
   logger.error(`error executing request ${req.method} ${req.path}`, {
     type: 'http',
     ...data,
-    error: err
+    error: err,
   })
 
   if (!res.headersSent) {
@@ -92,9 +83,9 @@ export function handleExpressError(
 function handleIncommingMessage(
   handler: AsyncHandler,
   options: Partial<{
-    defaultHeaders: Record<string, string>,
-    api?: boolean,
-    type?: string,
+    defaultHeaders: Record<string, string>
+    api?: boolean
+    type?: string
     // onSuccess: (data: any, req: Request, res: Response) => void
   }>
 ) {

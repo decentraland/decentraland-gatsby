@@ -1,7 +1,10 @@
 import { Request } from 'express'
 import { getConfiguration } from 'decentraland-connect/dist/configuration'
 import { AuthIdentity, AuthChain, AuthLinkType } from 'dcl-crypto/dist/types'
-import { Authenticator, parseEmphemeralPayload } from 'dcl-crypto/dist/Authenticator'
+import {
+  Authenticator,
+  parseEmphemeralPayload,
+} from 'dcl-crypto/dist/Authenticator'
 import { fromBase64 } from '../../utils/string/base64'
 import { HttpProvider } from 'web3x/providers'
 import RequestError from '../Route/error'
@@ -21,7 +24,9 @@ export type AuthOptions = {
 
 const getProvider = once(() => {
   const configuration = getConfiguration()
-  const provider = new HttpProvider(configuration.wallet_connect.urls[ChainId.ETHEREUM_MAINNET])
+  const provider = new HttpProvider(
+    configuration.wallet_connect.urls[ChainId.ETHEREUM_MAINNET]
+  )
   return provider
 })
 
@@ -75,7 +80,11 @@ export function auth(options: AuthOptions = {}) {
 
     let result: { ok: boolean; message?: string } = { ok: false }
     try {
-      result = await Authenticator.validateSignature(ephemeralAddress, authChain, getProvider())
+      result = await Authenticator.validateSignature(
+        ephemeralAddress,
+        authChain,
+        getProvider()
+      )
     } catch (error) {
       logger.error(error)
       if (options.allowInvalid) {

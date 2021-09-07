@@ -36,11 +36,11 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
 
   // Detect available providers
   useEffect(() => {
-    const providerTypes = (
+    const providerTypes =
       props.availableProviders ??
-      (connection.getAvailableProviders()
-        .filter((providerType) => enabledProviders.has(providerType)))
-    )
+      connection
+        .getAvailableProviders()
+        .filter((providerType) => enabledProviders.has(providerType))
 
     const providers = providerTypes.map((providerType) => {
       switch (providerType) {
@@ -55,10 +55,7 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
         case ProviderType.NETWORK:
           return [providerType, LoginModalOptionType.METAMASK] as const
         case ProviderType.WALLET_CONNECT:
-          return [
-            providerType,
-            LoginModalOptionType.WALLET_CONNECT,
-          ] as const
+          return [providerType, LoginModalOptionType.WALLET_CONNECT] as const
         case ProviderType.FORTMATIC:
           return [providerType, LoginModalOptionType.FORTMATIC] as const
       }
@@ -110,8 +107,15 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
         }
       })}
       <small className="message">
-        Trezor and smart contract wallets (like Dapper or Argent) cannot interact Polygon.
-        Read more about the Trezor support status <a href="https://github.com/trezor/trezor-firmware/pull/1568" target="_blank" rel="noopener noreferrer">here</a>
+        Trezor and smart contract wallets (like Dapper or Argent) cannot
+        interact Polygon. Read more about the Trezor support status{' '}
+        <a
+          href="https://github.com/trezor/trezor-firmware/pull/1568"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          here
+        </a>
       </small>
       {props.error && <p className="error visible">{props.error}</p>}
     </LoginModal>

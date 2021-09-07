@@ -1,2 +1,2 @@
-import Segment from "../Development/Segment";
+import Segment from '../Development/Segment'
 export default Segment

@@ -1,4 +1,4 @@
-import logger from "./logger"
+import logger from './logger'
 
 const mock = {
   log: jest.spyOn(logger, 'log'),
@@ -7,9 +7,9 @@ const mock = {
 }
 
 beforeEach(() => {
-  mock.log.mockImplementation(() => { })
-  mock.error.mockImplementation(() => { })
-  mock.warning.mockImplementation(() => { })
+  mock.log.mockImplementation(() => {})
+  mock.error.mockImplementation(() => {})
+  mock.warning.mockImplementation(() => {})
 })
 
 afterEach(() => {

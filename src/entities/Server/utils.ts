@@ -9,15 +9,23 @@ export const DEFAULT_PORT = 4000
 export const DEFAULT_HOST = '0.0.0.0'
 
 function log(protocol: string, host: string, port: string | number) {
-  const workerDetails = cluster.isWorker ?
-    `(cluster: ${cluster.worker.id}, pid: ${process.pid})` :
-    `(master, pid: ${process.pid})`
+  const workerDetails = cluster.isWorker
+    ? `(cluster: ${cluster.worker.id}, pid: ${process.pid})`
+    : `(master, pid: ${process.pid})`
 
   if (host === '127.0.0.1') {
-    console.log(`running server on:`, yellow(`${protocol}localhost:${port}`), green(workerDetails))
+    console.log(
+      `running server on:`,
+      yellow(`${protocol}localhost:${port}`),
+      green(workerDetails)
+    )
   }
 
-  console.log(`running server on:`, yellow(`${protocol}${host}:${port}`), green(workerDetails))
+  console.log(
+    `running server on:`,
+    yellow(`${protocol}${host}:${port}`),
+    green(workerDetails)
+  )
 }
 
 export async function listen(
@@ -69,25 +77,28 @@ export const serverInitializer = (
     if (cluster.isMaster && process.env.HTTP_CLUSTER !== 'true') {
       const server = await listen(app, port, host)
 
-      return () => new Promise<void>((resolve, reject) => {
-        console.log(`stopping server...`)
-        server.close((err?: Error) => {
-          err ? reject(err) : resolve()
+      return () =>
+        new Promise<void>((resolve, reject) => {
+          console.log(`stopping server...`)
+          server.close((err?: Error) => {
+            err ? reject(err) : resolve()
+          })
         })
-      })
-
     } else {
       const workers = cpus().map(() => cluster.fork())
 
-      return async () => Promise.all(workers.map(async (worker) => {
-        const waitForClose = new Promise((resolve) => {
-          worker.on('exit', () => resolve(null))
-        })
+      return async () =>
+        Promise.all(
+          workers.map(async (worker) => {
+            const waitForClose = new Promise((resolve) => {
+              worker.on('exit', () => resolve(null))
+            })
 
-        worker.kill()
+            worker.kill()
 
-        return waitForClose
-      }))
+            return waitForClose
+          })
+        )
     }
   }
 }

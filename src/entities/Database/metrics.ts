@@ -6,14 +6,31 @@ export const database_pool_size = new client.Gauge({
   name: 'database_pool_size',
   help: 'The number of queries that are running at the same time',
   registers: [],
-  labelNames: ['table', 'method', 'conditions', 'orderBy', 'rows', 'updates', 'hash'],
+  labelNames: [
+    'table',
+    'method',
+    'conditions',
+    'orderBy',
+    'rows',
+    'updates',
+    'hash',
+  ],
 })
 
 export const database_duration_seconds = new client.Histogram({
   name: 'database_duration_seconds',
   help: 'The time (in seconds) it takes for a query to complete',
   registers: [],
-  labelNames: ['table', 'method', 'conditions', 'orderBy', 'rows', 'updates', 'hash', 'error'],
+  labelNames: [
+    'table',
+    'method',
+    'conditions',
+    'orderBy',
+    'rows',
+    'updates',
+    'hash',
+    'error',
+  ],
   buckets: [
     0.005,
     0.01,
@@ -35,9 +52,15 @@ export const database_duration_seconds = new client.Histogram({
 registerMetric(database_pool_size)
 registerMetric(database_duration_seconds)
 
-export type DatabaseMetricParams = Record<'table' | 'method' | 'conditions' | 'orderBy' | 'rows' | 'updates' | 'hash', string | number>
+export type DatabaseMetricParams = Record<
+  'table' | 'method' | 'conditions' | 'orderBy' | 'rows' | 'updates' | 'hash',
+  string | number
+>
 
-export async function withDatabaseMetrics<T>(exec: () => Promise<T>, params: Partial<DatabaseMetricParams>): Promise<T> {
+export async function withDatabaseMetrics<T>(
+  exec: () => Promise<T>,
+  params: Partial<DatabaseMetricParams>
+): Promise<T> {
   database_pool_size.inc(params)
   const complete = database_duration_seconds.startTimer(params)
   try {

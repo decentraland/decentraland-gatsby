@@ -10,18 +10,14 @@ const DEFAULT_AVATAR = 'https://decentraland.org/images/male.png'
 const TTL_AVATAR = 86400
 
 export default routes((router) => {
-  router.get(
-    '/profile/:user/face.png',
-    redirectToFace
-  )
-  router.get(
-    '/profile/:user/body.png',
-    redirectToBody
-  )
+  router.get('/profile/:user/face.png', redirectToFace)
+  router.get('/profile/:user/body.png', redirectToBody)
 })
 
 const cache = new Map<string, Promise<readonly [Profile | null, number]>>()
-export async function getProfile(req: Request<{ user: string }>): Promise<Profile> {
+export async function getProfile(
+  req: Request<{ user: string }>
+): Promise<Profile> {
   const user = String(req.params.user).toLowerCase()
 
   // invalid user
@@ -31,8 +27,8 @@ export async function getProfile(req: Request<{ user: string }>): Promise<Profil
 
   // cached user
   const profileCache = cache.get(user)
-  if(profileCache) {
-    const [ profile, ttl ] = await profileCache
+  if (profileCache) {
+    const [profile, ttl] = await profileCache
     if (Date.now() < ttl) {
       if (profile) {
         return profile
@@ -44,11 +40,14 @@ export async function getProfile(req: Request<{ user: string }>): Promise<Profil
 
   // no cached user
   const handler = API.catch(Catalyst.get().getProfiles([user]))
-    .then(profiles => profiles && profiles[0] || null)
-    .then((profile: Profile | null) => [ profile, Date.now() + (TTL_AVATAR * 1000) ] as const)
+    .then((profiles) => (profiles && profiles[0]) || null)
+    .then(
+      (profile: Profile | null) =>
+        [profile, Date.now() + TTL_AVATAR * 1000] as const
+    )
 
   cache.set(user, handler)
-  const [ profile ] = await handler
+  const [profile] = await handler
   if (profile) {
     return profile
   }
@@ -57,13 +56,15 @@ export async function getProfile(req: Request<{ user: string }>): Promise<Profil
 }
 
 export function redirectToFace(req: Request<{ user: string }>, res: Response) {
-  getProfile(req)
-    .then(profile => redirectTo(res, profile.avatar?.snapshots?.face))
+  getProfile(req).then((profile) =>
+    redirectTo(res, profile.avatar?.snapshots?.face)
+  )
 }
 
 export function redirectToBody(req: Request<{ user: string }>, res: Response) {
-  getProfile(req)
-    .then(profile => redirectTo(res, profile.avatar?.snapshots?.face))
+  getProfile(req).then((profile) =>
+    redirectTo(res, profile.avatar?.snapshots?.face)
+  )
 }
 
 export function redirectTo(res: Response, url?: string | null) {

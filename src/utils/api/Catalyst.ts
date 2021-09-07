@@ -142,13 +142,21 @@ export default class Catalyst extends API {
         .filter((result) => {
           const avatar = result.avatars[0]!
           if (!avatar.ethAddress) {
-            rollbar((logger) => logger.error(`Error loading profiles`, { avatar, addresses, server: this.baseUrl }))
-            segment((analytics) => analytics.track('error', {
-              message: `Error loading profiles`,
-              server: this.baseUrl,
-              addresses,
-              avatar,
-            }))
+            rollbar((logger) =>
+              logger.error(`Error loading profiles`, {
+                avatar,
+                addresses,
+                server: this.baseUrl,
+              })
+            )
+            segment((analytics) =>
+              analytics.track('error', {
+                message: `Error loading profiles`,
+                server: this.baseUrl,
+                addresses,
+                avatar,
+              })
+            )
             return false
           }
 
@@ -166,21 +174,29 @@ export default class Catalyst extends API {
   }
 
   async getStatus(): Promise<CommsStatus>
-  async getStatus(includeLayers: { }): Promise<CommsStatus>
+  async getStatus(includeLayers: {}): Promise<CommsStatus>
   async getStatus(includeLayers: false): Promise<CommsStatus>
   async getStatus(includeLayers: true): Promise<CommsStatusWithLayers>
-  async getStatus(includeLayers: { includeLayers: true }): Promise<CommsStatusWithLayers>
-  async getStatus(includeLayers: { includeUsersParcels: true }): Promise<CommsStatusWithUsers>
+  async getStatus(includeLayers: {
+    includeLayers: true
+  }): Promise<CommsStatusWithLayers>
+  async getStatus(includeLayers: {
+    includeUsersParcels: true
+  }): Promise<CommsStatusWithUsers>
   async getStatus(options?: CommsStatusOptions) {
     return this.getCommsStatus(options as any)
   }
 
   async getCommsStatus(): Promise<CommsStatus>
-  async getCommsStatus(includeLayers: { }): Promise<CommsStatus>
+  async getCommsStatus(includeLayers: {}): Promise<CommsStatus>
   async getCommsStatus(includeLayers: false): Promise<CommsStatus>
   async getCommsStatus(includeLayers: true): Promise<CommsStatusWithLayers>
-  async getCommsStatus(includeLayers: { includeLayers: true }): Promise<CommsStatusWithLayers>
-  async getCommsStatus(includeLayers: { includeUsersParcels: true }): Promise<CommsStatusWithUsers>
+  async getCommsStatus(includeLayers: {
+    includeLayers: true
+  }): Promise<CommsStatusWithLayers>
+  async getCommsStatus(includeLayers: {
+    includeUsersParcels: true
+  }): Promise<CommsStatusWithUsers>
   async getCommsStatus(options?: CommsStatusOptions) {
     const params = new URLSearchParams()
     if (options) {
@@ -189,7 +205,9 @@ export default class Catalyst extends API {
       } else if (typeof options === 'object') {
         if ((options as { includeLayers: boolean }).includeLayers) {
           params.append('includeLayers', 'true')
-        } else if ((options as { includeUsersParcels: boolean }).includeUsersParcels) {
+        } else if (
+          (options as { includeUsersParcels: boolean }).includeUsersParcels
+        ) {
           params.append('includeUsersParcels', 'true')
         }
       }

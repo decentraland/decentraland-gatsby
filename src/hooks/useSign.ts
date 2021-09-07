@@ -19,7 +19,7 @@ export default function useSign(
     message: null,
     signature: null,
     signing: false,
-    error: null
+    error: null,
   })
 
   useEffect(() => {
@@ -27,7 +27,12 @@ export default function useSign(
       new Personal(provider)
         .sign(state.message || '', Address.fromString(address), '')
         .then((signature) =>
-          setState({ message: state.message, signature, signing: false, error: null })
+          setState({
+            message: state.message,
+            signature,
+            signing: false,
+            error: null,
+          })
         )
         .catch((error) => {
           logger.error(`Error signing message: ${state.message || '""'}`)

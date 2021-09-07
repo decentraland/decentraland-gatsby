@@ -7,7 +7,6 @@ describe('utils/iterator/range', () => {
   })
 
   test(`Should increase/decrease unsign a diff factor`, () => {
-
     expect(Array.from(range(0, 5, 2))).toEqual([0, 2, 4])
     expect(Array.from(range(0, -5, 2))).toEqual([0, -2, -4])
     expect(Array.from(range(0, 12345, 500))).toEqual([
@@ -40,6 +39,8 @@ describe('utils/iterator/range', () => {
   })
 
   test(`Should fail if diff is 0`, () => {
-    expect(() => Array.from(range(0, 1, 0))).toThrow(`inc param should be different than 0`)
+    expect(() => Array.from(range(0, 1, 0))).toThrow(
+      `inc param should be different than 0`
+    )
   })
 })

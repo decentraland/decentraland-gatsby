@@ -42,7 +42,12 @@ export default class Job extends Model<JobAttributes> {
     }
   }
 
-  static async schedule(id: string, name: string, date: Date, payload: object = {}) {
+  static async schedule(
+    id: string,
+    name: string,
+    date: Date,
+    payload: object = {}
+  ) {
     const job: JobAttributes = {
       id,
       name,

@@ -45,7 +45,6 @@ export function withLogs() {
         data.referer = req.headers['referer']
       }
 
-
       logger.log(`[${req.method}] ${req.originalUrl}`, {
         type: 'http',
         method: req.method,
@@ -73,7 +72,10 @@ export function withDDosProtection(options: Partial<DDosOptions> = {}) {
 
 export function withSecurityHeaders() {
   return middleware((req: Request, res: Response) => {
-    res.set('Strict-Transport-Security', 'max-age=63072000; includeSubdomains; preload')
+    res.set(
+      'Strict-Transport-Security',
+      'max-age=63072000; includeSubdomains; preload'
+    )
     res.set('X-Content-Type-Options', 'nosniff')
     res.set('X-Frame-Options', 'DENY')
     res.set('X-XSS-Protection', '1; mode=block')
@@ -81,23 +83,25 @@ export function withSecurityHeaders() {
 
     const host = req.hostname
     const tld = host.split('.').slice(-2).join('.')
-    const scriptPolicies = Array.from(new Set([
-      `'self'`,
-      `'unsafe-inline'`,
-      `'unsafe-eval'`,
-      `https://${tld}`,
-      `https://*.${tld}`,
-      'https://decentraland.org',
-      'https://*.decentraland.org',
-      'https://www.google-analytics.com',
-      'https://ajax.cloudflare.com',
-      // 'https://www.googletagmanager.com', disabled
-      // 'https://cdn.rollbar.com',
-      // 'https://a.klaviyo.com', deprecated
-      // 'https://widget.intercom.io', disabled
-      // 'https://js.intercomcdn.com', disabled
-      // 'https://connect.facebook.net', deprecated
-    ])).join(' ')
+    const scriptPolicies = Array.from(
+      new Set([
+        `'self'`,
+        `'unsafe-inline'`,
+        `'unsafe-eval'`,
+        `https://${tld}`,
+        `https://*.${tld}`,
+        'https://decentraland.org',
+        'https://*.decentraland.org',
+        'https://www.google-analytics.com',
+        'https://ajax.cloudflare.com',
+        // 'https://www.googletagmanager.com', disabled
+        // 'https://cdn.rollbar.com',
+        // 'https://a.klaviyo.com', deprecated
+        // 'https://widget.intercom.io', disabled
+        // 'https://js.intercomcdn.com', disabled
+        // 'https://connect.facebook.net', deprecated
+      ])
+    ).join(' ')
 
     res.set(
       'Content-Security-Policy',

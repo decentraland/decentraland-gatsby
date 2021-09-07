@@ -10,5 +10,5 @@ const fakeState = createAsyncMemoState(getDefaultChainId())
  */
 export default function useChainIdContext() {
   const [, { chainId }] = useAuthContext()
-  return [ chainId, fakeState ] as const
+  return [chainId, fakeState] as const
 }

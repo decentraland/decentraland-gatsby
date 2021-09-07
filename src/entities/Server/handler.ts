@@ -1,9 +1,11 @@
-import { yellow } from 'colors/safe';
-import { ServiceStartHandler, ServiceStopHandler } from "./types";
+import { yellow } from 'colors/safe'
+import { ServiceStartHandler, ServiceStopHandler } from './types'
 
-export async function initializeServices(serviceInitializers: (ServiceStartHandler | false | null | undefined)[]){
+export async function initializeServices(
+  serviceInitializers: (ServiceStartHandler | false | null | undefined)[]
+) {
   const services: ServiceStopHandler[] = []
-  for(const initializer of serviceInitializers) {
+  for (const initializer of serviceInitializers) {
     if (initializer) {
       const service = await initializer()
       services.push(service)
@@ -11,7 +13,7 @@ export async function initializeServices(serviceInitializers: (ServiceStartHandl
   }
 
   process.on('SIGTERM', async () => {
-    console.log(`SIGTERM received: ${yellow('shutting down services')}`);
+    console.log(`SIGTERM received: ${yellow('shutting down services')}`)
     while (services.length) {
       const stop = services.pop()!
       try {

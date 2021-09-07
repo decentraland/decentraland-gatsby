@@ -49,7 +49,7 @@ export default function Layout({
   const language: Locale = pageContext?.intl?.language || 'en'
   const languages: Locale[] = pageContext?.intl?.languages || ['en']
   const currentPath: string = pageContext?.intl?.originalPath || '/'
-  const [ , state ] = useAuthContext()
+  const [, state] = useAuthContext()
   const scroll = useWindowScroll()
   const isScrolled = scroll.scrollY.get() > 0
 
@@ -97,7 +97,9 @@ export default function Layout({
         open={state.selecting}
         loading={state.loading}
         error={state.error}
-        onConnect={(providerType, chainId) => state.connect(providerType, chainId)}
+        onConnect={(providerType, chainId) =>
+          state.connect(providerType, chainId)
+        }
         onClose={() => state.select(false)}
       />
       <Footer

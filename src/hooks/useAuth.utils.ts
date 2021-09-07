@@ -66,16 +66,20 @@ export function getListener(): SingletonListener<Window> {
 }
 
 export async function fetchAccounts(provider: Provider) {
-  const currentAccounts = await provider.request({ method: 'eth_accounts' }) as string[]
+  const currentAccounts = (await provider.request({
+    method: 'eth_accounts',
+  })) as string[]
   if (currentAccounts.length === 0) {
     throw new Error(`Provider is not connected`)
   }
 
-  return currentAccounts.map(account => account.toLowerCase())
+  return currentAccounts.map((account) => account.toLowerCase())
 }
 
 export async function fetchChainId(provider: Provider) {
-  const currentChainId = await provider.request({ method: 'eth_chainId' }) as string
+  const currentChainId = (await provider.request({
+    method: 'eth_chainId',
+  })) as string
   return parseInt(currentChainId, 16)
 }
 
@@ -126,19 +130,28 @@ export async function restoreConnection(): Promise<AuthState> {
   } catch (err) {
     console.error(err)
     rollbar((rollbar) => rollbar.error(err))
-    segment((analytics) => analytics.track('error', {
-      ...err,
-      message: err.message,
-      stack: err.stack,
-    }))
+    segment((analytics) =>
+      analytics.track('error', {
+        ...err,
+        message: err.message,
+        stack: err.stack,
+      })
+    )
 
-    return { ...initialState, status: AuthStatus.Disconnected, error: err.message }
+    return {
+      ...initialState,
+      status: AuthStatus.Disconnected,
+      error: err.message,
+    }
   }
 
   return { ...initialState, status: AuthStatus.Disconnected }
 }
 
-export async function createConnection(providerType: ProviderType, chainId: ChainId) {
+export async function createConnection(
+  providerType: ProviderType,
+  chainId: ChainId
+) {
   try {
     connection.getConnectionData()
     const data = await connection.connect(providerType, chainId)
@@ -172,14 +185,20 @@ export async function createConnection(providerType: ProviderType, chainId: Chai
   } catch (err) {
     console.error(err)
     rollbar((rollbar) => rollbar.error(err))
-    segment((analytics) => analytics.track('error', {
-      ...err,
-      message: err.message,
-      stack: err.stack,
-    }))
+    segment((analytics) =>
+      analytics.track('error', {
+        ...err,
+        message: err.message,
+        stack: err.stack,
+      })
+    )
 
     setCurrentIdentity(null)
-    return { ...initialState, status: AuthStatus.Disconnected, error: err.message }
+    return {
+      ...initialState,
+      status: AuthStatus.Disconnected,
+      error: err.message,
+    }
   }
 
   return { ...initialState, status: AuthStatus.Disconnected }
@@ -196,26 +215,28 @@ export function isLoading(status: AuthStatus) {
   }
 }
 
-export async function switchToChainId(provider: Provider | null, chainId: ChainId) {
+export async function switchToChainId(
+  provider: Provider | null,
+  chainId: ChainId
+) {
   if (provider) {
     try {
       await provider.request({
         method: 'wallet_switchEthereumChain',
-        params: [{ chainId: '0x' + chainId.toString(16) }]
+        params: [{ chainId: '0x' + chainId.toString(16) }],
       })
     } catch (switchError) {
       if (switchError.code === 4902) {
         try {
           await provider.request({
             method: 'wallet_addEthereumChain',
-            params: [getAddEthereumChainParameters(chainId)]
+            params: [getAddEthereumChainParameters(chainId)],
           })
 
           const currentChainId = await fetchChainId(provider)
           if (currentChainId !== chainId) {
             throw new Error('chainId did not change after adding network')
           }
-
         } catch (addError) {
           throw new Error(`Error adding network: ${addError.message}`)
         }
@@ -226,7 +247,9 @@ export async function switchToChainId(provider: Provider | null, chainId: ChainI
   }
 }
 
-export function getAddEthereumChainParameters(chainId: ChainId): AddEthereumChainParameters {
+export function getAddEthereumChainParameters(
+  chainId: ChainId
+): AddEthereumChainParameters {
   const hexChainId = '0x' + chainId.toString(16)
   const chainName = getChainName(chainId)!
   const config = getChainConfiguration(chainId)
@@ -238,10 +261,10 @@ export function getAddEthereumChainParameters(chainId: ChainId): AddEthereumChai
         nativeCurrency: {
           name: 'MATIC',
           symbol: 'MATIC',
-          decimals: 18
+          decimals: 18,
         },
         rpcUrls: ['https://rpc-mainnet.maticvigil.com/'],
-        blockExplorerUrls: ['https://polygonscan.com/']
+        blockExplorerUrls: ['https://polygonscan.com/'],
       }
     case ChainId.MATIC_MUMBAI:
       return {
@@ -250,10 +273,10 @@ export function getAddEthereumChainParameters(chainId: ChainId): AddEthereumChai
         nativeCurrency: {
           name: 'MATIC',
           symbol: 'MATIC',
-          decimals: 18
+          decimals: 18,
         },
         rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
-        blockExplorerUrls: ['https://mumbai.polygonscan.com/']
+        blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
       }
     case ChainId.ETHEREUM_MAINNET:
     case ChainId.ETHEREUM_ROPSTEN:
@@ -266,10 +289,10 @@ export function getAddEthereumChainParameters(chainId: ChainId): AddEthereumChai
         nativeCurrency: {
           name: 'Ether',
           symbol: 'ETH',
-          decimals: 18
+          decimals: 18,
         },
         rpcUrls: [config.rpcURL],
-        blockExplorerUrls: ['https://etherscan.io']
+        blockExplorerUrls: ['https://etherscan.io'],
       }
   }
 }
