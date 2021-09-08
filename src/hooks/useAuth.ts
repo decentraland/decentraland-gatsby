@@ -102,10 +102,12 @@ export default function useAuth() {
   }
 
   const [switching, switchTo] = useAsyncTask(async (chainId: ChainId) => {
-    try {
-      await switchToChainId(state.provider, chainId)
-    } catch (err) {
-      setState({ ...state, error: err.message })
+    if (state.providerType === ProviderType.INJECTED) {
+      try {
+        await switchToChainId(state.provider, chainId)
+      } catch (err) {
+        setState({ ...state, error: err.message })
+      }
     }
   })
 

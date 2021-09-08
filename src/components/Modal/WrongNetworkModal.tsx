@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 import { ChainId, getChainName } from '@dcl/schemas'
+import { ProviderType } from 'decentraland-connect/dist/types'
 import { Modal, ModalProps } from 'decentraland-ui/dist/components/Modal/Modal'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { ModalNavigation } from 'decentraland-ui/dist/components/ModalNavigation/ModalNavigation'
@@ -17,6 +18,7 @@ const defaultI18n = {
 export type WrongNetworkModalProps = ModalProps & {
   currentNetwork?: ChainId | null
   expectedNetwork?: ChainId | ChainId[]
+  providerType?: ProviderType | null
   i18n?: Partial<typeof defaultI18n>
   onSwitchNetwork?: (chainId: ChainId) => void
 }
@@ -36,6 +38,7 @@ export default React.memo(function WrongNetworkModal({
   currentNetwork,
   expectedNetwork,
   onSwitchNetwork,
+  providerType,
   i18n,
   ...props
 }: WrongNetworkModalProps) {
@@ -91,6 +94,8 @@ export default React.memo(function WrongNetworkModal({
     [currentNetwork]
   )
 
+  const allowNetworkSwitch = useMemo(() => providerType === ProviderType.INJECTED, [ providerType ])
+
   return (
     <Modal
       size="tiny"
@@ -105,7 +110,7 @@ export default React.memo(function WrongNetworkModal({
           expectedChainName,
         })}
       </Modal.Content>
-      {expectedNetworks.length > 0 && (
+      {allowNetworkSwitch && expectedNetworks.length > 0 && (
         <Modal.Content>
           {expectedNetworks.map((chainId: ChainId, index: number) => {
             return (

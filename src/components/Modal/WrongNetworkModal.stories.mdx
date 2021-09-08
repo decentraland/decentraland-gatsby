@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from 'react'
 import { ChainId } from '@dcl/schemas'
+import { ProviderType } from 'decentraland-connect/dist/types'
 import { Source, ArgsTable } from '@storybook/components'
 import {
   Meta,
@@ -11,7 +12,6 @@ import {
 import WrongNetworkModal from './WrongNetworkModal.tsx'
 
 <Meta title="Components/Modal/WrongNetworkModal" />
-
 
 <Canvas isExpanded>
   <Story name="Wrong Network">
@@ -25,6 +25,22 @@ import WrongNetworkModal from './WrongNetworkModal.tsx'
   <Story name="Multi Network Support">
     <div>
       <WrongNetworkModal open currentNetwork={ChainId.MATIC_MUMBAI} expectedNetwork={[ChainId.ETHEREUM_MAINNET, ChainId.MATIC_MAINNET]} />
+    </div>
+  </Story>
+</Canvas>
+
+<Canvas isExpanded>
+  <Story name="Switch Network">
+    <div>
+      <WrongNetworkModal open providerType={ProviderType.INJECTED} currentNetwork={ChainId.MATIC_MUMBAI} expectedNetwork={ChainId.ETHEREUM_MAINNET} />
+    </div>
+  </Story>
+</Canvas>
+
+<Canvas isExpanded>
+  <Story name="Switch Multi Network">
+    <div>
+      <WrongNetworkModal open providerType={ProviderType.INJECTED} currentNetwork={ChainId.MATIC_MUMBAI} expectedNetwork={[ChainId.ETHEREUM_MAINNET, ChainId.MATIC_MAINNET]} />
     </div>
   </Story>
 </Canvas>

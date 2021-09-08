@@ -92,6 +92,7 @@ export default function Layout({
         currentNetwork={state.chainId}
         expectedNetwork={getSupportedChainIds()}
         onSwitchNetwork={(chainId) => state.switchTo(chainId)}
+        providerType={state.providerType}
       />
       <WalletSelectorModal
         open={state.selecting}
