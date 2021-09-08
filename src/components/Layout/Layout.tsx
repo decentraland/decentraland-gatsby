@@ -28,6 +28,7 @@ import useAuthContext from '../../context/Auth/useAuthContext'
 import TokenList from '../../utils/dom/TokenList'
 import './Layout.css'
 import { getSupportedChainIds } from '../../context/Auth/utils'
+import { ProviderType } from 'decentraland-connect/dist/types'
 
 export type LayoutProps = PageProps &
   NavbarProps &
@@ -38,12 +39,14 @@ export type LayoutProps = PageProps &
         languages?: Locale[]
         originalPath?: string
       }
-    }
+    },
+    availableProviders?: ProviderType[]
   }
 
 export default function Layout({
   children,
   pageContext,
+  availableProviders,
   ...props
 }: LayoutProps) {
   const language: Locale = pageContext?.intl?.language || 'en'
@@ -101,6 +104,7 @@ export default function Layout({
         onConnect={(providerType, chainId) =>
           state.connect(providerType, chainId)
         }
+        availableProviders={availableProviders}
         onClose={() => state.select(false)}
       />
       <Footer
