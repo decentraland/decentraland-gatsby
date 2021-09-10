@@ -74,7 +74,7 @@ export const serverInitializer = (
       return async () => {}
     }
 
-    if (cluster.isMaster && process.env.HTTP_CLUSTER !== 'true') {
+    if (process.env.HTTP_CLUSTER !== 'true') {
       const server = await listen(app, port, host)
 
       return () =>
