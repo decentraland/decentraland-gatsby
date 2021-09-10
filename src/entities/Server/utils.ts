@@ -9,22 +9,22 @@ export const DEFAULT_PORT = 4000
 export const DEFAULT_HOST = '0.0.0.0'
 
 function log(protocol: string, host: string, port: string | number) {
-  const workerDetails = cluster.isWorker
-    ? `(cluster: ${cluster.worker.id}, pid: ${process.pid})`
-    : `(master, pid: ${process.pid})`
+  const workerDetails = cluster.isMaster
+    ? { cluster: 'master', pid: process.pid }
+    : { cluster: cluster.worker.id, pid: process.pid }
 
   if (host === '127.0.0.1') {
     console.log(
       `running server on:`,
       yellow(`${protocol}localhost:${port}`),
-      green(workerDetails)
+      green(JSON.stringify(workerDetails))
     )
   }
 
   console.log(
     `running server on:`,
     yellow(`${protocol}${host}:${port}`),
-    green(workerDetails)
+    green(JSON.stringify(workerDetails))
   )
 }
 
