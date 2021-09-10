@@ -11,7 +11,7 @@ export default routes((router) => {
   router.get(
     '/metrics',
     withPrometheusToken({ optional: true }),
-    handleRaw(getMetrics, 'text')
+    handleRaw(getMetrics, client.register.contentType)
   )
 })
 
