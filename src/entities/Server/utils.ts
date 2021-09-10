@@ -85,7 +85,14 @@ export const serverInitializer = (
           })
         })
     } else {
-      const workers = cpus().map(() => cluster.fork())
+      const workers = cpus().map(() => {
+        console.log(`forking http server...`)
+        return cluster.fork({
+          ...process.env,
+          HTTP_CLUSTER: 'false',
+          JOBS: 'false'
+        })
+      })
 
       return async () =>
         Promise.all(
