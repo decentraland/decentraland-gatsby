@@ -1,19 +1,10 @@
-import cluster from 'cluster'
-import once from '../../utils/function/once'
-
 export class Logger {
-
-  static getServiceData = once(() => {
-    const serviceData: Record<string, any> = {}
-    serviceData.cluster = cluster.isMaster ? 'master' : cluster.worker.id
-    return serviceData
-  })
 
   private write(log: string, data: Record<string, any> = {}) {
     if (process.env.NODE_ENV === 'production') {
-      console.log(JSON.stringify({ log, ...data, ...Logger.getServiceData() }))
+      console.log(JSON.stringify({ log, ...data }))
     } else {
-      console.log(log, JSON.stringify({ ...data, ...Logger.getServiceData() }))
+      console.log(log, JSON.stringify({ ...data }))
     }
   }
 
