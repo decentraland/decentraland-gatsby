@@ -7,14 +7,26 @@ let REQUEST_ID = 0
 
 export class ClusterRegistry {
 
-  static sendMessage(report: ReportMetricsResponse) {
+  static sendMessage(report: MetricMessage) {
     if (process.send) {
       process.send(report)
     }
   }
 
+  static createId() {
+    return [ ClusterRegistry.getCurrentWorkerId(), REQUEST_ID++ ].join('::')
+  }
+
+  static getCurrentWorkerId() {
+    return cluster.worker.id
+  }
+
+  static getWorker(id: number) {
+    return cluster.workers && (cluster.workers[id] as Pick<cluster.Worker, 'send' | 'id'> | undefined)
+  }
+
   static getWorkers() {
-    return Object.values(cluster.workers).filter(Boolean) as Pick<cluster.Worker, 'send'>[]
+    return Object.values(cluster.workers).filter(Boolean) as Pick<cluster.Worker, 'send' | 'id'>[]
   }
 
   static addEventListener(registry: ClusterRegistry) {
@@ -43,7 +55,7 @@ export class ClusterRegistry {
 
   private registry = new Registry()
   private forkRequests = new Map<string, (metrics: string) => void>()
-  private masterRequests = new Map<string, { metrics: client.metric[], worker: number, pending: number }>()
+  private masterRequests = new Map<string, { metrics: client.metric[][], worker: number, pending: number }>()
 
   constructor() {
     ClusterRegistry.addEventListener(this)
@@ -78,13 +90,19 @@ export class ClusterRegistry {
   }
 
   async metrics() {
-    if (cluster.isMaster) {
-      return '\n'
+    if (ClusterRegistry.isMaster()) {
+      return this.registry.metrics()
     }
 
-    const id = [ cluster.worker.id, REQUEST_ID++ ].join('::')
+    const id = ClusterRegistry.createId()
     const req = new Promise<string>((resolve) => {
       this.forkRequests.set(id, resolve)
+    })
+
+    ClusterRegistry.sendMessage({
+      id,
+      type: ClusterMessageType.RequestMetric,
+      worker: ClusterRegistry.getCurrentWorkerId()
     })
 
     return req
@@ -114,7 +132,7 @@ export class ClusterRegistry {
     const resolve = this.forkRequests.get(message.id)
     if (resolve) {
       this.forkRequests.delete(message.id)
-      const registry = AggregatorRegistry.aggregate(message.metrics)
+      const registry = AggregatorRegistry.aggregate([ message.metrics ])
       registry.metrics()
         .then((metrics) => resolve(metrics))
         .catch((err: Error) => {
@@ -125,7 +143,7 @@ export class ClusterRegistry {
   }
 
   forwardRequestMetrics(message: ReportMetricsRequest) {
-    if (cluster.isWorker) {
+    if (!ClusterRegistry.isMaster()) {
       return
     }
 
@@ -136,7 +154,7 @@ export class ClusterRegistry {
     }
 
     const worker = message.worker
-    const metrics = [] as client.metric[]
+    const metrics = [] as client.metric[][]
     this.masterRequests.set(message.id, { pending, worker, metrics })
 
     for (const fork of workers) {
@@ -148,13 +166,11 @@ export class ClusterRegistry {
     const task = this.masterRequests.get(message.id)
     if (task) {
       task.pending--
-      for (const metric of message.metrics) {
-        task.metrics.push(metric)
-      }
+      task.metrics.push(message.metrics)
 
       if (task.pending === 0) {
         this.masterRequests.delete(message.id)
-        const fork = cluster.workers[task.worker]
+        const fork = ClusterRegistry.getWorker(task.worker)
         if (fork) {
           fork.send({
             id: message.id,
