@@ -20,7 +20,7 @@ export function exposeRegistry(registry: client.Registry) {
   if (!PROMETHEUS_REGISTRIES.includes(registry)) {
     PROMETHEUS_REGISTRIES.push(registry)
     if (PROMETHEUS_REGISTRY instanceof ClusterRegistry) {
-      PROMETHEUS_REGISTRY.close()
+      ClusterRegistry.removeEventListener(PROMETHEUS_REGISTRY)
     }
 
     PROMETHEUS_REGISTRY = ClusterRegistry.merge(PROMETHEUS_REGISTRIES)
