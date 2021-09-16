@@ -6,11 +6,11 @@
 
 // You can delete this file if you're not using it
 import React from "react"
-import 'semantic-ui-css/semantic.min.css'
-import 'balloon-css/balloon.min.css'
-import 'decentraland-ui/dist/themes/base-theme.css'
-import 'decentraland-ui/dist/themes/alternative/light-theme.css'
-import './src/theme.css'
+import "semantic-ui-css/semantic.min.css"
+import "balloon-css/balloon.min.css"
+import "decentraland-ui/dist/themes/base-theme.css"
+import "decentraland-ui/dist/themes/alternative/light-theme.css"
+import "./src/theme.css"
 
 // import Helmet from "react-helmet"
 import AuthProvider from "decentraland-gatsby/dist/context/Auth/AuthProvider"
@@ -21,21 +21,22 @@ import segment from "decentraland-gatsby/dist/utils/segment/segment"
 
 export const registerServiceWorker = () => true
 
-export const wrapRootElement = ({ element }) => (<>
-  <AuthProvider>
-    {/* <FeatureFlagProvider endpoint="https://feature-flags.decentraland.org/[PROYECT].json"> */}
+export const wrapRootElement = ({ element }) => (
+  <>
+    <AuthProvider>
+      {/* <FeatureFlagProvider endpoint="https://feature-flags.decentraland.org/[PROYECT].json"> */}
       {element}
-    {/* </FeatureFlagProvider> */}
-  </AuthProvider>
-</>)
+      {/* </FeatureFlagProvider> */}
+    </AuthProvider>
+  </>
+)
 
 export const wrapPageElement = ({ element, props }) => {
-  return <Layout
-    {...props}
-    rightMenu={<UserMenu />}
-  >
-    {element}
-  </Layout>
+  return (
+    <Layout {...props} rightMenu={<UserMenu />}>
+      {element}
+    </Layout>
+  )
 }
 
 export const onClientEntry = () => {

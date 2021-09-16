@@ -20,11 +20,11 @@ module.exports = {
     `gatsby-transformer-sharp`,
     `gatsby-plugin-sharp`,
     {
-      resolve: 'gatsby-plugin-sri',
+      resolve: "gatsby-plugin-sri",
       options: {
-        hash: 'sha512', // 'sha256', 'sha384' or 'sha512' ('sha512' = default)
-        crossorigin: false // Optional
-      }
+        hash: "sha512", // 'sha256', 'sha384' or 'sha512' ('sha512' = default)
+        crossorigin: false, // Optional
+      },
     },
     {
       resolve: `gatsby-plugin-manifest`,
@@ -62,6 +62,6 @@ module.exports = {
         // option to redirect to `/ko` when connecting `/`
         redirect: false,
       },
-    }
+    },
   ],
 }

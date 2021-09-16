@@ -18,7 +18,7 @@ create a copy of `.env.example` and name it as `.env.development`
 
 if you are running this project locally you only need to check the following environment variables:
 
-* `CONNECTION_STRING`: make sure it is point to a valid database
+- `CONNECTION_STRING`: make sure it is point to a valid database
 
 ### database setup
 
@@ -48,8 +48,8 @@ You can find a full documentation about the project's structure in the [`decentr
 
 this project runs gatsby as front-end and a nodejs server as back-end both connected through a proxy
 
-* locally this proxy is defined in [`gatsby-config.js` (`proxy` prop)](https://www.gatsbyjs.com/docs/api-proxy/#gatsby-skip-here)
-* at servers this proxy is defined in `Pulumi.ts` (`servicePaths` prop)
+- locally this proxy is defined in [`gatsby-config.js` (`proxy` prop)](https://www.gatsbyjs.com/docs/api-proxy/#gatsby-skip-here)
+- at servers this proxy is defined in `Pulumi.ts` (`servicePaths` prop)
 
 ### routes
 
