@@ -22,7 +22,10 @@ function injectTransaction(
       replaced = true
       return {
         ...transaction,
-        chainId: parseInt(transaction.chainId, 16),
+        chainId:
+          typeof transaction.chainId === 'string'
+            ? parseInt(transaction.chainId, 16)
+            : transaction.chainId,
       }
     }
 

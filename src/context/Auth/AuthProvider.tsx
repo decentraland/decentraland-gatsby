@@ -19,7 +19,7 @@ const defaultAuthState: ReturnType<typeof useAuth> = [
 ]
 
 const defaultTransactionState: ReturnType<typeof useTransaction> = [
-  null,
+  [],
   {
     add: () => {},
     clear: () => {},
