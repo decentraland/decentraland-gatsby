@@ -1,3 +1,4 @@
+import type { AuthChain } from 'dcl-crypto'
 import type { Address } from 'web3x/address'
 import random from '../number/random'
 import env from '../env'
@@ -19,7 +20,6 @@ export type {
   LayerUser,
   EntityScene,
 } from './Catalyst.types'
-
 import type {
   Avatar,
   ProfileResponse,
@@ -291,5 +291,12 @@ export default class Catalyst extends API {
    */
   async getLayerUsers(layer: string) {
     return this.fetch<LayerUser[]>(`/comms/layers/${layer}/users`)
+  }
+
+  async verifySignature(authChain: AuthChain, message: string) {
+    return this.fetch(
+      `/lambdas/crypto/validate-signature`,
+      this.options().method('POST').json({ authChain, timestamp: message })
+    )
   }
 }
