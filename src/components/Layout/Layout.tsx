@@ -39,7 +39,7 @@ export type LayoutProps = PageProps &
         languages?: Locale[]
         originalPath?: string
       }
-    },
+    }
     availableProviders?: ProviderType[]
   }
 

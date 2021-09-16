@@ -90,7 +90,7 @@ export const serverInitializer = (
         return cluster.fork({
           ...process.env,
           HTTP_CLUSTER: 'false',
-          JOBS: 'false'
+          JOBS: 'false',
         })
       })
 

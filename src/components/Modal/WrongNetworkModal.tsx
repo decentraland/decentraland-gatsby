@@ -94,7 +94,10 @@ export default React.memo(function WrongNetworkModal({
     [currentNetwork]
   )
 
-  const allowNetworkSwitch = useMemo(() => providerType === ProviderType.INJECTED, [ providerType ])
+  const allowNetworkSwitch = useMemo(
+    () => providerType === ProviderType.INJECTED,
+    [providerType]
+  )
 
   return (
     <Modal

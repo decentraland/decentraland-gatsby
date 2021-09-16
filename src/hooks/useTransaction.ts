@@ -20,7 +20,9 @@ export default function useTransaction(
   address?: string | null,
   chainId?: ChainId | null
 ) {
-  const [transactions, setTransactions] = useState<TransactionState>(initialState)
+  const [transactions, setTransactions] = useState<TransactionState>(
+    initialState
+  )
 
   // re-store tranasctions
   useEffect(() => {
@@ -85,7 +87,7 @@ export default function useTransaction(
         clearTimeout(timer)
       }
     }
-  }, [ transactions ])
+  }, [transactions])
 
   function add(hash: string, payload: Record<string, any> = {}) {
     if (address && chainId) {

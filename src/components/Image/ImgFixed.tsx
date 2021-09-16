@@ -44,30 +44,38 @@ export default React.memo(function ImgFixed({
 const Img = React.memo(function (props: Pick<ImgFixedProps, 'dimension'>) {
   switch (props.dimension) {
     case 'vertical':
-      return <img
-        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAADCAYAAAC56t6BAAAAD0lEQVR4AWNwL/ABY0wGAFT5BhPIHHvgAAAAAElFTkSuQmCC"
-        width="2"
-        height="3"
-      />
+      return (
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAADCAYAAAC56t6BAAAAD0lEQVR4AWNwL/ABY0wGAFT5BhPIHHvgAAAAAElFTkSuQmCC"
+          width="2"
+          height="3"
+        />
+      )
     case 'wide':
-      return <img
-        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAADUlEQVR4AWNwL/ABYwAKHQIHW//QwwAAAABJRU5ErkJggg=="
-        width="2"
-        height="1"
-      />
+      return (
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAADUlEQVR4AWNwL/ABYwAKHQIHW//QwwAAAABJRU5ErkJggg=="
+          width="2"
+          height="1"
+        />
+      )
     case 'standard':
-      return <img
-        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAYAAAC09K7GAAAAD0lEQVR4AWNwL/BBwYQFADuuDCW4Y5knAAAAAElFTkSuQmCC"
-        width="4"
-        height="3"
-      />
+      return (
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAYAAAC09K7GAAAAD0lEQVR4AWNwL/BBwYQFADuuDCW4Y5knAAAAAElFTkSuQmCC"
+          width="4"
+          height="3"
+        />
+      )
     case 'square':
     case 'circle':
     default:
-      return <img
-        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4AWNwL/BhAAADCQEEiiqnjQAAAABJRU5ErkJggg=="
-        width="1"
-        height="1"
-      />
+      return (
+        <img
+          src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4AWNwL/BhAAADCQEEiiqnjQAAAABJRU5ErkJggg=="
+          width="1"
+          height="1"
+        />
+      )
   }
 })

@@ -22,7 +22,7 @@ function injectTransaction(
       replaced = true
       return {
         ...transaction,
-        chainId: parseInt(transaction.chainId, 16)
+        chainId: parseInt(transaction.chainId, 16),
       }
     }
 
@@ -48,7 +48,9 @@ export function storeTransactions(
     storageTransactions = injectTransaction(tx, storageTransactions)
   }
 
-  const filteredMemoryTransasctions = memoryTransasctions.filter(tx => tx.chainId === chainId)
+  const filteredMemoryTransasctions = memoryTransasctions.filter(
+    (tx) => tx.chainId === chainId
+  )
   if (memoryTransasctions.length !== filteredMemoryTransasctions.length) {
     memoryTransasctions = filteredMemoryTransasctions
   }
@@ -65,12 +67,13 @@ export function restoreTransactions(
 ): Transaction[] {
   const key = getKey(address, chainId)
   if (!transactions.has(key)) {
-    const storedTransactions = JSON.parse(localStorage.getItem(key) || '[]') as Transaction[]
+    const storedTransactions = JSON.parse(
+      localStorage.getItem(key) || '[]'
+    ) as Transaction[]
     transactions.set(key, storedTransactions)
   }
 
-  return transactions.get(key)!
-    .filter(tx => tx.chainId === chainId)
+  return transactions.get(key)!.filter((tx) => tx.chainId === chainId)
 }
 
 export function clearTransactions(address: string, chainId: ChainId): void {

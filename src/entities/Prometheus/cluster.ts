@@ -1,12 +1,16 @@
 import cluster from 'cluster'
 import client, { Registry, AggregatorRegistry } from 'prom-client'
 import logger from '../Development/logger'
-import { MetricMessage, ClusterMessageType, ReportMetricsRequest, ReportMetricsResponse } from './types'
+import {
+  MetricMessage,
+  ClusterMessageType,
+  ReportMetricsRequest,
+  ReportMetricsResponse,
+} from './types'
 
 let REQUEST_ID = 0
 
 export class ClusterRegistry {
-
   static sendMessage(report: MetricMessage) {
     if (process.send) {
       process.send(report)
@@ -14,7 +18,7 @@ export class ClusterRegistry {
   }
 
   static createId() {
-    return [ ClusterRegistry.getCurrentWorkerId(), REQUEST_ID++ ].join('::')
+    return [ClusterRegistry.getCurrentWorkerId(), REQUEST_ID++].join('::')
   }
 
   static getCurrentWorkerId() {
@@ -22,11 +26,17 @@ export class ClusterRegistry {
   }
 
   static getWorker(id: number) {
-    return cluster.workers && (cluster.workers[id] as Pick<cluster.Worker, 'send' | 'id'> | undefined)
+    return (
+      cluster.workers &&
+      (cluster.workers[id] as Pick<cluster.Worker, 'send' | 'id'> | undefined)
+    )
   }
 
   static getWorkers() {
-    return Object.values(cluster.workers).filter(Boolean) as Pick<cluster.Worker, 'send' | 'id'>[]
+    return Object.values(cluster.workers).filter(Boolean) as Pick<
+      cluster.Worker,
+      'send' | 'id'
+    >[]
   }
 
   static addEventListener(registry: ClusterRegistry) {
@@ -44,7 +54,7 @@ export class ClusterRegistry {
   static merge(registers: Registry[]): ClusterRegistry {
     const clusterRegistry = new ClusterRegistry()
     for (const registry of registers) {
-      const metrics: client.Metric<any>[]= registry.getMetricsAsArray() as any
+      const metrics: client.Metric<any>[] = registry.getMetricsAsArray() as any
       for (const metric of metrics) {
         clusterRegistry.registerMetric(metric)
       }
@@ -55,7 +65,10 @@ export class ClusterRegistry {
 
   private registry = new Registry()
   private forkRequests = new Map<string, (metrics: string) => void>()
-  private masterRequests = new Map<string, { metrics: client.metric[][], worker: number, pending: number }>()
+  private masterRequests = new Map<
+    string,
+    { metrics: client.metric[][]; worker: number; pending: number }
+  >()
 
   constructor() {
     ClusterRegistry.addEventListener(this)
@@ -102,38 +115,36 @@ export class ClusterRegistry {
     ClusterRegistry.sendMessage({
       id,
       type: ClusterMessageType.RequestMetric,
-      worker: ClusterRegistry.getCurrentWorkerId()
+      worker: ClusterRegistry.getCurrentWorkerId(),
     })
 
     return req
   }
 
   reportForkMetrics(message: ReportMetricsRequest) {
-    const metrics = this.registry.getMetricsAsJSON()
-      .catch((err: Error) => {
-        logger.error(`Error getting metrics as JSON: ${err.message}`, err)
-        return [] as client.metric[]
+    const metrics = this.registry.getMetricsAsJSON().catch((err: Error) => {
+      logger.error(`Error getting metrics as JSON: ${err.message}`, err)
+      return [] as client.metric[]
+    })
 
-      })
+    return metrics.then((metrics) => {
+      const report: ReportMetricsResponse = {
+        type: ClusterMessageType.ResponsetMetric,
+        id: message.id,
+        metrics,
+      }
 
-    return metrics
-      .then(metrics => {
-        const report: ReportMetricsResponse = {
-          type: ClusterMessageType.ResponsetMetric,
-          id: message.id,
-          metrics
-        }
-
-        ClusterRegistry.sendMessage(report)
-      })
+      ClusterRegistry.sendMessage(report)
+    })
   }
 
   resolveForkMetrics(message: ReportMetricsResponse) {
     const resolve = this.forkRequests.get(message.id)
     if (resolve) {
       this.forkRequests.delete(message.id)
-      const registry = AggregatorRegistry.aggregate([ message.metrics ])
-      registry.metrics()
+      const registry = AggregatorRegistry.aggregate([message.metrics])
+      registry
+        .metrics()
         .then((metrics) => resolve(metrics))
         .catch((err: Error) => {
           logger.error(`Error resolving metrics: ${err.message}`, err)
@@ -175,7 +186,7 @@ export class ClusterRegistry {
           fork.send({
             id: message.id,
             type: ClusterMessageType.ResponsetMetric,
-            metrics: task.metrics
+            metrics: task.metrics,
           })
         }
       }
