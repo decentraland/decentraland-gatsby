@@ -20,7 +20,10 @@ function injectTransaction(
   transactions = transactions.map((tx) => {
     if (tx.hash === transaction.hash) {
       replaced = true
-      return transaction
+      return {
+        ...transaction,
+        chainId: parseInt(transaction.chainId, 16)
+      }
     }
 
     return tx
@@ -39,11 +42,15 @@ export function storeTransactions(
   let storageTransactions: Transaction[] = JSON.parse(
     localStorage.getItem(key) || '[]'
   )
+
   for (const tx of txs) {
-    if (tx.chainId === chainId) {
-      memoryTransasctions = injectTransaction(tx, memoryTransasctions)
-      storageTransactions = injectTransaction(tx, storageTransactions)
-    }
+    memoryTransasctions = injectTransaction(tx, memoryTransasctions)
+    storageTransactions = injectTransaction(tx, storageTransactions)
+  }
+
+  const filteredMemoryTransasctions = memoryTransasctions.filter(tx => tx.chainId === chainId)
+  if (memoryTransasctions.length !== filteredMemoryTransasctions.length) {
+    memoryTransasctions = filteredMemoryTransasctions
   }
 
   transactions.set(key, memoryTransasctions)
@@ -58,11 +65,12 @@ export function restoreTransactions(
 ): Transaction[] {
   const key = getKey(address, chainId)
   if (!transactions.has(key)) {
-    const storedTransactions = JSON.parse(localStorage.getItem(key) || '[]')
+    const storedTransactions = JSON.parse(localStorage.getItem(key) || '[]') as Transaction[]
     transactions.set(key, storedTransactions)
   }
 
   return transactions.get(key)!
+    .filter(tx => tx.chainId === chainId)
 }
 
 export function clearTransactions(address: string, chainId: ChainId): void {

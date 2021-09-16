@@ -12,22 +12,22 @@ import { getTransaction } from 'decentraland-dapps/dist/modules/transaction/txUt
 import rollbar from '../utils/development/rollbar'
 import segment from '../utils/development/segment'
 
-type TransactionState = Transaction<any>[] | null
+type TransactionState = Transaction<any>[]
+
+const initialState: TransactionState = []
 
 export default function useTransaction(
   address?: string | null,
   chainId?: ChainId | null
 ) {
-  const [transactions, setTransactions] = useState<TransactionState>(null)
+  const [transactions, setTransactions] = useState<TransactionState>(initialState)
 
   // re-store tranasctions
   useEffect(() => {
-    if (!address || !chainId) {
-      setTransactions([])
-    } else {
+    if (address && chainId) {
       setTransactions(restoreTransactions(address, chainId))
     }
-  }, [address])
+  }, [address, chainId])
 
   // track transactions
   useEffect(() => {
@@ -48,6 +48,7 @@ export default function useTransaction(
             tx.chainId,
             tx.hash
           )
+
           if (updatedTransaction) {
             const hasChanges = Object.keys(updatedTransaction).some(
               (key) =>
@@ -84,7 +85,7 @@ export default function useTransaction(
         clearTimeout(timer)
       }
     }
-  }, [transactions])
+  }, [ transactions ])
 
   function add(hash: string, payload: Record<string, any> = {}) {
     if (address && chainId) {
@@ -123,7 +124,7 @@ export default function useTransaction(
       return
     }
 
-    setTransactions([])
+    setTransactions(initialState)
     clearTransactions(address, chainId)
   }
 
