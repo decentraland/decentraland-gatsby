@@ -13,15 +13,25 @@ jobs:
 
     steps:
       - uses: actions/checkout@v1
+
       - name: node.js 12
         uses: actions/setup-node@v1
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
+
       - name: installing
         run: npm ci
+
+      - name: linters
+        uses: wearerequired/lint-action@v1
+        with:
+          prettier: true
+          prettier_args: "--check './src/**/*.{ts,tsx,js,jsx,json,md}'"
+
       - name: testing
         run: npm test
+
       # TODO: add coverage service
       # - name: uploading to codecov
       #   uses: codecov/codecov-action@v1.0.2
@@ -29,6 +39,7 @@ jobs:
       #     token: ${{secrets.CODECOV_TOKEN}}
       - name: building
         run: npm run build
+
       - name: releasing
         run: npm run semantic-release
         env:

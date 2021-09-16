@@ -23,6 +23,12 @@ jobs:
       - name: installing
         run: npm ci
 
+      - name: linters
+        uses: wearerequired/lint-action@v1
+        with:
+          prettier: true
+          prettier_args: "--check './src/**/*.{ts,tsx,js,jsx,json,md}'"
+
       - name: testing
         run: npm test -- --coverage
 
