@@ -1,6 +1,10 @@
 .cache
+.github
+.vscode
 package.json
 package-lock.json
+build
 public
-node_modules
+dist
 lib
+node_modules
