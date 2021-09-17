@@ -1,6 +1,7 @@
 import pad from './pad'
 
-test('pad', () => {
+test('src/utils/number/pad', () => {
+  expect(pad(NaN)).toBe('NaN')
   expect(pad(0)).toBe('0')
   expect(pad(0, 5)).toBe('00000')
   expect(pad(123)).toBe('123')

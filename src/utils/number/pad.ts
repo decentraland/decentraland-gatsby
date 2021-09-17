@@ -12,12 +12,8 @@ export default function pad(
   if (fixed === '-0') {
     fixed = '0'
   }
-  const match = fixed.match(/^(\-)?(\d+)(\.\d+)?$/)
-  if (!match) {
-    return fixed
-  }
 
-  const [, sig, num, decimals] = match
+  const [, sig, num, decimals] = fixed.match(/^(\-)?(\d+)(\.\d+)?$/)!
   const padLength = Math.max(prefixLength - num.length, 0)
   const pad = '0'.repeat(padLength)
   return [sig || '', pad, num, decimals].join('')
