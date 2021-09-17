@@ -141,7 +141,6 @@ import { Eth } from 'web3x/eth'
 export function Sign () {
   const [ address, state ] = useAuth()
   const [ transactions, transactionsState ] = useTransaction(account, state.chainId)
-  const [ message, setMessage ] = useState('This is the original message')
 
   function handleTransaction () {
     .sendTransaction({
