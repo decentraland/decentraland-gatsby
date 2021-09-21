@@ -61,6 +61,7 @@ Promise.resolve()
       'gatsby-plugin-react-helmet@3',
       'gatsby-plugin-sharp@2',
       'gatsby-plugin-typescript@2',
+      'gatsby-plugin-sri@1',
       'gatsby-source-filesystem@2',
       'gatsby-transformer-sharp@2',
       'node-pg-migrate@4',
