@@ -5,9 +5,9 @@
  */
 
 // You can delete this file if you're not using it
-import React from "react"
-import Segment from "decentraland-gatsby/dist/components/Segment/Segment"
-export { wrapPageElement, wrapRootElement } from "./gatsby-browser"
+import React from 'react'
+import Segment from 'decentraland-gatsby/dist/components/Segment/Segment'
+export { wrapPageElement, wrapRootElement } from './gatsby-browser'
 
 /**
  * @see https://www.gatsbyjs.com/docs/reference/config-files/gatsby-ssr/#onPreRenderHTML
@@ -25,7 +25,7 @@ export function onPreRenderHTML(
   pluginOptions
 ) {
   const headComponents = getHeadComponents().map((component) => {
-    if (component.type !== "style" || !component.props["data-href"]) {
+    if (component.type !== 'style' || !component.props['data-href']) {
       return component
     }
 
@@ -33,7 +33,7 @@ export function onPreRenderHTML(
       <link
         rel="stylesheet"
         id={component.props.id}
-        href={component.props["data-href"]}
+        href={component.props['data-href']}
       />
     )
   })

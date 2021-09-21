@@ -5,19 +5,19 @@
  */
 
 // You can delete this file if you're not using it
-import React from "react"
-import "semantic-ui-css/semantic.min.css"
-import "balloon-css/balloon.min.css"
-import "decentraland-ui/dist/themes/base-theme.css"
-import "decentraland-ui/dist/themes/alternative/light-theme.css"
-import "./src/theme.css"
+import React from 'react'
+import 'semantic-ui-css/semantic.min.css'
+import 'balloon-css/balloon.min.css'
+import 'decentraland-ui/dist/themes/base-theme.css'
+import 'decentraland-ui/dist/themes/alternative/light-theme.css'
+import './src/theme.css'
 
 // import Helmet from "react-helmet"
-import AuthProvider from "decentraland-gatsby/dist/context/Auth/AuthProvider"
+import AuthProvider from 'decentraland-gatsby/dist/context/Auth/AuthProvider'
 // import FeatureFlagProvider from "decentraland-gatsby/dist/context/FeatureFlag/FeatureFlagProvider"
-import Layout from "decentraland-gatsby/dist/components/Layout/Layout"
-import UserMenu from "decentraland-gatsby/dist/components/User/UserMenu"
-import segment from "decentraland-gatsby/dist/utils/segment/segment"
+import Layout from 'decentraland-gatsby/dist/components/Layout/Layout'
+import UserMenu from 'decentraland-gatsby/dist/components/User/UserMenu'
+import segment from 'decentraland-gatsby/dist/utils/segment/segment'
 
 export const registerServiceWorker = () => true
 

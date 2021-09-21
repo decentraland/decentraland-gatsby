@@ -1,4 +1,4 @@
-import { fromBase64, toBase64 } from "./base64"
+import { fromBase64, toBase64 } from './base64'
 
 test('src/utils/number/base64', () => {
   const message = 'abcdefghijklmnopqrstuvwxyz'
