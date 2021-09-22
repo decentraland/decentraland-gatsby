@@ -28,7 +28,7 @@ import Catalyst from './Catalyst'
 
 export const CatalystLoader = React.memo((props) => {
   const [comms, commsState] = useAsyncMemo(
-    () => Catalyst.from(props.address).getCommsStatus(true),
+    () => Catalyst.from(props.address).getCommsStatus(),
     [props.address]
   )
   const [lambdas, lambdasState] = useAsyncMemo(
@@ -60,11 +60,7 @@ export const CatalystLoader = React.memo((props) => {
             {comms && (
               <div style={{ paddingBottom: '16px' }}>
                 <Stats title="Users">
-                  {(comms.layers &&
-                    comms.layers
-                      .reduce((total, layer) => total + layer.usersCount, 0)
-                      .toString()) ||
-                    '0'}
+                  {comms.usersCount || '0'}
                 </Stats>
               </div>
             )}
@@ -95,13 +91,6 @@ export const CatalystLoader = React.memo((props) => {
             {profileState.loading && <Loader active />}
             {profile && (
               <div style={{ paddingBottom: '16px' }}>
-                <Stats title="Profile versioni">
-                  {profile.version.toString() || '0'}
-                </Stats>
-              </div>
-            )}
-            {profile && (
-              <div style={{ paddingBottom: '16px' }}>
                 <Stats title="Profile name">{profile.name || 'Unknown'}</Stats>
               </div>
             )}
@@ -116,7 +105,8 @@ export const CatalystLoader = React.memo((props) => {
           <div
             style={{
               position: 'relative',
-              flex: '0 0 25%',
+              flex: '0 0 20%',
+              marginRight: '10%',
               minHeight: '5rem',
               display: 'flex',
               justifyContent: 'center',
