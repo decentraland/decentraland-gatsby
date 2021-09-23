@@ -1,9 +1,11 @@
 import type { ConnectionResponse } from 'decentraland-connect/dist/types'
-import type { AuthChain } from 'dcl-crypto/dist/types'
+import type { AuthChain, AuthIdentity } from 'dcl-crypto/dist/types'
 import EmptyAccountsError from '../errors/EmptyAccountsError'
 import once from '../function/once'
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
+
+const authenticator = once(() => import('dcl-crypto/dist/Authenticator'))
 
 const dependencies = once(async () =>
   Promise.all([
@@ -11,7 +13,7 @@ const dependencies = once(async () =>
     import('web3x/account'),
     import('web3x/personal'),
     import('web3x/utils/hex-buffer'),
-    import('dcl-crypto/dist/Authenticator'),
+    authenticator(),
   ] as const)
 )
 
@@ -67,15 +69,11 @@ export default async function identify(connection: ConnectionResponse) {
 }
 
 export async function ownerAddress(authChain: AuthChain) {
-  const [
-    ,
-    ,
-    ,
-    ,
-    /*web3x/address*/ /*web3x/account*/ /*web3x/personal*/ /*web3x/utils/hex-buffer*/ {
-      Authenticator,
-    } /* from dcl-crypto/dist/Authenticator */,
-  ] = await dependencies()
-
+  const { Authenticator } = await authenticator()
   return Authenticator.ownerAddress(authChain).toLowerCase()
+}
+
+export async function signPayload(identity: AuthIdentity, payload: string) {
+  const { Authenticator } = await authenticator()
+  return Authenticator.signPayload(identity, payload)
 }
