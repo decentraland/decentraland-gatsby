@@ -21,7 +21,7 @@ export default class API {
       base = base.slice(0, -1)
     }
 
-    if (!path.startsWith('/')) {
+    if (path !== '' && !path.startsWith('/')) {
       path = '/' + path
     }
 

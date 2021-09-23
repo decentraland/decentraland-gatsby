@@ -19,19 +19,19 @@ describe('utils/api/API', () => {
 
   describe('#url', () => {
     test('should return root path from base', () => {
-      expect(API.url('')).toBe('/')
-      expect(API.url('/path')).toBe('/path/')
+      expect(API.url('')).toBe('')
+      expect(API.url('/path')).toBe('/path')
       expect(API.url('https://decentraland.org')).toBe(
-        'https://decentraland.org/'
+        'https://decentraland.org'
       )
       expect(API.url('https://decentraland.org/path')).toBe(
-        'https://decentraland.org/path/'
+        'https://decentraland.org/path'
       )
     })
 
     test('should attach path', () => {
       expect(API.url('https://decentraland.org/path', '')).toBe(
-        'https://decentraland.org/path/'
+        'https://decentraland.org/path'
       )
       expect(API.url('https://decentraland.org/path', 'target/path')).toBe(
         'https://decentraland.org/path/target/path'
@@ -47,7 +47,7 @@ describe('utils/api/API', () => {
     test('should attach search params', () => {
       // Empty params
       expect(API.url('https://decentraland.org/path', '', {})).toBe(
-        'https://decentraland.org/path/'
+        'https://decentraland.org/path'
       )
       expect(API.url('https://decentraland.org/path', 'target/path', {})).toBe(
         'https://decentraland.org/path/target/path'
@@ -66,7 +66,7 @@ describe('utils/api/API', () => {
       // Object params
       expect(
         API.url('https://decentraland.org/path', '', { param2: 'value2' })
-      ).toBe('https://decentraland.org/path/?param2=value2')
+      ).toBe('https://decentraland.org/path?param2=value2')
       expect(
         API.url('https://decentraland.org/path', 'target/path', {
           param2: 'value2',
@@ -92,7 +92,7 @@ describe('utils/api/API', () => {
           '',
           new URLSearchParams({ param2: 'value2' })
         )
-      ).toBe('https://decentraland.org/path/?param2=value2')
+      ).toBe('https://decentraland.org/path?param2=value2')
       expect(
         API.url(
           'https://decentraland.org/path',

@@ -1,5 +1,5 @@
+import type { Identity } from '../auth/types'
 import { getCurrentIdentity } from '../auth/storage'
-import { Identity } from '../auth/types'
 import { toBase64 } from '../string/base64'
 
 export type RequestOptions = Omit<RequestInit, 'headers'> & {
