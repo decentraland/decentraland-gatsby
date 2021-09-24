@@ -69,7 +69,7 @@ export default function Layout({
 
   return (
     <>
-      {hideNavbar && (
+      {!hideNavbar && (
         <Navbar
           mana={props.mana}
           address={props.address}
@@ -113,7 +113,7 @@ export default function Layout({
         availableProviders={availableProviders}
         onClose={() => state.select(false)}
       />
-      {hideFooter && (
+      {!hideFooter && (
         <Footer
           locale={language}
           locales={languages}
