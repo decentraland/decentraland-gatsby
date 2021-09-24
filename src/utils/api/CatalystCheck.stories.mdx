@@ -59,9 +59,7 @@ export const CatalystLoader = React.memo((props) => {
             )}
             {comms && (
               <div style={{ paddingBottom: '16px' }}>
-                <Stats title="Users">
-                  {comms.usersCount || '0'}
-                </Stats>
+                <Stats title="Users">{comms.usersCount || '0'}</Stats>
               </div>
             )}
           </div>

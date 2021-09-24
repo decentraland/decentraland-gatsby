@@ -16,7 +16,11 @@ import WrongNetworkModal from './WrongNetworkModal.tsx'
 <Canvas isExpanded>
   <Story name="Wrong Network">
     <div>
-      <WrongNetworkModal open currentNetwork={ChainId.MATIC_MUMBAI} expectedNetwork={ChainId.ETHEREUM_MAINNET} />
+      <WrongNetworkModal
+        open
+        currentNetwork={ChainId.MATIC_MUMBAI}
+        expectedNetwork={ChainId.ETHEREUM_MAINNET}
+      />
     </div>
   </Story>
 </Canvas>
@@ -24,7 +28,11 @@ import WrongNetworkModal from './WrongNetworkModal.tsx'
 <Canvas isExpanded>
   <Story name="Multi Network Support">
     <div>
-      <WrongNetworkModal open currentNetwork={ChainId.MATIC_MUMBAI} expectedNetwork={[ChainId.ETHEREUM_MAINNET, ChainId.MATIC_MAINNET]} />
+      <WrongNetworkModal
+        open
+        currentNetwork={ChainId.MATIC_MUMBAI}
+        expectedNetwork={[ChainId.ETHEREUM_MAINNET, ChainId.MATIC_MAINNET]}
+      />
     </div>
   </Story>
 </Canvas>
@@ -32,7 +40,12 @@ import WrongNetworkModal from './WrongNetworkModal.tsx'
 <Canvas isExpanded>
   <Story name="Switch Network">
     <div>
-      <WrongNetworkModal open providerType={ProviderType.INJECTED} currentNetwork={ChainId.MATIC_MUMBAI} expectedNetwork={ChainId.ETHEREUM_MAINNET} />
+      <WrongNetworkModal
+        open
+        providerType={ProviderType.INJECTED}
+        currentNetwork={ChainId.MATIC_MUMBAI}
+        expectedNetwork={ChainId.ETHEREUM_MAINNET}
+      />
     </div>
   </Story>
 </Canvas>
@@ -40,7 +53,12 @@ import WrongNetworkModal from './WrongNetworkModal.tsx'
 <Canvas isExpanded>
   <Story name="Switch Multi Network">
     <div>
-      <WrongNetworkModal open providerType={ProviderType.INJECTED} currentNetwork={ChainId.MATIC_MUMBAI} expectedNetwork={[ChainId.ETHEREUM_MAINNET, ChainId.MATIC_MAINNET]} />
+      <WrongNetworkModal
+        open
+        providerType={ProviderType.INJECTED}
+        currentNetwork={ChainId.MATIC_MUMBAI}
+        expectedNetwork={[ChainId.ETHEREUM_MAINNET, ChainId.MATIC_MAINNET]}
+      />
     </div>
   </Story>
 </Canvas>

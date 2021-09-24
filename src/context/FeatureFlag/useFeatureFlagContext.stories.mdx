@@ -37,7 +37,7 @@ import React from 'react'
 import { ProviderType, ChainId } from 'decentraland-connect/dist/types'
 
 export default function Component() {
-  const [ ff ] = useFeatureFlagContext()
+  const [ff] = useFeatureFlagContext()
 
   return (
     <div>{ff.flag['test'] ? 'feature is enabled' : 'feature is disabled'}</div>

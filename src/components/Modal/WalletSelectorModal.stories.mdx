@@ -16,12 +16,15 @@ import WalletSelectorModal from './WalletSelectorModal.tsx'
 <Canvas isExpanded>
   <Story name="All providers">
     <div>
-      <WalletSelectorModal open availableProviders={[
-        ProviderType.INJECTED,
-        ProviderType.FORTMATIC,
-        ProviderType.NETWORK,
-        ProviderType.WALLET_CONNECT,
-      ]} />
+      <WalletSelectorModal
+        open
+        availableProviders={[
+          ProviderType.INJECTED,
+          ProviderType.FORTMATIC,
+          ProviderType.NETWORK,
+          ProviderType.WALLET_CONNECT,
+        ]}
+      />
     </div>
   </Story>
   <Story name="Detected providers">

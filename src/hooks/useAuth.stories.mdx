@@ -254,25 +254,38 @@ export function ConnectExample() {
 
 export const SwitchExample = () => {
   const [account, state] = useAuth()
-  return <Container>
-    <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-      {chains.map(chainId => {
-        return <Button
-          key={chainId}
-          size="small"
-          style={{ margin: '0 .5em .5em 0' }}
-          loading={state.loading}
-          disabled={!account || state.chainId === chainId || state.providerType !== ProviderType.INJECTED}
-          primary={state.chainId !== chainId}
-          onClick={() => state.switchTo(chainId)}>
-            Switch to {getChainName(chainId)}
-          </Button>
-      })}
-    </div>
-    {state.providerType !== ProviderType.INJECTED && <div style={{ paddingTop: '1em' }}>
-      <Paragraph primary small>Network switch is only available for INJECTED providers</Paragraph>
-    </div>}
-  </Container>
+  return (
+    <Container>
+      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+        {chains.map((chainId) => {
+          return (
+            <Button
+              key={chainId}
+              size="small"
+              style={{ margin: '0 .5em .5em 0' }}
+              loading={state.loading}
+              disabled={
+                !account ||
+                state.chainId === chainId ||
+                state.providerType !== ProviderType.INJECTED
+              }
+              primary={state.chainId !== chainId}
+              onClick={() => state.switchTo(chainId)}
+            >
+              Switch to {getChainName(chainId)}
+            </Button>
+          )
+        })}
+      </div>
+      {state.providerType !== ProviderType.INJECTED && (
+        <div style={{ paddingTop: '1em' }}>
+          <Paragraph primary small>
+            Network switch is only available for INJECTED providers
+          </Paragraph>
+        </div>
+      )}
+    </Container>
+  )
 }
 
 <SwitchExample />
