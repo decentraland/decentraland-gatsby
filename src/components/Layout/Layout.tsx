@@ -33,6 +33,8 @@ import { ProviderType } from 'decentraland-connect/dist/types'
 export type LayoutProps = PageProps &
   NavbarProps &
   FooterProps & {
+    hideNavbar?: boolean
+    hideFooter?: boolean
     pageContext?: {
       intl?: {
         language?: Locale
@@ -47,6 +49,8 @@ export default function Layout({
   children,
   pageContext,
   availableProviders,
+  hideNavbar,
+  hideFooter,
   ...props
 }: LayoutProps) {
   const language: Locale = pageContext?.intl?.language || 'en'
@@ -65,7 +69,7 @@ export default function Layout({
 
   return (
     <>
-      <Navbar
+      {hideNavbar && <Navbar
         mana={props.mana}
         address={props.address}
         activePage={props.activePage}
@@ -85,7 +89,7 @@ export default function Layout({
         ])}
         onSignIn={props.onSignIn}
         onClickAccount={props.onClickAccount}
-      />
+      />}
       <main
         className={TokenList.join(['LayoutMainContainer', props.className])}
       >
@@ -107,14 +111,14 @@ export default function Layout({
         availableProviders={availableProviders}
         onClose={() => state.select(false)}
       />
-      <Footer
+      {hideFooter && <Footer
         locale={language}
         locales={languages}
         isFullscreen={props.isFullscreen}
         className={TokenList.join(['LayoutFooterContainer', props.className])}
         i18n={props.i18n}
         onChange={trackEvent(handleChangeLocal)}
-      />
+      />}
     </>
   )
 }
