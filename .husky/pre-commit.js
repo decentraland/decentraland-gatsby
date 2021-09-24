@@ -3,5 +3,5 @@ module.exports = {
     'jest --bail --watchAll=false --findRelatedTests --passWithNoTests',
     () => 'tsc-files --noEmit',
   ],
-  './{src,bin}/**/*.{ts,tsx,js,jsx,json,md,css}': ['prettier --write'],
+  '*.{ts,tsx,js,jsx,json,md,mdx,css}': ['prettier --write'],
 }

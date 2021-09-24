@@ -27,7 +27,7 @@ jobs:
         uses: wearerequired/lint-action@v1
         with:
           prettier: true
-          prettier_args: "--check './src/**/*.{ts,tsx,js,jsx,json,md}'"
+          prettier_extensions: ts,tsx,js,jsx,json,md,mdx,css
 
       - name: testing
         run: npm test

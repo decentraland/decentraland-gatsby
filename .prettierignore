@@ -1,6 +1,7 @@
 .cache
 .github
 .vscode
+.husky
 package.json
 package-lock.json
 build
