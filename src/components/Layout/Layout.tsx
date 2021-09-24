@@ -69,27 +69,29 @@ export default function Layout({
 
   return (
     <>
-      {hideNavbar && <Navbar
-        mana={props.mana}
-        address={props.address}
-        activePage={props.activePage}
-        leftMenu={props.leftMenu}
-        middleMenu={props.middleMenu}
-        rightMenu={props.rightMenu}
-        i18n={props.i18n}
-        isConnected={props.isConnected}
-        isConnecting={props.isConnecting}
-        isSignIn={props.isSignIn}
-        isFullscreen={props.isFullscreen}
-        isOverlay={props.isOverlay}
-        className={TokenList.join([
-          'LayoutNavbarContainer',
-          props.className,
-          !isScrolled && 'initial',
-        ])}
-        onSignIn={props.onSignIn}
-        onClickAccount={props.onClickAccount}
-      />}
+      {hideNavbar && (
+        <Navbar
+          mana={props.mana}
+          address={props.address}
+          activePage={props.activePage}
+          leftMenu={props.leftMenu}
+          middleMenu={props.middleMenu}
+          rightMenu={props.rightMenu}
+          i18n={props.i18n}
+          isConnected={props.isConnected}
+          isConnecting={props.isConnecting}
+          isSignIn={props.isSignIn}
+          isFullscreen={props.isFullscreen}
+          isOverlay={props.isOverlay}
+          className={TokenList.join([
+            'LayoutNavbarContainer',
+            props.className,
+            !isScrolled && 'initial',
+          ])}
+          onSignIn={props.onSignIn}
+          onClickAccount={props.onClickAccount}
+        />
+      )}
       <main
         className={TokenList.join(['LayoutMainContainer', props.className])}
       >
@@ -111,14 +113,16 @@ export default function Layout({
         availableProviders={availableProviders}
         onClose={() => state.select(false)}
       />
-      {hideFooter && <Footer
-        locale={language}
-        locales={languages}
-        isFullscreen={props.isFullscreen}
-        className={TokenList.join(['LayoutFooterContainer', props.className])}
-        i18n={props.i18n}
-        onChange={trackEvent(handleChangeLocal)}
-      />}
+      {hideFooter && (
+        <Footer
+          locale={language}
+          locales={languages}
+          isFullscreen={props.isFullscreen}
+          className={TokenList.join(['LayoutFooterContainer', props.className])}
+          i18n={props.i18n}
+          onChange={trackEvent(handleChangeLocal)}
+        />
+      )}
     </>
   )
 }
