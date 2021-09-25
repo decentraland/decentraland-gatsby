@@ -33,8 +33,8 @@ describe('utils/api/Catalyst', () => {
   describe(`.verifySignature()`, () => {
     test(`should verify authChains created with "Authenticator.createSimpleAuthChain()"`, async () => {
       const finalPayload = `Mw485mHs`
-      const ownerAddress = TEST_IDENTITY.authChain[0].payload
       const signature = `0xd8b76035f09faab4e723ce49b9688947b608709f8cd8a70298c10954a4e2bec857d52ee46af53e923c17fea7a6d2cab3144ce10e9960847b37e77323b5c20dcf1b`
+      const ownerAddress = TEST_IDENTITY.authChain[0].payload
 
       const authChain = Authenticator.createSimpleAuthChain(
         finalPayload,
@@ -52,8 +52,8 @@ describe('utils/api/Catalyst', () => {
 
     test(`should verify authChains created with "Authenticator.signPayload()"`, async () => {
       const finalPayload = 'nz81Djv1'
-      const ownerAddress = TEST_IDENTITY.authChain[0].payload
       const authChain = Authenticator.signPayload(TEST_IDENTITY, finalPayload)
+      const ownerAddress = Authenticator.ownerAddress(TEST_IDENTITY.authChain)
 
       const response = await Catalyst.get().verifySignature(
         authChain,

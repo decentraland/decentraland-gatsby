@@ -3,6 +3,13 @@ import FetchError from '../errors/FetchError'
 import RequestError from '../errors/RequestError'
 import Options, { RequestOptions } from './Options'
 import 'isomorphic-fetch'
+import { signPayload } from '../auth/identify'
+import { getCurrentIdentity } from '../auth'
+import {
+  AUTH_CHAIN_HEADER_PREFIX,
+  AUTH_METADATA_HEADER,
+  AUTH_TIMESTAMP_HEADER,
+} from './API.types'
 
 export default class API {
   static catch<T>(prom: Promise<T>) {
@@ -73,6 +80,38 @@ export default class API {
     }
 
     return '?' + queryString
+  }
+
+  async signedFetch<T extends object>(
+    path: string,
+    options: Options = new Options({})
+  ) {
+    const identify = await getCurrentIdentity()
+    if (!identify) {
+      throw Object.assign(new Error(`Missing identity to sign the request`), {
+        path,
+        options: this.defaultOptions.merge(options).toObject(),
+      })
+    }
+
+    const { body, ...opt } = this.defaultOptions.merge(options).toObject()
+    const timestamp = String(Date.now())
+    const pathname = new URL(this.url(path)).pathname
+    const method = opt.method || 'GET'
+    const metadata = (body as string) || '{}'
+    const payload = [method, pathname, timestamp, metadata]
+      .join(':')
+      .toLowerCase()
+    const chain = await signPayload(identify, payload)
+
+    const newOptions = this.options(opt)
+    chain.forEach((link, i) =>
+      newOptions.header(AUTH_CHAIN_HEADER_PREFIX + i, JSON.stringify(link))
+    )
+    newOptions.header(AUTH_TIMESTAMP_HEADER, timestamp)
+    newOptions.header(AUTH_METADATA_HEADER, metadata)
+
+    return this.fetch<T>(path, newOptions)
   }
 
   async fetch<T extends object>(

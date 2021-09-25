@@ -9,7 +9,7 @@ let CURRENT_IDENTITY: Identity | null = null
 let CURRENT_IDENTITY_RAW: string | null = null
 let STORAGE_LISTENER: SingletonListener<Window> | null = null
 
-function getStorateListener() {
+function getStorageListener() {
   if (STORAGE_LISTENER === null) {
     CURRENT_IDENTITY = restoreIdentity()
     STORAGE_LISTENER = SingletonListener.from(window)
@@ -68,28 +68,34 @@ export function setCurrentIdentity(identity: Identity | null) {
 }
 
 export function getCurrentIdentity() {
-  getStorateListener()
+  getStorageListener()
   return CURRENT_IDENTITY
 }
 
 function storeIdentity(identity: Identity | null) {
-  localStorage.removeItem(STORE_LEGACY_KEY)
+  if (typeof localStorage !== 'undefined') {
+    localStorage.removeItem(STORE_LEGACY_KEY)
 
-  if (identity === null) {
-    CURRENT_IDENTITY_RAW = null
-    localStorage.removeItem(PersistedKeys.Identity)
-  } else {
-    CURRENT_IDENTITY_RAW = JSON.stringify(identity)
-    localStorage.setItem(PersistedKeys.Identity, CURRENT_IDENTITY_RAW)
+    if (identity === null) {
+      CURRENT_IDENTITY_RAW = null
+      localStorage.removeItem(PersistedKeys.Identity)
+    } else {
+      CURRENT_IDENTITY_RAW = JSON.stringify(identity)
+      localStorage.setItem(PersistedKeys.Identity, CURRENT_IDENTITY_RAW)
+    }
+
+    // local propagation
+    Promise.resolve().then(() => {
+      getStorageListener().dispatch(PersistedKeys.Identity as any, identity)
+    })
   }
-
-  // local propagation
-  Promise.resolve().then(() => {
-    getStorateListener().dispatch(PersistedKeys.Identity as any, identity)
-  })
 }
 
 function restoreIdentity(): Identity | null {
+  if (typeof localStorage === 'undefined') {
+    return null
+  }
+
   const raw = localStorage.getItem(PersistedKeys.Identity)
 
   if (!raw || raw === 'null') {

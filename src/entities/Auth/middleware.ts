@@ -1,6 +1,11 @@
 import { Request } from 'express'
 import { getConfiguration } from 'decentraland-connect/dist/configuration'
-import { AuthIdentity, AuthChain, AuthLinkType } from 'dcl-crypto/dist/types'
+import {
+  AuthIdentity,
+  AuthChain,
+  AuthLinkType,
+  AuthLink,
+} from 'dcl-crypto/dist/types'
 import {
   Authenticator,
   parseEmphemeralPayload,
@@ -12,6 +17,14 @@ import { middleware } from '../Route/handle'
 import logger from '../Development/logger'
 import once from '../../utils/function/once'
 import { ChainId } from '../../utils/loader/ensBalance'
+import Catalyst from '../../utils/api/Catalyst'
+import {
+  AUTHORIZATION_HEADER,
+  AUTH_CHAIN_HEADER_PREFIX,
+  AUTH_METADATA_HEADER,
+  AUTH_TIMESTAMP_HEADER,
+} from '../../utils/api/API.types'
+import Time from '../../utils/date/Time'
 
 export type WithAuth<R extends Request = Request> = R & {
   auth: string | null
@@ -19,7 +32,6 @@ export type WithAuth<R extends Request = Request> = R & {
 
 export type AuthOptions = {
   optional?: boolean
-  allowInvalid?: boolean
 }
 
 const getProvider = once(() => {
@@ -30,8 +42,8 @@ const getProvider = once(() => {
   return provider
 })
 
-export function auth(options: AuthOptions = {}) {
-  return middleware(async (req) => {
+function checkAuthorizationHeader(options: AuthOptions = {}) {
+  return async function (req: Request) {
     const authorization = req.header('authorization')
     if (!authorization && options.optional) {
       return
@@ -40,9 +52,7 @@ export function auth(options: AuthOptions = {}) {
     }
 
     const [type, token] = authorization.split(' ')
-    if (type.toLowerCase() !== 'bearer' && options.allowInvalid) {
-      return
-    } else if (type.toLowerCase() !== 'bearer') {
+    if (type.toLowerCase() !== 'bearer') {
       throw new RequestError(
         `Invalid authorization type: "${type}"`,
         RequestError.Unauthorized
@@ -68,14 +78,10 @@ export function auth(options: AuthOptions = {}) {
       ephemeralAddress = ephemeralPayload.ephemeralAddress
     } catch (error) {
       logger.error(`Error decoding authChain`, error)
-      if (options.allowInvalid) {
-        return
-      } else {
-        throw new RequestError(
-          `Invalid authorization token`,
-          RequestError.Unauthorized
-        )
-      }
+      throw new RequestError(
+        `Invalid authorization token`,
+        RequestError.Unauthorized
+      )
     }
 
     let result: { ok: boolean; message?: string } = { ok: false }
@@ -87,19 +93,13 @@ export function auth(options: AuthOptions = {}) {
       )
     } catch (error) {
       logger.error(error)
-      if (options.allowInvalid) {
-        return
-      } else {
-        throw new RequestError(
-          `Invalid authorization token sign`,
-          RequestError.Unauthorized
-        )
-      }
+      throw new RequestError(
+        `Invalid authorization token sign`,
+        RequestError.Unauthorized
+      )
     }
 
-    if (!result.ok && options.allowInvalid) {
-      return
-    } else if (!result.ok) {
+    if (!result.ok) {
       throw new RequestError(
         result.message || 'Invalid authorization data',
         RequestError.Forbidden
@@ -108,6 +108,81 @@ export function auth(options: AuthOptions = {}) {
 
     const auth = Authenticator.ownerAddress(authChain).toLowerCase()
     Object.assign(req, { auth })
+  }
+}
+
+export function withAuthorizationHeader(options: AuthOptions = {}) {
+  return middleware(checkAuthorizationHeader(options))
+}
+
+function checkChainHeader(options: AuthOptions = {}) {
+  return async function (req: Request) {
+    let i = 0
+    const authChain: AuthLink[] = []
+    while (req.header(AUTH_CHAIN_HEADER_PREFIX + i)) {
+      const data = req.header(AUTH_CHAIN_HEADER_PREFIX + i)!
+      authChain.push(JSON.parse(data))
+      i++
+    }
+
+    if (authChain.length === 0 && options.optional) {
+      return
+    } else if (authChain.length === 0) {
+      throw new RequestError(`Unauthorized`, RequestError.Unauthorized)
+    }
+
+    const method = req.method
+    const path = req.path
+    const rawTimestamp = req.header(AUTH_TIMESTAMP_HEADER) || '0'
+    const rawMetadata = req.header(AUTH_METADATA_HEADER) || '{}'
+    const ownerAddress = Authenticator.ownerAddress(authChain).toLowerCase()
+    const payload = [method, path, rawTimestamp, rawMetadata]
+      .join(':')
+      .toLowerCase()
+    const verification = await Catalyst.get().verifySignature(
+      authChain,
+      payload
+    )
+
+    if (
+      !verification.valid ||
+      verification.ownerAddress.toLowerCase() !== ownerAddress
+    ) {
+      throw new RequestError('Invalid signature', RequestError.Forbidden)
+    }
+
+    const timestamp = Number(rawTimestamp)
+    const metadata = JSON.parse(rawTimestamp)
+    if (timestamp < Date.now() + Time.Minute) {
+      throw new RequestError('Expired signature', RequestError.Forbidden)
+    }
+
+    Object.assign(req, {
+      auth: ownerAddress,
+      body: metadata,
+    })
+  }
+}
+
+export function withChainHeader(options: AuthOptions = {}) {
+  return middleware(checkChainHeader(options))
+}
+
+export function auth(options: AuthOptions = {}) {
+  return middleware(async (req: Request) => {
+    const authorization = req.header(AUTHORIZATION_HEADER)
+    if (authorization) {
+      return checkAuthorizationHeader(options)(req)
+    }
+
+    const chain = req.header(AUTH_CHAIN_HEADER_PREFIX + '0')
+    if (chain) {
+      return checkChainHeader(options)(req)
+    }
+
+    if (!options.optional) {
+      throw new RequestError(`Unauthorized`, RequestError.Unauthorized)
+    }
   })
 }
 

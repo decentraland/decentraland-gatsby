@@ -293,7 +293,10 @@ export default class Catalyst extends API {
     return this.fetch<LayerUser[]>(`/comms/layers/${layer}/users`)
   }
 
-  async verifySignature(authChain: AuthChain, message: string) {
+  async verifySignature(
+    authChain: AuthChain,
+    message: string
+  ): Promise<{ ownerAddress: string; valid: boolean }> {
     return this.fetch(
       `/lambdas/crypto/validate-signature`,
       this.options().method('POST').json({ authChain, timestamp: message })
