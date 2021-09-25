@@ -153,7 +153,7 @@ function checkChainHeader(options: AuthOptions = {}) {
 
     const timestamp = Number(rawTimestamp)
     const metadata = JSON.parse(rawTimestamp)
-    if (timestamp < Date.now() + Time.Minute) {
+    if (timestamp + Time.Minute < Date.now()) {
       throw new RequestError('Expired signature', RequestError.Forbidden)
     }
 
