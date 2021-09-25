@@ -132,7 +132,7 @@ function checkChainHeader(options: AuthOptions = {}) {
     }
 
     const method = req.method
-    const path = req.path
+    const path = req.baseUrl + req.path
     const rawTimestamp = req.header(AUTH_TIMESTAMP_HEADER) || '0'
     const rawMetadata = req.header(AUTH_METADATA_HEADER) || '{}'
     const ownerAddress = Authenticator.ownerAddress(authChain).toLowerCase()
