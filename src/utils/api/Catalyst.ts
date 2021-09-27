@@ -34,6 +34,7 @@ import type {
   EntityScene,
   CommsStatusOptions,
   CommsStatusWithUsers,
+  Peer,
 } from './Catalyst.types'
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
@@ -291,6 +292,10 @@ export default class Catalyst extends API {
    */
   async getLayerUsers(layer: string) {
     return this.fetch<LayerUser[]>(`/comms/layers/${layer}/users`)
+  }
+
+  async getPeers() {
+    return this.fetch<Peer[]>(`/comms/peers`)
   }
 
   async verifySignature(

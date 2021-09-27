@@ -178,3 +178,11 @@ export type EntityScene = {
     ]
   }
 }
+
+export type Peer = {
+  id: string
+  address: string
+  parcel: [number, number]
+  position: [number, number, number]
+  lastPing: number
+}
