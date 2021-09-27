@@ -128,23 +128,21 @@ export default class API {
       }
 
       if (!!identity?.authChain) {
-        const { body, ...opt } = options.toObject()
         const timestamp = String(Date.now())
         const pathname = new URL(this.url(path)).pathname
-        const method = opt.method || 'GET'
-        const metadata = (body as string) || '{}'
+        const method = options.getMethod() || 'GET'
+        const metadata = JSON.stringify(options.getMetadata())
         const payload = [method, pathname, timestamp, metadata]
           .join(':')
           .toLowerCase()
         const chain = await signPayload(identity, payload)
 
-        const newOptions = this.options(opt)
         chain.forEach((link, i) =>
-          newOptions.header(AUTH_CHAIN_HEADER_PREFIX + i, JSON.stringify(link))
+          options.header(AUTH_CHAIN_HEADER_PREFIX + i, JSON.stringify(link))
         )
-        newOptions.header(AUTH_TIMESTAMP_HEADER, timestamp)
-        newOptions.header(AUTH_METADATA_HEADER, metadata)
-        return newOptions
+        options.header(AUTH_TIMESTAMP_HEADER, timestamp)
+        options.header(AUTH_METADATA_HEADER, metadata)
+        return options
       }
     }
 

@@ -28,6 +28,7 @@ import Time from '../../utils/date/Time'
 
 export type WithAuth<R extends Request = Request> = R & {
   auth: string | null
+  authMetadata: Record<string, string | number> | null
 }
 
 export type AuthOptions = {
@@ -107,7 +108,7 @@ function checkAuthorizationHeader(options: AuthOptions = {}) {
     }
 
     const auth = Authenticator.ownerAddress(authChain).toLowerCase()
-    Object.assign(req, { auth })
+    Object.assign(req, { auth, authMetadata: null })
   }
 }
 
@@ -159,7 +160,7 @@ function checkChainHeader(options: AuthOptions = {}) {
 
     Object.assign(req, {
       auth: ownerAddress,
-      body: metadata,
+      authMetadata: metadata,
     })
   }
 }

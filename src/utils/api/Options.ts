@@ -9,32 +9,40 @@ export type RequestAuthorizationOptions = Partial<{
 }>
 
 export default class Options {
-  private options: RequestOptions = {}
+  private _options: RequestOptions = {}
 
-  private auth: RequestAuthorizationOptions = {}
+  private _authorization: RequestAuthorizationOptions = {}
+
+  private _metadata: Record<string, string | number> = {}
 
   constructor(options: RequestOptions = {}) {
-    this.options = options
+    this._options = options
   }
 
   merge(options: Options) {
     const raw = options.toObject()
     const newOptions = {
-      ...this.options,
+      ...this._options,
       ...raw,
     }
 
-    if (this.options.headers || raw.headers) {
+    if (this._options.headers || raw.headers) {
       newOptions.headers = {
-        ...this.options.headers,
+        ...this._options.headers,
         ...raw.headers,
       }
     }
 
     const result = new Options(newOptions)
+
     result.authorization({
-      ...this.auth,
+      ...this._authorization,
       ...options.getAuthorization(),
+    })
+
+    result.metadata({
+      ...this._metadata,
+      ...options.getMetadata(),
     })
 
     return result
@@ -42,19 +50,19 @@ export default class Options {
 
   set(options: Omit<RequestOptions, 'headers' | 'body'> = {}) {
     const newOptions = {
-      ...this.options,
+      ...this._options,
       ...options,
     }
 
-    if (this.options.headers) {
-      newOptions.headers = this.options.headers
+    if (this._options.headers) {
+      newOptions.headers = this._options.headers
     }
 
-    if (this.options.body) {
-      newOptions.headers = this.options.headers
+    if (this._options.body) {
+      newOptions.headers = this._options.headers
     }
 
-    this.options = newOptions
+    this._options = newOptions
 
     return this
   }
@@ -62,21 +70,21 @@ export default class Options {
   authorization(
     options: RequestAuthorizationOptions = { identity: true, optional: true }
   ) {
-    this.auth = options
+    this._authorization = options
     return this
   }
 
   header(key: string, value: string) {
-    if (!this.options.headers) {
-      this.options.headers = {}
+    if (!this._options.headers) {
+      this._options.headers = {}
     }
 
-    if (this.options.headers[key]) {
+    if (this._options.headers[key]) {
       console.warn(
-        `Can not set header "${key}" as "${value}" because is already defined as "${this.options.headers[key]}"`
+        `Can not set header "${key}" as "${value}" because is already defined as "${this._options.headers[key]}"`
       )
     } else {
-      this.options.headers[key] = value
+      this._options.headers[key] = value
     }
 
     return this
@@ -84,26 +92,42 @@ export default class Options {
 
   headers(headers: Record<string, string>) {
     Object.keys(headers).forEach((key) => this.header(key, headers[key]))
-
     return this
   }
 
   method(method: string) {
-    this.options.method = method
+    this._options.method = method
     return this
+  }
+
+  getMethod() {
+    return this._options.method || 'GET'
+  }
+
+  metadata(data: Record<string, string | number>) {
+    this._metadata = {
+      ...this._metadata,
+      ...data,
+    }
+
+    return this
+  }
+
+  getMetadata() {
+    return this._metadata
   }
 
   json(data: any) {
     this.header('Content-Type', 'application/json')
-    this.options.body = JSON.stringify(data)
+    this._options.body = JSON.stringify(data)
     return this
   }
 
   getAuthorization() {
-    return this.auth
+    return this._authorization
   }
 
   toObject() {
-    return this.options
+    return this._options
   }
 }
