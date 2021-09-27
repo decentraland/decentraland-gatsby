@@ -1,13 +1,18 @@
-import type { Identity } from '../auth/types'
-import { getCurrentIdentity } from '../auth/storage'
-import { toBase64 } from '../string/base64'
-
 export type RequestOptions = Omit<RequestInit, 'headers'> & {
   headers?: Record<string, string>
 }
 
+export type RequestAuthorizationOptions = Partial<{
+  identity: boolean
+  sign: boolean
+  optional: boolean
+}>
+
 export default class Options {
   private options: RequestOptions = {}
+
+  private auth: RequestAuthorizationOptions = {}
+
   constructor(options: RequestOptions = {}) {
     this.options = options
   }
@@ -26,7 +31,13 @@ export default class Options {
       }
     }
 
-    return new Options(newOptions)
+    const result = new Options(newOptions)
+    result.authorization({
+      ...this.auth,
+      ...options.getAuthorization(),
+    })
+
+    return result
   }
 
   set(options: Omit<RequestOptions, 'headers' | 'body'> = {}) {
@@ -48,16 +59,11 @@ export default class Options {
     return this
   }
 
-  authorization() {
-    const identity: Identity | null = getCurrentIdentity()
-    if (!identity || !identity.authChain) {
-      return this
-    }
-
-    return this.header(
-      'Authorization',
-      'Bearer ' + toBase64(JSON.stringify(identity.authChain))
-    )
+  authorization(
+    options: RequestAuthorizationOptions = { identity: true, optional: true }
+  ) {
+    this.auth = options
+    return this
   }
 
   header(key: string, value: string) {
@@ -91,6 +97,10 @@ export default class Options {
     this.header('Content-Type', 'application/json')
     this.options.body = JSON.stringify(data)
     return this
+  }
+
+  getAuthorization() {
+    return this.auth
   }
 
   toObject() {

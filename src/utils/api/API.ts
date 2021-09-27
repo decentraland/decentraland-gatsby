@@ -2,14 +2,16 @@ import logger from '../../entities/Development/logger'
 import FetchError from '../errors/FetchError'
 import RequestError from '../errors/RequestError'
 import Options, { RequestOptions } from './Options'
-import 'isomorphic-fetch'
+import type { Identity } from '../auth/types'
 import { signPayload } from '../auth/identify'
-import { getCurrentIdentity } from '../auth'
+import { getCurrentIdentity } from '../auth/storage'
 import {
   AUTH_CHAIN_HEADER_PREFIX,
   AUTH_METADATA_HEADER,
   AUTH_TIMESTAMP_HEADER,
 } from './API.types'
+import 'isomorphic-fetch'
+import { toBase64 } from '../string/base64'
 
 export default class API {
   static catch<T>(prom: Promise<T>) {
@@ -82,36 +84,71 @@ export default class API {
     return '?' + queryString
   }
 
-  async signedFetch<T extends object>(
+  async authorizeOptions(
     path: string,
     options: Options = new Options({})
-  ) {
-    const identify = await getCurrentIdentity()
-    if (!identify) {
-      throw Object.assign(new Error(`Missing identity to sign the request`), {
-        path,
-        options: this.defaultOptions.merge(options).toObject(),
-      })
+  ): Promise<Options> {
+    const config = options.getAuthorization()
+
+    if (config.identity) {
+      const identity: Identity | null = getCurrentIdentity()
+      if (!identity?.authChain && !config.optional) {
+        throw new FetchError(
+          path,
+          options.toObject(),
+          'Missing identity to autorize the request'
+        )
+      }
+
+      if (!!identity?.authChain) {
+        options.header(
+          'Authorization',
+          'Bearer ' + toBase64(JSON.stringify(identity.authChain))
+        )
+      }
     }
 
-    const { body, ...opt } = this.defaultOptions.merge(options).toObject()
-    const timestamp = String(Date.now())
-    const pathname = new URL(this.url(path)).pathname
-    const method = opt.method || 'GET'
-    const metadata = (body as string) || '{}'
-    const payload = [method, pathname, timestamp, metadata]
-      .join(':')
-      .toLowerCase()
-    const chain = await signPayload(identify, payload)
+    return options
+  }
 
-    const newOptions = this.options(opt)
-    chain.forEach((link, i) =>
-      newOptions.header(AUTH_CHAIN_HEADER_PREFIX + i, JSON.stringify(link))
-    )
-    newOptions.header(AUTH_TIMESTAMP_HEADER, timestamp)
-    newOptions.header(AUTH_METADATA_HEADER, metadata)
+  async signOptions(
+    path: string,
+    options: Options = new Options({})
+  ): Promise<Options> {
+    const config = options.getAuthorization()
 
-    return this.fetch<T>(path, newOptions)
+    if (config.sign) {
+      const identity = getCurrentIdentity()
+      if (!identity?.authChain && !config.optional) {
+        throw new FetchError(
+          path,
+          options.toObject(),
+          'Missing identity to sign the request'
+        )
+      }
+
+      if (!!identity?.authChain) {
+        const { body, ...opt } = options.toObject()
+        const timestamp = String(Date.now())
+        const pathname = new URL(this.url(path)).pathname
+        const method = opt.method || 'GET'
+        const metadata = (body as string) || '{}'
+        const payload = [method, pathname, timestamp, metadata]
+          .join(':')
+          .toLowerCase()
+        const chain = await signPayload(identity, payload)
+
+        const newOptions = this.options(opt)
+        chain.forEach((link, i) =>
+          newOptions.header(AUTH_CHAIN_HEADER_PREFIX + i, JSON.stringify(link))
+        )
+        newOptions.header(AUTH_TIMESTAMP_HEADER, timestamp)
+        newOptions.header(AUTH_METADATA_HEADER, metadata)
+        return newOptions
+      }
+    }
+
+    return options
   }
 
   async fetch<T extends object>(
@@ -122,7 +159,10 @@ export default class API {
     let body: string = ''
     let json: T = null as any
     const url = this.url(path)
-    const opt = this.defaultOptions.merge(options)
+
+    let opt = this.defaultOptions.merge(options)
+    opt = await this.authorizeOptions(path, opt)
+    opt = await this.signOptions(path, opt)
 
     try {
       res = await fetch(url, opt.toObject())
