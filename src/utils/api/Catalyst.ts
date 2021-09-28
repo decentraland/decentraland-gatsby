@@ -295,7 +295,10 @@ export default class Catalyst extends API {
   }
 
   async getPeers() {
-    return this.fetch<Peer[]>(`/comms/peers`)
+    const result = await this.fetch<{ ok: boolean; peers: Peer[] }>(
+      `/comms/peers`
+    )
+    return result.peers
   }
 
   async verifySignature(
