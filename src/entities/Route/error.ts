@@ -16,14 +16,12 @@ export default class RequestError extends Error {
       error: err.message,
     }
 
-    if (err instanceof RequestError) {
-      if (err.code) {
-        result.code
-      }
+    if ((err as RequestError).code) {
+      result.code
+    }
 
-      if (err.data) {
-        result.data = err.data
-      }
+    if (Object.keys((err as RequestError).data || {}).length > 0) {
+      result.data = (err as RequestError).data
     }
 
     if (result.stack && process.env.NODE_ENV !== 'production') {
