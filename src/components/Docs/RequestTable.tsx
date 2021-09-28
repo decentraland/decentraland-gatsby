@@ -11,6 +11,7 @@ import type {
   AjvSchema,
   AjvStringSchema,
 } from '../../entities/Schema/types'
+import { toArray } from './utils'
 
 export type RequestTableProps = {
   query?: AjvObjectSchema
@@ -92,18 +93,6 @@ export default React.memo(function RequestTable({
     </Table>
   )
 })
-
-function toArray<T>(value: T | T[] | undefined): T[] {
-  if (!value) {
-    return []
-  }
-
-  if (!Array.isArray(value)) {
-    return [value]
-  }
-
-  return value
-}
 
 const RequestTableRow = React.memo(
   ({
