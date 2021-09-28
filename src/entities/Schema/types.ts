@@ -1,16 +1,21 @@
-export type AjvSchema = AjvEnumSchema | AjvOperatorSchema | AjvNamedSchema
+export type AjvSchema =
+  | AjvBooleanSchema
+  | AjvEnumSchema
+  | AjvOperatorSchema
+  | AjvNamedSchema
 
 export type AjvEnumSchema = {
   enum: any[]
 }
 
 export type AjvOperatorSchema = {
-  not?: AjvSchema[]
+  // not?: AjvSchema[] | AjvSchema
+  // allOf?: AjvSchema[]
   oneOf?: AjvSchema[]
   anyOf?: AjvSchema[]
-  allOf?: AjvSchema[]
   description?: string
   default?: string
+  nullable?: boolean
 }
 
 export type AjvNamedSchema =
@@ -21,7 +26,6 @@ export type AjvNamedSchema =
 
 export type AjvObjectSchema = AjvOperatorSchema & {
   type: 'object'
-  nullable?: boolean
   additionalProperties?: boolean
   maxProperties?: boolean
   minProperties?: boolean
@@ -36,7 +40,6 @@ export type AjvObjectSchema = AjvOperatorSchema & {
 
 export type AjvNumberSchema = AjvOperatorSchema & {
   type: 'number'
-  nullable?: boolean
   maximum?: number
   minimum?: number
   exclusiveMaximum?: number
@@ -46,7 +49,6 @@ export type AjvNumberSchema = AjvOperatorSchema & {
 
 export type AjvStringSchema = AjvOperatorSchema & {
   type: 'string'
-  nullable?: boolean
   format?: string
   minLength?: number
   maxLength?: number
@@ -55,7 +57,6 @@ export type AjvStringSchema = AjvOperatorSchema & {
 
 export type AjvArraySchema = AjvOperatorSchema & {
   type: 'array'
-  nullable?: boolean
   uniqueItems?: boolean
   additionalItems?: boolean
   unevaluatedItems?: boolean
@@ -65,4 +66,8 @@ export type AjvArraySchema = AjvOperatorSchema & {
   contains?: AjvSchema | AjvSchema[]
   maxContains?: number
   minContains?: number
+}
+
+export type AjvBooleanSchema = AjvOperatorSchema & {
+  type: 'boolean'
 }

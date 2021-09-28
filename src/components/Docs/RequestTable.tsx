@@ -7,6 +7,7 @@ import type {
   AjvNamedSchema,
   AjvNumberSchema,
   AjvObjectSchema,
+  AjvOperatorSchema,
   AjvSchema,
   AjvStringSchema,
 } from '../../entities/Schema/types'
@@ -92,6 +93,18 @@ export default React.memo(function RequestTable({
   )
 })
 
+function toArray<T>(value: T | T[] | undefined): T[] {
+  if (!value) {
+    return []
+  }
+
+  if (!Array.isArray(value)) {
+    return [value]
+  }
+
+  return value
+}
+
 const RequestTableRow = React.memo(
   ({
     name,
@@ -99,31 +112,26 @@ const RequestTableRow = React.memo(
     definition,
     required,
   }: {
-    name: string
+    name?: string
     position: string
     definition: AjvSchema
     required?: string[]
   }) => {
-    const isRequired = (required || []).includes(name)
-    const items = useMemo(() => {
-      if ((definition as AjvArraySchema).type !== 'array') {
-        return []
-      }
-
-      const i = (definition as AjvArraySchema).items
-      if (!i) {
-        return []
-      }
-
-      return Array.isArray(i) ? i : [i]
-    }, [definition])
+    const isRequired = !!name && (required || []).includes(name)
+    const items = useMemo(() => toArray((definition as AjvArraySchema).items), [
+      definition,
+    ])
+    const oneOf = useMemo(() => (definition as AjvOperatorSchema).oneOf, [
+      definition,
+    ])
+    const anyOf = useMemo(() => (definition as AjvOperatorSchema).anyOf, [
+      definition,
+    ])
 
     const obj = useMemo(() => {
-      if ((definition as AjvObjectSchema).type !== 'object') {
-        return null
-      }
-
-      return definition as AjvObjectSchema
+      return (definition as AjvObjectSchema).type === 'object'
+        ? (definition as AjvObjectSchema)
+        : null
     }, [definition])
 
     return (
@@ -139,6 +147,14 @@ const RequestTableRow = React.memo(
             definition={definition}
           />
         </Table.Row>
+        {oneOf &&
+          oneOf.map((item, i) => (
+            <RequestTableRow key={i} position={position} definition={item} />
+          ))}
+        {anyOf &&
+          anyOf.map((item, i) => (
+            <RequestTableRow key={i} position={position} definition={item} />
+          ))}
         {items.map((item, i) => (
           <RequestTableRow
             key={i}
@@ -167,13 +183,15 @@ const RequestTableNameCell = React.memo(function ({
   name,
 }: {
   required: boolean
-  name: string
+  name?: string
 }) {
   return (
-    <Table.Cell>
-      <span style={{ fontWeight: required ? 'bold' : 'normal' }}>
-        <Code inline>{name}</Code>
-      </span>
+    <Table.Cell style={name ? {} : { borderTop: 0 }}>
+      {name && (
+        <span style={{ fontWeight: required ? 'bold' : 'normal' }}>
+          <Code inline>{name}</Code>
+        </span>
+      )}
     </Table.Cell>
   )
 })
@@ -183,19 +201,27 @@ const RequestTableTypeCell = React.memo(function ({
 }: {
   definition: AjvSchema
 }) {
+  let types: string[] = []
+
+  if ((definition as AjvEnumSchema).enum) {
+    types.push(
+      (definition as AjvEnumSchema).enum
+        .map((value) => JSON.stringify(value))
+        .join(' | ')
+    )
+  }
+
+  if ((definition as AjvNamedSchema).nullable) {
+    types.push('null')
+  }
+
+  if ((definition as AjvNamedSchema).type) {
+    types.push(toArray((definition as AjvNamedSchema).type).join(' | '))
+  }
+
   return (
     <Table.Cell>
-      <Code inline>
-        {(definition as AjvEnumSchema).enum &&
-          (definition as AjvEnumSchema).enum
-            .map((value) => JSON.stringify(value))
-            .join(' | ')}
-        {Array.isArray((definition as AjvNamedSchema).type) &&
-          ((definition as AjvNamedSchema).type as any).join(' | ')}
-        {!Array.isArray((definition as AjvNamedSchema).type) &&
-          (definition as AjvNamedSchema).type}
-        {(definition as AjvNamedSchema).nullable && ' | null'}
-      </Code>
+      {types.length > 0 && <Code inline> {types.join(' | ')} </Code>}
     </Table.Cell>
   )
 })

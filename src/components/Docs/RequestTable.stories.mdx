@@ -14,51 +14,51 @@ import RequestTable from './RequestTable'
       properties: {
         str: {
           type: 'string',
-          description: 'param description',
+          description: 'str description',
         },
         str_nullable: {
           type: 'string',
           nullable: true,
-          description: 'param description',
+          description: 'str_nullable description',
         },
         str_required: {
           type: 'string',
-          description: 'param description',
+          description: 'str_required description',
         },
         str_default: {
           type: 'string',
           default: 'value',
-          description: 'param description',
+          description: 'str_default description',
         },
         arr_string: {
           type: 'array',
-          description: 'param description',
+          description: 'arr_string description',
           items: {
             type: 'string',
-            description: 'param description',
+            description: 'arr_string[] description',
           },
         },
         arr_number: {
           type: 'array',
-          description: 'param description',
+          description: 'arr_number description',
           items: {
             type: 'number',
-            description: 'param description',
+            description: 'arr_number[] description',
           },
         },
         arr_obj: {
           type: 'array',
-          description: 'param description',
+          description: 'arr_obj description',
           items: {
             type: 'object',
-            description: 'param description',
+            description: 'arr_obj[] description',
             properties: {
               prop1: {
-                description: 'param description',
+                description: 'arr_obj[].prop1 description',
                 type: 'string',
               },
               prop2: {
-                description: 'param description',
+                description: 'arr_obj[].prop2 description',
                 type: 'number',
               },
             },
@@ -66,30 +66,38 @@ import RequestTable from './RequestTable'
         },
         obj: {
           type: 'object',
-          description: 'param description',
+          description: 'obj description',
           properties: {
             prop1: {
-              description: 'param description',
+              description: 'obj.prop1 description',
               type: 'string',
             },
             prop2: {
-              description: 'param description',
+              description: 'obj.prop2 description',
               type: 'number',
             },
           },
         },
         enum: {
           enum: [1, 2, 3, 'random'],
-          description: 'param description',
+          description: 'enum description',
         },
         enum_required: {
           enum: [1, 2, 3, 'random'],
-          description: 'param description',
+          description: 'enum_required description',
         },
         enum_nullable: {
           enum: [1, 2, 3, 'random'],
           nullable: true,
-          description: 'param description',
+          description: 'enum_nullable description',
+        },
+        oneOf: {
+          description: 'oneOf description',
+          oneOf: [
+            { type: 'null', description: 'oneOf (null) description' },
+            { type: 'number', description: 'oneOf (number) description' },
+            { enum: ['random'], description: 'oneOf (enum) description' },
+          ],
         },
       },
     }}
