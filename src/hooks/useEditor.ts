@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import omit from 'lodash.omit'
 
 export type Editor<P extends {} = {}> = (state: P, newProps: Partial<P>) => P
@@ -31,21 +31,26 @@ export default function useEditor<P extends {} = {}>(
     error: {},
     validated: false,
   })
-  function set(newProps: Partial<P>, options: { validate?: boolean } = {}) {
-    const value = editor(state.value, newProps)
-    if (state.value !== value) {
-      const keys = Object.keys(newProps) as (keyof P)[]
-      const newError = options.validate === false ? {} : validator(value, keys)
-      const error = clear({
-        ...(omit(state.error, keys) as EditorError<P>),
-        ...newError,
-      })
 
-      setState({ value, error, validated: false })
-    }
-  }
+  const set = useCallback(
+    (newProps: Partial<P>, options: { validate?: boolean } = {}) => {
+      const value = editor(state.value, newProps)
+      if (state.value !== value) {
+        const keys = Object.keys(newProps) as (keyof P)[]
+        const newError =
+          options.validate === false ? {} : validator(value, keys)
+        const error = clear({
+          ...(omit(state.error, keys) as EditorError<P>),
+          ...newError,
+        })
 
-  function validate() {
+        setState({ value, error, validated: false })
+      }
+    },
+    [state]
+  )
+
+  const validate = useCallback(() => {
     const keys = [...Object.keys(state.value), '*'] as (keyof P | '*')[]
 
     const error = clear(validator(state.value, keys))
@@ -54,20 +59,29 @@ export default function useEditor<P extends {} = {}>(
     } else {
       setState({ value: state.value, error, validated: false })
     }
-  }
+  }, [state])
 
-  function error(err: EditorError<P>) {
-    err = clear(err)
-    if (Object.keys(err).length > 0) {
-      setState({
-        value: state.value,
-        validated: false,
-        error: { ...state.error, ...err },
-      })
-    }
-  }
+  const error = useCallback(
+    (err: EditorError<P>) => {
+      err = clear(err)
+      if (Object.keys(err).length > 0) {
+        setState({
+          value: state.value,
+          validated: false,
+          error: { ...state.error, ...err },
+        })
+      }
+    },
+    [state]
+  )
 
-  return [state, { set, validate, error }] as const
+  const actions = useMemo(() => ({ set, validate, error }), [
+    set,
+    validate,
+    error,
+  ])
+
+  return [state, actions] as const
 }
 
 function clear<P>(err: EditorError<P>): EditorError<P> {

@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react'
-import useAsyncMemo from '../../hooks/useAsyncMemo'
+import useAsyncState from '../../hooks/useAsyncState'
 import { StyleNamespace } from '../../variables'
 import TokenList from '../../utils/dom/TokenList'
 import profiles from '../../utils/loader/profile'
@@ -26,7 +26,7 @@ export default React.memo(function Avatar({
   ...props
 }: AvatarProps) {
   const [failed, setFailed] = useState(false)
-  const [profile, { loading }] = useAsyncMemo(
+  const [profile, { loading }] = useAsyncState(
     () => profiles.load(address || ''),
     [address],
     { callWithTruthyDeps: true }

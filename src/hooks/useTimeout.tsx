@@ -24,6 +24,7 @@ export default function useTimeout<T>(
   }, [])
 
   const [state, setState] = useState<State<T>>(initialValue)
+
   const execute = () => {
     if (state.executed) {
       return
@@ -61,7 +62,7 @@ export default function useTimeout<T>(
         clearTimeout(state.timeout)
       }
     }
-  }, [at.getTime()])
+  }, [execute, at.getTime()])
 
   return state.value
 }

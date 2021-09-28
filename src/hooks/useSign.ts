@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Provider } from 'decentraland-connect/dist/types'
 import { Address } from 'web3x/address'
 import { Personal } from 'web3x/personal'
@@ -41,14 +41,26 @@ export default function useSign(
     }
   }, [state.signing, address, provider])
 
-  function sign(message: string) {
-    if (!state.signing) {
-      setState({ message, signature: null, signing: true, error: null })
-    }
-  }
+  const sign = useCallback(
+    (message: string) => {
+      if (!state.signing) {
+        setState({ message, signature: null, signing: true, error: null })
+      }
+    },
+    [state]
+  )
+
+  const publicState = useMemo(
+    () => ({ signature: state.signature, message: state.message }),
+    [state.signature, state.message]
+  )
+  const publecActions = useMemo(
+    () => ({ sign, signing: state.signing, error: state.error }),
+    [sign, state.signing, state.error]
+  )
 
   return [
     { signature: state.signature, message: state.message },
-    { sign, signing: state.signing },
+    { sign, signing: state.signing, error: state.error },
   ]
 }

@@ -3,6 +3,12 @@ import EntityStore, { EntityStoreState } from '../utils/EntityStore'
 
 const INITIAL_STATE = {}
 
+/**
+ * @deprecated
+ * @param initialState
+ * @param deps
+ * @returns
+ */
 export default function useStore<E extends object>(
   initialState: Partial<EntityStoreState<E>> = INITIAL_STATE,
   deps: React.DependencyList = []

@@ -5,6 +5,12 @@ export type Selector<E extends object, R> = (store: EntityStoreState<E>) => R
 
 const defaultSelector = (state: EntityStoreState<any>) => state as any
 
+/**
+ * @deprecated
+ * @param store
+ * @param selector
+ * @returns
+ */
 export default function useEntityStoreSelector<E extends object, R>(
   store: EntityStore<E>,
   selector: (store: EntityStoreState<E>) => R = defaultSelector

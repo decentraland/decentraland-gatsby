@@ -1,17 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import clipboardCopy from 'clipboard-copy'
 
 export default function useClipboardCopy(timeout?: number) {
   const [state, setState] = useState<string | number | boolean | null>(null)
 
-  function copy(value: string | number | boolean | null) {
-    clipboardCopy(String(value ?? ''))
-    setState(value)
-  }
+  const copy = useCallback(
+    (value: string | number | boolean | null) => {
+      clipboardCopy(String(value ?? ''))
+      setState(value)
+    },
+    [state]
+  )
 
-  function clear() {
-    setState(null)
-  }
+  const clear = useCallback(() => setState(null), [state])
 
   useEffect(() => {
     let copyTimeout: null | ReturnType<typeof setTimeout> = null
@@ -26,5 +27,7 @@ export default function useClipboardCopy(timeout?: number) {
     }
   }, [state, timeout])
 
-  return [state, { copy, clear }] as const
+  const actions = useMemo(() => ({ copy, clear }), [copy, clear])
+
+  return [state, actions] as const
 }

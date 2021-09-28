@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ChainId } from '@dcl/schemas'
 import { ProviderType } from 'decentraland-connect/dist/types'
 import { connection } from 'decentraland-connect/dist/ConnectionManager'
@@ -28,59 +28,66 @@ let CONNECTION_PROMISE: Promise<AuthState> | null = null
 export default function useAuth() {
   const [state, setState] = useState<AuthState>({ ...initialState })
 
-  function select(selecting: boolean = true) {
-    if (isLoading(state.status)) {
-      return
-    }
+  const select = useCallback(
+    (selecting: boolean = true) => {
+      if (isLoading(state.status)) {
+        return
+      }
 
-    if (selecting === state.selecting) {
-      return
-    }
+      if (selecting === state.selecting) {
+        return
+      }
 
-    setState((current) => ({ ...current, selecting }))
-  }
+      setState((current) => ({ ...current, selecting }))
+    },
+    [state]
+  )
 
-  function connect(providerType: ProviderType, chainId: ChainId) {
-    if (isLoading(state.status)) {
-      return
-    }
+  const connect = useCallback(
+    (providerType: ProviderType, chainId: ChainId) => {
+      if (isLoading(state.status)) {
+        return
+      }
 
-    if (state.account) {
-      console.warn(`Already connected as "${state.account}"`)
-      return
-    }
+      if (state.account) {
+        console.warn(`Already connected as "${state.account}"`)
+        return
+      }
 
-    const conn = { providerType: providerType, chainId: chainId }
-    if (!providerType || !chainId) {
-      console.error(`Invalid connection params: ${JSON.stringify(conn)}`)
-      rollbar((rollbar) =>
-        rollbar.error(`Invalid connection params: ${JSON.stringify(conn)}`)
+      const conn = { providerType: providerType, chainId: chainId }
+      if (!providerType || !chainId) {
+        console.error(`Invalid connection params: ${JSON.stringify(conn)}`)
+        rollbar((rollbar) =>
+          rollbar.error(`Invalid connection params: ${JSON.stringify(conn)}`)
+        )
+        segment((analytics) =>
+          analytics.track('error', {
+            message: `Invalid connection params: ${JSON.stringify(conn)}`,
+            conn,
+          })
+        )
+        return
+      }
+
+      segment((analytics, context) =>
+        analytics.track(AuthEvent.Connect, { ...context, ...conn })
       )
-      segment((analytics) =>
-        analytics.track('error', {
-          message: `Invalid connection params: ${JSON.stringify(conn)}`,
-          conn,
-        })
-      )
-      return
-    }
 
-    segment((analytics, context) =>
-      analytics.track(AuthEvent.Connect, { ...context, ...conn })
-    )
-    setState({
-      account: null,
-      identity: null,
-      provider: null,
-      error: null,
-      selecting: state.selecting,
-      status: AuthStatus.Connecting,
-      providerType,
-      chainId,
-    })
-  }
+      setState({
+        account: null,
+        identity: null,
+        provider: null,
+        error: null,
+        selecting: state.selecting,
+        status: AuthStatus.Connecting,
+        providerType,
+        chainId,
+      })
+    },
+    [state]
+  )
 
-  function disconnect() {
+  const disconnect = useCallback(() => {
     if (isLoading(state.status)) {
       return
     }
@@ -99,17 +106,20 @@ export default function useAuth() {
       providerType: null,
       chainId: null,
     })
-  }
+  }, [state])
 
-  const [switching, switchTo] = useAsyncTask(async (chainId: ChainId) => {
-    if (state.providerType === ProviderType.INJECTED) {
-      try {
-        await switchToChainId(state.provider, chainId)
-      } catch (err) {
-        setState({ ...state, error: err.message })
+  const [switching, switchTo] = useAsyncTask(
+    async (chainId: ChainId) => {
+      if (state.providerType === ProviderType.INJECTED) {
+        try {
+          await switchToChainId(state.provider, chainId)
+        } catch (err) {
+          setState({ ...state, error: err.message })
+        }
       }
-    }
-  })
+    },
+    [state]
+  )
 
   // bootstrap
   useEffect(() => {
@@ -263,7 +273,7 @@ export default function useAuth() {
     return () => {
       cancelled = true
     }
-  }, [state.status, state.providerType, state.chainId])
+  }, [state])
 
   useEffect(() => {
     const provider = state.provider
@@ -284,13 +294,12 @@ export default function useAuth() {
         provider.removeListener('disconnect', onDisconnect)
       }
     }
-  }, [state.provider])
+  }, [state])
 
   const loading = isLoading(state.status) || switching
 
-  return [
-    state.account,
-    {
+  const actions = useMemo(
+    () => ({
       connect,
       disconnect,
       switchTo,
@@ -301,6 +310,9 @@ export default function useAuth() {
       provider: !loading ? state.provider : null,
       providerType: !loading ? state.providerType : null,
       chainId: !loading ? state.chainId : null,
-    },
-  ] as const
+    }),
+    [connect, disconnect, switchTo, select, loading, state]
+  )
+
+  return [state.account, actions] as const
 }

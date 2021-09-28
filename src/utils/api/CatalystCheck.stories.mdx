@@ -14,7 +14,7 @@ import Container from '../../components/Storybook/Container'
 import Divider from '../../components/Text/Divider'
 import Link from '../../components/Text/Link'
 import Avatar from '../../components/User/Avatar'
-import useAsyncMemo from '../../hooks/useAsyncMemo'
+import useAsyncState from '../../hooks/useAsyncState'
 import useAuth from '../../hooks/useAuth'
 import Catalyst from './Catalyst'
 
@@ -27,19 +27,19 @@ import Catalyst from './Catalyst'
 <Divider size="small" />
 
 export const CatalystLoader = React.memo((props) => {
-  const [comms, commsState] = useAsyncMemo(
+  const [comms, commsState] = useAsyncState(
     () => Catalyst.from(props.address).getCommsStatus(),
     [props.address]
   )
-  const [lambdas, lambdasState] = useAsyncMemo(
+  const [lambdas, lambdasState] = useAsyncState(
     () => Catalyst.from(props.address).getLambdasStatus(),
     [props.address]
   )
-  const [content, contentState] = useAsyncMemo(
+  const [content, contentState] = useAsyncState(
     () => Catalyst.from(props.address).getContentStatus(),
     [props.address]
   )
-  const [profile, profileState] = useAsyncMemo(
+  const [profile, profileState] = useAsyncState(
     () => Catalyst.from(props.address).getProfile(props.user),
     [props.user],
     { callWithTruthyDeps: true }
@@ -180,7 +180,7 @@ export const PreviewLoader = () => {
   const [address, setAddress] = useState(
     '0x05d48ee3e815bf376fc79d283301cfdef872e280'
   )
-  const [servers, { loading }] = useAsyncMemo(
+  const [servers, { loading }] = useAsyncState(
     () => Catalyst.get().getServers(),
     []
   )

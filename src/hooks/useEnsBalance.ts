@@ -1,11 +1,11 @@
 import { ChainId, fetchEnsBalance } from '../utils/loader/ensBalance'
-import useAsyncMemo from './useAsyncMemo'
+import useAsyncState from './useAsyncState'
 
 export default function useNameBalance(
   account?: string | null,
   chainId?: ChainId | null
 ) {
-  return useAsyncMemo(
+  return useAsyncState(
     async () => {
       return !account || !chainId ? 0 : fetchEnsBalance(account, chainId)
     },

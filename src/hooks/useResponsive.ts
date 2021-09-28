@@ -1,7 +1,7 @@
 import Responsive, {
   ResponsiveWidthShorthand,
 } from 'semantic-ui-react/dist/commonjs/addons/Responsive'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import SingletonListener from '../utils/dom/SingletonListener'
 
 let CURRENT_WIDTH = Responsive.onlyMobile.maxWidth as number
@@ -31,15 +31,18 @@ export default function useResponsive() {
     }
   }, [])
 
-  return function responsive(limits: Partial<ResponsiveWidthShorthand> = {}) {
-    if (limits.minWidth !== undefined && width < limits.minWidth) {
-      return false
-    }
+  return useCallback(
+    function responsive(limits: Partial<ResponsiveWidthShorthand> = {}) {
+      if (limits.minWidth !== undefined && width < limits.minWidth) {
+        return false
+      }
 
-    if (limits.maxWidth !== undefined && width > limits.maxWidth) {
-      return false
-    }
+      if (limits.maxWidth !== undefined && width > limits.maxWidth) {
+        return false
+      }
 
-    return true
-  }
+      return true
+    },
+    [width]
+  )
 }

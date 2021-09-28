@@ -1,11 +1,11 @@
 import { ChainId, fetchLandBalance } from '../utils/loader/landBalance'
-import useAsyncMemo from './useAsyncMemo'
+import useAsyncState from './useAsyncState'
 
 export default function useLandBalance(
   account?: string | null,
   chainId?: ChainId | null
 ) {
-  return useAsyncMemo(
+  return useAsyncState(
     async () => {
       return !account || !chainId ? 0 : fetchLandBalance(account, chainId)
     },

@@ -18,6 +18,7 @@ export default function useAsyncEffect(
         })
       )
     })
+
     return function () {
       promise.then((unsubscribe) => {
         if (typeof unsubscribe === 'function') {

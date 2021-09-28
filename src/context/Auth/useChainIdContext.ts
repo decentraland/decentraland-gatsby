@@ -1,5 +1,5 @@
 import useAuthContext from './useAuthContext'
-import { createAsyncMemoState } from '../../hooks/useAsyncMemo'
+import { createAsyncMemoState } from '../../hooks/useAsyncState'
 import { getDefaultChainId } from './utils'
 
 const fakeState = createAsyncMemoState(getDefaultChainId())

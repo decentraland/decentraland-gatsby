@@ -1,10 +1,10 @@
 import useAuthContext from './useAuthContext'
-import useAsyncMemo from '../../hooks/useAsyncMemo'
+import useAsyncState from '../../hooks/useAsyncState'
 import profile from '../../utils/loader/profile'
 
 export default function useProfileContext() {
   const [account] = useAuthContext()
-  return useAsyncMemo(async () => (!account ? null : profile.load(account)), [
+  return useAsyncState(async () => (!account ? null : profile.load(account)), [
     account,
   ])
 }

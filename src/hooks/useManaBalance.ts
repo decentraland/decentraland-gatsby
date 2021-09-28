@@ -1,11 +1,11 @@
 import { ChainId, fetchManaBalance } from '../utils/loader/manaBalance'
-import useAsyncMemo from './useAsyncMemo'
+import useAsyncState from './useAsyncState'
 
 export default function useManaBalance(
   account?: string | null,
   chainId?: ChainId | null
 ) {
-  return useAsyncMemo(
+  return useAsyncState(
     async () => {
       return !account || !chainId ? 0 : fetchManaBalance(account, chainId)
     },

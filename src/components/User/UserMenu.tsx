@@ -8,7 +8,7 @@ import {
 } from 'decentraland-ui/dist/components/UserMenu/UserMenu'
 import useAuthContext from '../../context/Auth/useAuthContext'
 import useProfileInjected from '../../context/Auth/useProfileContext'
-import useAsyncMemo from '../../hooks/useAsyncMemo'
+import useAsyncState from '../../hooks/useAsyncState'
 import './UserMenu.css'
 import useChainId from '../../hooks/useChainId'
 import { fetchManaBalance } from '../../utils/loader/manaBalance'
@@ -36,7 +36,7 @@ export default function UserMenu(props: UserMenuProps) {
   const [profile, profileState] = useProfileInjected()
   const chainId = useChainId()
   const loading = userState.loading || profileState.loading
-  const [manaBalances] = useAsyncMemo<UserMenuBalances>(async () => {
+  const [manaBalances] = useAsyncState<UserMenuBalances>(async () => {
     if (props.hideBalance || !user) {
       return {}
     }

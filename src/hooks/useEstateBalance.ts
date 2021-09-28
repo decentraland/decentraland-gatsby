@@ -1,11 +1,11 @@
 import { ChainId, fetchEstateBalance } from '../utils/loader/estateBalance'
-import useAsyncMemo from './useAsyncMemo'
+import useAsyncState from './useAsyncState'
 
 export default function useEstateBalance(
   account?: string | null,
   chainId?: ChainId | null
 ) {
-  const [[estates, lands], state] = useAsyncMemo(
+  const [[estates, lands], state] = useAsyncState(
     async () => {
       if (!account || !chainId) {
         return [0, 0] as [number, number]

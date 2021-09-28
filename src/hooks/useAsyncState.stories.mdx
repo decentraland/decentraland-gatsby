@@ -14,16 +14,16 @@ import Container from '../components/Storybook/Container'
 import toObject from '../utils/errors/toObject'
 import random from '../utils/number/random'
 import delay from '../utils/promise/delay'
-import useAsyncMemo from './useAsyncMemo'
+import useAsyncState from './useAsyncState'
 
-<Meta title="Hooks/useAsyncMemo" />
+<Meta title="Hooks/useAsyncState" />
 
 # Async memo
 
 > The _async memo_ allows to resolve and async function and stores its result in the component livecycle.
 
 ```ts
-const [value, state] = useAsyncMemo(resolver, deps, options)
+const [value, state] = useAsyncState(resolver, deps, options)
 ```
 
 <ArgsTable
@@ -73,7 +73,7 @@ const [value, state] = useAsyncMemo(resolver, deps, options)
 ## Preview
 
 export const Example = () => {
-  const [value, state] = useAsyncMemo(
+  const [value, state] = useAsyncState(
     () => fetch('https://httpbin.org/get').then((r) => r.json()),
     [],
     {}
@@ -108,7 +108,7 @@ import React from 'react'
 ```
 
 export const ErrorExample = () => {
-  const [value, state] = useAsyncMemo(
+  const [value, state] = useAsyncState(
     async () => {
       const time = random(1000, 3000)
       await delay(time)

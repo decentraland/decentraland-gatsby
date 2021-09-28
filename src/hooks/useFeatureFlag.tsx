@@ -1,10 +1,10 @@
 import unleash, { DEFAULT_FEATURE_FLAG } from '../utils/api/unleash'
-import useAsyncMemo from './useAsyncMemo'
+import useAsyncState from './useAsyncState'
 
 export { DEFAULT_FEATURE_FLAG }
 
 export default function useFeatureFlag(endpoint?: string | null) {
-  return useAsyncMemo(() => unleash(endpoint), [endpoint], {
+  return useAsyncState(() => unleash(endpoint), [endpoint], {
     callWithTruthyDeps: true,
     initialValue: DEFAULT_FEATURE_FLAG,
   })

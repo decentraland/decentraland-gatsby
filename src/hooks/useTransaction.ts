@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ChainId } from '@dcl/schemas'
 import Time from '../utils/date/Time'
 import {
@@ -89,46 +89,51 @@ export default function useTransaction(
     }
   }, [transactions])
 
-  function add(hash: string, payload: Record<string, any> = {}) {
-    if (address && chainId) {
-      getTransaction(address, chainId, hash)
-        .then((tx) => {
-          if (!tx) {
-            return
-          }
+  const add = useCallback(
+    (hash: string, payload: Record<string, any> = {}) => {
+      if (address && chainId) {
+        getTransaction(address, chainId, hash)
+          .then((tx) => {
+            if (!tx) {
+              return
+            }
 
-          const newTransaction: Transaction = {
-            ...tx,
-            timestamp: Date.now(),
-            chainId,
-            payload,
-          }
+            const newTransaction: Transaction = {
+              ...tx,
+              timestamp: Date.now(),
+              chainId,
+              payload,
+            }
 
-          const txs = storeTransactions(address, chainId, [newTransaction])
-          setTransactions(txs)
-        })
-        .catch((err) => {
-          console.error(err)
-          rollbar((rollbar) => rollbar.error(err))
-          segment((analytics) =>
-            analytics.track('error', {
-              ...err,
-              message: err.message,
-              stack: err.stack,
-            })
-          )
-        })
-    }
-  }
+            const txs = storeTransactions(address, chainId, [newTransaction])
+            setTransactions(txs)
+          })
+          .catch((err) => {
+            console.error(err)
+            rollbar((rollbar) => rollbar.error(err))
+            segment((analytics) =>
+              analytics.track('error', {
+                ...err,
+                message: err.message,
+                stack: err.stack,
+              })
+            )
+          })
+      }
+    },
+    [transactions]
+  )
 
-  function clear() {
+  const clear = useCallback(() => {
     if (!address || !chainId) {
       return
     }
 
     setTransactions(initialState)
     clearTransactions(address, chainId)
-  }
+  }, [transactions])
 
-  return [transactions, { add, clear }] as const
+  const actions = useMemo(() => ({ add, clear }), [add, clear])
+
+  return [transactions, actions] as const
 }

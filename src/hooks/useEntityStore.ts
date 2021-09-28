@@ -1,6 +1,11 @@
 import { useState, useEffect } from 'react'
 import EntityStore, { EntityStoreState } from '../utils/EntityStore'
 
+/**
+ * @deprecated
+ * @param store
+ * @returns
+ */
 export default function useEntityStore<E extends object>(
   store: EntityStore<E>
 ) {
