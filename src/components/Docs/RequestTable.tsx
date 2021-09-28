@@ -27,7 +27,7 @@ export default React.memo(function RequestTable({
   response,
 }: RequestTableProps) {
   return (
-    <Table basic="very">
+    <Table basic="very" className="RequestTable">
       <Table.Header>
         <Table.Row>
           <Table.HeaderCell>Name</Table.HeaderCell>
@@ -200,12 +200,12 @@ const RequestTableTypeCell = React.memo(function ({
     )
   }
 
-  if ((definition as AjvNamedSchema).nullable) {
-    types.push('null')
-  }
-
   if ((definition as AjvNamedSchema).type) {
     types.push(toArray((definition as AjvNamedSchema).type).join(' | '))
+  }
+
+  if ((definition as AjvNamedSchema).nullable) {
+    types.push('null')
   }
 
   return (

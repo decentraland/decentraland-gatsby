@@ -71,3 +71,19 @@ export type AjvArraySchema = AjvOperatorSchema & {
 export type AjvBooleanSchema = AjvOperatorSchema & {
   type: 'boolean'
 }
+
+export const updateDatabaseRecordSchema: AjvObjectSchema = {
+  type: 'object',
+  properties: {
+    created_at: {
+      type: 'string',
+      format: 'data-time',
+      description: 'The time the record was created',
+    },
+    update_at: {
+      type: 'string',
+      format: 'data-time',
+      description: 'The moment the record was last updated',
+    },
+  },
+}
