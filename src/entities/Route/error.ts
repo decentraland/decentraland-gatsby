@@ -17,7 +17,7 @@ export default class RequestError extends Error {
     }
 
     if ((err as RequestError).code) {
-      result.code
+      result.code = (err as RequestError).code
     }
 
     if (Object.keys((err as RequestError).data || {}).length > 0) {
