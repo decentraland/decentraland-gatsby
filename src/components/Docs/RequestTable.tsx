@@ -13,6 +13,8 @@ import type {
 } from '../../entities/Schema/types'
 import { toArray } from './utils'
 
+import './RequestTable.css'
+
 export type RequestTableProps = {
   query?: AjvObjectSchema
   params?: AjvObjectSchema
@@ -193,15 +195,16 @@ const RequestTableTypeCell = React.memo(function ({
   let types: string[] = []
 
   if ((definition as AjvEnumSchema).enum) {
-    types.push(
-      (definition as AjvEnumSchema).enum
-        .map((value) => JSON.stringify(value))
-        .join(' | ')
-    )
+    types = [
+      ...types,
+      ...(definition as AjvEnumSchema).enum.map((value) =>
+        JSON.stringify(value)
+      ),
+    ]
   }
 
   if ((definition as AjvNamedSchema).type) {
-    types.push(toArray((definition as AjvNamedSchema).type).join(' | '))
+    types = [...types, ...toArray((definition as AjvNamedSchema).type)]
   }
 
   if ((definition as AjvNamedSchema).nullable) {
@@ -210,7 +213,13 @@ const RequestTableTypeCell = React.memo(function ({
 
   return (
     <Table.Cell>
-      {types.length > 0 && <Code inline> {types.join(' | ')} </Code>}
+      {types.map((t, i) => (
+        <>
+          <Code key={i} inline>
+            {t}
+          </Code>{' '}
+        </>
+      ))}
     </Table.Cell>
   )
 })

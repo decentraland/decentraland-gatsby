@@ -1,0 +1,10 @@
+table.ui.table.RequestTable th td,
+table.ui.table.RequestTable tr td {
+  padding: 1em 1em 1em 0;
+}
+
+table.ui.table.RequestTable th td:last-child,
+table.ui.table.RequestTable tr td:last-child {
+  width: 50%;
+  padding-right: 0;
+}
