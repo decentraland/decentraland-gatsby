@@ -16,15 +16,15 @@ import { toArray } from './utils'
 export type RequestTableProps = {
   query?: AjvObjectSchema
   params?: AjvObjectSchema
+  header?: AjvObjectSchema
   body?: AjvObjectSchema
-  response?: AjvObjectSchema
 }
 
 export default React.memo(function RequestTable({
   params,
   query,
   body,
-  response,
+  header,
 }: RequestTableProps) {
   return (
     <Table basic="very" className="RequestTable">
@@ -63,6 +63,19 @@ export default React.memo(function RequestTable({
               />
             )
           })}
+        {header &&
+          header.properties &&
+          Object.keys(header.properties).map((key) => {
+            return (
+              <RequestTableRow
+                key={`header::${key}`}
+                name={key}
+                position="header"
+                definition={header!.properties![key]}
+                required={header?.required}
+              />
+            )
+          })}
         {body &&
           body.properties &&
           Object.keys(body.properties).map((key) => {
@@ -73,19 +86,6 @@ export default React.memo(function RequestTable({
                 position="body"
                 definition={body!.properties![key]}
                 required={body?.required}
-              />
-            )
-          })}
-        {response &&
-          response.properties &&
-          Object.keys(response.properties).map((key) => {
-            return (
-              <RequestTableRow
-                key={`response::${key}`}
-                name={key}
-                position="response"
-                definition={response!.properties![key]}
-                required={response?.required}
               />
             )
           })}
