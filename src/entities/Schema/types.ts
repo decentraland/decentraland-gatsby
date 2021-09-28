@@ -39,7 +39,7 @@ export type AjvObjectSchema = AjvOperatorSchema & {
 }
 
 export type AjvNumberSchema = AjvOperatorSchema & {
-  type: 'number'
+  type: 'number' | 'integer'
   maximum?: number
   minimum?: number
   exclusiveMaximum?: number
