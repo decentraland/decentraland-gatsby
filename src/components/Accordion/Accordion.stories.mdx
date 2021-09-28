@@ -1,0 +1,102 @@
+import { useState, useMemo, useEffect } from 'react'
+import { Source, ArgsTable } from '@storybook/components'
+import {
+  Meta,
+  Story,
+  Preview,
+  Canvas,
+  Subtitle,
+} from '@storybook/addon-docs/blocks'
+import { Container } from 'decentraland-ui/dist/components/Container/Container'
+import { Stats } from 'decentraland-ui/dist/components/Stats/Stats'
+import { Card } from 'decentraland-ui/dist/components/Card/Card'
+import Accordion from './Accordion'
+import Divider from '../Text/Divider'
+import Paragraph from '../Text/Paragraph'
+import ImgFixed from '../Image/ImgFixed'
+import Land from '../../utils/api/Land.ts'
+import random from '../../utils/number/random'
+
+<Meta title="Components/Accordion" />
+
+## With content
+
+<Canvas isExpanded>
+  <Container>
+    <Accordion
+      title={<Stats title="Accordion sub title">Accordion title</Stats>}
+      description={
+        <Paragraph secondary small>
+          Accordion description
+        </Paragraph>
+      }
+    >
+      <ImgFixed
+        src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
+        dimension="wide"
+      />
+    </Accordion>
+  </Container>
+</Canvas>
+
+<Divider size="small" />
+
+## Without content
+
+<Canvas isExpanded>
+  <Container>
+    <Accordion
+      title={<Stats title="Accordion sub title">Accordion title</Stats>}
+      description={
+        <Paragraph secondary small>
+          Accordion description
+        </Paragraph>
+      }
+    />
+  </Container>
+</Canvas>
+
+<Divider size="small" />
+
+## With content and Card
+
+<Canvas isExpanded>
+  <Card style={{ width: '100%' }}>
+    <Card.Content>
+      <Accordion
+        title={<Stats title="Accordion sub title">Accordion title</Stats>}
+        description={
+          <Paragraph secondary small>
+            Accordion description
+          </Paragraph>
+        }
+      >
+        <ImgFixed
+          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
+          dimension="wide"
+        />
+      </Accordion>
+    </Card.Content>
+  </Card>
+</Canvas>
+
+<Divider size="small" />
+
+## Without content and Card
+
+<Canvas isExpanded>
+  <Card style={{ width: '100%' }}>
+    <Card.Content>
+      <Accordion
+        title={<Stats title="Accordion sub title">Accordion title</Stats>}
+        description={
+          <Paragraph secondary small>
+            Accordion description
+          </Paragraph>
+        }
+      />
+    </Card.Content>
+  </Card>
+</Canvas>
+
+<Divider size="small" />

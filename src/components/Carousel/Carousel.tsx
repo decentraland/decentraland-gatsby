@@ -1,7 +1,9 @@
-import React, { useEffect } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import usePatchState from '../../hooks/usePatchState'
 import TokenList from '../../utils/dom/TokenList'
 import './Carousel.css'
+import Next from './Next'
+import Prev from './Prev'
 
 export type CarouselProps = React.HTMLProps<HTMLDivElement> & {
   onMove?: (index: number) => void
@@ -15,36 +17,7 @@ export type CarouselState = {
   timer: number | null
 }
 
-export function Next() {
-  return (
-    <svg width="48" height="48" viewBox="0 0 48 48">
-      <g fill="none" fillRule="evenodd" opacity=".32">
-        <path d="M0 0H48V48H0z" />
-        <path
-          fill="#736E7D"
-          d="M34 24L21.242 36.457c-.742.724-1.944.724-2.686 0-.741-.724-.741-1.898 0-2.623L28.628 24l-10.072-9.834c-.741-.725-.741-1.899 0-2.623.742-.724 1.944-.724 2.686 0L34 24z"
-        />
-      </g>
-    </svg>
-  )
-}
-
-export function Prev() {
-  return (
-    <svg width="48" height="48" viewBox="0 0 48 48">
-      <g fill="none" fillRule="evenodd" opacity=".32">
-        <path d="M0 0H48V48H0z" transform="matrix(-1 0 0 1 48 0)" />
-        <path
-          fill="#736E7D"
-          d="M34 24L21.242 36.457c-.742.724-1.944.724-2.686 0-.741-.724-.741-1.898 0-2.623L28.628 24l-10.072-9.834c-.741-.725-.741-1.899 0-2.623.742-.724 1.944-.724 2.686 0L34 24z"
-          transform="matrix(-1 0 0 1 48 0)"
-        />
-      </g>
-    </svg>
-  )
-}
-
-export default function Carousel({
+export default React.memo(function Carousel({
   className,
   children,
   progress,
@@ -78,34 +51,36 @@ export default function Carousel({
     }
   }, [state.running, state.current, timeout])
 
-  function handleTimerOn() {
-    patchState({ running: true })
-  }
-
-  function handleTimerOff() {
+  const handleTimerOn = useCallback(() => patchState({ running: true }), [
+    state,
+  ])
+  const handleTimerOff = useCallback(() => {
     if (state.timer) {
       clearTimeout(state.timer)
     }
 
     patchState({ timer: null, running: false })
-  }
+  }, [state])
 
-  function handleMove(to: number) {
-    patchState({ current: to })
-    if (onMove) {
-      onMove(to)
-    }
-  }
+  const handleMove = useCallback(
+    (to: number) => {
+      patchState({ current: to })
+      if (onMove) {
+        onMove(to)
+      }
+    },
+    [state, onMove]
+  )
 
-  function handleNext() {
+  const handleNext = useCallback(() => {
     const next = state.current >= size - 1 ? 0 : state.current + 1
     handleMove(next)
-  }
+  }, [state, handleMove])
 
-  function handlePrev() {
+  const handlePrev = useCallback(() => {
     const prev = state.current <= 0 ? size - 1 : state.current - 1
     handleMove(prev)
-  }
+  }, [state, handleMove])
 
   return (
     <div {...props} className={TokenList.join(['Carousel', className])}>
@@ -171,4 +146,4 @@ export default function Carousel({
       )}
     </div>
   )
-}
+})
