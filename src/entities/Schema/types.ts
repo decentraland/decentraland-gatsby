@@ -83,7 +83,7 @@ export const updateDatabaseRecordSchema: AjvObjectSchema = {
     update_at: {
       type: 'string',
       format: 'data-time',
-      description: 'The moment the record was last updated',
+      description: 'The time the record was last updated',
     },
   },
 }
