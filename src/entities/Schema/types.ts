@@ -14,7 +14,7 @@ export type AjvOperatorSchema = {
   oneOf?: AjvSchema[]
   anyOf?: AjvSchema[]
   description?: string
-  default?: string
+  default?: any
   nullable?: boolean
 }
 
