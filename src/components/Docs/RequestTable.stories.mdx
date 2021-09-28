@@ -1,0 +1,99 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks'
+import Divider from '../Text/Divider'
+import RequestTable from './RequestTable'
+
+<Meta title="Components/Docs/RequestTable" />
+
+## RequestTable for Params
+
+<Canvas isExpanded>
+  <RequestTable
+    params={{
+      type: 'object',
+      required: ['str_required', 'enum_required'],
+      properties: {
+        str: {
+          type: 'string',
+          description: 'param description',
+        },
+        str_nullable: {
+          type: 'string',
+          nullable: true,
+          description: 'param description',
+        },
+        str_required: {
+          type: 'string',
+          description: 'param description',
+        },
+        str_default: {
+          type: 'string',
+          default: 'value',
+          description: 'param description',
+        },
+        arr_string: {
+          type: 'array',
+          description: 'param description',
+          items: {
+            type: 'string',
+            description: 'param description',
+          },
+        },
+        arr_number: {
+          type: 'array',
+          description: 'param description',
+          items: {
+            type: 'number',
+            description: 'param description',
+          },
+        },
+        arr_obj: {
+          type: 'array',
+          description: 'param description',
+          items: {
+            type: 'object',
+            description: 'param description',
+            properties: {
+              prop1: {
+                description: 'param description',
+                type: 'string',
+              },
+              prop2: {
+                description: 'param description',
+                type: 'number',
+              },
+            },
+          },
+        },
+        obj: {
+          type: 'object',
+          description: 'param description',
+          properties: {
+            prop1: {
+              description: 'param description',
+              type: 'string',
+            },
+            prop2: {
+              description: 'param description',
+              type: 'number',
+            },
+          },
+        },
+        enum: {
+          enum: [1, 2, 3, 'random'],
+          description: 'param description',
+        },
+        enum_required: {
+          enum: [1, 2, 3, 'random'],
+          description: 'param description',
+        },
+        enum_nullable: {
+          enum: [1, 2, 3, 'random'],
+          nullable: true,
+          description: 'param description',
+        },
+      },
+    }}
+  />
+</Canvas>
+
+<Divider size="small" />

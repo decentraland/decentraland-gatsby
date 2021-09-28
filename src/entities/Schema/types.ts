@@ -1,0 +1,68 @@
+export type AjvSchema = AjvEnumSchema | AjvOperatorSchema | AjvNamedSchema
+
+export type AjvEnumSchema = {
+  enum: any[]
+}
+
+export type AjvOperatorSchema = {
+  not?: AjvSchema[]
+  oneOf?: AjvSchema[]
+  anyOf?: AjvSchema[]
+  allOf?: AjvSchema[]
+  description?: string
+  default?: string
+}
+
+export type AjvNamedSchema =
+  | AjvObjectSchema
+  | AjvNumberSchema
+  | AjvStringSchema
+  | AjvArraySchema
+
+export type AjvObjectSchema = AjvOperatorSchema & {
+  type: 'object'
+  nullable?: boolean
+  additionalProperties?: boolean
+  maxProperties?: boolean
+  minProperties?: boolean
+  required?: string[]
+  properties?: Record<string, AjvSchema>
+  patternProperties?: Record<string, AjvSchema>
+  dependentRequired?: Record<string, string[]>
+  dependentSchemas?: Record<string, { properties: Record<string, AjvSchema> }>
+  unevaluatedProperties?: Record<string, string>
+  discriminator?: { propertyName: string }
+}
+
+export type AjvNumberSchema = AjvOperatorSchema & {
+  type: 'number'
+  nullable?: boolean
+  maximum?: number
+  minimum?: number
+  exclusiveMaximum?: number
+  exclusiveMinimum?: number
+  multipleOf?: number
+}
+
+export type AjvStringSchema = AjvOperatorSchema & {
+  type: 'string'
+  nullable?: boolean
+  format?: string
+  minLength?: number
+  maxLength?: number
+  pattern?: string
+}
+
+export type AjvArraySchema = AjvOperatorSchema & {
+  type: 'array'
+  nullable?: boolean
+  uniqueItems?: boolean
+  additionalItems?: boolean
+  unevaluatedItems?: boolean
+  maxItems?: number
+  minItems?: number
+  items?: AjvSchema | AjvSchema[]
+  contains?: AjvSchema | AjvSchema[]
+  maxContains?: number
+  minContains?: number
+}
