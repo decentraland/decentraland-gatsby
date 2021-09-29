@@ -5,7 +5,6 @@ import type {
   AjvArraySchema,
   AjvEnumSchema,
   AjvNamedSchema,
-  AjvNumberSchema,
   AjvObjectSchema,
   AjvOperatorSchema,
   AjvSchema,
