@@ -17,8 +17,7 @@ import RequestTable from './RequestTable'
           description: 'str description',
         },
         str_nullable: {
-          type: 'string',
-          nullable: true,
+          type: ['string', 'null'],
           description: 'str_nullable description',
         },
         str_required: {
@@ -109,8 +108,7 @@ import RequestTable from './RequestTable'
           description: 'enum_required description',
         },
         enum_nullable: {
-          enum: [1, 2, 3, 'random'],
-          nullable: true,
+          enum: [1, 2, 3, 'random', 'null'],
           description: 'enum_nullable description',
         },
         oneOf: {

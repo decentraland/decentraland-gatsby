@@ -15,14 +15,16 @@ export type AjvOperatorSchema = {
   anyOf?: AjvSchema[]
   description?: string
   default?: any
-  nullable?: boolean
 }
 
 export type AjvNamedSchema =
   | AjvObjectSchema
   | AjvNumberSchema
   | AjvStringSchema
+  | AjvBooleanSchema
+  | AjvNullSchema
   | AjvArraySchema
+  | AjvMultiSchmea
 
 export type AjvObjectSchema = AjvOperatorSchema & {
   type: 'object'
@@ -72,9 +74,33 @@ export type AjvBooleanSchema = AjvOperatorSchema & {
   type: 'boolean'
 }
 
+export type AjvNullSchema = AjvOperatorSchema & {
+  type: 'null'
+}
+
+export type AjvMultiSchmea = {
+  type: (
+    | AjvNullSchema['type']
+    | AjvObjectSchema['type']
+    | AjvNumberSchema['type']
+    | AjvStringSchema['type']
+    | AjvArraySchema['type']
+    | AjvBooleanSchema['type']
+  )[]
+} & Omit<AjvNullSchema, 'type'> &
+  Omit<AjvObjectSchema, 'type'> &
+  Omit<AjvNumberSchema, 'type'> &
+  Omit<AjvStringSchema, 'type'> &
+  Omit<AjvArraySchema, 'type'> &
+  Omit<AjvBooleanSchema, 'type'>
+
 export const updateDatabaseRecordSchema: AjvObjectSchema = {
   type: 'object',
   properties: {
+    created: {
+      format: 'data-time',
+      description: 'The time the record was created',
+    },
     created_at: {
       type: 'string',
       format: 'data-time',

@@ -207,10 +207,6 @@ const RequestTableTypeCell = React.memo(function ({
     types = [...types, ...toArray((definition as AjvNamedSchema).type)]
   }
 
-  if ((definition as AjvNamedSchema).nullable) {
-    types.push('null')
-  }
-
   return (
     <Table.Cell>
       {types.map((t, i) => (
