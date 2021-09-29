@@ -5,6 +5,9 @@ import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import Accordion from '../Accordion/Accordion'
 import Code from '../Text/Code'
 import Paragraph from '../Text/Paragraph'
+import MethodLabel from './MethodLabel'
+
+import './ApiCard.css'
 
 export type ApiCardProps = {
   id?: string
@@ -25,12 +28,12 @@ export type ApiCardProps = {
 
 export default React.memo(function ApiCard(props: ApiCardProps) {
   return (
-    <Card style={{ width: '100%' }}>
+    <Card className="ApiCard">
       <Card.Content>
         <Accordion
           id={props.id}
           title={
-            <Stats title={props.method || ''}>
+            <Stats title={(<MethodLabel method={props.method} />) as any}>
               <Header>
                 <Code inline>{props.path || ''}</Code>
                 {props.deprecated && ' (deprecated)'}

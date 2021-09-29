@@ -1,0 +1,10 @@
+.ui.card.ApiCard,
+.ui.cards > .card.ApiCard {
+  width: 100%;
+}
+
+.ui.card.ApiCard .ui.sub.header .ui.label {
+  font-weight: 500;
+  padding: 3px 0.5em;
+  margin-left: 0;
+}

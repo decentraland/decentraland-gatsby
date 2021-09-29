@@ -1,0 +1,39 @@
+import { Meta, Canvas } from '@storybook/addon-docs/blocks'
+import Paragraph from '../Text/Paragraph'
+import Divider from '../Text/Divider'
+import ApiCard from './ApiCard'
+
+<Meta title="Components/Docs/ApiCard" />
+
+## ApiCard endpoint and method
+
+<Canvas isExpanded>
+  <ApiCard method="GET" path="/api/resource" />
+  <ApiCard method="POST" path="/api/resource" />
+  <ApiCard method="PUT" path="/api/resource" />
+  <ApiCard method="PATCH" path="/api/resource" />
+  <ApiCard method="DELETE" path="/api/resource" />
+  <ApiCard method="HEAD" path="/api/resource" />
+  <ApiCard method="OPTIONS" path="/api/resource" />
+  <ApiCard method="Random" path="/api/resource" />
+</Canvas>
+
+<Divider size="small" />
+
+## ApiCard with description
+
+<Canvas isExpanded>
+  <ApiCard method="GET" path="/api/resource" description="Get resource data" />
+</Canvas>
+
+<Divider size="small" />
+
+## ApiCard with with content
+
+<Canvas isExpanded>
+  <ApiCard method="GET" path="/api/resource" description="Get resource data">
+    <Paragraph>With content</Paragraph>
+  </ApiCard>
+</Canvas>
+
+<Divider size="small" />
