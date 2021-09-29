@@ -1,15 +1,31 @@
 import React from 'react'
-import Code from '../Text/Code'
+import Paragraph from '../Text/Paragraph'
+import RequestTable, { RequestTableProps } from './RequestTable'
+import SubTitle from '../Text/SubTitle'
+import Blockquote from '../Text/Blockquote'
 
-export type ApiCodeProps = {
-  note?: React.ReactNode
-  data?: any
-}
+export type ApiDetailsProps = {
+  title?: string
+  description?: string
+  authorization?: boolean
+} & RequestTableProps
 
-export default React.memo(function ApiCode(props: ApiCodeProps) {
+export default React.memo(function ApiDetails(props: ApiDetailsProps) {
   return (
-    <Code note={props.note} language="json">
-      {JSON.stringify(props.data, null, 2)}
-    </Code>
+    <>
+      {props.title && <SubTitle>{props.title}</SubTitle>}
+      {props.description && <Paragraph small>props.description</Paragraph>}
+      {props.authorization && (
+        <Blockquote>
+          <Paragraph small>Authentication is required</Paragraph>
+        </Blockquote>
+      )}
+      <RequestTable
+        query={props.query}
+        body={props.body}
+        header={props.header}
+        params={props.params}
+      />
+    </>
   )
 })
