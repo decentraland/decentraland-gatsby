@@ -8,9 +8,18 @@ import Paragraph from '../Text/Paragraph'
 
 export type ApiCardProps = {
   id?: string
-  method?: 'GET' | 'OPTIONS' | 'HEAD' | 'POST' | 'PUT' | 'PATCH' | 'DELETE'
+  method?:
+    | 'GET'
+    | 'OPTIONS'
+    | 'HEAD'
+    | 'POST'
+    | 'PUT'
+    | 'PATCH'
+    | 'DELETE'
+    | string
   path?: string
   description?: string
+  deprecated?: boolean
   children?: React.ReactNode
 }
 
@@ -24,6 +33,7 @@ export default React.memo(function ApiCard(props: ApiCardProps) {
             <Stats title={props.method || ''}>
               <Header>
                 <Code inline>{props.path || ''}</Code>
+                {props.deprecated && ' (deprecated)'}
               </Header>
             </Stats>
           }

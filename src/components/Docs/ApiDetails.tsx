@@ -7,6 +7,7 @@ import Blockquote from '../Text/Blockquote'
 export type ApiDetailsProps = {
   title?: string
   description?: string
+  deprecated?: boolean
   authorization?: 'required' | 'optional' | boolean
   cors?: 'site' | 'decentraland' | '*'
 } & RequestTableProps
@@ -33,6 +34,11 @@ export default React.memo(function ApiDetails(props: ApiDetailsProps) {
               'Accessible from decentraland domains'}
             {props.cors === '*' && 'Publicly Accessible'}
           </Paragraph>
+        </Blockquote>
+      )}
+      {props.deprecated && (
+        <Blockquote danger>
+          <Paragraph small>Deprecated</Paragraph>
         </Blockquote>
       )}
       <RequestTable
