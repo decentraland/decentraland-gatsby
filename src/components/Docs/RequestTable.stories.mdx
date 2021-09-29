@@ -4,7 +4,7 @@ import RequestTable from './RequestTable'
 
 <Meta title="Components/Docs/RequestTable" />
 
-## RequestTable for Params
+## RequestTable for String
 
 <Canvas isExpanded>
   <RequestTable
@@ -15,6 +15,26 @@ import RequestTable from './RequestTable'
         str: {
           type: 'string',
           description: 'str description',
+        },
+        str_uuid: {
+          type: 'string',
+          format: 'uuid',
+          description: 'uuid description',
+        },
+        str_address: {
+          type: 'string',
+          format: 'address',
+          description: 'address description',
+        },
+        str_date: {
+          type: 'string',
+          format: 'date',
+          description: 'date description',
+        },
+        str_date_time: {
+          type: 'string',
+          format: 'date-time',
+          description: 'date-time description',
         },
         str_nullable: {
           type: ['string', 'null'],
@@ -29,20 +49,109 @@ import RequestTable from './RequestTable'
           default: 'value',
           description: 'str_default description',
         },
+        str_restrictions: {
+          type: 'string',
+          description: 'str_default description',
+          minLength: 1,
+          maxLength: 100,
+          pattern: '[a-z0-9]',
+        },
+      },
+    }}
+  />
+</Canvas>
+
+<Divider size="small" />
+
+## RequestTable for Number
+
+<Canvas isExpanded>
+  <RequestTable
+    params={{
+      type: 'object',
+      required: ['num_required', 'int_required'],
+      properties: {
+        num: {
+          type: 'number',
+          description: 'num description',
+        },
+        int: {
+          type: 'integer',
+          description: 'int description',
+        },
+        num_required: {
+          type: 'number',
+          description: 'num requried description',
+        },
+        num_nullable: {
+          type: ['number', 'null'],
+          description: 'num requried description',
+        },
+        num_restrictios: {
+          type: 'number',
+          description: 'num requried description',
+          maximum: 1,
+          minimum: 100,
+          exclusiveMaximum: 1,
+          exclusiveMinimum: 100,
+          multipleOf: 1,
+        },
+      },
+    }}
+  />
+</Canvas>
+
+<Divider size="small" />
+
+## RequestTable for Boolean
+
+<Canvas isExpanded>
+  <RequestTable
+    params={{
+      type: 'object',
+      required: ['bool_required'],
+      properties: {
+        bool: {
+          type: 'boolean',
+          description: 'bool description',
+        },
+        bool_required: {
+          type: 'boolean',
+          description: 'bool_required description',
+        },
+        bool_nullable: {
+          type: ['boolean', 'null'],
+          description: 'bool_required description',
+        },
+      },
+    }}
+  />
+</Canvas>
+
+<Divider size="small" />
+
+## RequestTable for Array
+
+<Canvas isExpanded>
+  <RequestTable
+    params={{
+      type: 'object',
+      required: ['arr_required'],
+      properties: {
+        arr: {
+          type: 'array',
+          description: 'arr_string description',
+        },
+        arr_required: {
+          type: 'array',
+          description: 'arr_boolean description',
+        },
         arr_string: {
           type: 'array',
           description: 'arr_string description',
           items: {
             type: 'string',
             description: 'arr_string[] description',
-          },
-        },
-        arr_number: {
-          type: 'array',
-          description: 'arr_number description',
-          items: {
-            type: 'number',
-            description: 'arr_number[] description',
           },
         },
         arr_obj: {
@@ -63,7 +172,34 @@ import RequestTable from './RequestTable'
             },
           },
         },
+      },
+    }}
+  />
+</Canvas>
+
+<Divider size="small" />
+
+## RequestTable for Object
+
+<Canvas isExpanded>
+  <RequestTable
+    params={{
+      type: 'object',
+      required: ['obj_required'],
+      properties: {
         obj: {
+          type: 'object',
+          description: 'obj description',
+        },
+        obj_required: {
+          type: 'object',
+          description: 'obj description',
+        },
+        obj_nullable: {
+          type: ['object', 'null'],
+          description: 'obj description',
+        },
+        obj_deep: {
           type: 'object',
           description: 'obj description',
           properties: {
@@ -77,6 +213,21 @@ import RequestTable from './RequestTable'
             },
           },
         },
+      },
+    }}
+  />
+</Canvas>
+
+<Divider size="small" />
+
+## RequestTable for Enum
+
+<Canvas isExpanded>
+  <RequestTable
+    params={{
+      type: 'object',
+      required: ['enum_required'],
+      properties: {
         enum: {
           enum: [
             1,
@@ -111,6 +262,21 @@ import RequestTable from './RequestTable'
           enum: [1, 2, 3, 'random', 'null'],
           description: 'enum_nullable description',
         },
+      },
+    }}
+  />
+</Canvas>
+
+<Divider size="small" />
+
+## RequestTable for OneOf
+
+<Canvas isExpanded>
+  <RequestTable
+    params={{
+      type: 'object',
+      required: [],
+      properties: {
         oneOf: {
           description: 'oneOf description',
           oneOf: [

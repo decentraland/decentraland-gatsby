@@ -204,7 +204,17 @@ const RequestTableTypeCell = React.memo(function ({
   }
 
   if ((definition as AjvNamedSchema).type) {
-    types = [...types, ...toArray((definition as AjvNamedSchema).type)]
+    const newTypes = toArray((definition as AjvNamedSchema).type).map(
+      (type) => {
+        if (type === 'string' && (definition as AjvStringSchema).format) {
+          return (definition as AjvStringSchema).format!
+        }
+
+        return type
+      }
+    )
+
+    types = [...types, ...newTypes]
   }
 
   return (
@@ -220,6 +230,26 @@ const RequestTableTypeCell = React.memo(function ({
   )
 })
 
+const restrictionProps = [
+  'default',
+  'minimum',
+  'maximum',
+  'exclusiveMinimum',
+  'exclusiveMaximum',
+  'multipleOf',
+  'minLength',
+  'maxLength',
+  'pattern',
+  'uniqueItems',
+  'additionalItems',
+  'unevaluatedItems',
+  'minItems',
+  'maxItems',
+  'minContains',
+  'maxContains',
+  'additionalProperties',
+]
+
 const RequestTableDescriptionCell = React.memo(function ({
   required,
   definition,
@@ -227,11 +257,31 @@ const RequestTableDescriptionCell = React.memo(function ({
   required: boolean
   definition: AjvSchema
 }) {
+  const restrictions: string[] = []
+
+  if (required) {
+    restrictions.push('required')
+  }
+
+  for (const prop of restrictionProps) {
+    if (definition[prop] !== undefined) {
+      restrictions.push(`${prop}: ${JSON.stringify(definition[prop])}`)
+    }
+  }
+
   return (
     <Table.Cell>
-      {(definition as AjvNamedSchema).description || ''}
-      {required ? ' [required]' : ''}
-      {(definition as AjvNamedSchema).default !== undefined &&
+      <span>
+        {(definition as AjvNamedSchema).description || ''}
+        {restrictions.map((restriction) => (
+          <>
+            {' '}
+            <Code inline>{restriction}</Code>
+          </>
+        ))}
+      </span>
+      {/* {required ? ' [required]' : ''} */}
+      {/* {(definition as AjvNamedSchema).default !== undefined &&
         ` [default: ${JSON.stringify((definition as AjvNamedSchema).default)}]`}
       {(definition as AjvNumberSchema).minimum !== undefined &&
         ` [minimum: ${JSON.stringify(
@@ -253,8 +303,6 @@ const RequestTableDescriptionCell = React.memo(function ({
         ` [multipleOf: ${JSON.stringify(
           (definition as AjvNumberSchema).multipleOf
         )}]`}
-      {(definition as AjvStringSchema).format !== undefined &&
-        ` [format: ${JSON.stringify((definition as AjvStringSchema).format)}]`}
       {(definition as AjvStringSchema).minLength !== undefined &&
         ` [minLength: ${JSON.stringify(
           (definition as AjvStringSchema).minLength
@@ -298,7 +346,7 @@ const RequestTableDescriptionCell = React.memo(function ({
       {(definition as AjvObjectSchema).additionalProperties !== undefined &&
         ` [additionalProperties: ${JSON.stringify(
           (definition as AjvObjectSchema).additionalProperties
-        )}]`}
+        )}]`} */}
     </Table.Cell>
   )
 })
