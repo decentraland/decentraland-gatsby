@@ -31,7 +31,6 @@ export default function validate<R extends {}>(
       'Invalid data was sent to the server',
       RequestError.BadRequest,
       {
-        code: 'bad_request',
         errors: [...validator.errors],
         messages,
         body,

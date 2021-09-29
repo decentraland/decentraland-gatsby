@@ -10,6 +10,19 @@ export default class RequestError extends Error {
   static NotImplemented = 501
   static ServiceUnavailable = 503
 
+  static Code = {
+    [400]: 'bad_request',
+    [401]: 'unauthorized',
+    [403]: 'forbidden',
+    [404]: 'not_found',
+    [413]: 'payload_too_large',
+    [418]: 'i_am_a_teapot',
+    [429]: 'too_many_requests',
+    [500]: 'internal_server_error',
+    [501]: 'not_implemented',
+    [503]: 'service_unavailable',
+  }
+
   static toJSON(err: Error | RequestError) {
     const result: Record<string, any> = {
       ok: false,
@@ -18,6 +31,14 @@ export default class RequestError extends Error {
 
     if ((err as RequestError).code) {
       result.code = (err as RequestError).code
+    }
+
+    if (
+      !(err as RequestError).code &&
+      (err as RequestError).statusCode &&
+      RequestError[(err as RequestError).statusCode!]
+    ) {
+      result.code = RequestError[(err as RequestError).statusCode!]
     }
 
     if (Object.keys((err as RequestError).data || {}).length > 0) {
