@@ -1,4 +1,6 @@
-import Ajv from 'ajv'
+import type Ajv from 'ajv'
+import { AjvObjectSchema } from '../Schema/types'
+import defaultAjv from '../Schema/index'
 import RequestError from './error'
 
 export default function validate<R extends {}>(
@@ -38,4 +40,14 @@ export default function validate<R extends {}>(
   }
 
   return body as R
+}
+
+export function createValidator<R extends {}>(
+  schema: AjvObjectSchema,
+  ajv: Ajv.Ajv = defaultAjv
+) {
+  const validator = ajv.compile(schema)
+  return function (body: Record<string, any> = {}): R {
+    return validate(validator, body) as R
+  }
 }
