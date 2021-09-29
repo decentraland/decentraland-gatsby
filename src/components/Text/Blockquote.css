@@ -3,3 +3,15 @@
   padding: 0 1em;
   border-left: 0.5em solid var(--divider);
 }
+
+.dg.Blockquote--primary {
+  border-color: var(--primary);
+}
+
+.dg.Blockquote--danger {
+  border-color: var(--danger);
+}
+
+.dg.Blockquote--error {
+  border-color: var(--error);
+}
