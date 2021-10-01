@@ -1,5 +1,5 @@
 import { Request } from 'express'
-import { getConfiguration } from 'decentraland-connect/dist/configuration'
+import { ChainId } from '@dcl/schemas'
 import {
   AuthIdentity,
   AuthChain,
@@ -11,13 +11,9 @@ import {
   parseEmphemeralPayload,
 } from 'dcl-crypto/dist/Authenticator'
 import { fromBase64 } from '../../utils/string/base64'
-import { HttpProvider } from 'web3x/providers'
 import RequestError from '../Route/error'
 import { middleware } from '../Route/handle'
 import logger from '../Development/logger'
-import once from '../../utils/function/once'
-import { ChainId } from '../../utils/loader/ensBalance'
-import Catalyst from '../../utils/api/Catalyst'
 import {
   AUTHORIZATION_HEADER,
   AUTH_CHAIN_HEADER_PREFIX,
@@ -25,6 +21,7 @@ import {
   AUTH_TIMESTAMP_HEADER,
 } from '../../utils/api/API.types'
 import Time from '../../utils/date/Time'
+import { getProvider } from '../Blockchain/provider'
 
 export type WithAuth<R extends Request = Request> = R & {
   auth: string | null
@@ -34,14 +31,6 @@ export type WithAuth<R extends Request = Request> = R & {
 export type AuthOptions = {
   optional?: boolean
 }
-
-const getProvider = once(() => {
-  const configuration = getConfiguration()
-  const provider = new HttpProvider(
-    configuration.wallet_connect.urls[ChainId.ETHEREUM_MAINNET]
-  )
-  return provider
-})
 
 function checkAuthorizationHeader(options: AuthOptions = {}) {
   return async function (req: Request) {
@@ -90,7 +79,7 @@ function checkAuthorizationHeader(options: AuthOptions = {}) {
       result = await Authenticator.validateSignature(
         ephemeralAddress,
         authChain,
-        getProvider()
+        getProvider({ chainId: ChainId.ETHEREUM_MAINNET })
       )
     } catch (error) {
       logger.error(error)
@@ -140,16 +129,17 @@ function checkChainHeader(options: AuthOptions = {}) {
     const payload = [method, path, rawTimestamp, rawMetadata]
       .join(':')
       .toLowerCase()
-    const verification = await Catalyst.get().verifySignature(
-      authChain,
-      payload
-    )
 
-    if (
-      !verification.valid ||
-      verification.ownerAddress.toLowerCase() !== ownerAddress
-    ) {
-      throw new RequestError('Invalid signature', RequestError.Forbidden)
+    const verification = await Authenticator.validateSignature(
+      payload,
+      authChain,
+      getProvider({ chainId: ChainId.ETHEREUM_MAINNET })
+    )
+    if (!verification.ok) {
+      throw new RequestError(
+        `Invalid signature: ${verification}`,
+        RequestError.Forbidden
+      )
     }
 
     const timestamp = Number(rawTimestamp)
