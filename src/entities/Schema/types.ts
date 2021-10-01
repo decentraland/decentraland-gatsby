@@ -94,22 +94,28 @@ export type AjvMultiSchmea = {
   Omit<AjvArraySchema, 'type'> &
   Omit<AjvBooleanSchema, 'type'>
 
-export const updateDatabaseRecordSchema: AjvObjectSchema = {
+export const apiResultSchema = (data: AjvSchema): AjvObjectSchema => ({
   type: 'object',
   properties: {
-    created: {
-      format: 'data-time',
-      description: 'The time the record was created',
+    ok: {
+      type: 'boolean',
+      description: 'Define where the request was completed',
     },
-    created_at: {
-      type: 'string',
-      format: 'data-time',
-      description: 'The time the record was created',
-    },
-    update_at: {
-      type: 'string',
-      format: 'data-time',
-      description: 'The time the record was last updated',
-    },
+    data,
   },
-}
+})
+
+export const timePropertiesSchema = (
+  name: string = 'record'
+): Record<'created_at' | 'update_at', AjvSchema> => ({
+  created_at: {
+    type: 'string',
+    format: 'data-time',
+    description: `The time the ${name} was created`,
+  },
+  update_at: {
+    type: 'string',
+    format: 'data-time',
+    description: `The time the ${name} was last updated`,
+  },
+})
