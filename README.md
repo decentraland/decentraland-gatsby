@@ -94,6 +94,33 @@ Run the setup command
   tsconfig.json   ........ tsconfig default configuration
 ```
 
+Environment variables
+
+```.env
+# ethereum addresses (separated by ,) that return true
+# when you use src/entities/Auth/isAdmin.ts
+ADMIN_ADDRESSES=
+
+# infura keys (separated by ,) to create providers
+# with src/entities/Blockchain/provider#getProvider
+INFURA_KEYS=
+
+# connection string to the database
+CONNECTION_STRING=
+
+# token bearer token that protects `/metrics`
+PROMETHEUS_BEARER_TOKEN=
+
+# build data, exposed at `/status`
+IMAGE=
+
+# default endpoint for utils/api/Catalyst
+GATSBY_CATALYST_API=
+
+# default endpoint for utils/api/Land
+GATSBY_LAND_API=
+```
+
 ## Project commands
 
 Development
