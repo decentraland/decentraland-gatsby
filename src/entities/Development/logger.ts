@@ -1,9 +1,15 @@
 export class Logger {
+  constructor(private data: Record<string, any> = {}) {}
+
+  extend(data: Record<string, any> = {}) {
+    return new Logger({ ...this.data, ...data })
+  }
+
   private write(log: string, data: Record<string, any> = {}) {
     if (process.env.NODE_ENV === 'production') {
-      console.log(JSON.stringify({ log, ...data }))
+      console.log(JSON.stringify({ log, ...data, ...this.data }))
     } else {
-      console.log(log, JSON.stringify({ ...data }))
+      console.log(log, JSON.stringify({ ...data, ...this.data }))
     }
   }
 
