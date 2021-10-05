@@ -3,7 +3,8 @@ import cluster from 'cluster'
 import { Application } from 'express'
 import { cpus, networkInterfaces } from 'os'
 import { yellow, green } from 'colors/safe'
-import { ServiceStartHandler } from './types'
+import { emptyServiceInitializer, ServiceStartHandler } from './types'
+import { clusterInitializer } from '../Cluster/utils'
 
 export const DEFAULT_PORT = 4000
 export const DEFAULT_HOST = '0.0.0.0'
@@ -69,12 +70,22 @@ export const serverInitializer = (
   port: number | string = DEFAULT_PORT,
   host: string = DEFAULT_HOST
 ): ServiceStartHandler => {
-  return async () => {
-    if (process.env.HTTP === 'false') {
-      return async () => {}
-    }
+  if (process.env.HTTP === 'false') {
+    return emptyServiceInitializer()
+  }
 
-    if (process.env.HTTP_CLUSTER !== 'true') {
+  return clusterInitializer(
+    process.env.CLUSTER === 'true' || process.env.HTTP_CLUSTER === 'true',
+    {
+      CLUSTER: 'false',
+      HTTP_CLUSTER: 'false',
+      HTTP: 'true',
+      JOBS_CLUSTER: 'false',
+      JOBS: 'false',
+      TASKS_CLUSTER: 'false',
+      TASKS: 'false',
+    },
+    async () => {
       const server = await listen(app, port, host)
 
       return () =>
@@ -84,28 +95,6 @@ export const serverInitializer = (
             err ? reject(err) : resolve()
           })
         })
-    } else {
-      const workers = cpus().map(() => {
-        console.log(`forking http server...`)
-        return cluster.fork({
-          ...process.env,
-          HTTP_CLUSTER: 'false',
-          JOBS: 'false',
-        })
-      })
-
-      return async () =>
-        Promise.all(
-          workers.map(async (worker) => {
-            const waitForClose = new Promise((resolve) => {
-              worker.on('exit', () => resolve(null))
-            })
-
-            worker.kill()
-
-            return waitForClose
-          })
-        )
     }
-  }
+  )
 }

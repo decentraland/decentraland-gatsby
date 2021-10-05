@@ -1,0 +1,166 @@
+import { v4 as uuid } from 'uuid'
+import Time from '../../utils/date/Time'
+import random from '../../utils/number/random'
+import TaskModel from './model'
+import { Task } from './Task'
+import { CreateTaskAttributes, TaskAttributes } from './types'
+import timeout from './task/timeout'
+import globalLogger, { Logger } from '../Development/logger'
+
+type TaskManagerOptions = {
+  concurrency: number
+  interval: number
+}
+
+export type TaskRunContext<P extends {} = {}> = {
+  id: string
+  name: string
+  runner: string
+  payload: P
+  logger: Logger
+}
+
+export default class TaskManager {
+  private _id = uuid()
+  private _running = false
+  private _concurrency = 5
+  private _tasks = new Map<string, Task>([[timeout.name, timeout]])
+  private _interval: ReturnType<typeof setInterval> | null
+  private _intervalTime = Time.Second * 15
+  private _logger: Logger
+
+  constructor() {
+    this._logger = globalLogger.extend({ runner: this._id })
+  }
+
+  get id() {
+    return this._id
+  }
+
+  get running() {
+    return this._running
+  }
+
+  get logger() {
+    return this._logger
+  }
+
+  set<K extends keyof TaskManagerOptions>(
+    option: K,
+    value: TaskManagerOptions[K]
+  ) {
+    switch (option) {
+      case 'concurrency':
+        this._concurrency = value
+        break
+      case 'interval':
+        this._intervalTime = value
+        break
+    }
+
+    return this
+  }
+
+  use(task: Task) {
+    if (this._tasks.has(task.name) && this._tasks.get(task.name) !== task) {
+      throw new Error(`Duplicated task name "${task.name}"`)
+    }
+
+    this._tasks.set(task.name, task)
+    return this
+  }
+
+  async start() {
+    if (!this._running) {
+      this._running = true
+
+      setTimeout(async () => {
+        if (!this._running) {
+          return
+        }
+
+        const tasks = Array.from(this._tasks.values())
+        await TaskModel.initialize(tasks)
+        this.runTasksCycle()
+      }, random(0, this._intervalTime))
+    }
+  }
+
+  async stop() {
+    if (this._running) {
+      this._running = false
+
+      if (this._interval) {
+        clearInterval(this._interval)
+      }
+    }
+  }
+
+  async runTasksCycle() {
+    if (!this._running) {
+      return
+    }
+
+    const start = Date.now()
+
+    try {
+      await this.runTasks()
+    } catch (err) {}
+
+    const nextCycle = this._intervalTime - (Date.now() - start)
+    this._interval = setTimeout(
+      () => this.runTasksCycle(),
+      Math.max(nextCycle, 100)
+    )
+  }
+
+  async runTasks() {
+    if (!this._running) {
+      return
+    }
+
+    const names = Array.from(this._tasks.keys())
+    const tasks = await TaskModel.lock({
+      id: this.id,
+      names,
+      limit: this._concurrency,
+    })
+    const results = await Promise.all(
+      tasks.map(async (task) => this.runTask(task))
+    )
+
+    await TaskModel.complete(tasks)
+    let newTasks: CreateTaskAttributes[] = []
+    for (const result of results) {
+      newTasks = [...newTasks, ...result]
+    }
+
+    await TaskModel.schedule(newTasks)
+  }
+
+  async runTask(task: TaskAttributes) {
+    if (!this._running) {
+      return []
+    }
+
+    const handle = this._tasks.get(task.name)!
+    const reschedules = await handle.run({
+      id: task.id,
+      payload: task.payload,
+      runner: this._id,
+      logger: this._logger,
+    })
+
+    const repeat = handle.repeateAt()
+    if (repeat !== null) {
+      const timestamp = typeof repeat === 'number' ? repeat : repeat.getTime()
+      reschedules.push({
+        name: handle.name,
+        payload: {},
+        run_at: new Date(timestamp),
+      })
+    }
+
+    return reschedules
+  }
+}

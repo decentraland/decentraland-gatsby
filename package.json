@@ -16,6 +16,7 @@
     "semantic-release": "semantic-release",
     "build-storybook": "build-storybook --quiet && cp ./static/* ./storybook-static && mv ./storybook-static ./public",
     "husky-setup": "husky install",
+    "migrate": "DOTENV_CONFIG_PATH=.env.development ts-node -r dotenv/config ./node_modules/node-pg-migrate/bin/node-pg-migrate -j ts -m src/migrations -d CONNECTION_STRING",
     "precommit": "lint-staged --config .husky/pre-commit.js"
   },
   "repository": {

@@ -1,8 +1,6 @@
 import JobContext from './context'
 
-export type Job<P extends object = {}> = ((
-  ctx: JobContext<P>
-) => Promise<any>) & {
+export type Job<P extends {} = {}> = ((ctx: JobContext<P>) => Promise<any>) & {
   jobName?: string
 }
 

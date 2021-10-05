@@ -17,6 +17,7 @@ export default class JobManager {
   pool: Pool<any>
   interval: NodeJS.Timeout
   initialInterval: NodeJS.Timeout
+  queue: Job[]
   running: boolean = false
 
   constructor(settings: JobSettings) {
@@ -93,6 +94,10 @@ export default class JobManager {
   }
 
   async check() {
+    if (!this.running) {
+      return
+    }
+
     const jobs = await this.getModel().getPending()
     const pendingJobs = jobs.filter((job) => !this.runningJobs.has(job.id))
 
@@ -107,8 +112,14 @@ export default class JobManager {
     await this.getModel().updatePayload(id, payload)
   }
 
-  schedule = async (handler: string, date: Date, payload: object = {}) => {
-    const job = await this.getModel().schedule(uuid(), handler, date, payload)
+  schedule = async (
+    handler: string | Job<any>,
+    date: Date,
+    payload: object = {}
+  ) => {
+    const name =
+      typeof handler === 'string' ? handler : handler.jobName || handler.name
+    const job = await this.getModel().schedule(uuid(), name, date, payload)
 
     if (this.running && job.run_at.getTime() < Date.now()) {
       this.run(job.id, job.name, job.payload)
@@ -136,6 +147,10 @@ export default class JobManager {
     payload: any,
     job: Job<any>
   ): Promise<void> {
+    if (!this.running) {
+      return
+    }
+
     const context = new JobContext(
       id,
       handler || job.name,
