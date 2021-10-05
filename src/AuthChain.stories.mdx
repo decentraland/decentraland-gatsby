@@ -1,0 +1,277 @@
+import { ChainId } from '@dcl/schemas'
+import { useState, useMemo, useEffect } from 'react'
+import { Source, ArgsTable } from '@storybook/components'
+import { Meta, Story, Preview } from '@storybook/addon-docs/blocks'
+import Label from 'semantic-ui-react/dist/commonjs/elements/Label'
+import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
+import { ProviderType } from 'decentraland-connect/dist/types'
+import { Table } from 'decentraland-ui/dist/components/Table/Table'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Field } from 'decentraland-ui/dist/components/Field/Field'
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import { Card } from 'decentraland-ui/dist/components/Card/Card'
+import { Stats } from 'decentraland-ui/dist/components/Stats/Stats'
+import { Args } from './components/Storybook/utils'
+import Container from './components/Storybook/Container'
+import Textarea from './components/Form/Textarea'
+import Blockquote from './components/Text/Blockquote'
+import Paragraph from './components/Text/Paragraph'
+import Divider from './components/Text/Divider'
+import Link from './components/Text/Link'
+import Code from './components/Text/Code'
+import Avatar from './components/User/Avatar'
+import useAsyncState from './hooks/useAsyncState'
+import useAsyncTask from './hooks/useAsyncTask'
+import useAuth from './hooks/useAuth'
+import { signPayload } from './utils/auth/identify'
+import { getCurrentIdentity } from './utils/auth/storage'
+import {
+  AUTH_CHAIN_HEADER_PREFIX,
+  AUTH_TIMESTAMP_HEADER,
+  AUTH_METADATA_HEADER,
+} from './utils/api/API.types'
+
+<Meta title="Development/AuthChain" />
+
+export function NoAuthMessage() {
+  return (
+    <Grid.Row>
+      <Grid.Column tablet="16">
+        <Blockquote>
+          <Paragraph small secondary>
+            This feature requires to login, try to connect using the{' '}
+            <Link href="/?path=/story/hooks-useauth--page#connect-preview">
+              `useAuth`
+            </Link>{' '}
+            hook.
+          </Paragraph>
+        </Blockquote>
+      </Grid.Column>
+    </Grid.Row>
+  )
+}
+
+export function AuthChainTable({ chain, timestamp, metadata }) {
+  return (
+    <Grid.Row>
+      <Grid.Column mobile="16">
+        <Table basic="very">
+          <Table.Header>
+            <Table.Row>
+              <Table.HeaderCell>Header</Table.HeaderCell>
+              <Table.HeaderCell>Value</Table.HeaderCell>
+            </Table.Row>
+          </Table.Header>
+          <Table.Body>
+            {!chain && (
+              <Table.Row>
+                <Table.Cell style={{ width: '15em' }}>
+                  <Header sub>NO HEADER</Header>
+                </Table.Cell>
+                <Table.Cell>
+                  <Header sub>NO HEADER</Header>
+                </Table.Cell>
+              </Table.Row>
+            )}
+            {chain &&
+              chain.map((item, i) => (
+                <Table.Row>
+                  <Table.Cell style={{ width: '15em' }}>
+                    <Paragraph small secondary>
+                      {AUTH_CHAIN_HEADER_PREFIX + i}
+                    </Paragraph>
+                  </Table.Cell>
+                  <Table.Cell>
+                    <Paragraph small style={{ wordBreak: 'break-all' }}>
+                      {JSON.stringify(item)}
+                    </Paragraph>
+                  </Table.Cell>
+                </Table.Row>
+              ))}
+            {timestamp && (
+              <Table.Row>
+                <Table.Cell style={{ width: '15em' }}>
+                  <Paragraph small secondary>
+                    {AUTH_TIMESTAMP_HEADER}
+                  </Paragraph>
+                </Table.Cell>
+                <Table.Cell>
+                  <Paragraph small style={{ wordBreak: 'break-all' }}>
+                    {JSON.stringify(timestamp)}
+                  </Paragraph>
+                </Table.Cell>
+              </Table.Row>
+            )}
+            {metadata && (
+              <Table.Row>
+                <Table.Cell style={{ width: '15em' }}>
+                  <Paragraph small secondary>
+                    {AUTH_METADATA_HEADER}
+                  </Paragraph>
+                </Table.Cell>
+                <Table.Cell>
+                  <Paragraph small style={{ wordBreak: 'break-all' }}>
+                    {JSON.stringify(metadata)}
+                  </Paragraph>
+                </Table.Cell>
+              </Table.Row>
+            )}
+          </Table.Body>
+        </Table>
+      </Grid.Column>
+    </Grid.Row>
+  )
+}
+
+## Auth Chain Generator
+
+<Divider size="small" />
+
+export function AuthChainStandar() {
+  const [account] = useAuth()
+  const [state, setState] = useState({
+    method: 'GET',
+    path: '/path/to/resource',
+    metadata: '{}',
+  })
+  const [value, setValue] = useState({})
+  const [signing, sign] = useAsyncTask(async () => {
+    const identity = getCurrentIdentity()
+    if (identity) {
+      const timestamp = Date.now()
+      const chain = await signPayload(
+        getCurrentIdentity(),
+        [
+          state.method,
+          state.path,
+          timestamp,
+          (state.metadata || '{}').toLowerCase(),
+        ].join(':')
+      )
+      setValue({ ...state, timestamp, chain })
+    }
+  }, [value])
+  return (
+    <Container>
+      <Grid>
+        {!account && <NoAuthMessage />}
+        <Grid.Row>
+          <Grid.Column tablet="7">
+            <ArgsTable
+              compact={true}
+              updateArgs={(value) => {
+                console.log(value)
+                setState((current) => ({ ...current, ...value }))
+              }}
+              rows={{
+                method: {
+                  name: 'method',
+                  control: {
+                    type: 'select',
+                    value: state.method,
+                    options: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
+                  },
+                },
+                path: {
+                  name: 'path',
+                  control: { type: 'text', value: state.path },
+                },
+                metadata: {
+                  name: 'metadata',
+                  control: {
+                    type: 'text',
+                    value: state.metadata,
+                    placeholder: '{}',
+                  },
+                },
+              }}
+            />
+          </Grid.Column>
+          <Grid.Column tablet="9">
+            <Button
+              primary
+              size="small"
+              style={{ minWidth: '200px', margin: '0 auto' }}
+              disabled={!account}
+              loading={signing}
+              onClick={() => sign()}
+            >
+              Sign
+            </Button>
+            <Source
+              language="ts"
+              code={JSON.stringify(value.chain || null, null, 2)}
+            />
+          </Grid.Column>
+        </Grid.Row>
+        <AuthChainTable
+          chain={value.chain}
+          timestamp={value.timestamp}
+          metadata={value.metadata}
+        />
+      </Grid>
+    </Container>
+  )
+}
+
+<AuthChainStandar />
+
+<Divider />
+
+## Auth Chain Raw Generator
+
+> Generate an auth chain usign a raw payload
+
+<Divider size="small" />
+
+export function AuthChainRaw() {
+  const [account] = useAuth()
+  const [chain, setChain] = useState(null)
+  const [message, setMessage] = useState('get:/path/to/resource')
+  const [signing, sign] = useAsyncTask(
+    async (payload) => {
+      const identity = getCurrentIdentity()
+      if (identity) {
+        const chain = await signPayload(
+          getCurrentIdentity(),
+          payload.toLowerCase()
+        )
+        setChain(chain)
+      }
+    },
+    [chain]
+  )
+  return (
+    <Container>
+      <Grid>
+        {!account && <NoAuthMessage />}
+        <Grid.Row>
+          <Grid.Column tablet="7">
+            <Textarea
+              value={message}
+              minHeight={170}
+              onChange={(e, { value }) => setMessage(value || '')}
+            />
+          </Grid.Column>
+          <Grid.Column tablet="9">
+            <Button
+              primary
+              size="small"
+              style={{ minWidth: '200px', margin: '0 auto' }}
+              disabled={!account}
+              loading={signing}
+              onClick={() => sign(message)}
+            >
+              Sign
+            </Button>
+            <Source language="ts" code={JSON.stringify(chain, null, 2)} />
+          </Grid.Column>
+        </Grid.Row>
+        <AuthChainTable chain={chain} />
+      </Grid>
+    </Container>
+  )
+}
+
+<AuthChainRaw />
