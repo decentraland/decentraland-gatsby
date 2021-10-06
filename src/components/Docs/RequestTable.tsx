@@ -108,15 +108,18 @@ const RequestTableRow = React.memo(
     required?: string[]
   }) => {
     const isRequired = !!name && (required || []).includes(name)
-    const items = useMemo(() => toArray((definition as AjvArraySchema).items), [
-      definition,
-    ])
-    const oneOf = useMemo(() => (definition as AjvOperatorSchema).oneOf, [
-      definition,
-    ])
-    const anyOf = useMemo(() => (definition as AjvOperatorSchema).anyOf, [
-      definition,
-    ])
+    const items = useMemo(
+      () => toArray((definition as AjvArraySchema).items),
+      [definition]
+    )
+    const oneOf = useMemo(
+      () => (definition as AjvOperatorSchema).oneOf,
+      [definition]
+    )
+    const anyOf = useMemo(
+      () => (definition as AjvOperatorSchema).anyOf,
+      [definition]
+    )
 
     const obj = useMemo(() => {
       return (definition as AjvObjectSchema).type === 'object'

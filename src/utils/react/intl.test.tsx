@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/server'
-import { createIntl } from 'react-intl'
+import { createIntl } from 'gatsby-plugin-intl'
 import { createFormatMessage } from './intl'
 import flat from 'flat'
 import Paragraph from '../../components/Text/Paragraph'
@@ -23,8 +23,7 @@ describe(__filename, () => {
         { text: 'item 2 ({index}, {isFirst}, {isLast}).' },
         { text: 'item 3 ({index}, {isFirst}, {isLast}).' },
       ],
-      code:
-        'code block:\n\n```\n  const variable = "value";\n```\n\nthis is and example.',
+      code: 'code block:\n\n```\n  const variable = "value";\n```\n\nthis is and example.',
       inlineCode: 'inline `code` example.',
       highlightCode:
         'code block:\n\n```typescript\n  const variable = "value";\n```\n\nthis is and example.',

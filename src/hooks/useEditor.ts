@@ -75,11 +75,10 @@ export default function useEditor<P extends {} = {}>(
     [state]
   )
 
-  const actions = useMemo(() => ({ set, validate, error }), [
-    set,
-    validate,
-    error,
-  ])
+  const actions = useMemo(
+    () => ({ set, validate, error }),
+    [set, validate, error]
+  )
 
   return [state, actions] as const
 }

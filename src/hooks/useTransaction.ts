@@ -20,9 +20,8 @@ export default function useTransaction(
   address?: string | null,
   chainId?: ChainId | null
 ) {
-  const [transactions, setTransactions] = useState<TransactionState>(
-    initialState
-  )
+  const [transactions, setTransactions] =
+    useState<TransactionState>(initialState)
 
   // re-store tranasctions
   useEffect(() => {

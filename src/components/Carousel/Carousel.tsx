@@ -51,9 +51,10 @@ export default React.memo(function Carousel({
     }
   }, [state.running, state.current, timeout])
 
-  const handleTimerOn = useCallback(() => patchState({ running: true }), [
-    state,
-  ])
+  const handleTimerOn = useCallback(
+    () => patchState({ running: true }),
+    [state]
+  )
   const handleTimerOff = useCallback(() => {
     if (state.timer) {
       clearTimeout(state.timer)

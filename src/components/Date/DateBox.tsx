@@ -9,10 +9,10 @@ export type DateBoxProps = {
 }
 
 export default React.memo(function DateBox(props: DateBoxProps) {
-  const date = useMemo(() => Time.from(props.date, { utc: props.utc }), [
-    props.date.getTime(),
-    props.utc,
-  ])
+  const date = useMemo(
+    () => Time.from(props.date, { utc: props.utc }),
+    [props.date.getTime(), props.utc]
+  )
 
   return (
     <div className="DateBox">

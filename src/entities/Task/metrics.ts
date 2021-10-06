@@ -15,20 +15,7 @@ export const task_manager_duration_seconds = new client.Histogram({
   registers: [],
   labelNames: ['runner', 'task', 'error'],
   buckets: [
-    0.005,
-    0.01,
-    0.025,
-    0.05,
-    0.1,
-    0.25,
-    0.5,
-    1,
-    2.5,
-    5,
-    10,
-    20,
-    30,
-    60,
+    0.005, 0.01, 0.025, 0.05, 0.1, 0.25, 0.5, 1, 2.5, 5, 10, 20, 30, 60,
   ],
 })
 

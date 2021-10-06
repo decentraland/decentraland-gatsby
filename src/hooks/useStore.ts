@@ -13,10 +13,7 @@ export default function useStore<E extends object>(
   initialState: Partial<EntityStoreState<E>> = INITIAL_STATE,
   deps: React.DependencyList = []
 ) {
-  const store = useMemo(
-    () => new EntityStore<E>({ initialState }),
-    deps
-  )
+  const store = useMemo(() => new EntityStore<E>({ initialState }), deps)
   const [current, setState] = useState(store.getState())
 
   useEffect(() => {

@@ -4,7 +4,8 @@ import profile from '../../utils/loader/profile'
 
 export default function useProfileContext() {
   const [account] = useAuthContext()
-  return useAsyncState(async () => (!account ? null : profile.load(account)), [
-    account,
-  ])
+  return useAsyncState(
+    async () => (!account ? null : profile.load(account)),
+    [account]
+  )
 }
