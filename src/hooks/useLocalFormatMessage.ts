@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import flatten from 'flat'
-import { createIntl, createIntlCache } from 'react-intl'
+import { createIntl, createIntlCache } from 'gatsby-plugin-intl'
 import { createFormatMessage } from '../utils/react/intl'
 
 const localCache = createIntlCache()
