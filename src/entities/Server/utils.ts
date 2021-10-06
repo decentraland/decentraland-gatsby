@@ -1,7 +1,7 @@
 import { Server } from 'http'
 import cluster from 'cluster'
 import { Application } from 'express'
-import { cpus, networkInterfaces } from 'os'
+import { networkInterfaces } from 'os'
 import { yellow, green } from 'colors/safe'
 import { emptyServiceInitializer, ServiceStartHandler } from './types'
 import { clusterInitializer } from '../Cluster/utils'
