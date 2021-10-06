@@ -3,6 +3,10 @@
   "version": "0.0.0-development",
   "description": "Common Gastby components",
   "main": "dist/index.js",
+  "engines": {
+    "node": ">=12.0.0",
+    "npm": "^6.0.0"
+  },
   "bin": {
     "setup-project": "./bin/setup-project.sh",
     "setup-global-css": "./bin/setup-global-css.sh"
