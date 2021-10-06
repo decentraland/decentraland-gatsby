@@ -66,8 +66,6 @@ export class Task<P extends {} = {}> {
     return null
   }
 
-  withPayload(payload: P) {}
-
   async run(options: Partial<TaskRunOptions> = {}) {
     const id = options.id ?? uuid()
     const payload = options.payload ?? {}
