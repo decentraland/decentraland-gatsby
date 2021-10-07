@@ -1,11 +1,7 @@
-import { Request } from 'express'
+import { NextFunction, Request, Response } from 'express'
+import verify from 'decentraland-crypto-middleware/lib/verify'
 import { ChainId } from '@dcl/schemas'
-import {
-  AuthIdentity,
-  AuthChain,
-  AuthLinkType,
-  AuthLink,
-} from 'dcl-crypto/dist/types'
+import { AuthIdentity, AuthChain, AuthLinkType } from 'dcl-crypto/dist/types'
 import {
   Authenticator,
   parseEmphemeralPayload,
@@ -17,15 +13,12 @@ import logger from '../Development/logger'
 import {
   AUTHORIZATION_HEADER,
   AUTH_CHAIN_HEADER_PREFIX,
-  AUTH_METADATA_HEADER,
-  AUTH_TIMESTAMP_HEADER,
 } from '../../utils/api/API.types'
-import Time from '../../utils/date/Time'
 import { getProvider } from '../Blockchain/provider'
 
 export type WithAuth<R extends Request = Request> = R & {
-  auth: string | null
-  authMetadata: Record<string, string | number> | null
+  auth: string | undefined
+  authMetadata: Record<string, string | number> | undefined
 }
 
 export type AuthOptions = {
@@ -105,76 +98,41 @@ export function withAuthorizationHeader(options: AuthOptions = {}) {
   return middleware(checkAuthorizationHeader(options))
 }
 
-function checkChainHeader(options: AuthOptions = {}) {
-  return async function (req: Request) {
-    let i = 0
-    const authChain: AuthLink[] = []
-    while (req.header(AUTH_CHAIN_HEADER_PREFIX + i)) {
-      const data = req.header(AUTH_CHAIN_HEADER_PREFIX + i)!
-      authChain.push(JSON.parse(data))
-      i++
-    }
-
-    if (authChain.length === 0 && options.optional) {
-      return
-    } else if (authChain.length === 0) {
-      throw new RequestError(`Unauthorized`, RequestError.Unauthorized)
-    }
-
-    const method = req.method
-    const path = req.baseUrl + req.path
-    const rawTimestamp = req.header(AUTH_TIMESTAMP_HEADER) || '0'
-    const rawMetadata = req.header(AUTH_METADATA_HEADER) || '{}'
-    const ownerAddress = Authenticator.ownerAddress(authChain).toLowerCase()
-    const payload = [method, path, rawTimestamp, rawMetadata]
-      .join(':')
-      .toLowerCase()
-
-    const verification = await Authenticator.validateSignature(
-      payload,
-      authChain,
-      getProvider({ chainId: ChainId.ETHEREUM_MAINNET })
-    )
-    if (!verification.ok) {
-      throw new RequestError(
-        `Invalid signature: ${verification}`,
-        RequestError.Forbidden
-      )
-    }
-
-    const timestamp = Number(rawTimestamp)
-    const metadata = JSON.parse(rawTimestamp)
-    if (timestamp + Time.Minute < Date.now()) {
-      throw new RequestError('Expired signature', RequestError.Forbidden)
-    }
-
-    Object.assign(req, {
-      auth: ownerAddress,
-      authMetadata: metadata,
-    })
-  }
-}
-
 export function withChainHeader(options: AuthOptions = {}) {
-  return middleware(checkChainHeader(options))
+  return middleware(async (req: Request) => {
+    try {
+      const data = await verify(req.method, req.baseUrl + req.path, req.headers)
+      Object.assign(req, data)
+    } catch (err) {
+      if (err.statusCode === 400 || !options.optional) {
+        throw new RequestError(err.message, err.statusCode)
+      }
+    }
+  })
 }
 
 export function auth(options: AuthOptions = {}) {
-  return middleware(async (req: Request) => {
-    const authorization = req.header(AUTHORIZATION_HEADER)
-    if (authorization) {
-      return checkAuthorizationHeader(options)(req)
-    }
-
-    const chain = req.header(AUTH_CHAIN_HEADER_PREFIX + '0')
-    if (chain) {
-      return checkChainHeader(options)(req)
-    }
-
+  const checkAuthorizationHeader = withAuthorizationHeader(options)
+  const checkChainHeader = withChainHeader(options)
+  const checkOptional = middleware(async () => {
     if (!options.optional) {
       throw new RequestError(`Unauthorized`, RequestError.Unauthorized)
     }
   })
+
+  return async (req: Request, res: Response, next: NextFunction) => {
+    const authorization = req.header(AUTHORIZATION_HEADER)
+    if (authorization) {
+      return checkAuthorizationHeader(req, res, next)
+    }
+
+    const chain = req.header(AUTH_CHAIN_HEADER_PREFIX + '0')
+    if (chain) {
+      return checkChainHeader(req, res, next)
+    }
+
+    return checkOptional(req, res, next)
+  }
 }
 
 export function withBearerToken(tokens: string[]) {
