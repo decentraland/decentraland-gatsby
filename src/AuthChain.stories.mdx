@@ -147,7 +147,9 @@ export function AuthChainStandar() {
           state.path,
           timestamp,
           (state.metadata || '{}').toLowerCase(),
-        ].join(':')
+        ]
+          .join(':')
+          .toLowerCase()
       )
       setValue({ ...state, timestamp, chain })
     }
