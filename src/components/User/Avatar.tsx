@@ -16,7 +16,7 @@ type Props = SizeProps & {
 
 export type AvatarProps = Omit<
   React.HTMLProps<HTMLImageElement>,
-  'height' | 'width' | 'size' | 'src'
+  'size' | 'src'
 > &
   Props
 
@@ -50,8 +50,8 @@ export default React.memo(function Avatar({
       {...(props as any)}
       src={!loading ? target : undefined}
       onError={() => setFailed(true)}
-      width="128"
-      height="128"
+      width={props.width ?? '128'}
+      height={props.height ?? '128'}
       className={TokenList.join([
         StyleNamespace,
         'dcl-avatar',

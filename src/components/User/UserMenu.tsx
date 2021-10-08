@@ -12,6 +12,7 @@ import useAsyncState from '../../hooks/useAsyncState'
 import './UserMenu.css'
 import useChainId from '../../hooks/useChainId'
 import { fetchManaBalance } from '../../utils/loader/manaBalance'
+import Avatar from './Avatar'
 
 type UserMenuBalances = Partial<Record<Network, number>>
 
@@ -73,7 +74,15 @@ export default function UserMenu(props: UserMenuProps) {
     }
   }, [user, chainId, props.hideBalance])
 
-  if (!user || loading) {
+  if (loading) {
+    return (
+      <div>
+        <Avatar loading width="42" height="42" />
+      </div>
+    )
+  }
+
+  if (!user) {
     return (
       <div>
         <Button

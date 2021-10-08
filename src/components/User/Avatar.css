@@ -14,6 +14,7 @@
 }
 
 .dg.dcl-avatar.dcl-avatar--loading {
+  opacity: 0.6;
   background-size: 200% 100%;
   animation: 1.5s dcl-avatar--loading-animation linear infinite;
   background-image: linear-gradient(
