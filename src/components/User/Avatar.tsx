@@ -11,6 +11,7 @@ const DEFAULT_AVATAR = 'https://decentraland.org/images/male.png'
 type Props = SizeProps & {
   src?: string
   address?: string
+  loading?: boolean
 }
 
 export type AvatarProps = Omit<
@@ -23,10 +24,11 @@ export default React.memo(function Avatar({
   address,
   size,
   src,
+  loading,
   ...props
 }: AvatarProps) {
   const [failed, setFailed] = useState(false)
-  const [profile, { loading }] = useAsyncState(
+  const [profile, profileState] = useAsyncState(
     () => profiles.load(address || ''),
     [address],
     { callWithTruthyDeps: true }
@@ -46,7 +48,7 @@ export default React.memo(function Avatar({
     <img
       loading="lazy"
       {...(props as any)}
-      src={target}
+      src={!loading ? target : undefined}
       onError={() => setFailed(true)}
       width="128"
       height="128"
@@ -55,7 +57,7 @@ export default React.memo(function Avatar({
         'dcl-avatar',
         `dcl-avatar--${size}`,
         `dcl-avatar--${((address || '')[2] || '').toLowerCase()}`,
-        !src && loading && `dcl-avatar--loading`,
+        (loading || (!src && profileState.loading)) && `dcl-avatar--loading`,
         props.className,
       ])}
     />
