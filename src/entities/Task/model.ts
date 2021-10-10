@@ -137,8 +137,7 @@ export default class TaskModel extends Model<TaskAttributes> {
 
   static async releaseTimeout() {
     const now = new Date()
-    const timeout = new Date(now.getTime() - Time.Hour)
-
+    const timeout = new Date(now.getTime() - Time.Minute * 30)
     return this.rowCount(SQL`
       UPDATE ${table(this)}
       SET

@@ -4,7 +4,6 @@ import random from '../../utils/number/random'
 import TaskModel from './model'
 import { Task } from './Task'
 import { CreateTaskAttributes, TaskAttributes } from './types'
-import timeout from './task/timeout'
 import globalLogger, { Logger } from '../Development/logger'
 
 type TaskManagerOptions = {
@@ -24,8 +23,9 @@ export default class TaskManager {
   private _id = uuid()
   private _running = false
   private _concurrency = 5
-  private _tasks = new Map<string, Task>([[timeout.name, timeout]])
-  private _interval: ReturnType<typeof setInterval> | null
+  private _tasks = new Map<string, Task>()
+  private _nextCycle: ReturnType<typeof setTimeout> | null
+  private _nextTimeoutRelease: ReturnType<typeof setInterval> | null
   private _intervalTime = Time.Second * 15
   private _logger: Logger
 
@@ -74,6 +74,7 @@ export default class TaskManager {
     if (!this._running) {
       this._running = true
 
+      // run task cycle
       setTimeout(async () => {
         if (!this._running) {
           return
@@ -83,6 +84,13 @@ export default class TaskManager {
         await TaskModel.initialize(tasks)
         this.runTasksCycle()
       }, random(0, this._intervalTime))
+
+      // run task timeout
+      setTimeout(async () => {
+        this._nextTimeoutRelease = setInterval(async () => {
+          await this.runTackTimeout()
+        }, Time.Minute * 10)
+      }, random(Time.Minute, Time.Minute * 1000))
     }
   }
 
@@ -90,10 +98,18 @@ export default class TaskManager {
     if (this._running) {
       this._running = false
 
-      if (this._interval) {
-        clearInterval(this._interval)
+      if (this._nextCycle) {
+        clearInterval(this._nextCycle)
+      }
+
+      if (this._nextTimeoutRelease) {
+        clearInterval(this._nextTimeoutRelease)
       }
     }
+  }
+
+  async runTackTimeout() {
+    await TaskModel.releaseTimeout()
   }
 
   async runTasksCycle() {
@@ -102,13 +118,10 @@ export default class TaskManager {
     }
 
     const start = Date.now()
-
-    try {
-      await this.runTasks()
-    } catch (err) {}
+    await this.runTasks()
 
     const nextCycle = this._intervalTime - (Date.now() - start)
-    this._interval = setTimeout(
+    this._nextCycle = setTimeout(
       () => this.runTasksCycle(),
       Math.max(nextCycle, 100)
     )
@@ -125,17 +138,29 @@ export default class TaskManager {
       names,
       limit: this._concurrency,
     })
+
     const results = await Promise.all(
-      tasks.map(async (task) => this.runTask(task))
+      tasks.map((task) =>
+        this.runTask(task).catch((err: Error) => {
+          this.logger.error(`Error runngin task "${task.id}": ${err.message}`, {
+            ...err,
+            stack: err.stack,
+            id: task.id,
+            ruuner: this.id,
+          })
+
+          return []
+        })
+      )
     )
 
-    await TaskModel.complete(tasks)
     let newTasks: CreateTaskAttributes[] = []
     for (const result of results) {
       newTasks = [...newTasks, ...result]
     }
 
     await TaskModel.schedule(newTasks)
+    await TaskModel.complete(tasks)
   }
 
   async runTask(task: TaskAttributes) {
