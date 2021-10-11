@@ -14,4 +14,8 @@ tsconfig.json
 .storybook
 .github
 .vscode
+.husky
+.prettierignore
+.prettierrc
+README.md
 test
