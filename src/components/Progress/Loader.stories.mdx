@@ -1,0 +1,104 @@
+import { useState, useMemo, useEffect } from 'react'
+import { Source, ArgsTable } from '@storybook/components'
+import {
+  Meta,
+  Story,
+  Preview,
+  Canvas,
+  Subtitle,
+} from '@storybook/addon-docs/blocks'
+import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid'
+import { ProviderType } from 'decentraland-connect/dist/types'
+import Loader from './Loader'
+import { Size } from '../Props/types'
+import { Args } from '../Storybook/utils'
+import Container from '../Storybook/Container'
+import Divider from '../Text/Divider'
+import Code from '../Text/Code'
+
+<Meta title="Components/Progress/Loader" />
+
+# Loader component
+
+> Render a loader spinner
+
+<Divider size="small" />
+
+## Active
+
+<Canvas isExpanded>
+  <Grid textAlign="center">
+    <Grid.Row>
+      <Grid.Column mobile="8" style={{ paddingBottom: '7rem' }}>
+        <Code inline>{`active={false}`}</Code>
+        <Loader />
+      </Grid.Column>
+      <Grid.Column mobile="8" style={{ paddingBottom: '7rem' }}>
+        <Code inline>{`active={true}`}</Code>
+        <Loader active />
+      </Grid.Column>
+    </Grid.Row>
+  </Grid>
+</Canvas>
+
+## Sizes
+
+<Canvas isExpanded>
+  <Grid textAlign="center">
+    <Grid.Row>
+      <Grid.Column mobile="2" style={{ paddingBottom: '7rem' }}>
+        <Code inline>{`size="mini"`}</Code>
+        <Loader active size="mini" />
+      </Grid.Column>
+      <Grid.Column mobile="2" style={{ paddingBottom: '7rem' }}>
+        <Code inline>{`size="tiny"`}</Code>
+        <Loader active size="tiny" />
+      </Grid.Column>
+      <Grid.Column mobile="2" style={{ paddingBottom: '7rem' }}>
+        <Code inline>{`size="small"`}</Code>
+        <Loader active size="small" />
+      </Grid.Column>
+      <Grid.Column mobile="2" style={{ paddingBottom: '7rem' }}>
+        <Code inline>{`size="medium"`}</Code>
+        <Loader active size="medium" />
+      </Grid.Column>
+      <Grid.Column mobile="2" style={{ paddingBottom: '7rem' }}>
+        <Code inline>{`size="large"`}</Code>
+        <Loader active size="large" />
+      </Grid.Column>
+      <Grid.Column mobile="2" style={{ paddingBottom: '7rem' }}>
+        <Code inline>{`size="big"`}</Code>
+        <Loader active size="big" />
+      </Grid.Column>
+      <Grid.Column mobile="2" style={{ paddingBottom: '7rem' }}>
+        <Code inline>{`size="huge"`}</Code>
+        <Loader active size="huge" />
+      </Grid.Column>
+      <Grid.Column mobile="2" style={{ paddingBottom: '7rem' }}>
+        <Code inline>{`size="massive"`}</Code>
+        <Loader active size="massive" />
+      </Grid.Column>
+    </Grid.Row>
+  </Grid>
+</Canvas>
+
+## ProviderType
+
+<Canvas isExpanded>
+  <Grid textAlign="center">
+    <Grid.Row>
+      <Grid.Column mobile="5" style={{ paddingBottom: '7rem' }}>
+        <Code inline>{`provider={ProviderType.INJECTED}`}</Code>
+        <Loader active size="huge" provider={ProviderType.INJECTED} />
+      </Grid.Column>
+      <Grid.Column mobile="5" style={{ paddingBottom: '7rem' }}>
+        <Code inline>{`provider={ProviderType.FORTMATIC}`}</Code>
+        <Loader active size="huge" provider={ProviderType.FORTMATIC} />
+      </Grid.Column>
+      <Grid.Column mobile="5" style={{ paddingBottom: '7rem' }}>
+        <Code inline>{`provider={ProviderType.WALLET_CONNECT}`}</Code>
+        <Loader active size="huge" provider={ProviderType.WALLET_CONNECT} />
+      </Grid.Column>
+    </Grid.Row>
+  </Grid>
+</Canvas>

@@ -29,6 +29,29 @@ export type WalletSelectorProps = {
   onClose?: () => void
 }
 
+export { LoginModalOptionType }
+
+export function getProviderOptionType(
+  providerType: ProviderType
+): LoginModalOptionType {
+  switch (providerType) {
+    case ProviderType.INJECTED:
+      if (isCucumberProvider()) {
+        return LoginModalOptionType.SAMSUNG
+      } else if (isDapperProvider()) {
+        return LoginModalOptionType.DAPPER
+      } else {
+        return LoginModalOptionType.METAMASK
+      }
+    case ProviderType.NETWORK:
+      return LoginModalOptionType.METAMASK
+    case ProviderType.WALLET_CONNECT:
+      return LoginModalOptionType.WALLET_CONNECT
+    case ProviderType.FORTMATIC:
+      return LoginModalOptionType.FORTMATIC
+  }
+}
+
 export default React.memo(function WalletSelector(props: WalletSelectorProps) {
   const [availableProviders, setAvailableProviders] = useState<
     (readonly [ProviderType, LoginModalOptionType])[] | null
@@ -42,25 +65,10 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
         .getAvailableProviders()
         .filter((providerType) => enabledProviders.has(providerType))
 
-    const providers = providerTypes.map((providerType) => {
-      switch (providerType) {
-        case ProviderType.INJECTED:
-          if (isCucumberProvider()) {
-            return [providerType, LoginModalOptionType.SAMSUNG] as const
-          } else if (isDapperProvider()) {
-            return [providerType, LoginModalOptionType.DAPPER] as const
-          } else {
-            return [providerType, LoginModalOptionType.METAMASK] as const
-          }
-        case ProviderType.NETWORK:
-          return [providerType, LoginModalOptionType.METAMASK] as const
-        case ProviderType.WALLET_CONNECT:
-          return [providerType, LoginModalOptionType.WALLET_CONNECT] as const
-        case ProviderType.FORTMATIC:
-          return [providerType, LoginModalOptionType.FORTMATIC] as const
-      }
-    })!
-
+    const providers = providerTypes.map(
+      (providerType) =>
+        [providerType, getProviderOptionType(providerType)] as const
+    )!
     setAvailableProviders(providers)
   }, [])
 
