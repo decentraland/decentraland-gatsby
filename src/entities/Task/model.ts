@@ -2,8 +2,8 @@ import { v4 as uuid } from 'uuid'
 import Time from '../../utils/date/Time'
 import { Model } from '../Database/model'
 import { join, SQL, SQLStatement, table } from '../Database/utils'
-import { Task } from './Task'
 import { CreateTaskAttributes, TaskAttributes, TaskStatus } from './types'
+import Task from './Task'
 
 export default class TaskModel extends Model<TaskAttributes> {
   static tableName = 'tasks'
@@ -56,16 +56,10 @@ export default class TaskModel extends Model<TaskAttributes> {
 
   static async lock(options: {
     id: string
-    names: string[]
     limit?: number
   }): Promise<TaskAttributes[]> {
     const limit = options.limit ?? 1
     if (limit < 1) {
-      return []
-    }
-
-    const names = options.names
-    if (names.length === 0) {
       return []
     }
 
@@ -75,14 +69,11 @@ export default class TaskModel extends Model<TaskAttributes> {
       SET
         "runner" = ${options.id},
         "status" = ${TaskStatus.running},
-        "updated_at" = ${now}
+        "updated_at" = ${now},
+        "run_at" = ${now}
       WHERE
         "runner" IS NULL AND
         "status" = ${TaskStatus.pending},
-        "name" IN (${join(
-          names.map((name) => SQL`${name}`),
-          SQL`, `
-        )})
         "run_at" < ${now}
       ORDER BY
         "run_at" ASC
@@ -147,7 +138,7 @@ export default class TaskModel extends Model<TaskAttributes> {
       WHERE
         "runner" IS NOT NULL,
         "status" = ${TaskStatus.running},
-        "updated_at" < ${timeout}
+        "run_at" < ${timeout}
     `)
   }
 }

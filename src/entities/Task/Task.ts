@@ -31,7 +31,7 @@ export type TaskRunContext<P extends {} = {}> = {
 
 export type TaskHandler = (context: TaskRunContext) => Promise<any>
 
-export class Task<P extends {} = {}> {
+export default class Task<P extends {} = {}> {
   static Repeat = {
     Never: () => null,
     Immediately: () => Time.from(),
@@ -66,9 +66,9 @@ export class Task<P extends {} = {}> {
     return null
   }
 
-  async run(options: Partial<TaskRunOptions> = {}) {
+  async run(options: Partial<TaskRunOptions<P>> = {}) {
     const id = options.id ?? uuid()
-    const payload = options.payload ?? {}
+    const payload = options.payload ?? ({} as P)
     const runner = options.runner ?? 'unkown'
     const data = { id, runner, name: this.name }
     const newTasks: CreateTaskAttributes[] = []

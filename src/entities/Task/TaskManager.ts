@@ -2,7 +2,7 @@ import { v4 as uuid } from 'uuid'
 import Time from '../../utils/date/Time'
 import random from '../../utils/number/random'
 import TaskModel from './model'
-import { Task } from './Task'
+import Task from './Task'
 import { CreateTaskAttributes, TaskAttributes } from './types'
 import globalLogger, { Logger } from '../Development/logger'
 
@@ -132,10 +132,8 @@ export default class TaskManager {
       return
     }
 
-    const names = Array.from(this._tasks.keys())
     const tasks = await TaskModel.lock({
       id: this.id,
-      names,
       limit: this._concurrency,
     })
 
