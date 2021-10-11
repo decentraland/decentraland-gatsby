@@ -134,6 +134,7 @@ export default class TaskManager {
 
     const tasks = await TaskModel.lock({
       id: this.id,
+      taskNames: Array.from(this._tasks.keys()),
       limit: this._concurrency,
     })
 

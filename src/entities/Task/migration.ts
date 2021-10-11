@@ -43,7 +43,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
     },
   })
 
-  pgm.createIndex(Model.tableName, ['runner', 'status', 'run_at'])
+  pgm.createIndex(Model.tableName, ['runner', 'status', 'name', 'run_at'])
 }
 
 export async function down(pgm: MigrationBuilder): Promise<void> {

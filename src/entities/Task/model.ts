@@ -14,7 +14,7 @@ export default class TaskModel extends Model<TaskAttributes> {
         INTO ${table(
           this
         )} ("id", "name", "status", "payload", "runner", "run_at", "created_at", "updated_at")
-        VALUES ${sql}
+        ${sql}
     `)
   }
 
@@ -30,20 +30,20 @@ export default class TaskModel extends Model<TaskAttributes> {
       this
     )}`
     const newTasks = join(
-      tasks
-        .filter((task) => task.repeateAt() !== null)
-        .map(
-          (task) => SQL`(SELECT
+      tasks.map(
+        (task) => SQL`(SELECT
             ${uuid()} as "id",
             ${task.name} as "name",
-            ${TaskStatus.pending} as "status",
+            ${TaskStatus.pending}::type_tast_status as "status",
             ${JSON.stringify({})} as "payload",
             ${null} as "runner",
-            ${task.repeateAt()} as "run_at",
-            ${now} as "created_at",
-            ${now} as "updated_at"
+            to_timestamp(${new Date(
+              task.repeateAt()!.getTime()
+            ).toJSON()}, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "run_at",
+            to_timestamp(${now.toJSON()}, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "created_at",
+            to_timestamp(${now.toJSON()}, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "updated_at"
           )`
-        ),
+      ),
       SQL` union `
     )
 
@@ -56,6 +56,7 @@ export default class TaskModel extends Model<TaskAttributes> {
 
   static async lock(options: {
     id: string
+    taskNames: string[]
     limit?: number
   }): Promise<TaskAttributes[]> {
     const limit = options.limit ?? 1
@@ -63,9 +64,15 @@ export default class TaskModel extends Model<TaskAttributes> {
       return []
     }
 
+    const names = options.taskNames ?? []
+    if (names.length === 0) {
+      return []
+    }
+
     const now = new Date()
     const locked = await this.rowCount(SQL`
-      UPDATE ${table(this)}
+      UPDATE
+        ${table(this)}
       SET
         "runner" = ${options.id},
         "status" = ${TaskStatus.running},
@@ -73,7 +80,8 @@ export default class TaskModel extends Model<TaskAttributes> {
         "run_at" = ${now}
       WHERE
         "runner" IS NULL AND
-        "status" = ${TaskStatus.pending},
+        "status" = ${TaskStatus.pending} AND
+        "name" IN (${join(names.map((name) => SQL`${name}`, SQL`, `))}) AND
         "run_at" < ${now}
       ORDER BY
         "run_at" ASC
@@ -86,9 +94,12 @@ export default class TaskModel extends Model<TaskAttributes> {
     }
 
     const tasks: TaskAttributes<any>[] = await this.query(SQL`
-      SELECT * FROM ${table(this)}
+      SELECT
+        *
+      FROM
+        ${table(this)}
       WHERE
-        "runner" = ${options.id},
+        "runner" = ${options.id} AND
         "status" = ${TaskStatus.running}
     `)
 
@@ -99,6 +110,10 @@ export default class TaskModel extends Model<TaskAttributes> {
   }
 
   static async complete(tasks: TaskAttributes[]) {
+    if (tasks.length === 0) {
+      return 0
+    }
+
     return this.rowCount(SQL`
       DELETE
         FROM ${table(this)}
@@ -110,9 +125,13 @@ export default class TaskModel extends Model<TaskAttributes> {
   }
 
   static async schedule(tasks: CreateTaskAttributes[]) {
+    if (tasks.length === 0) {
+      return 0
+    }
+
     const now = new Date()
     return this.insertQuery(
-      join(
+      SQL`VALUES ${join(
         tasks.map(
           (task) =>
             SQL`(${uuid()}, ${task.name}, ${
@@ -122,7 +141,7 @@ export default class TaskModel extends Model<TaskAttributes> {
             }, ${now}, ${now})`
         ),
         SQL`, `
-      )
+      )}`
     )
   }
 
@@ -136,8 +155,8 @@ export default class TaskModel extends Model<TaskAttributes> {
         "status" = ${TaskStatus.pending},
         "updated_at" = ${now}
       WHERE
-        "runner" IS NOT NULL,
-        "status" = ${TaskStatus.running},
+        "runner" IS NOT NULL AND
+        "status" = ${TaskStatus.running} AND
         "run_at" < ${timeout}
     `)
   }

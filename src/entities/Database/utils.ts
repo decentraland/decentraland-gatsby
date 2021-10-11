@@ -24,7 +24,7 @@ export const databaseInitializer = (): ServiceStartHandler => {
 }
 
 export function table(model: ModelConstructor) {
-  return raw(model.tableName)
+  return raw('"' + model.tableName + '"')
 }
 
 export function conditional(condition: boolean, statement: SQLStatement) {

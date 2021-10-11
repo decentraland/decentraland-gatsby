@@ -16,7 +16,7 @@ export type CreateTaskAttributes<P extends {} = {}> = Pick<
   'name' | 'payload' | 'run_at'
 >
 
-export type TaskTimmer = () => Pick<Date, 'getTime'> | number | null
+export type TaskTimmer = () => Pick<Date, 'getTime'> | null
 
 export enum TaskStatus {
   pending = 'pending',
