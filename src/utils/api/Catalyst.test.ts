@@ -63,4 +63,131 @@ describe('utils/api/Catalyst', () => {
       expect(response).toEqual({ ownerAddress, valid: true })
     })
   })
+
+  describe(`.get()`, () => {
+    test(`should return an instance of a Catalyst`, async () => {
+      const catalyst = Catalyst.get()
+      expect(catalyst).toBeInstanceOf(Catalyst)
+    })
+  })
+
+  describe(`.getAny()`, () => {
+    test(`should return an instance of a Catalyst`, async () => {
+      const catalyst = await Catalyst.getAny()
+      expect(catalyst).toBeInstanceOf(Catalyst)
+    })
+  })
+
+  describe(`.from()`, () => {
+    test(`should return an instance of a Catalyst`, async () => {
+      const catalyst = Catalyst.from(Catalyst.Url)
+      expect(catalyst).toBeInstanceOf(Catalyst)
+    })
+  })
+
+  describe(`.getProfile()`, () => {
+    test(`should return an instance of a Catalyst`, async () => {
+      const catalyst = Catalyst.get()
+      const profile = await catalyst.getProfile(
+        '0x05d48ee3e815bf376fc79d283301cfdef872e280'
+      )
+      expect((profile?.ethAddress || '').toLowerCase()).toEqual(
+        '0x05d48ee3e815bf376fc79d283301cfdef872e280'
+      )
+    })
+  })
+
+  describe(`.getProfiles()`, () => {
+    test(`should return an instance of a Catalyst`, async () => {
+      const catalyst = Catalyst.get()
+      const profiles = await catalyst.getProfiles([
+        '0x05d48ee3e815bf376fc79d283301cfdef872e280',
+      ])
+      expect(Array.isArray(profiles)).toBe(true)
+      expect(profiles.length).toBe(1)
+      expect((profiles[0]?.ethAddress || '').toLowerCase()).toEqual(
+        '0x05d48ee3e815bf376fc79d283301cfdef872e280'
+      )
+    })
+  })
+
+  describe(`.getStatus() / .getCommsStatus()`, () => {
+    test(`should return an instance of a Catalyst`, async () => {
+      const catalyst = Catalyst.get()
+      const status = await catalyst.getStatus()
+      expect(typeof status.name).toEqual('string')
+      const commsStatus = await catalyst.getCommsStatus()
+      expect(typeof commsStatus.version).toEqual('string')
+    })
+  })
+
+  describe(`.getContentStatus()`, () => {
+    test(`should return an instance of a Catalyst`, async () => {
+      const catalyst = Catalyst.get()
+      const status = await catalyst.getContentStatus()
+      expect(typeof status.version).toEqual('string')
+    })
+  })
+
+  describe(`.getContentStatus()`, () => {
+    test(`should return an instance of a Catalyst`, async () => {
+      const catalyst = Catalyst.get()
+      const status = await catalyst.getLambdasStatus()
+      expect(typeof status.version).toEqual('string')
+    })
+  })
+
+  describe(`.getEntityScenes()`, () => {
+    test(`should return an instance of a Catalyst`, async () => {
+      const catalyst = Catalyst.get()
+      const scenes = await catalyst.getEntityScenes(['0,0'])
+      expect(Array.isArray(scenes)).toBe(true)
+      expect(scenes.every((scene) => typeof scene.id === 'string')).toBe(true)
+    })
+  })
+
+  describe(`.getServer()`, () => {
+    test(`should return an instance of a Catalyst`, async () => {
+      const catalyst = Catalyst.get()
+      const servers = await catalyst.getServers()
+      expect(Array.isArray(servers)).toBe(true)
+      expect(servers.every((server) => typeof server.id === 'string')).toBe(
+        true
+      )
+    })
+  })
+
+  describe(`.getPeers()`, () => {
+    test(`should return an instance of a Catalyst`, async () => {
+      const catalyst = Catalyst.get()
+      const peers = await catalyst.getPeers()
+      expect(Array.isArray(peers)).toBe(true)
+      expect(peers.every((peer) => typeof peer.id === 'string')).toBe(true)
+    })
+  })
+
+  describe(`.getBanNames()`, () => {
+    test(`should return an instance of a Catalyst`, async () => {
+      const catalyst = Catalyst.get()
+      const names = await catalyst.getBanNames()
+      expect(Array.isArray(names)).toBe(true)
+      expect(names.every((name) => typeof name === 'string')).toBe(true)
+    })
+  })
+
+  describe(`.getPOIs()`, () => {
+    test(`should return an instance of a Catalyst`, async () => {
+      const catalyst = Catalyst.get()
+      const pois = await catalyst.getPOIs()
+      expect(Array.isArray(pois)).toBe(true)
+      expect(
+        pois.every(
+          (poi) =>
+            poi.length === 2 &&
+            typeof poi[0] === 'number' &&
+            typeof poi[1] === 'number'
+        )
+      ).toBe(true)
+    })
+  })
 })
