@@ -21,7 +21,7 @@ export default class TaskModel extends Model<TaskAttributes> {
   static async initialize(tasks: Task[]) {
     tasks = tasks.filter((task) => task.repeateAt() !== null)
 
-    if (tasks.length) {
+    if (!tasks.length) {
       return 0
     }
 
