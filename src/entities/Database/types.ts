@@ -62,4 +62,5 @@ export const Type = {
   Boolean: `BOOLEAN`,
 
   Array: (type: string) => type + '[]',
+  ArrayFixed: (num: number, type: string) => type + `[${num}]`,
 }
