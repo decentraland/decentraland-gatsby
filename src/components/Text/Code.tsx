@@ -6,7 +6,7 @@ import { StyleNamespace } from '../../variables'
 import 'highlight.js/styles/github-gist.css'
 import './Code.css'
 
-export type CodeProps = React.Props<HTMLPreElement> &
+export type CodeProps = React.HTMLProps<HTMLPreElement> &
   React.HTMLProps<HTMLSpanElement> & {
     inline?: boolean
     note?: React.ReactNode
