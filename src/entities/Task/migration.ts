@@ -4,7 +4,7 @@ import Model from './model'
 import { TaskStatus } from './types'
 
 export async function up(pgm: MigrationBuilder): Promise<void> {
-  pgm.createType('type_tast_status', [TaskStatus.pending, TaskStatus.running])
+  pgm.createType('type_task_status', [TaskStatus.pending, TaskStatus.running])
 
   pgm.createTable(Model.tableName, {
     id: {
@@ -17,7 +17,7 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
       notNull: true,
     },
     status: {
-      type: 'type_tast_status',
+      type: 'type_task_status',
       notNull: true,
     },
     payload: {
@@ -48,5 +48,5 @@ export async function up(pgm: MigrationBuilder): Promise<void> {
 
 export async function down(pgm: MigrationBuilder): Promise<void> {
   pgm.dropTable(Model.tableName, { cascade: true })
-  pgm.dropType('type_tast_status')
+  pgm.dropType('type_task_status')
 }
