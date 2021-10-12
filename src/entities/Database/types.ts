@@ -59,5 +59,7 @@ export const Type = {
   /** INTERVAL: time interval */
   Interval: `INTERVAL`,
 
+  Boolean: `BOOLEAN`,
+
   Array: (type: string) => type + '[]',
 }
