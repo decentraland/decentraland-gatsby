@@ -20,5 +20,5 @@ export type TaskTimmer = () => Pick<Date, 'getTime'> | null
 
 export enum TaskStatus {
   pending = 'pending',
-  running = 'runnig',
+  running = 'running',
 }

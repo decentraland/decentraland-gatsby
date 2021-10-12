@@ -34,7 +34,7 @@ export default class TaskModel extends Model<TaskAttributes> {
         (task) => SQL`(SELECT
             ${uuid()} as "id",
             ${task.name} as "name",
-            ${TaskStatus.pending}::type_tast_status as "status",
+            ${TaskStatus.pending}::type_task_status as "status",
             ${JSON.stringify({})} as "payload",
             ${null} as "runner",
             to_timestamp(${new Date(
@@ -70,23 +70,31 @@ export default class TaskModel extends Model<TaskAttributes> {
     }
 
     const now = new Date()
-    const locked = await this.rowCount(SQL`
-      UPDATE
+    const selectIdleTask = SQL`
+      SELECT
+        "id"
+      FROM
         ${table(this)}
-      SET
-        "runner" = ${options.id},
-        "status" = ${TaskStatus.running},
-        "updated_at" = ${now},
-        "run_at" = ${now}
       WHERE
         "runner" IS NULL AND
-        "status" = ${TaskStatus.pending} AND
+        "status" = ${TaskStatus.pending}::type_task_status AND
         "name" IN (${join(names.map((name) => SQL`${name}`, SQL`, `))}) AND
         "run_at" < ${now}
       ORDER BY
         "run_at" ASC
       LIMIT
         ${limit}
+    `
+    const locked = await this.rowCount(SQL`
+      UPDATE
+        ${table(this)}
+      SET
+        "runner" = ${options.id},
+        "status" = ${TaskStatus.running}::type_task_status,
+        "updated_at" = ${now},
+        "run_at" = ${now}
+      WHERE
+        "id" IN (${selectIdleTask})
     `)
 
     if (locked === 0) {
@@ -100,7 +108,7 @@ export default class TaskModel extends Model<TaskAttributes> {
         ${table(this)}
       WHERE
         "runner" = ${options.id} AND
-        "status" = ${TaskStatus.running}
+        "status" = ${TaskStatus.running}::type_task_status
     `)
 
     return tasks.map((task) => ({
@@ -136,7 +144,7 @@ export default class TaskModel extends Model<TaskAttributes> {
           (task) =>
             SQL`(${uuid()}, ${task.name}, ${
               TaskStatus.pending
-            }, ${JSON.stringify(task.payload)}, ${null}, ${
+            }::type_task_status, ${JSON.stringify(task.payload)}, ${null}, ${
               task.run_at
             }, ${now}, ${now})`
         ),
@@ -152,11 +160,11 @@ export default class TaskModel extends Model<TaskAttributes> {
       UPDATE ${table(this)}
       SET
         "runner" IS NULL,
-        "status" = ${TaskStatus.pending},
+        "status" = ${TaskStatus.pending}::type_task_status,
         "updated_at" = ${now}
       WHERE
         "runner" IS NOT NULL AND
-        "status" = ${TaskStatus.running} AND
+        "status" = ${TaskStatus.running}::type_task_status AND
         "run_at" < ${timeout}
     `)
   }

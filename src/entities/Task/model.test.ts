@@ -82,7 +82,7 @@ describe(`src/entities/Task/model`, () => {
               SELECT
                 $1 as "id",
                 $2 as "name",
-                $3::type_tast_status as "status",
+                $3::type_task_status as "status",
                 $4 as "payload",
                 $5 as "runner",
                 to_timestamp($6, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "run_at",
@@ -154,7 +154,7 @@ describe(`src/entities/Task/model`, () => {
               SELECT
                 $1 as "id",
                 $2 as "name",
-                $3::type_tast_status as "status",
+                $3::type_task_status as "status",
                 $4 as "payload",
                 $5 as "runner",
                 to_timestamp($6, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "run_at",
@@ -165,7 +165,7 @@ describe(`src/entities/Task/model`, () => {
               SELECT
                 $9 as "id",
                 $10 as "name",
-                $11::type_tast_status as "status",
+                $11::type_task_status as "status",
                 $12 as "payload",
                 $13 as "runner",
                 to_timestamp($14, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "run_at",
@@ -176,7 +176,7 @@ describe(`src/entities/Task/model`, () => {
               SELECT
                 $17 as "id",
                 $18 as "name",
-                $19::type_tast_status as "status",
+                $19::type_task_status as "status",
                 $20 as "payload",
                 $21 as "runner",
                 to_timestamp($22, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "run_at",
@@ -228,18 +228,25 @@ describe(`src/entities/Task/model`, () => {
         UPDATE "tasks"
         SET
           "runner" = $1,
-          "status" = $2,
+          "status" = $2::type_task_status,
           "updated_at" = $3,
           "run_at" = $4
         WHERE
-          "runner" IS NULL AND
-          "status" = $5 AND
-          "name" IN ($6) AND
-          "run_at" < $7
-        ORDER BY
-          "run_at" ASC
-        LIMIT
-          $8
+          "id" IN (
+            SELECT
+              "id"
+            FROM
+              "tasks"
+            WHERE
+              "runner" IS NULL AND
+              "status" = $5::type_task_status AND
+              "name" IN ($6) AND
+              "run_at" < $7
+            ORDER BY
+              "run_at" ASC
+            LIMIT
+              $8
+          )
       `)
       )
     })
@@ -266,18 +273,25 @@ describe(`src/entities/Task/model`, () => {
         UPDATE "tasks"
         SET
           "runner" = $1,
-          "status" = $2,
+          "status" = $2::type_task_status,
           "updated_at" = $3,
           "run_at" = $4
         WHERE
-          "runner" IS NULL AND
-          "status" = $5 AND
-          "name" IN ($6) AND
-          "run_at" < $7
-        ORDER BY
-          "run_at" ASC
-        LIMIT
-          $8
+          "id" IN (
+            SELECT
+              "id"
+            FROM
+              "tasks"
+            WHERE
+              "runner" IS NULL AND
+              "status" = $5::type_task_status AND
+              "name" IN ($6) AND
+              "run_at" < $7
+            ORDER BY
+              "run_at" ASC
+            LIMIT
+              $8
+          )
       `)
       )
 
@@ -290,7 +304,7 @@ describe(`src/entities/Task/model`, () => {
           "tasks"
         WHERE
           "runner" = $1 AND
-          "status" = $2
+          "status" = $2::type_task_status
       `)
       )
     })
@@ -381,8 +395,8 @@ describe(`src/entities/Task/model`, () => {
           INTO "tasks"
             ("id", "name", "status", "payload", "runner", "run_at", "created_at", "updated_at")
         VALUES
-          ($1, $2, $3, $4, $5, $6, $7, $8),
-          ($9, $10, $11, $12, $13, $14, $15, $16)
+          ($1, $2, $3::type_task_status, $4, $5, $6, $7, $8),
+          ($9, $10, $11::type_task_status, $12, $13, $14, $15, $16)
       `)
       )
     })
@@ -407,11 +421,11 @@ describe(`src/entities/Task/model`, () => {
         UPDATE "tasks"
         SET
           "runner" IS NULL,
-          "status" = $1,
+          "status" = $1::type_task_status,
           "updated_at" = $2
         WHERE
           "runner" IS NOT NULL AND
-          "status" = $3 AND
+          "status" = $3::type_task_status AND
           "run_at" < $4
       `)
       )
