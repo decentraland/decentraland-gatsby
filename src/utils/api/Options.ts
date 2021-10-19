@@ -113,7 +113,7 @@ export default class Options {
     return this
   }
 
-  getMetadata() {
+  getMetadata(): Record<string, string | number> {
     return this._metadata
   }
 

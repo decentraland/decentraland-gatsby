@@ -58,7 +58,7 @@ function createBalanceLoader(chainId: ChainId) {
 
 const cache = new Map<ChainId, Loader<number>>()
 
-export default function manaBalance(chainId: ChainId) {
+export default function manaBalance(chainId: ChainId): Loader<number> {
   if (!cache.has(chainId)) {
     cache.set(chainId, createBalanceLoader(chainId))
   }
