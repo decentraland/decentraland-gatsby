@@ -9,7 +9,6 @@ import Divider from '../Text/Divider'
 import Paragraph from '../Text/Paragraph'
 import ImgFixed from '../Image/ImgFixed'
 import Land from '../../utils/api/Land.ts'
-import random from '../../utils/number/random'
 
 <Meta title="Components/Accordion" />
 
@@ -26,10 +25,7 @@ import random from '../../utils/number/random'
           </Paragraph>
         }
       >
-        <ImgFixed
-          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
-          dimension="wide"
-        />
+        <ImgFixed src={Land.get().getParcelImage([-29, 55])} dimension="wide" />
       </Accordion>
     </Container>
   </Story>
@@ -71,7 +67,7 @@ import random from '../../utils/number/random'
           }
         >
           <ImgFixed
-            src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
+            src={Land.get().getParcelImage([-108, -30])}
             dimension="wide"
           />
         </Accordion>

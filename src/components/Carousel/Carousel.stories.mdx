@@ -5,7 +5,6 @@ import Carousel from './Carousel'
 import Divider from '../Text/Divider'
 import ImgFixed from '../Image/ImgFixed'
 import Land from '../../utils/api/Land.ts'
-import random from '../../utils/number/random'
 
 <Meta title="Components/Carousel" />
 
@@ -15,16 +14,13 @@ import random from '../../utils/number/random'
   <Story name="Carousel">
     <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
       <Carousel>
+        <ImgFixed src={Land.get().getParcelImage([-29, 55])} dimension="wide" />
         <ImgFixed
-          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
+          src={Land.get().getParcelImage([-108, -30])}
           dimension="wide"
         />
         <ImgFixed
-          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
-          dimension="wide"
-        />
-        <ImgFixed
-          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
+          src={Land.get().getParcelImage([144, -34])}
           dimension="wide"
         />
       </Carousel>
@@ -40,16 +36,13 @@ import random from '../../utils/number/random'
   <Story name="Carousel time">
     <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
       <Carousel time={1000}>
+        <ImgFixed src={Land.get().getParcelImage([-10, 58])} dimension="wide" />
         <ImgFixed
-          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
+          src={Land.get().getParcelImage([-79, -54])}
           dimension="wide"
         />
         <ImgFixed
-          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
-          dimension="wide"
-        />
-        <ImgFixed
-          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
+          src={Land.get().getParcelImage([111, -23])}
           dimension="wide"
         />
       </Carousel>
@@ -65,16 +58,10 @@ import random from '../../utils/number/random'
   <Story name="As progress">
     <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
       <Carousel progress>
+        <ImgFixed src={Land.get().getParcelImage([25, 74])} dimension="wide" />
+        <ImgFixed src={Land.get().getParcelImage([26, 9])} dimension="wide" />
         <ImgFixed
-          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
-          dimension="wide"
-        />
-        <ImgFixed
-          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
-          dimension="wide"
-        />
-        <ImgFixed
-          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
+          src={Land.get().getParcelImage([-143, -125])}
           dimension="wide"
         />
       </Carousel>

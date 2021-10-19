@@ -76,7 +76,7 @@ exports[`Storyshots Components/Accordion With content 1`] = `
           style={
             Object {
               "backgroundColor": "transparent",
-              "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/13/111/map.png\\")",
+              "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/-29/55/map.png\\")",
               "backgroundPosition": "center center",
               "backgroundSize": "cover",
             }
@@ -179,7 +179,7 @@ exports[`Storyshots Components/Accordion With content and Card 1`] = `
             style={
               Object {
                 "backgroundColor": "transparent",
-                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/138/29/map.png\\")",
+                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/-108/-30/map.png\\")",
                 "backgroundPosition": "center center",
                 "backgroundSize": "cover",
               }
@@ -343,7 +343,7 @@ exports[`Storyshots Components/Carousel As progress 1`] = `
             style={
               Object {
                 "backgroundColor": "transparent",
-                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/94/80/map.png\\")",
+                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/25/74/map.png\\")",
                 "backgroundPosition": "center center",
                 "backgroundSize": "cover",
               }
@@ -364,7 +364,7 @@ exports[`Storyshots Components/Carousel As progress 1`] = `
             style={
               Object {
                 "backgroundColor": "transparent",
-                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/86/54/map.png\\")",
+                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/26/9/map.png\\")",
                 "backgroundPosition": "center center",
                 "backgroundSize": "cover",
               }
@@ -385,7 +385,7 @@ exports[`Storyshots Components/Carousel As progress 1`] = `
             style={
               Object {
                 "backgroundColor": "transparent",
-                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/21/96/map.png\\")",
+                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/-143/-125/map.png\\")",
                 "backgroundPosition": "center center",
                 "backgroundSize": "cover",
               }
@@ -505,7 +505,7 @@ exports[`Storyshots Components/Carousel Carousel 1`] = `
             style={
               Object {
                 "backgroundColor": "transparent",
-                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/16/32/map.png\\")",
+                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/-29/55/map.png\\")",
                 "backgroundPosition": "center center",
                 "backgroundSize": "cover",
               }
@@ -526,7 +526,7 @@ exports[`Storyshots Components/Carousel Carousel 1`] = `
             style={
               Object {
                 "backgroundColor": "transparent",
-                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/39/91/map.png\\")",
+                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/-108/-30/map.png\\")",
                 "backgroundPosition": "center center",
                 "backgroundSize": "cover",
               }
@@ -547,7 +547,7 @@ exports[`Storyshots Components/Carousel Carousel 1`] = `
             style={
               Object {
                 "backgroundColor": "transparent",
-                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/148/89/map.png\\")",
+                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/144/-34/map.png\\")",
                 "backgroundPosition": "center center",
                 "backgroundSize": "cover",
               }
@@ -667,7 +667,7 @@ exports[`Storyshots Components/Carousel Carousel time 1`] = `
             style={
               Object {
                 "backgroundColor": "transparent",
-                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/1/78/map.png\\")",
+                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/-10/58/map.png\\")",
                 "backgroundPosition": "center center",
                 "backgroundSize": "cover",
               }
@@ -688,7 +688,7 @@ exports[`Storyshots Components/Carousel Carousel time 1`] = `
             style={
               Object {
                 "backgroundColor": "transparent",
-                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/139/70/map.png\\")",
+                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/-79/-54/map.png\\")",
                 "backgroundPosition": "center center",
                 "backgroundSize": "cover",
               }
@@ -709,7 +709,7 @@ exports[`Storyshots Components/Carousel Carousel time 1`] = `
             style={
               Object {
                 "backgroundColor": "transparent",
-                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/7/57/map.png\\")",
+                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/111/-23/map.png\\")",
                 "backgroundPosition": "center center",
                 "backgroundSize": "cover",
               }
