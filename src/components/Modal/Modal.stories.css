@@ -1,0 +1,16 @@
+.scrolling.dimmable.dimmed {
+  overflow: auto;
+}
+
+.scrolling.dimmable > .dimmer {
+  position: relative;
+}
+
+.ui.page.dimmer {
+  position: relative;
+  min-height: 80vh;
+}
+
+.ui.modal.visible.active {
+  position: relative !important;
+}

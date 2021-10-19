@@ -2,16 +2,30 @@ import { useState, useMemo, useEffect } from 'react'
 import { ChainId } from '@dcl/schemas'
 import { ProviderType } from 'decentraland-connect/dist/types'
 import { Source, ArgsTable } from '@storybook/components'
-import {
-  Meta,
-  Story,
-  Preview,
-  Canvas,
-  Subtitle,
-} from '@storybook/addon-docs/blocks'
-import WrongNetworkModal from './WrongNetworkModal.tsx'
+import { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs'
+import Base from './WrongNetworkModal.tsx'
+import './Modal.stories.css'
 
 <Meta title="Components/Modal/WrongNetworkModal" />
+
+export let ID = 0
+export function getID() {
+  return ID++
+}
+
+export function WrongNetworkModal(props) {
+  const [id] = useState(() => 'ID' + getID())
+  const [mountNode, setMountNode] = useState()
+  useEffect(() => {
+    setMountNode(document.getElementById(id))
+  }, [id])
+  return (
+    <div>
+      <div id={id} />
+      {mountNode && <Base {...props} mountNode={mountNode} />}
+    </div>
+  )
+}
 
 <Canvas isExpanded>
   <Story name="Wrong Network">

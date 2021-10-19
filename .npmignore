@@ -7,7 +7,9 @@ dist/__mock__
 dist/__mocks__
 dist/migrations
 dist/**/*.test.js
+dist/**/*.test.js
 dist/**/*.test.d.ts
+*.snap
 postcss.config.js
 tsconfig.json
 .circleci

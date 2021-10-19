@@ -28,10 +28,18 @@
     "url": "git+https://github.com/decentraland/decentraland-growth-ui.git"
   },
   "jest": {
-    "preset": "ts-jest",
+    "testEnvironment": "jsdom",
+    "setupFiles": [
+      "<rootDir>/src/storyshots.setup.ts"
+    ],
     "roots": [
       "<rootDir>/src/"
     ],
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest",
+      "^.+\\.jsx?$": "./jest.transform.js",
+      "^.+\\.mdx?$": "@storybook/addon-docs/jest-transform-mdx"
+    },
     "moduleNameMapper": {
       "\\.(css|less|sass|scss|gif|ttf|eot|svg)$": "<rootDir>/src/__mocks__/files.ts"
     }
@@ -47,10 +55,14 @@
   "homepage": "https://github.com/decentraland/decentraland-growth-ui#readme",
   "devDependencies": {
     "@babel/core": "^7.10.2",
+    "@babel/preset-env": "^7.15.8",
+    "@babel/preset-react": "^7.14.5",
+    "@babel/preset-typescript": "^7.15.0",
     "@babel/runtime-corejs3": "^7.12.13",
     "@storybook/addon-actions": "^6.1.18",
     "@storybook/addon-docs": "^6.1.18",
     "@storybook/addon-links": "^6.1.18",
+    "@storybook/addon-storyshots": "^6.3.10",
     "@storybook/addon-storysource": "^6.1.18",
     "@storybook/addon-viewport": "^6.1.18",
     "@storybook/addons": "^6.1.18",
@@ -64,6 +76,7 @@
     "@types/react-dom": "^16.9.5",
     "@types/react-highlight": "^0.12.2",
     "@types/segment-analytics": "0.0.32",
+    "babel-jest": "^25.5.1",
     "babel-loader": "^8.2.2",
     "core-js": "^3.8.3",
     "flat": "^5.0.0",
@@ -71,6 +84,7 @@
     "postcss": "^7.0.27",
     "postcss-svg": "^3.0.0",
     "react-docgen-typescript-loader": "^3.6.0",
+    "react-test-renderer": "^17.0.2",
     "semantic-release": "^17.4.7",
     "sql-formatter": "^4.0.2",
     "ts-jest": "^25.2.1",
@@ -79,6 +93,7 @@
     "typescript": "^3.8.2"
   },
   "dependencies": {
+    "@dcl/feature-flags": "^1.0.0",
     "@types/cors": "^2.8.6",
     "@types/cron": "^1.7.2",
     "@types/express": "^4.17.3",
@@ -100,7 +115,7 @@
     "ddos": "^0.2.1",
     "decentraland-commons": "^5.1.0",
     "decentraland-crypto-middleware": "^1.0.1",
-    "decentraland-dapps": "^12.25.4",
+    "decentraland-dapps": "^12.26.0",
     "decentraland-server": "^2.11.6",
     "eth-crypto": "^1.9.0",
     "express": "^4.17.1",

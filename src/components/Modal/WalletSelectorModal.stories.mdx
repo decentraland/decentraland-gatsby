@@ -1,25 +1,52 @@
-import { useState, useMemo, useEffect } from 'react'
 import { ChainId } from '@dcl/schemas'
+import { useState, useMemo, useEffect, useRef } from 'react'
 import { Source, ArgsTable } from '@storybook/components'
-import {
-  Meta,
-  Story,
-  Preview,
-  Canvas,
-  Subtitle,
-} from '@storybook/addon-docs/blocks'
+import { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs'
 import { ProviderType } from 'decentraland-connect/dist/types'
-import WalletSelectorModal from './WalletSelectorModal.tsx'
+import Base from './WalletSelectorModal.tsx'
+import './Modal.stories.css'
 
 <Meta title="Components/Modal/WalletSelectorModal" />
 
+export let ID = 0
+export function getID() {
+  return ID++
+}
+
+export function WalletSelectorModal(props) {
+  const [id] = useState(() => 'ID' + getID())
+  const [mountNode, setMountNode] = useState()
+  useEffect(() => {
+    setMountNode(document.getElementById(id))
+  }, [id])
+  return (
+    <div>
+      <div id={id} />
+      {mountNode && <Base {...props} mountNode={mountNode} />}
+    </div>
+  )
+}
+
 <Canvas isExpanded>
   <Story name="All providers">
+    <WalletSelectorModal
+      open
+      availableProviders={[
+        ProviderType.INJECTED,
+        ProviderType.FORTMATIC,
+        ProviderType.NETWORK,
+        ProviderType.WALLET_CONNECT,
+      ]}
+    />
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story name="Metamask as link">
     <div>
       <WalletSelectorModal
         open
         availableProviders={[
-          ProviderType.INJECTED,
           ProviderType.FORTMATIC,
           ProviderType.NETWORK,
           ProviderType.WALLET_CONNECT,
@@ -27,16 +54,25 @@ import WalletSelectorModal from './WalletSelectorModal.tsx'
       />
     </div>
   </Story>
+</Canvas>
+
+<Canvas>
   <Story name="Detected providers">
     <div>
       <WalletSelectorModal open />
     </div>
   </Story>
+</Canvas>
+
+<Canvas>
   <Story name="Loading">
     <div>
       <WalletSelectorModal open loading={true} />
     </div>
   </Story>
+</Canvas>
+
+<Canvas>
   <Story name="Error">
     <div>
       <WalletSelectorModal open error={'Could not connect wallet'} />

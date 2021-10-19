@@ -11,7 +11,3 @@
   width: 100%;
   max-width: 360px;
 }
-
-.ui.modal.dcl.login-modal p.error {
-  margin-bottom: 0;
-}

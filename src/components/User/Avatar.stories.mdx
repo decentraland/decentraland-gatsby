@@ -1,18 +1,15 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Source, ArgsTable } from '@storybook/components'
-import {
-  Meta,
-  Story,
-  Preview,
-  Canvas,
-  Subtitle,
-} from '@storybook/addon-docs/blocks'
+import { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs'
+import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid'
 import Avatar from './Avatar'
 import { Size } from '../Props/types'
 import { Args } from '../Storybook/utils'
 import Container from '../Storybook/Container'
 import Divider from '../Text/Divider'
+import Code from '../Text/Code'
 import useAuth from '../../hooks/useAuth.ts'
+import './Avatar.stories.css'
 
 <Meta title="Components/User/Avatar" />
 
@@ -25,7 +22,7 @@ export const PreviewAvatar = () => {
   const [state, setState] = useState({
     address: '0x05d48ee3e815bf376fc79d283301cfdef872e280',
     size: Size.Full,
-    source: '',
+    src: '',
   })
   useEffect(() => {
     auth && setState((current) => ({ ...current, address: auth }))
@@ -41,11 +38,7 @@ export const PreviewAvatar = () => {
             alignItems: 'center',
           }}
         >
-          <Avatar
-            src={state.source}
-            address={state.address}
-            size={state.size}
-          />
+          <Avatar src={state.src} address={state.address} size={state.size} />
         </div>
         <div style={{ flex: '0 0 60%' }}>
           <ArgsTable
@@ -76,11 +69,11 @@ export const PreviewAvatar = () => {
                   ],
                 },
               },
-              source: {
-                name: 'source',
+              src: {
+                name: 'src',
                 control: {
                   type: 'text',
-                  value: state.source,
+                  value: state.src,
                   placeholder: 'https://....',
                 },
               },
@@ -92,7 +85,7 @@ export const PreviewAvatar = () => {
         language="ts"
         dark
         code={`<Address${[
-          state.source ? ` src="${state.source}"` : ``,
+          state.src ? ` src="${state.src}"` : ``,
           state.address ? ` address="${state.address}"` : ``,
           state.size ? ` size="${state.size}"` : ``,
         ].join('')}/>`}
@@ -104,21 +97,32 @@ export const PreviewAvatar = () => {
 <PreviewAvatar />
 <Divider size="small" />
 
-## Avatar fallback
+## Avatar image fallback
 
 When an avatar doesn't exists this component will show the default avatar image, otherwise will load their information and show the current face
 
 <Canvas isExpanded>
-  <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-    <Avatar
-      address={'0xffffffffffffffffffffffffffffffffffffffff'}
-      size="full"
-    />
-    <Avatar
-      address={'0x05d48ee3e815bf376fc79d283301cfdef872e280'}
-      size="full"
-    />
-  </div>
+  <Story name="Avatar image fallback">
+    <Grid textAlign="center">
+      <Grid.Row>
+        <Grid.Column mobile="4">
+          <Code inline>{`default`}</Code>
+          <Avatar
+            address={'0xffffffffffffffffffffffffffffffffffffffff'}
+            size="full"
+          />
+        </Grid.Column>
+        <Grid.Column mobile="2" />
+        <Grid.Column mobile="4">
+          <Code inline>{`decentraland user`}</Code>
+          <Avatar
+            address={'0x05d48ee3e815bf376fc79d283301cfdef872e280'}
+            size="full"
+          />
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
+  </Story>
 </Canvas>
 
 <Divider size="small" />
@@ -126,24 +130,26 @@ When an avatar doesn't exists this component will show the default avatar image,
 ## Automatic background colors
 
 <Canvas isExpanded>
-  <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-    <Avatar address={'0x0...'} />
-    <Avatar address={'0x1...'} />
-    <Avatar address={'0x2...'} />
-    <Avatar address={'0x3...'} />
-    <Avatar address={'0x4...'} />
-    <Avatar address={'0x5...'} />
-    <Avatar address={'0x6...'} />
-    <Avatar address={'0x7...'} />
-    <Avatar address={'0x8...'} />
-    <Avatar address={'0x9...'} />
-    <Avatar address={'0xa...'} />
-    <Avatar address={'0xb...'} />
-    <Avatar address={'0xc...'} />
-    <Avatar address={'0xd...'} />
-    <Avatar address={'0xe...'} />
-    <Avatar address={'0xf...'} />
-  </div>
+  <Story name="Automatic background colors">
+    <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+      <Avatar address={'0x0...'} />
+      <Avatar address={'0x1...'} />
+      <Avatar address={'0x2...'} />
+      <Avatar address={'0x3...'} />
+      <Avatar address={'0x4...'} />
+      <Avatar address={'0x5...'} />
+      <Avatar address={'0x6...'} />
+      <Avatar address={'0x7...'} />
+      <Avatar address={'0x8...'} />
+      <Avatar address={'0x9...'} />
+      <Avatar address={'0xa...'} />
+      <Avatar address={'0xb...'} />
+      <Avatar address={'0xc...'} />
+      <Avatar address={'0xd...'} />
+      <Avatar address={'0xe...'} />
+      <Avatar address={'0xf...'} />
+    </div>
+  </Story>
 </Canvas>
 
 <Divider size="small" />
@@ -151,23 +157,25 @@ When an avatar doesn't exists this component will show the default avatar image,
 ## Sizes
 
 <Canvas isExpanded>
-  <div
-    style={{
-      display: 'flex',
-      justifyContent: 'space-around',
-      alignItems: 'center',
-    }}
-  >
-    <Avatar size="mini" />
-    <Avatar size="tiny" />
-    <Avatar size="small" />
-    <Avatar size="medium" />
-    <Avatar size="large" />
-    <Avatar size="big" />
-    <Avatar size="huge" />
-    <Avatar size="massive" />
-    <Avatar size="full" />
-  </div>
+  <Story name="Sizes">
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+      }}
+    >
+      <Avatar size="mini" />
+      <Avatar size="tiny" />
+      <Avatar size="small" />
+      <Avatar size="medium" />
+      <Avatar size="large" />
+      <Avatar size="big" />
+      <Avatar size="huge" />
+      <Avatar size="massive" />
+      <Avatar size="full" />
+    </div>
+  </Story>
 </Canvas>
 
 <Divider size="small" />
@@ -175,48 +183,52 @@ When an avatar doesn't exists this component will show the default avatar image,
 ## Custom sources
 
 <Canvas isExpanded>
-  <div
-    style={{
-      display: 'flex',
-      justifyContent: 'space-around',
-      alignItems: 'center',
-    }}
-  >
-    <Avatar
-      size="massive"
-      src="https://peer-lb.decentraland.org/content/contents/QmPbEZrpFB1kwe7DAU6A3v56PFz6NcgNziFN3XNX6gABE6"
-    />
-    <Avatar
-      size="massive"
-      src="https://peer-lb.decentraland.org/content/contents/QmYM9YEd4T9veJNRUUXD75hSh3QKpeg3XcVzXcKsUKNDKB"
-    />
-    <Avatar
-      size="massive"
-      src="https://peer-lb.decentraland.org/content/contents/QmPHSo4hMz4xnJNuzNJkT4ddxsYznHLCRzzRTuGbemUFLT"
-    />
-  </div>
+  <Story name="Custom sources">
+    <div
+      style={{
+        display: 'flex',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+      }}
+    >
+      <Avatar
+        size="massive"
+        src="https://peer-lb.decentraland.org/content/contents/QmPbEZrpFB1kwe7DAU6A3v56PFz6NcgNziFN3XNX6gABE6"
+      />
+      <Avatar
+        size="massive"
+        src="https://peer-lb.decentraland.org/content/contents/QmYM9YEd4T9veJNRUUXD75hSh3QKpeg3XcVzXcKsUKNDKB"
+      />
+      <Avatar
+        size="massive"
+        src="https://peer-lb.decentraland.org/content/contents/QmPHSo4hMz4xnJNuzNJkT4ddxsYznHLCRzzRTuGbemUFLT"
+      />
+    </div>
+  </Story>
 </Canvas>
 
 ## Loading
 
 <Canvas isExpanded>
-  <div style={{ display: 'flex', justifyContent: 'space-around' }}>
-    <Avatar loading />
-    <Avatar loading address={'0x0...'} />
-    <Avatar loading address={'0x1...'} />
-    <Avatar loading address={'0x2...'} />
-    <Avatar loading address={'0x3...'} />
-    <Avatar loading address={'0x4...'} />
-    <Avatar loading address={'0x5...'} />
-    <Avatar loading address={'0x6...'} />
-    <Avatar loading address={'0x7...'} />
-    <Avatar loading address={'0x8...'} />
-    <Avatar loading address={'0x9...'} />
-    <Avatar loading address={'0xa...'} />
-    <Avatar loading address={'0xb...'} />
-    <Avatar loading address={'0xc...'} />
-    <Avatar loading address={'0xd...'} />
-    <Avatar loading address={'0xe...'} />
-    <Avatar loading address={'0xf...'} />
-  </div>
+  <Story name="Loading state">
+    <div style={{ display: 'flex', justifyContent: 'space-around' }}>
+      <Avatar loading />
+      <Avatar loading address={'0x0...'} />
+      <Avatar loading address={'0x1...'} />
+      <Avatar loading address={'0x2...'} />
+      <Avatar loading address={'0x3...'} />
+      <Avatar loading address={'0x4...'} />
+      <Avatar loading address={'0x5...'} />
+      <Avatar loading address={'0x6...'} />
+      <Avatar loading address={'0x7...'} />
+      <Avatar loading address={'0x8...'} />
+      <Avatar loading address={'0x9...'} />
+      <Avatar loading address={'0xa...'} />
+      <Avatar loading address={'0xb...'} />
+      <Avatar loading address={'0xc...'} />
+      <Avatar loading address={'0xd...'} />
+      <Avatar loading address={'0xe...'} />
+      <Avatar loading address={'0xf...'} />
+    </div>
+  </Story>
 </Canvas>

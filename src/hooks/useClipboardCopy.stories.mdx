@@ -1,12 +1,12 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Source, ArgsTable } from '@storybook/components'
-import { Meta, Story, Preview } from '@storybook/addon-docs/blocks'
+import { Meta, Story, Preview } from '@storybook/addon-docs'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { randomHexadecimal } from '../utils/string/random'
 import { Args } from '../components/Storybook/utils'
 import Container from '../components/Storybook/Container'
 import Divider from '../components/Text/Divider'
-import { Time } from '../components/Date/utils'
+import Time from '../utils/date/Time'
 import useClipboardCopy from './useClipboardCopy'
 
 <Meta title="Hooks/useClipboardCopy" />

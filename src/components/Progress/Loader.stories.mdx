@@ -1,18 +1,7 @@
-import { useState, useMemo, useEffect } from 'react'
-import { Source, ArgsTable } from '@storybook/components'
-import {
-  Meta,
-  Story,
-  Preview,
-  Canvas,
-  Subtitle,
-} from '@storybook/addon-docs/blocks'
+import { Meta, Story, Canvas, Subtitle } from '@storybook/addon-docs'
 import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid'
 import { ProviderType } from 'decentraland-connect/dist/types'
 import Loader from './Loader'
-import { Size } from '../Props/types'
-import { Args } from '../Storybook/utils'
-import Container from '../Storybook/Container'
 import Divider from '../Text/Divider'
 import Code from '../Text/Code'
 
@@ -27,6 +16,7 @@ import Code from '../Text/Code'
 ## Active
 
 <Canvas isExpanded>
+  {/* <Story name="Active"> TODO: FIX*/}
   <Grid textAlign="center">
     <Grid.Row>
       <Grid.Column mobile="8" style={{ paddingBottom: '7rem' }}>
@@ -39,11 +29,13 @@ import Code from '../Text/Code'
       </Grid.Column>
     </Grid.Row>
   </Grid>
+  {/* </Story> */}
 </Canvas>
 
 ## Sizes
 
 <Canvas isExpanded>
+  {/* <Story name="Sizes"> TODO: FIX*/}
   <Grid textAlign="center">
     <Grid.Row>
       <Grid.Column mobile="2" style={{ paddingBottom: '7rem' }}>
@@ -80,11 +72,13 @@ import Code from '../Text/Code'
       </Grid.Column>
     </Grid.Row>
   </Grid>
+  {/* </Story> */}
 </Canvas>
 
 ## ProviderType
 
 <Canvas isExpanded>
+  {/* <Story name="Provider image"> TODO: FIX*/}
   <Grid textAlign="center">
     <Grid.Row>
       <Grid.Column mobile="5" style={{ paddingBottom: '7rem' }}>
@@ -101,4 +95,5 @@ import Code from '../Text/Code'
       </Grid.Column>
     </Grid.Row>
   </Grid>
+  {/* </Story> */}
 </Canvas>

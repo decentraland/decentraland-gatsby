@@ -1,7 +1,9 @@
-import React, { createContext } from 'react'
+import React, { createContext, useMemo } from 'react'
 import useFeatureFlag, {
   DEFAULT_FEATURE_FLAG,
+  FeatureFlagOptions,
 } from '../../hooks/useFeatureFlag'
+import useAuthContext from '../Auth/useAuthContext'
 
 const defaultTransactionState: ReturnType<typeof useFeatureFlag> = [
   DEFAULT_FEATURE_FLAG,
@@ -12,14 +14,64 @@ const defaultTransactionState: ReturnType<typeof useFeatureFlag> = [
     version: 0,
     set: () => null,
     reload: () => null,
+    isEnabled: () => false,
+    getVariant: () => null as any,
   },
 ]
 
 export const FeatureFlagContext = createContext(defaultTransactionState)
-export default React.memo(function AuthProvider(
-  props: React.PropsWithChildren<{}> & { endpoint: string }
+export type FeatureFlagProviderProps = React.PropsWithChildren<{}> &
+  Partial<Omit<FeatureFlagOptions, 'userId'>> & {
+    /** @deprecated use applicationName instead */
+    endpoint: string
+  }
+
+export default React.memo(function FeatureFlagProvider(
+  props: React.PropsWithChildren<{}> &
+    Partial<Omit<FeatureFlagOptions, 'userId'>> & { endpoint: string }
 ) {
-  const ff = useFeatureFlag(props.endpoint)
+  const [userId] = useAuthContext()
+  const options = useMemo<Partial<FeatureFlagOptions>>(() => {
+    if (!props.endpoint && !props.applicationName) {
+      return {}
+    }
+
+    const result: Partial<FeatureFlagOptions> = {}
+    if (props.applicationName) {
+      result.applicationName = props.applicationName
+    } else {
+      const endpoint = new URL(props.endpoint)
+      const applicationName = endpoint.pathname.slice(1, -5)
+      if (applicationName) {
+        result.applicationName = applicationName
+      }
+    }
+
+    if (result.applicationName) {
+      if (props.debug) {
+        result.debug = props.debug
+      }
+
+      if (props.featureFlagsUrl) {
+        result.featureFlagsUrl = props.featureFlagsUrl
+      }
+
+      if (userId) {
+        result.userId = userId
+      }
+    }
+
+    return result
+  }, [
+    props.endpoint,
+    props.applicationName,
+    props.debug,
+    props.featureFlagsUrl,
+    userId,
+  ])
+
+  const ff = useFeatureFlag(options)
+
   return (
     <FeatureFlagContext.Provider value={ff}>
       {props.children}

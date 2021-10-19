@@ -1,12 +1,6 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Source, ArgsTable } from '@storybook/components'
-import {
-  Meta,
-  Story,
-  Preview,
-  Canvas,
-  Subtitle,
-} from '@storybook/addon-docs/blocks'
+import { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs'
 import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid'
 import Code from '../Text/Code'
 import Divider from '../Text/Divider'
@@ -21,45 +15,47 @@ import ImgFixed from './ImgFixed'
 ### Dimensions
 
 <Canvas isExpanded>
-  <Grid>
-    <Grid.Row>
-      <Grid.Column mobile="5">
-        <Code inline>dimension="wide"</Code>
-        <ImgFixed
-          dimension="wide"
-          src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
-        />
-      </Grid.Column>
-      <Grid.Column mobile="5">
-        <Code inline>dimension="standard"</Code>
-        <ImgFixed
-          dimension="standard"
-          src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
-        />
-      </Grid.Column>
-      <Grid.Column mobile="5">
-        <Code inline>dimension="square"</Code>
-        <ImgFixed
-          dimension="square"
-          src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
-        />
-      </Grid.Column>
-      <Grid.Column mobile="5">
-        <Code inline>dimension="vertical"</Code>
-        <ImgFixed
-          dimension="vertical"
-          src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
-        />
-      </Grid.Column>
-      <Grid.Column mobile="5">
-        <Code inline>dimension="circle"</Code>
-        <ImgFixed
-          dimension="circle"
-          src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
-        />
-      </Grid.Column>
-    </Grid.Row>
-  </Grid>
+  <Story name="Dimensions">
+    <Grid>
+      <Grid.Row>
+        <Grid.Column mobile="5">
+          <Code inline>dimension="wide"</Code>
+          <ImgFixed
+            dimension="wide"
+            src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
+          />
+        </Grid.Column>
+        <Grid.Column mobile="5">
+          <Code inline>dimension="standard"</Code>
+          <ImgFixed
+            dimension="standard"
+            src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
+          />
+        </Grid.Column>
+        <Grid.Column mobile="5">
+          <Code inline>dimension="square"</Code>
+          <ImgFixed
+            dimension="square"
+            src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
+          />
+        </Grid.Column>
+        <Grid.Column mobile="5">
+          <Code inline>dimension="vertical"</Code>
+          <ImgFixed
+            dimension="vertical"
+            src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
+          />
+        </Grid.Column>
+        <Grid.Column mobile="5">
+          <Code inline>dimension="circle"</Code>
+          <ImgFixed
+            dimension="circle"
+            src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
+          />
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
+  </Story>
 </Canvas>
 
 <Divider size="small" />
@@ -67,64 +63,66 @@ import ImgFixed from './ImgFixed'
 ### Sizes
 
 <Canvas isExpanded>
-  <Grid>
-    <Grid.Row>
-      <Grid.Column mobile="5">
-        <Code inline>size="initial"</Code>
-        <ImgFixed
-          size="initial"
-          dimension="wide"
-          background="#222"
-          src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
-        />
-      </Grid.Column>
-      <Grid.Column mobile="5">
-        <Code inline>size="cover"</Code>
-        <ImgFixed
-          size="cover"
-          dimension="wide"
-          background="#222"
-          src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
-        />
-      </Grid.Column>
-      <Grid.Column mobile="5">
-        <Code inline>size="contain"</Code>
-        <ImgFixed
-          size="contain"
-          dimension="wide"
-          background="#222"
-          src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
-        />
-      </Grid.Column>
-    </Grid.Row>
-    <Grid.Row>
-      <Grid.Column mobile="5">
-        <Code inline>size="75%"</Code>
-        <ImgFixed
-          size="75%"
-          dimension="wide"
-          background="#222"
-          src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
-        />
-      </Grid.Column>
-      <Grid.Column mobile="5">
-        <Code inline>size="50%"</Code>
-        <ImgFixed
-          size="50%"
-          dimension="wide"
-          background="#222"
-          src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
-        />
-      </Grid.Column>
-      <Grid.Column mobile="5">
-        <Code inline>size="25%"</Code>
-        <ImgFixed
-          size="25%"
-          dimension="wide"
-          background="#222"
-          src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
-        />
-      </Grid.Column>
-    </Grid.Row>
-  </Grid>
+  <Story name="sizes">
+    <Grid>
+      <Grid.Row>
+        <Grid.Column mobile="5">
+          <Code inline>size="initial"</Code>
+          <ImgFixed
+            size="initial"
+            dimension="wide"
+            background="#222"
+            src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
+          />
+        </Grid.Column>
+        <Grid.Column mobile="5">
+          <Code inline>size="cover"</Code>
+          <ImgFixed
+            size="cover"
+            dimension="wide"
+            background="#222"
+            src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
+          />
+        </Grid.Column>
+        <Grid.Column mobile="5">
+          <Code inline>size="contain"</Code>
+          <ImgFixed
+            size="contain"
+            dimension="wide"
+            background="#222"
+            src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
+          />
+        </Grid.Column>
+      </Grid.Row>
+      <Grid.Row>
+        <Grid.Column mobile="5">
+          <Code inline>size="75%"</Code>
+          <ImgFixed
+            size="75%"
+            dimension="wide"
+            background="#222"
+            src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
+          />
+        </Grid.Column>
+        <Grid.Column mobile="5">
+          <Code inline>size="50%"</Code>
+          <ImgFixed
+            size="50%"
+            dimension="wide"
+            background="#222"
+            src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
+          />
+        </Grid.Column>
+        <Grid.Column mobile="5">
+          <Code inline>size="25%"</Code>
+          <ImgFixed
+            size="25%"
+            dimension="wide"
+            background="#222"
+            src="https://user-images.githubusercontent.com/2781777/40743488-0927f342-6428-11e8-942d-3ca36269d7dc.png"
+          />
+        </Grid.Column>
+      </Grid.Row>
+    </Grid>
+  </Story>
 </Canvas>

@@ -1,12 +1,6 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Source, ArgsTable } from '@storybook/components'
-import {
-  Meta,
-  Story,
-  Preview,
-  Canvas,
-  Subtitle,
-} from '@storybook/addon-docs/blocks'
+import { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs'
 import Carousel from './Carousel'
 import Divider from '../Text/Divider'
 import ImgFixed from '../Image/ImgFixed'
@@ -18,22 +12,24 @@ import random from '../../utils/number/random'
 ## Carousel
 
 <Canvas isExpanded>
-  <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
-    <Carousel>
-      <ImgFixed
-        src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
-        dimension="wide"
-      />
-      <ImgFixed
-        src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
-        dimension="wide"
-      />
-      <ImgFixed
-        src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
-        dimension="wide"
-      />
-    </Carousel>
-  </div>
+  <Story name="Carousel">
+    <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
+      <Carousel>
+        <ImgFixed
+          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
+          dimension="wide"
+        />
+        <ImgFixed
+          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
+          dimension="wide"
+        />
+        <ImgFixed
+          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
+          dimension="wide"
+        />
+      </Carousel>
+    </div>
+  </Story>
 </Canvas>
 
 <Divider size="small" />
@@ -41,45 +37,49 @@ import random from '../../utils/number/random'
 ## Carousel time
 
 <Canvas isExpanded>
-  <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
-    <Carousel time={1000}>
-      <ImgFixed
-        src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
-        dimension="wide"
-      />
-      <ImgFixed
-        src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
-        dimension="wide"
-      />
-      <ImgFixed
-        src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
-        dimension="wide"
-      />
-    </Carousel>
-  </div>
+  <Story name="Carousel time">
+    <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
+      <Carousel time={1000}>
+        <ImgFixed
+          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
+          dimension="wide"
+        />
+        <ImgFixed
+          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
+          dimension="wide"
+        />
+        <ImgFixed
+          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
+          dimension="wide"
+        />
+      </Carousel>
+    </div>
+  </Story>
 </Canvas>
 
 <Divider size="small" />
 
-## Progress
+## As progress
 
 <Canvas isExpanded>
-  <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
-    <Carousel progress>
-      <ImgFixed
-        src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
-        dimension="wide"
-      />
-      <ImgFixed
-        src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
-        dimension="wide"
-      />
-      <ImgFixed
-        src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
-        dimension="wide"
-      />
-    </Carousel>
-  </div>
+  <Story name="As progress">
+    <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
+      <Carousel progress>
+        <ImgFixed
+          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
+          dimension="wide"
+        />
+        <ImgFixed
+          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
+          dimension="wide"
+        />
+        <ImgFixed
+          src={Land.get().getParcelImage([random(0, 150), random(0, 150)])}
+          dimension="wide"
+        />
+      </Carousel>
+    </div>
+  </Story>
 </Canvas>
 
 <Divider size="small" />
