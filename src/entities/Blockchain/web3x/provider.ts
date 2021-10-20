@@ -1,4 +1,3 @@
-import { ChainId } from '@dcl/schemas'
 import { HttpProvider } from 'web3x/providers/http'
 import { WebsocketProvider } from 'web3x/providers/ws'
 import roundRobin from '../../../utils/iterator/roundRobin'

@@ -1,11 +1,12 @@
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
-import { ConnectionOptions } from './types'
+import { ConnectionOptions, ConnectionType } from './types'
 
 export type FuncWithConnectionOptions<T> = (options: ConnectionOptions) => T
 export function onceWithConnectionOptions<T>(
   fun: FuncWithConnectionOptions<T>
 ): FuncWithConnectionOptions<T> {
-  const CACHE: Record<ConnectionType, Record<ChainId, () => T>> = {} as any
+  const CACHE: Record<ConnectionType, Record<ChainId, T>> = {} as any
+
   return ({ chainId, type }: ConnectionOptions) => {
     if (!type || type === 'http') {
       type = 'https'
