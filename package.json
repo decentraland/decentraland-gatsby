@@ -118,6 +118,7 @@
     "decentraland-dapps": "^12.26.0",
     "decentraland-server": "^2.11.6",
     "eth-crypto": "^1.9.0",
+    "eth-sig-util": "^3.0.1",
     "express": "^4.17.1",
     "fetch-mock": "^9.11.0",
     "framer-motion": "^1.9.0",

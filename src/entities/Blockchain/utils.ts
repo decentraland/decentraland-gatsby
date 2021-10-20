@@ -1,23 +1,24 @@
-export function parseEndpointId(endpoint: string) {
-  const url = new URL(endpoint)
-  return url.pathname.split('/')[2]
-}
+import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
+import { ConnectionOptions } from './types'
 
-export function parseNetworkId(endpoint: string) {
-  const url = new URL(endpoint)
-  const network = url.host.split('.')[0]
-  switch (network) {
-    case 'mainnet':
-      return 1
-    case 'ropsten':
-      return 3
-    case 'rinkeby':
-      return 4
-    case 'goerli':
-      return 5
-    case 'kovan':
-      return 42
-    default:
-      return null
+export type FuncWithConnectionOptions<T> = (options: ConnectionOptions) => T
+export function onceWithConnectionOptions<T>(
+  fun: FuncWithConnectionOptions<T>
+): FuncWithConnectionOptions<T> {
+  const CACHE: Record<ConnectionType, Record<ChainId, () => T>> = {} as any
+  return ({ chainId, type }: ConnectionOptions) => {
+    if (!type || type === 'http') {
+      type = 'https'
+    }
+
+    if (!CACHE[type]) {
+      CACHE[type] = {} as any
+    }
+
+    if (!CACHE[type][chainId]) {
+      CACHE[type][chainId] = fun({ chainId, type })
+    }
+
+    return CACHE[type][chainId]
   }
 }
