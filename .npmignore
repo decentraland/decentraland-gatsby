@@ -10,7 +10,9 @@ dist/**/*.test.js
 dist/**/*.test.js
 dist/**/*.test.d.ts
 *.snap
+jest.transform.js
 postcss.config.js
+babel.config.js
 tsconfig.json
 .circleci
 .storybook
