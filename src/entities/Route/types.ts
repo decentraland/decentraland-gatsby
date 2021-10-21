@@ -76,7 +76,16 @@ export const defaultOrigin = [
   /https:\/\/([a-zA-Z0-9\-_]+\.)*manaland\.cn/,
 ]
 
-export const defaultAllowedHeaders = ['Content-Type', 'Authorization']
+export const defaultAllowedHeaders = [
+  'Content-Type',
+  'Authorization',
+  'X-API-Key',
+  'X-Identity-Auth-Chain-1',
+  'X-Identity-Auth-Chain-2',
+  'X-Identity-Auth-Chain-3',
+  'X-Identity-Timestamp',
+  'X-Identity-Metadata',
+]
 
 export const defaultExposedHeaders = [
   'ETag',
