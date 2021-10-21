@@ -80,9 +80,9 @@ export const defaultAllowedHeaders = [
   'Content-Type',
   'Authorization',
   'X-API-Key',
+  'X-Identity-Auth-Chain-0',
   'X-Identity-Auth-Chain-1',
   'X-Identity-Auth-Chain-2',
-  'X-Identity-Auth-Chain-3',
   'X-Identity-Timestamp',
   'X-Identity-Metadata',
 ]
