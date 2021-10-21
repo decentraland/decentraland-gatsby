@@ -5,7 +5,6 @@ import { Modal, ModalProps } from 'decentraland-ui/dist/components/Modal/Modal'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { ModalNavigation } from 'decentraland-ui/dist/components/ModalNavigation/ModalNavigation'
 import useLocalFormatMessage from '../../hooks/useLocalFormatMessage'
-import './Modal.stories.css'
 
 const defaultI18n = {
   header: 'Wrong Network',
