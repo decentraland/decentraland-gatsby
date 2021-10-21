@@ -35,6 +35,7 @@ const i18n = {
 }
 
 export default React.memo(function WalletSelector(props: WalletSelectorProps) {
+  const [provider, setProvider] = useState(LoginModalOptionType.METAMASK)
   const [availableProviders, setAvailableProviders] = useState(
     new Set<ProviderType>([])
   )
@@ -47,6 +48,12 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
       ),
     [...(props.availableProviders || [])]
   )
+
+  useEffect(() => {
+    setProvider(
+      toModalOptionType(ProviderType.INJECTED) || LoginModalOptionType.METAMASK
+    )
+  }, [])
 
   const handleConnect = useCallback(
     (providerType: ProviderType, chainId: ChainId) => {
@@ -86,19 +93,16 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
         onClose={props.onClose}
       />
       <ModalContent>
-        <LoginModal.Option
-          type={toModalOptionType(ProviderType.INJECTED)!}
-          onClick={handleConnectInjected}
-        />
+        <LoginModal.Option type={provider} onClick={handleConnectInjected} />
         {availableProviders.has(ProviderType.FORTMATIC) && (
           <LoginModal.Option
-            type={toModalOptionType(ProviderType.FORTMATIC)!}
+            type={LoginModalOptionType.FORTMATIC}
             onClick={handleConnectFortmatic}
           />
         )}
         {availableProviders.has(ProviderType.WALLET_CONNECT) && (
           <LoginModal.Option
-            type={toModalOptionType(ProviderType.WALLET_CONNECT)!}
+            type={LoginModalOptionType.WALLET_CONNECT}
             onClick={handleConnectWalletConnect}
           />
         )}
