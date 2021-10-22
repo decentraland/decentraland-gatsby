@@ -2,41 +2,41 @@
   transition: width 0.3 ease;
 }
 
-.Accordion .Accordion__Title {
+.Accordion > .Accordion__Title {
   display: flex;
   align-items: center;
 }
 
-.Accordion .Accordion__Title__Content {
+.Accordion > .Accordion__Title > .Accordion__Title__Content {
   flex: 1;
 }
 
-.Accordion .Accordion__Title__Description {
+.Accordion > .Accordion__Title > .Accordion__Title__Description {
   opacity: 0.7;
 }
 
-.Accordion .Accordion__Title__Action {
+.Accordion > .Accordion__Title > .Accordion__Title__Action {
   cursor: pointer;
-  min-width: 10%;
+  width: 48px;
   display: flex;
   justify-content: center;
 }
 
-.Accordion .Accordion__Title__Action svg {
+.Accordion > .Accordion__Title > .Accordion__Title__Action svg {
   display: block;
   transform: rotate(0deg);
   transition: 0.3s ease transform;
 }
 
-.Accordion.Accordion--open .Accordion__Title__Action svg {
+.Accordion.Accordion--open > .Accordion__Title > .Accordion__Title__Action svg {
   transform: rotate(90deg);
 }
 
-.Accordion .Accordion__Content {
+.Accordion > .Accordion__Content {
   overflow: hidden;
   transition: 0.3s ease height;
 }
 
-.Accordion .Accordion__Content > div {
+.Accordion > .Accordion__Content > div {
   padding-top: 16px;
 }
