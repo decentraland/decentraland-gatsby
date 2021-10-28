@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 import { Table } from 'decentraland-ui/dist/components/Table/Table'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import Code from '../Text/Code'
 import type {
   AjvArraySchema,
@@ -28,42 +29,15 @@ export default React.memo(function RequestTable({
   header,
 }: RequestTableProps) {
   return (
-    <Table basic="very" className="RequestTable">
-      <Table.Header>
-        <Table.Row>
-          <Table.HeaderCell>Name</Table.HeaderCell>
-          <Table.HeaderCell>Type</Table.HeaderCell>
-          <Table.HeaderCell>Place</Table.HeaderCell>
-          <Table.HeaderCell>Description</Table.HeaderCell>
-        </Table.Row>
-      </Table.Header>
+    <Table className="RequestTable">
       <Table.Body>
-        {params &&
-          params.properties &&
-          Object.keys(params.properties).map((key) => {
-            return (
-              <RequestTableRow
-                key={`param::${key}`}
-                name={key}
-                position="url"
-                definition={params!.properties![key]}
-                required={params?.required}
-              />
-            )
-          })}
-        {query &&
-          query.properties &&
-          Object.keys(query.properties).map((key) => {
-            return (
-              <RequestTableRow
-                key={`query::${key}`}
-                name={key}
-                position="qs"
-                definition={query!.properties![key]}
-                required={query?.required}
-              />
-            )
-          })}
+        {header && header.properties && (
+          <Table.Row>
+            <Table.Cell colspan="3" className="RequestTable__Section">
+              <Header sub>Header</Header>
+            </Table.Cell>
+          </Table.Row>
+        )}
         {header &&
           header.properties &&
           Object.keys(header.properties).map((key) => {
@@ -71,12 +45,56 @@ export default React.memo(function RequestTable({
               <RequestTableRow
                 key={`header::${key}`}
                 name={key}
-                position="header"
                 definition={header!.properties![key]}
                 required={header?.required}
               />
             )
           })}
+        {params && params.properties && (
+          <Table.Row>
+            <Table.Cell colspan="3" className="RequestTable__Section">
+              <Header sub>URL</Header>
+            </Table.Cell>
+          </Table.Row>
+        )}
+        {params &&
+          params.properties &&
+          Object.keys(params.properties).map((key) => {
+            return (
+              <RequestTableRow
+                key={`param::${key}`}
+                name={key}
+                definition={params!.properties![key]}
+                required={params?.required}
+              />
+            )
+          })}
+        {query && query.properties && (
+          <Table.Row>
+            <Table.Cell colspan="3" className="RequestTable__Section">
+              <Header sub>Query params</Header>
+            </Table.Cell>
+          </Table.Row>
+        )}
+        {query &&
+          query.properties &&
+          Object.keys(query.properties).map((key) => {
+            return (
+              <RequestTableRow
+                key={`query::${key}`}
+                name={key}
+                definition={query!.properties![key]}
+                required={query?.required}
+              />
+            )
+          })}
+        {body && body.properties && (
+          <Table.Row>
+            <Table.Cell colspan="3" className="RequestTable__Section">
+              <Header sub>Body</Header>
+            </Table.Cell>
+          </Table.Row>
+        )}
         {body &&
           body.properties &&
           Object.keys(body.properties).map((key) => {
@@ -84,7 +102,6 @@ export default React.memo(function RequestTable({
               <RequestTableRow
                 key={`body::${key}`}
                 name={key}
-                position="body"
                 definition={body!.properties![key]}
                 required={body?.required}
               />
@@ -98,12 +115,10 @@ export default React.memo(function RequestTable({
 const RequestTableRow = React.memo(
   ({
     name,
-    position,
     definition,
     required,
   }: {
     name?: string
-    position: string
     definition: AjvSchema
     required?: string[]
   }) => {
@@ -132,36 +147,23 @@ const RequestTableRow = React.memo(
         <Table.Row>
           <RequestTableNameCell required={isRequired} name={name} />
           <RequestTableTypeCell definition={definition} />
-          <Table.Cell>
-            <Code inline>{position}</Code>
-          </Table.Cell>
           <RequestTableDescriptionCell
             required={isRequired}
             definition={definition}
           />
         </Table.Row>
         {oneOf &&
-          oneOf.map((item, i) => (
-            <RequestTableRow key={i} position={position} definition={item} />
-          ))}
+          oneOf.map((item, i) => <RequestTableRow key={i} definition={item} />)}
         {anyOf &&
-          anyOf.map((item, i) => (
-            <RequestTableRow key={i} position={position} definition={item} />
-          ))}
+          anyOf.map((item, i) => <RequestTableRow key={i} definition={item} />)}
         {items.map((item, i) => (
-          <RequestTableRow
-            key={i}
-            name={`${name}[]`}
-            position={position}
-            definition={item}
-          />
+          <RequestTableRow key={i} name={`${name}[]`} definition={item} />
         ))}
         {obj?.properties &&
           Object.keys(obj.properties).map((key) => (
             <RequestTableRow
               key={key}
               name={`${name}.${key}`}
-              position={position}
               definition={obj.properties![key]}
               required={obj.required}
             />

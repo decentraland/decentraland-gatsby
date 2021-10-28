@@ -1,10 +1,24 @@
 table.ui.table.RequestTable th td,
 table.ui.table.RequestTable tr td {
-  padding: 1em 1em 1em 0;
+  padding: 1em 10px;
+}
+
+table.ui.table.RequestTable th td:first-child,
+table.ui.table.RequestTable tr td:first-child {
+  padding-left: 20px;
 }
 
 table.ui.table.RequestTable th td:last-child,
 table.ui.table.RequestTable tr td:last-child {
-  width: 50%;
-  padding-right: 0;
+  padding-right: 20px;
+}
+
+table.ui.table.RequestTable .RequestTable__Section {
+  background-color: rgb(246, 249, 252);
+}
+
+table.ui.table.RequestTable .RequestTable__Section .ui.header.sub {
+  letter-spacing: 0.35em;
+  font-weight: 900;
+  font-size: 11px;
 }

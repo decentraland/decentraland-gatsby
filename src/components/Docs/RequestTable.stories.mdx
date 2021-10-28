@@ -4,6 +4,49 @@ import RequestTable from './RequestTable'
 
 <Meta title="Components/Docs/RequestTable" />
 
+## RequestTable str_restrictions
+
+<Canvas isExpanded>
+  <RequestTable
+    params={{
+      type: 'object',
+      properties: {
+        url_param: {
+          type: 'string',
+          description: 'url param',
+        },
+      },
+    }}
+    query={{
+      type: 'object',
+      properties: {
+        query_param: {
+          type: 'string',
+          description: 'query param',
+        },
+      },
+    }}
+    header={{
+      type: 'object',
+      properties: {
+        header: {
+          type: 'string',
+          description: 'Header',
+        },
+      },
+    }}
+    body={{
+      type: 'object',
+      properties: {
+        body: {
+          type: 'string',
+          description: 'body',
+        },
+      },
+    }}
+  />
+</Canvas>
+
 ## RequestTable for String
 
 <Canvas isExpanded>
