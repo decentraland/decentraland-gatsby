@@ -14,6 +14,7 @@ import { Card } from 'decentraland-ui/dist/components/Card/Card'
 import { Stats } from 'decentraland-ui/dist/components/Stats/Stats'
 import { Args } from './components/Storybook/utils'
 import Container from './components/Storybook/Container'
+import MissingAuthMessage from './components/Storybook/MissingAuthMessage'
 import Textarea from './components/Form/Textarea'
 import Blockquote from './components/Text/Blockquote'
 import Paragraph from './components/Text/Paragraph'
@@ -33,24 +34,6 @@ import {
 } from './utils/api/API.types'
 
 <Meta title="Development/AuthChain" />
-
-export function NoAuthMessage() {
-  return (
-    <Grid.Row>
-      <Grid.Column tablet="16">
-        <Blockquote>
-          <Paragraph small secondary>
-            This feature requires to login, try to connect using the{' '}
-            <Link href="./?path=/story/hooks-useauth--page#connect-preview">
-              `useAuth`
-            </Link>{' '}
-            hook.
-          </Paragraph>
-        </Blockquote>
-      </Grid.Column>
-    </Grid.Row>
-  )
-}
 
 export function AuthChainTable({ chain, timestamp, metadata }) {
   return (
@@ -157,7 +140,13 @@ export function AuthChainStandar() {
   return (
     <Container>
       <Grid>
-        {!account && <NoAuthMessage />}
+        {!account && (
+          <Grid.Row>
+            <Grid.Column mobile="16">
+              <MissingAuthMessage />
+            </Grid.Column>
+          </Grid.Row>
+        )}
         <Grid.Row>
           <Grid.Column tablet="7">
             <ArgsTable
@@ -247,7 +236,13 @@ export function AuthChainRaw() {
   return (
     <Container>
       <Grid>
-        {!account && <NoAuthMessage />}
+        {!account && (
+          <Grid.Row>
+            <Grid.Column mobile="16">
+              <MissingAuthMessage />
+            </Grid.Column>
+          </Grid.Row>
+        )}
         <Grid.Row>
           <Grid.Column tablet="7">
             <Textarea
