@@ -9,10 +9,10 @@ import {
 import useAuthContext from '../../context/Auth/useAuthContext'
 import useProfileInjected from '../../context/Auth/useProfileContext'
 import useAsyncState from '../../hooks/useAsyncState'
-import './UserMenu.css'
 import useChainId from '../../hooks/useChainId'
 import { fetchManaBalance } from '../../utils/loader/manaBalance'
 import Avatar from './Avatar'
+import './UserMenu.css'
 
 type UserMenuBalances = Partial<Record<Network, number>>
 
