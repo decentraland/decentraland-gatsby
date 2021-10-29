@@ -1,4 +1,4 @@
-import { toBN } from 'web3x/utils/bn'
+import { BigNumber } from '@ethersproject/bignumber'
 import API from './API'
 import env from '../env'
 import Options from './Options'
@@ -72,17 +72,17 @@ export type MapContent = {
   total: number
 }
 
-const CLEAR_LOW = toBN(
+const CLEAR_LOW = BigNumber.from(
   '0xffffffffffffffffffffffffffffffff00000000000000000000000000000000'
 )
-const CLEAR_HIGH = toBN(
+const CLEAR_HIGH = BigNumber.from(
   '0x00000000000000000000000000000000ffffffffffffffffffffffffffffffff'
 )
-const FACTOR = toBN('0x100000000000000000000000000000000')
-const FACTOR_LOW = toBN(
+const FACTOR = BigNumber.from('0x100000000000000000000000000000000')
+const FACTOR_LOW = BigNumber.from(
   '0x10000000000000000000000000000000000000000000000000000000000000000'
 )
-const REVERSE_FACTOR = toBN('0x1000000000000000000000000000000')
+const REVERSE_FACTOR = BigNumber.from('0x1000000000000000000000000000000')
 
 export default class Land extends API {
   static Url =
@@ -123,18 +123,18 @@ export default class Land extends API {
       throw new RangeError(`The coordinates should be inside bounds`)
     }
 
-    const absX = toBN(Math.abs(x))
-    const absY = toBN(Math.abs(y))
+    const absX = BigNumber.from(Math.abs(x))
+    const absY = BigNumber.from(Math.abs(y))
     const uintX = x < 0 ? FACTOR_LOW.sub(absX) : absX
     const uintY = y < 0 ? FACTOR.sub(absY) : absY
 
-    let bX = toBN(uintX).mul(FACTOR).and(CLEAR_LOW)
-    let bY = toBN(uintY).and(CLEAR_HIGH)
+    let bX = BigNumber.from(uintX).mul(FACTOR).and(CLEAR_LOW)
+    let bY = BigNumber.from(uintY).and(CLEAR_HIGH)
     return bX.or(bY).toString()
   }
 
   static decodeParcelId(parcelId: string): [number, number] {
-    const bn = toBN(parcelId)
+    const bn = BigNumber.from(parcelId)
     const bnX = bn.div(FACTOR)
     const bnY = bn.mod(FACTOR)
     const x = bnX.gte(REVERSE_FACTOR)
