@@ -10,7 +10,7 @@ module.exports = {
     '@storybook/addon-actions',
     '@storybook/addon-links',
     '@storybook/addon-docs',
-    '@storybook/addon-postcss',
+    // '@storybook/addon-postcss',
     '@storybook/addon-viewport/register',
     '@storybook/addon-actions/register',
     {
