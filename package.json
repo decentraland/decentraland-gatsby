@@ -29,6 +29,9 @@
   },
   "jest": {
     "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "./jest.setup.js"
+    ],
     "setupFiles": [
       "<rootDir>/src/storyshots.setup.ts"
     ],
