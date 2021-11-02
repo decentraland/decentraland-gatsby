@@ -1,24 +1,24 @@
-name: release_alpha
+name: Alpha
 
 on:
   push:
     branches:
       - next
-      - feat/*
-      - fix/*
 
 jobs:
-  release_alpha:
+
+  release:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
 
       - name: node.js 12
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: 12
           registry-url: https://registry.npmjs.org/
+          cache: 'npm'
 
       - name: installing
         run: npm ci
@@ -28,17 +28,21 @@ jobs:
         with:
           prettier: true
           prettier_extensions: ts,tsx,js,jsx,json,md,mdx,css
+          continue_on_error: false
 
       - name: testing
-        run: npm test
+        run: npm test -- --coverage
 
-      # TODO: add coverage service
-      # - name: uploading to codecov
-      #   uses: codecov/codecov-action@v1.0.2
-      #   with:
-      #     token: ${{secrets.CODECOV_TOKEN}}
+      - name: coveralls
+        uses: coverallsapp/github-action@v1.1.2
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: building
         run: npm run build
+
+      - name: building documents
+        run: npm run build-storybook
 
       - name: releasing
         run: npm run semantic-release
