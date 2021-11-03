@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Eth } from 'web3x/eth'
 import { Source, ArgsTable } from '@storybook/components'
 import { Meta, Story, Preview } from '@storybook/addon-docs'
 import { ChainId } from '@dcl/schemas'
+import { Web3Provider } from '@ethersproject/providers'
 import { ProviderType } from 'decentraland-connect/dist/types'
 import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
@@ -62,16 +62,15 @@ export const SendTransaction = () => {
   useEffect(() => {
     if (sending) {
       Promise.resolve()
-        .then(
-          () =>
-            new Eth(accountState.provider).sendTransaction({
-              from: account,
-              to: account,
-              value: 1,
-            }).txHashPromise
+        .then(() =>
+          new Web3Provider(provider).getSigner().sendTransaction({
+            from: account,
+            to: account,
+            value: 1,
+          })
         )
         .then((tx) => {
-          transactionState.add(tx)
+          transactionState.add(tx.hash)
           setSending(false)
         })
         .catch((err) => {
@@ -134,27 +133,35 @@ export const SendTransaction = () => {
 <SendTransaction />
 
 ```tsx dark=true
-import React from "react"
-import { Eth } from 'web3x/eth'
+import React from 'react'
+import { Web3Provider } from '@ethersproject/providers'
 
-export function Sign () {
-  const [ address, state ] = useAuth()
-  const [ transactions, transactionsState ] = useTransaction(account, state.chainId)
+export function Sign() {
+  const [address, state] = useAuth()
+  const [transactions, transactionsState] = useTransaction(
+    account,
+    state.chainId
+  )
 
-  function handleTransaction () {
-    .sendTransaction({
-      from: account,
-      to: account,
-      value: 1
-    })
-    .txHashPromise
-    .then(tx => transactionsState.add(tx))
+  function handleTransaction() {
+    new Web3Provider(state.provider)
+      .getSigner()
+      .sendTransaction({
+        from: account,
+        to: account,
+        value: 1,
+      })
+      .then((tx) => transactionsState.add(tx.hash))
   }
 
-  return <div>
-    <button disabled={!account} onClick={handleTransaction}>send transaction</button>
-    <pre>{JSON.stringify(transactions, null, 2)}</pre>
-  </div>
+  return (
+    <div>
+      <button disabled={!account} onClick={handleTransaction}>
+        send transaction
+      </button>
+      <pre>{JSON.stringify(transactions, null, 2)}</pre>
+    </div>
+  )
 }
 ```
 

@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Provider } from 'decentraland-connect/dist/types'
-import { Address } from 'web3x/address'
-import { Personal } from 'web3x/personal'
+import { Web3Provider } from '@ethersproject/providers'
 import logger from '../entities/Development/logger'
 
 type SignState = {
@@ -24,8 +23,9 @@ export default function useSign(
 
   useEffect(() => {
     if (state.signing && address && provider) {
-      new Personal(provider)
-        .sign(state.message || '', Address.fromString(address), '')
+      new Web3Provider(provider)
+        .getSigner()
+        .signMessage(state.message || '')
         .then((signature) =>
           setState({
             message: state.message,
