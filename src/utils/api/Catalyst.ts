@@ -1,5 +1,4 @@
 import type { AuthChain } from 'dcl-crypto'
-import type { Address } from 'web3x/address'
 import random from '../number/random'
 import env from '../env'
 import API from './API'
