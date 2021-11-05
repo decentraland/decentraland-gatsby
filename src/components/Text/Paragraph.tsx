@@ -3,18 +3,17 @@ import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
 import './Paragraph.css'
 
-export type ParagraphProps = React.Props<HTMLParagraphElement> &
-  React.HTMLProps<HTMLParagraphElement> & {
-    primary?: boolean
-    secondary?: boolean
-    small?: boolean
-    tiny?: boolean
-    italic?: boolean
-    bold?: boolean
-    semiBold?: boolean
-    underline?: boolean
-    uppercase?: boolean
-  }
+export type ParagraphProps = React.HTMLAttributes<HTMLParagraphElement> & {
+  primary?: boolean
+  secondary?: boolean
+  small?: boolean
+  tiny?: boolean
+  italic?: boolean
+  bold?: boolean
+  semiBold?: boolean
+  underline?: boolean
+  uppercase?: boolean
+}
 
 export default React.memo(function Paragraph({
   primary,

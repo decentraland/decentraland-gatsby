@@ -1,13 +1,11 @@
 import React from 'react'
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
-
 import './Link.css'
 
-export type LinkProps = React.Props<HTMLAnchorElement> &
-  React.HTMLProps<HTMLAnchorElement> & {
-    secondary?: boolean
-  }
+export type LinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
+  secondary?: boolean
+}
 
 export default React.memo(function Link({
   secondary,
