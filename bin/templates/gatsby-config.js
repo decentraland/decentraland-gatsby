@@ -51,16 +51,14 @@ module.exports = {
     // `gatsby-plugin-offline`,
     // `gatsby-plugin-i18n`,
     {
-      resolve: `gatsby-plugin-intl`,
+      resolve: `decentraland-gatsby/dist/plugins/intl`,
       options: {
         // language JSON resource path
-        path: `${__dirname}/src/intl`,
+        paths: [`${__dirname}/src/intl`],
         // supported language
         languages: [`en` /*, `es`, `zh` */],
         // language file path
         defaultLanguage: `en`,
-        // option to redirect to `/ko` when connecting `/`
-        redirect: false,
       },
     },
   ],
