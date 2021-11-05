@@ -5,8 +5,7 @@ import { StyleNamespace } from '../../variables'
 
 import './MainTitle.css'
 
-export type MainTitleProps = React.Props<HTMLHeadingElement> &
-  React.HTMLProps<HTMLHeadingElement>
+export type MainTitleProps = React.HTMLAttributes<HTMLHeadingElement>
 
 export default React.memo(function MainTitle(props: MainTitleProps) {
   return (
