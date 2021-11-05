@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/server'
-import { createIntl } from 'gatsby-plugin-intl'
+import { createIntl } from 'react-intl'
 import { createFormatMessage } from './intl'
 import flat from 'flat'
 import Paragraph from '../../components/Text/Paragraph'
@@ -64,11 +64,11 @@ describe(__filename, () => {
       l.markdown('decorations'),
       <Paragraph>
         2nd paragraph: <Italic>italic</Italic>, <Bold>bold</Bold>,{' '}
-        <Link target="" href="#">
+        <Link href="#" target="">
           innerLink
         </Link>{' '}
         and{' '}
-        <Link target="_blank" href="https://decentraland.com">
+        <Link href="https://decentraland.com" target="_blank">
           outerLink
         </Link>
         .
