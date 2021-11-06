@@ -1,6 +1,7 @@
 import { flatten } from 'flat'
 import { CreatePageArgs, Page } from 'gatsby'
 import { DecentralandIntlContext, DecentralandIntlPluginOptions } from './types'
+import { INTL_DEAULT_PATHS } from './utils'
 
 function loadTransaction(path: string, locale: string): Record<string, string> {
   try {
@@ -77,7 +78,7 @@ export function onCreatePage(
         locale,
         locales,
         defaultLocale,
-        messages: loadTransactions(paths, locale),
+        messages: loadTransactions([...INTL_DEAULT_PATHS, ...paths], locale),
       })
     )
   }
