@@ -6,11 +6,21 @@ const prettierConfig = JSON.parse(
 
 module.exports = {
   stories: ['../src/**/*.stories.@(ts|tsx|js|jsx|mdx)'],
+  core: {
+    builder: 'webpack5',
+  },
+  webpackFinal: async (config) => {
+    config.resolve.fallback.https = false
+    config.resolve.fallback.http = false
+    config.resolve.fallback.stream = false
+    config.resolve.fallback.os = false
+    return config
+  },
   addons: [
     '@storybook/addon-actions',
     '@storybook/addon-links',
     '@storybook/addon-docs',
-    // '@storybook/addon-postcss',
+    '@storybook/addon-postcss',
     '@storybook/addon-viewport/register',
     '@storybook/addon-actions/register',
     {
