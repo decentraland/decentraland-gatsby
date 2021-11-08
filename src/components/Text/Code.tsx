@@ -3,7 +3,7 @@ import TokenList from '../../utils/dom/TokenList'
 import Highlight from 'react-highlight'
 import { StyleNamespace } from '../../variables'
 
-import 'highlight.js/styles/github-gist.css'
+import 'highlight.js/styles/github.css'
 import './Code.css'
 
 export type CodeProps = React.HTMLProps<HTMLPreElement> &

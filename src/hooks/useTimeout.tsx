@@ -25,7 +25,7 @@ export default function useTimeout<T>(
 
   const [state, setState] = useState<State<T>>(initialValue)
 
-  const execute = () => {
+  const execute = (): void => {
     if (state.executed) {
       return
     }

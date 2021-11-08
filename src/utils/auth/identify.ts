@@ -1,3 +1,4 @@
+import '../buffer/buffer'
 import type { ConnectionResponse } from 'decentraland-connect/dist/types'
 import type { AuthChain, AuthIdentity } from 'dcl-crypto/dist/types'
 import { Wallet } from '@ethersproject/wallet'

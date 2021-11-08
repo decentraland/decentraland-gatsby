@@ -13,7 +13,14 @@ export function replaceHelmetMetadata(
   const html = parse(page)
 
   const head = html.querySelector('head')
-  head.removeChild(head.querySelector('title'))
+  if (!head) {
+    return html.toString()
+  }
+
+  const title = head && head.querySelector('title')
+  if (title) {
+    head.removeChild(title)
+  }
 
   const helmetMetadata = head
     .querySelectorAll('meta')
