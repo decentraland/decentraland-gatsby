@@ -9,7 +9,7 @@ import {
   AUTH_CHAIN_HEADER_PREFIX,
   AUTH_METADATA_HEADER,
   AUTH_TIMESTAMP_HEADER,
-} from './API.types'
+} from 'decentraland-crypto-middleware/lib/types'
 import 'isomorphic-fetch'
 import { toBase64 } from '../string/base64'
 

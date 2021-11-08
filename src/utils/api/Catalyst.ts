@@ -101,9 +101,9 @@ export default class Catalyst extends API {
 
   private available: boolean | null = null
 
-  async getProfile(address: Address | string): Promise<Avatar | null> {
+  async getProfile(address: string): Promise<Avatar | null> {
     const result: ProfileResponse = await this.fetch(
-      `/lambdas/profile/${address.toString().toLowerCase()}`
+      `/lambdas/profile/${address.toLowerCase()}`
     )
     return (result && result.avatars && result.avatars[0]) || null
   }
@@ -121,16 +121,14 @@ export default class Catalyst extends API {
    * getProfiles([ `0x1234...`, 0x00000 ]) => Promise<[ { user: `0x1234...`, ...profile }, null ]>
    * ```
    */
-  async getProfiles(
-    addresses: (Address | string)[]
-  ): Promise<(Avatar | null)[]> {
+  async getProfiles(addresses: string[]): Promise<(Avatar | null)[]> {
     if (addresses.length === 0) {
       return []
     }
 
     const params = new URLSearchParams()
     for (const address of addresses) {
-      params.append('id', address.toString().toLowerCase())
+      params.append('id', address.toLowerCase())
     }
 
     const results: ProfileResponse[] = await this.fetch(
@@ -168,9 +166,7 @@ export default class Catalyst extends API {
         })
     )
 
-    return addresses.map(
-      (address) => map.get(address.toString().toLowerCase()) || null
-    )
+    return addresses.map((address) => map.get(address.toLowerCase()) || null)
   }
 
   async getStatus(): Promise<CommsStatus>
