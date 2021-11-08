@@ -1,5 +1,5 @@
 import React from 'react'
-import ReactMarkdown, { ReactMarkdownProps, NodeType } from 'react-markdown'
+import ReactMarkdown, { Options, Components } from 'react-markdown'
 import { Table } from 'decentraland-ui/dist/components/Table/Table'
 import MainTitle from './MainTitle'
 import Title from './Title'
@@ -12,38 +12,27 @@ import Link from './Link'
 import Blockquote from './Blockquote'
 
 export type MarkdownProps = Omit<
-  ReactMarkdownProps,
+  Options,
   'renders' | 'linkTarget' | 'astPlugins' | 'plugins'
 >
 
-export const renderers: Partial<Record<NodeType, React.ReactType<any>>> = {
-  heading: ({ level, ...props }: any) => {
-    switch (level) {
-      case 1:
-        return <MainTitle {...props} />
-      case 2:
-        return <Title {...props} />
-      default:
-        return <SubTitle {...props} />
-    }
-  },
-  paragraph: Paragraph,
-  emphasis: Italic,
-  strong: Bold,
-  link: Link,
-  code: Code,
-  inlineCode: Code,
+export const components: Components = {
+  h1: MainTitle,
+  h2: Title,
+  h3: SubTitle,
+  h4: SubTitle,
+  h5: SubTitle,
+  h6: SubTitle,
+  p: Paragraph as any,
+  i: Italic as any,
+  b: Bold as any,
+  a: Link,
+  code: Code as any,
+  // inlineCode: Code,
   blockquote: Blockquote,
-  list: (props: any) => {
-    switch (props.ordered) {
-      case true:
-        return <ol start={props.start}>{props.children}</ol>
-      case false:
-      default:
-        return <ul>{props.children}</ul>
-    }
-  },
-  listItem: (props: any) => {
+  ol: 'ol',
+  ul: 'ul',
+  li: (props) => {
     return (
       <li {...props}>
         <Paragraph>
@@ -60,45 +49,28 @@ export const renderers: Partial<Record<NodeType, React.ReactType<any>>> = {
       </li>
     )
   },
-  table: (props: React.Props<any>) => (
-    <Table basic="very">{props.children}</Table>
-  ),
-  tableHead: (props: React.Props<any>) => (
-    <Table.Header>{props.children}</Table.Header>
-  ),
-  tableBody: (props: React.Props<any>) => (
-    <Table.Body>{props.children}</Table.Body>
-  ),
-  tableRow: (props: React.Props<any>) => (
-    <Table.Row>{props.children}</Table.Row>
-  ),
-  tableCell: (
-    props: React.Props<any> & {
-      isHeader: boolean
-      align?: 'center' | 'left' | 'right'
-    }
-  ) =>
+  table: (props) => <Table basic="very">{props.children}</Table>,
+  th: Table.Header as any,
+  tbody: Table.Body as any,
+  thead: Table.Header as any,
+  tr: Table.Row as any,
+  // td: Table.Cell,
+  td: (props) =>
     props.isHeader ? (
-      <Table.HeaderCell textAlign={props.align || undefined}>
-        {props.children}
-      </Table.HeaderCell>
+      <Table.HeaderCell {...(props as any)} />
     ) : (
-      <Table.Cell textAlign={props.align || undefined}>
-        {props.children}
-      </Table.Cell>
+      <Table.Cell {...(props as any)} />
     ),
 }
 
-export const allowedTypes = ['root', 'text'].concat(
-  Object.keys(renderers)
-) as NodeType[]
+export const allowedTypes = ['root', 'text'].concat(Object.keys(components))
 
 export default React.memo(function Markdown(props: MarkdownProps) {
   return (
     <ReactMarkdown
       {...props}
-      renderers={renderers as any}
-      allowedTypes={allowedTypes}
+      components={components}
+      allowedElements={allowedTypes}
     />
   )
 })

@@ -61,7 +61,7 @@ export default function MarkdownTextarea({
           className="MarkdownTextarea__Preview"
           style={{ minHeight: (props.minHeight || 72) + 'px' }}
         >
-          <Markdown source={props.value ?? value} />
+          <Markdown>{props.value ?? value}</Markdown>
         </div>
       )}
       {previewing && <p className="message"> {props.message} &nbsp; </p>}

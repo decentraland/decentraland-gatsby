@@ -20,8 +20,8 @@ if (process.env.STRICT_TRANSPORT_SECURITY === 'true') {
 }
 
 export type AsyncHandler = (
-  req: Request & any,
-  res: Response & any,
+  req: Request & Record<string, any>,
+  res: Response & Record<string, any>,
   ctx: Context
 ) => Promise<any> | any
 

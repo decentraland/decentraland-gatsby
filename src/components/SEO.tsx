@@ -209,7 +209,7 @@ export default function SEO({
       name: `twitter:title`,
       content: title,
     },
-    ...meta,
+    ...(meta || []),
   ].filter<MetaProps>(Boolean as any)
 
   return (

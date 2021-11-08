@@ -1,18 +1,18 @@
-import type Ajv from 'ajv'
+import Ajv, { ValidateFunction } from 'ajv'
 import { AjvObjectSchema } from '../Schema/types'
 import defaultAjv from '../Schema/index'
 import RequestError from './error'
 
 export default function validate<R extends {}>(
-  validator: Ajv.ValidateFunction,
+  validator: ValidateFunction,
   body: Record<string, any> = {}
 ): R {
   if (!validator(body) && validator.errors && validator.errors.length > 0) {
     const messages = validator.errors
       .map((error) => {
         let message = ''
-        if (error.dataPath) {
-          message += error.dataPath.slice(1)
+        if (error.instancePath) {
+          message += error.instancePath.slice(1)
         }
 
         if (error.message) {
@@ -43,7 +43,7 @@ export default function validate<R extends {}>(
 
 export function createValidator<R extends {}>(
   schema: AjvObjectSchema,
-  ajv: Ajv.Ajv = defaultAjv
+  ajv: Ajv = defaultAjv
 ) {
   const validator = ajv.compile(schema)
   return function (body: Record<string, any> = {}): R {
