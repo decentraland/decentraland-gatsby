@@ -7,7 +7,6 @@
 
 import React from 'react'
 import { DropdownProps } from 'semantic-ui-react'
-import { changeLocale } from 'gatsby-plugin-intl'
 import { PageProps } from 'gatsby'
 
 import trackEvent from '../../utils/segment/trackEvent'
@@ -26,9 +25,10 @@ import WrongNetworkModal from '../Modal/WrongNetworkModal'
 import useWindowScroll from '../../hooks/useWindowScroll'
 import useAuthContext from '../../context/Auth/useAuthContext'
 import TokenList from '../../utils/dom/TokenList'
-import './Layout.css'
 import { getSupportedChainIds } from '../../context/Auth/utils'
 import { ProviderType } from 'decentraland-connect/dist/types'
+import { changeLocale } from '../../plugins/intl/utils'
+import './Layout.css'
 
 export type LayoutProps = PageProps &
   NavbarProps &
@@ -55,7 +55,6 @@ export default function Layout({
 }: LayoutProps) {
   const language: Locale = pageContext?.intl?.language || 'en'
   const languages: Locale[] = pageContext?.intl?.languages || ['en']
-  const currentPath: string = pageContext?.intl?.originalPath || '/'
   const [, state] = useAuthContext()
   const scroll = useWindowScroll()
   const isScrolled = scroll.scrollY.get() > 0
@@ -64,7 +63,7 @@ export default function Layout({
     _: React.SyntheticEvent<HTMLElement>,
     data: DropdownProps
   ) {
-    changeLocale(data.value as Locale, currentPath)
+    changeLocale(data.value as string)
   }
 
   return (

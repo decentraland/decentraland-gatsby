@@ -15,6 +15,8 @@ import useAnchor from '../../hooks/useAnchor'
 import Loader from '../Progress/Loader'
 import 'decentraland-ui/dist/components/LoginModal/LoginModal.css'
 import './WalletSelectorModal.css'
+import useFormatMessage from '../../hooks/useFormatMessage'
+import Markdown from '../Text/Markdown'
 
 export type WalletSelectorProps = {
   open?: boolean
@@ -29,12 +31,8 @@ export type WalletSelectorProps = {
 
 export { LoginModalOptionType }
 
-const i18n = {
-  title: 'Sign In',
-  subtitle: 'Choose a method to connect',
-}
-
 export default React.memo(function WalletSelector(props: WalletSelectorProps) {
+  const l = useFormatMessage()
   const [provider, setProvider] = useState(LoginModalOptionType.METAMASK)
   const [availableProviders, setAvailableProviders] = useState(
     new Set<ProviderType>([])
@@ -88,8 +86,8 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
       mountNode={props.mountNode}
     >
       <ModalNavigation
-        title={i18n.title}
-        subtitle={i18n.subtitle}
+        title={l('@growth.WalletSelector.title')}
+        subtitle={l('@growth.WalletSelector.subtitle')}
         onClose={props.onClose}
       />
       <ModalContent>
@@ -107,15 +105,7 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
           />
         )}
         <small className="message">
-          Trezor and smart contract wallets (like Dapper or Argent) cannot
-          interact Polygon. Read more about the Trezor support status{' '}
-          <a
-            href="https://github.com/trezor/trezor-firmware/pull/1568"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            here
-          </a>
+          <Markdown children={l('@growth.WalletSelector.trezor')} />
         </small>
       </ModalContent>
       {props.error && <p className="error visible">{props.error}</p>}
@@ -127,29 +117,4 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
       ) : null}
     </Modal>
   )
-
-  // return (
-  //   <LoginModal
-  //     open={props.open}
-  //     loading={props.loading}
-  //     onClose={props.onClose}
-  //     mountNode={props.mountNode}
-  //   >
-  //     <LoginModal.Option type={toModalOptionType(ProviderType.INJECTED)!} onClick={handleConnectInjected} />
-  //     {availableProviders.has(ProviderType.FORTMATIC) && <LoginModal.Option type={toModalOptionType(ProviderType.FORTMATIC)!} onClick={handleConnectFortmatic} />}
-  //     {availableProviders.has(ProviderType.WALLET_CONNECT) && <LoginModal.Option type={toModalOptionType(ProviderType.WALLET_CONNECT)!} onClick={handleConnectWalletConnect} />}
-  //     <small className="message">
-  //       Trezor and smart contract wallets (like Dapper or Argent) cannot
-  //       interact Polygon. Read more about the Trezor support status{' '}
-  //       <a
-  //         href="https://github.com/trezor/trezor-firmware/pull/1568"
-  //         target="_blank"
-  //         rel="noopener noreferrer"
-  //       >
-  //         here
-  //       </a>
-  //     </small>
-  //     {props.error && <p className="error visible">{props.error}</p>}
-  //   </LoginModal>
-  // )
 })

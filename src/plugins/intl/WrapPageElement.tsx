@@ -20,6 +20,7 @@ export default function WrapPageElement(
         {
           locale: ctx.locale,
           messages: ctx.messages,
+          defaultLocale: ctx.defaultLocale,
         },
         cacheIntl
       ),

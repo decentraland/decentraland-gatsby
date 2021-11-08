@@ -4,22 +4,12 @@ import { ProviderType } from 'decentraland-connect/dist/types'
 import { Modal, ModalProps } from 'decentraland-ui/dist/components/Modal/Modal'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { ModalNavigation } from 'decentraland-ui/dist/components/ModalNavigation/ModalNavigation'
-import useLocalFormatMessage from '../../hooks/useLocalFormatMessage'
-
-const defaultI18n = {
-  header: 'Wrong Network',
-  message:
-    'You need to be connected to {expectedChainName} to use this app, but you are currently connected to {currentChainName}.',
-  change_chain: 'switch to {expectedChainName}',
-  separator: ' or ',
-  unknown_chain: 'Unknown',
-}
+import useFormatMessage from '../../hooks/useFormatMessage'
 
 export type WrongNetworkModalProps = ModalProps & {
   currentNetwork?: ChainId | null
   expectedNetwork?: ChainId | ChainId[]
   providerType?: ProviderType | null
-  i18n?: Partial<typeof defaultI18n>
   onSwitchNetwork?: (chainId: ChainId) => void
 }
 
@@ -39,10 +29,9 @@ export default React.memo(function WrongNetworkModal({
   expectedNetwork,
   onSwitchNetwork,
   providerType,
-  i18n,
   ...props
 }: WrongNetworkModalProps) {
-  const l = useLocalFormatMessage(i18n, defaultI18n, 'WrongNetworkModal')
+  const l = useFormatMessage()
   const expectedNetworks = useMemo(() => {
     if (!expectedNetwork) {
       return anyNetwork
