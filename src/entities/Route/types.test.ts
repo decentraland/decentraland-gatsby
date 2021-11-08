@@ -23,8 +23,7 @@ const validOriginCases = [
   'https://subdomain.decentraland.org',
   'https://decentraland.io',
   'https://subdomain.decentraland.io',
-  'https://now.sh',
-  'https://subdomain.now.sh',
+  'https://decentraland.github.io',
   'https://manaland.cn',
   'https://subdomain.manaland.cn',
 ]
@@ -58,6 +57,8 @@ const invalidOriginCases = [
   'http://subdomain.decentraland.io',
   'http://now.sh',
   'http://subdomain.now.sh',
+  'https://now.sh',
+  'https://subdomain.now.sh',
   'http://manaland.cn',
   'http://subdomain.manaland.cn',
   'http://other.domain',
