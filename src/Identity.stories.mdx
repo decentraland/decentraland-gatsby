@@ -1,0 +1,39 @@
+import { useState } from 'react'
+import { ChainId } from '@dcl/schemas'
+import { Source, ArgsTable } from '@storybook/components'
+import { Meta, Story, Preview } from '@storybook/addon-docs'
+import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import MissingAuthMessage from './components/Storybook/MissingAuthMessage'
+import Divider from './components/Text/Divider'
+import Code from './components/Text/Code'
+import useAsyncTask from './hooks/useAsyncTask'
+import useAuth from './hooks/useAuth'
+
+<Meta title="Development/DecentralandIdentity" />
+
+# Generate a new Decentraland Identity
+
+<Divider size="small" />
+
+export const IdentityGenerator = React.memo((props) => {
+  const [account] = useAuth()
+  const [identity, setIdentity] = useState(null)
+  const [creating, create] = useAsyncTask(() => {}, [account])
+  return (
+    <div>
+      {!account && <MissingAuthMessage />}
+      <Button
+        primary
+        onClick={create}
+        disabled={!account || creating}
+        loadin={creating}
+      >
+        create identity
+      </Button>
+      <Code language="json">{JSON.stringify(identity, null, 2)}</Code>
+    </div>
+  )
+})
+
+<IdentityGenerator />
