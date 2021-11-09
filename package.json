@@ -38,8 +38,12 @@
     "roots": [
       "<rootDir>/src/"
     ],
+    "transform": {
+      "^.+\\.[tj]sx?$": "./transform.jest.js",
+      "^.+\\.mdx?$": "@storybook/addon-docs/jest-transform-mdx"
+    },
     "moduleNameMapper": {
-      "\\.(css|less|sass|scss|gif|ttf|eot|svg)$": "<rootDir>/src/__mocks__/files.ts"
+      "\\.(css|less|sass|scss|gif|ttf|eot|svg)$": "jest-transform-stub"
     }
   },
   "author": "",
@@ -72,18 +76,19 @@
     "@types/flat": "^5.0.2",
     "@types/html-escaper": "^3.0.0",
     "@types/isomorphic-fetch": "0.0.35",
-    "@types/jest": "^27.0.2",
+    "@types/jest": "^26.0.24",
     "@types/lodash.omit": "^4.5.6",
     "@types/node": "^16.11.6",
     "@types/react-dom": "^17.0.11",
     "@types/react-highlight": "^0.12.5",
     "@types/segment-analytics": "0.0.34",
     "@types/three": "^0.133.1",
-    "babel-jest": "^27.3.1",
+    "babel-jest": "^26.6.3",
     "babel-loader": "^8.2.3",
     "core-js": "^3.19.1",
     "husky": "^7.0.4",
-    "jest": "^27.3.1",
+    "jest": "^26.6.3",
+    "jest-transform-stub": "^2.0.0",
     "lint-staged": "^11.2.6",
     "node-pg-migrate": "^6.0.0",
     "postcss": "^7.0.39",
@@ -93,7 +98,7 @@
     "react-test-renderer": "^17.0.2",
     "semantic-release": "^18.0.0",
     "sql-formatter": "^4.0.2",
-    "ts-jest": "^27.0.7",
+    "ts-jest": "^26.5.6",
     "ts-loader": "^9.2.6",
     "ts-node": "^10.4.0",
     "typescript": "^4.4.4",
@@ -150,6 +155,8 @@
     "react-highlight": "^0.14.0",
     "react-intl": "^5.21.0",
     "react-markdown": "^7.1.0",
+    "remark-emoji": "^3.0.2",
+    "remark-gfm": "^3.0.1",
     "rollbar": "^2.24.0",
     "three": "^0.134.0",
     "tsc-files": "^1.1.2",
