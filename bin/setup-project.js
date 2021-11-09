@@ -53,7 +53,7 @@ Promise.resolve()
   .then(() =>
     installDependencies([
       'dotenv',
-      'gatsby@2',
+      'gatsby@4',
       'gatsby-plugin-image@2',
       'gatsby-plugin-sharp@4',
       'gatsby-transformer-sharp@4',
