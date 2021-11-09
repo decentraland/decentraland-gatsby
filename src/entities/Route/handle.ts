@@ -19,15 +19,15 @@ if (process.env.STRICT_TRANSPORT_SECURITY === 'true') {
   DEFAULT_API_HEADERS['Strict-Transport-Security'] = 'max-age=63072000'
 }
 
-export type AsyncHandler = (
-  req: Request & Record<string, any>,
-  res: Response & Record<string, any>,
+export type AsyncHandler<R extends Request> = (
+  req: R,
+  res: Response,
   ctx: Context
 ) => Promise<any> | any
 
 export default handleAPI
 
-export function handleAPI(handler: AsyncHandler) {
+export function handleAPI<R extends Request>(handler: AsyncHandler<R>) {
   return handleIncommingMessage(handler, {
     defaultHeaders: DEFAULT_API_HEADERS,
     api: true,
@@ -37,14 +37,17 @@ export function handleAPI(handler: AsyncHandler) {
   })
 }
 
-export function handleJSON(handler: AsyncHandler) {
+export function handleJSON<R extends Request>(handler: AsyncHandler<R>) {
   return handleIncommingMessage(handler, {
     defaultHeaders: DEFAULT_API_HEADERS,
     type: 'application/json',
   })
 }
 
-export function handleRaw(handler: AsyncHandler, type?: string) {
+export function handleRaw<R extends Request>(
+  handler: AsyncHandler<R>,
+  type?: string
+) {
   return handleIncommingMessage(handler, { type })
 }
 
@@ -80,8 +83,8 @@ export function handleExpressError(
   }
 }
 
-function handleIncommingMessage(
-  handler: AsyncHandler,
+function handleIncommingMessage<R extends Request>(
+  handler: AsyncHandler<R>,
   options: Partial<{
     defaultHeaders: Record<string, string>
     api?: boolean
@@ -114,7 +117,7 @@ function handleIncommingMessage(
           res.type(options.type)
         }
       })
-      .then(() => handler(req, res, new Context(req, res)))
+      .then(() => handler(req as R, res, new Context(req, res)))
       .then(function handleResponseOk(data: any) {
         if (!res.headersSent) {
           res.status(defaultStatusCode(req))
@@ -140,9 +143,11 @@ function handleIncommingMessage(
   }
 }
 
-export function middleware(handler: AsyncHandler): NextHandleFunction {
+export function middleware<R extends Request>(
+  handler: AsyncHandler<R>
+): NextHandleFunction {
   return function (req: Request, res: Response, next: NextFunction) {
-    handler(req, res, new Context(req, res))
+    handler(req as R, res, new Context(req, res))
       .then(() => next())
       .catch((err: RequestError) => handleExpressError(err, req, res))
   }
