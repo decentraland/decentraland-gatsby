@@ -1,6 +1,7 @@
+import type { Request } from 'express'
 import handle, { AsyncHandler } from '../handle'
 
-export default function single(handler: AsyncHandler) {
+export default function single<R extends Request>(handler: AsyncHandler<R>) {
   let loaders = new Map<string, Promise<any>>()
 
   return handle(async (req, res, ctx) => {
@@ -8,7 +9,7 @@ export default function single(handler: AsyncHandler) {
       return loaders.get(req.path)
     }
 
-    const loader = handler(req, res, ctx)
+    const loader = handler(req as R, res, ctx)
       .then((response: any) => {
         loaders.delete(req.path)
         return response
