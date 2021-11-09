@@ -6,22 +6,25 @@ import Markdown from './Markdown'
 # Markdown component
 
 <Canvas>
-  <Markdown source={'`this is makrdown!`'} />
+  <Markdown children={'`this is makrdown!`'} />
 </Canvas>
 
 ## Markdown Cheat Sheet
 
 <Canvas>
   <Markdown
-    source={`
+    children={`
 # Welcome to my React Markdown Editor!
 \n
 ## This is a sub-heading...
 ### And here's some other cool stuff:
+#### And here's some other cool stuff:
+##### And here's some other cool stuff:
+###### And here's some other cool stuff:
 \n
-Heres some code, \`<div ></div>\`, between 2 backticks.
+Heres some code, \`<div ></div>\`, between 2 backticks :+1:.
 \n
-\`\`\`
+\`\`\`tsx
 // this is multi-line code:
 \n
 function anotherExample(firstLine, lastLine) {
@@ -32,8 +35,11 @@ function anotherExample(firstLine, lastLine) {
 \`\`\`
 \n
 You can also make text **bold**... whoa!
+\n
 Or _italic_.
+\n
 Or... wait for it... **_both!_**
+\n
 And feel free to go crazy ~~crossing stuff out~~.
 \n
 There's also [links](https://www.freecodecamp.com), and
@@ -41,10 +47,10 @@ There's also [links](https://www.freecodecamp.com), and
 \n
 And if you want to get really crazy, even tables:
 \n
-Wild Header | Crazy Header | Another Header?
------------- |: -------------: | -------------:
-Your content can | be here, and it | can be here....
-And here. | Okay. | I think we get it.
+| Wild Header | Crazy Header | Another Header? |
+|------------ | ------------- | ------------- |
+| Your content can | be here, and it | can be here.... |
+| And here. | Okay. | I think we get it. |
 \n
 - And of course there are lists.
   - Some are bulleted.
@@ -61,7 +67,7 @@ And here. | Okay. | I think we get it.
 - [ ] And there are \`unchecked\` lists too.
 - [x] And there are \`checked\` lists too.
 \n
-![React Logo w/ Text](https://goo.gl/Umyytc)
+![Decentraland](https://decentraland.org/logos/svg/color-dark-text.svg)
 `}
   />
 </Canvas>

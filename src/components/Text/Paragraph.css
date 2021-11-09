@@ -1,4 +1,5 @@
-.dg.Paragraph {
+.dg.Paragraph,
+.dg.List > .dg.ListItem {
   color: var(--text);
   font-size: 21px;
   font-weight: 300;
@@ -8,39 +9,48 @@
   letter-spacing: 0.3px;
 }
 
-.dg.Paragraph.Paragraph--small {
+.dg.Paragraph.Paragraph--small,
+.dg.List > .dg.ListItem.ListItem--small {
   font-size: 17px;
 }
 
-.dg.Paragraph.Paragraph--tiny {
+.dg.Paragraph.Paragraph--tiny,
+.dg.List > .dg.ListItem.ListItem--tiny {
   font-size: 11px;
 }
 
-.dg.Paragraph.Paragraph--primary {
+.dg.Paragraph.Paragraph--primary,
+.dg.List > .dg.ListItem.ListItem--primary {
   color: var(--primary);
 }
 
-.dg.Paragraph.Paragraph--secondary {
+.dg.Paragraph.Paragraph--secondary,
+.dg.List > .dg.ListItem.ListItem--secondary {
   color: var(--secondary-text);
 }
 
-.dg.Paragraph.Paragraph--semi-bold {
+.dg.Paragraph.Paragraph--semi,
+.dg.List > .dg.ListItem-bold--semi {
   font-weight: 400;
 }
 
-.dg.Paragraph.Paragraph--bold {
+.dg.Paragraph.Paragraph--bold,
+.dg.List > .dg.ListItem.ListItem--bold {
   font-weight: bold;
 }
 
-.dg.Paragraph.Paragraph--italic {
+.dg.Paragraph.Paragraph--italic,
+.dg.List > .dg.ListItem.ListItem--italic {
   font-style: italic;
 }
 
-.dg.Paragraph.Paragraph--underline {
+.dg.Paragraph.Paragraph--underline,
+.dg.List > .dg.ListItem.ListItem--underline {
   text-decoration: underline;
 }
 
-.dg.Paragraph.Paragraph--uppercase {
+.dg.Paragraph.Paragraph--uppercase,
+.dg.List > .dg.ListItem.ListItem--uppercase {
   text-transform: uppercase;
 }
 
@@ -49,11 +59,13 @@
     font-size: 21px;
   }
 
-  .dg.Paragraph.Paragraph--small {
+  .dg.Paragraph.Paragraph--small,
+  .dg.List > .dg.ListItem.ListItem--small {
     font-size: 17px;
   }
 
-  .dg.Paragraph.Paragraph--tiny {
+  .dg.Paragraph.Paragraph--tiny,
+  .dg.List > .dg.ListItem.ListItem--tiny {
     font-size: 11px;
   }
 }
@@ -63,11 +75,13 @@
     font-size: 17px;
   }
 
-  .dg.Paragraph.Paragraph--small {
+  .dg.Paragraph.Paragraph--small,
+  .dg.List > .dg.ListItem.ListItem--small {
     font-size: 17px;
   }
 
-  .dg.Paragraph.Paragraph--tiny {
+  .dg.Paragraph.Paragraph--tiny,
+  .dg.List > .dg.ListItem.ListItem--tiny {
     font-size: 11px;
   }
 }
