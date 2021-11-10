@@ -162,6 +162,7 @@
     "remark-emoji": "^3.0.2",
     "remark-gfm": "^3.0.1",
     "rollbar": "^2.24.0",
+    "sharp": "^0.29.2",
     "three": "^0.134.0",
     "tsc-files": "^1.1.2",
     "uuid": "^8.3.1",
