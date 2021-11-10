@@ -13,7 +13,11 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "rm -rf dist && tsc -p . -outDir dist --sourceMap false --skipLibCheck && postcss --base src --dir dist 'src/**/*.css'",
+    "build": "npm run build:clear && build:code && build:plugins && build:style",
+    "build:clear": "rm -rf dist",
+    "build:code": "tsc -p . -outDir dist --sourceMap false --skipLibCheck",
+    "build:plugins": "cp src/plugins/intl/package.json dist/plugins/intl",
+    "build:style": "postcss --base src --dir dist 'src/**/*.css'",
     "start": "npm run storybook",
     "format": "prettier --write '**/*.{ts,tsx,js,jsx,json,md,mdx,css}'",
     "storybook": "start-storybook -s static -p 6006",
