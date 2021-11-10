@@ -1,30 +1,5 @@
 import Ajv from 'ajv'
-import isEmail from 'validator/lib/isEmail'
-import isUUID from 'validator/lib/isUUID'
-import isURL from 'validator/lib/isURL'
-import isNumeric from 'validator/lib/isNumeric'
+import addFortmas from 'ajv-formats'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
 
-export default new Ajv()
-  .addFormat('address', isEthereumAddress)
-  .addFormat('email', isEmail)
-  .addFormat('uuid', isUUID)
-  .addFormat('numeric', (n) => isNumeric(n))
-  .addFormat('domain', (domain) =>
-    new RegExp(
-      '^(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?.)+[a-z0-9][a-z0-9-]{0,61}[a-z0-9]$'
-    ).test(domain)
-  )
-  .addFormat('url', (url) =>
-    isURL(url, {
-      protocols: ['http', 'https'],
-      require_tld: true,
-      require_protocol: true,
-      require_host: true,
-      require_valid_protocol: true,
-      allow_underscores: false,
-      allow_trailing_dot: false,
-      allow_protocol_relative_urls: false,
-      disallow_auth: true,
-    })
-  )
+export default addFortmas(new Ajv()).addFormat('address', isEthereumAddress)

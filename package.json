@@ -117,6 +117,7 @@
     "@types/react-helmet": "^6.1.4",
     "@types/validator": "^13.6.6",
     "ajv": "^8.6.3",
+    "ajv-formats": "^2.1.1",
     "autoprefix": "^1.0.1",
     "aws-sdk": "^2.1023.0",
     "browser-lang": "0.1.0",
