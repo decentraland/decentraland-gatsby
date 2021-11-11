@@ -8,8 +8,7 @@
     "npm": ">=7.0.0"
   },
   "bin": {
-    "setup-project": "./bin/setup-project.sh",
-    "setup-global-css": "./bin/setup-global-css.sh"
+    "setup-project": "./bin/setup-project.sh"
   },
   "scripts": {
     "test": "jest",
