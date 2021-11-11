@@ -1,12 +1,8 @@
-import { NavigateOptions as RouterNavigateOptions } from '@reach/router'
 import { navigate as gatsbyNavigate, withPrefix } from 'gatsby'
+import { NavigateOptions as RouterNavigateOptions } from '@reach/router'
 import './types'
 
 export const INTL_LANGUAGE_KEY = `decentraland-gatsby-intl`
-export const INTL_DEAULT_PATHS = [
-  require.resolve(`decentraland-dapps/dist/modules/translation/defaults`),
-  require.resolve(`../../intl`),
-]
 
 export type NavigateOptions<S> = RouterNavigateOptions<S> & {
   locale?: string
