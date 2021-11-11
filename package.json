@@ -13,9 +13,10 @@
   },
   "scripts": {
     "test": "jest",
-    "build": "npm run build:clear && npm run build:code && npm run build:plugins && npm run build:style",
+    "build": "npm run build:clear && npm run build:code && npm run build:intl && npm run build:plugins && npm run build:style",
     "build:clear": "rm -rf dist",
     "build:code": "tsc -p . -outDir dist --sourceMap false --skipLibCheck",
+    "build:intl": "cp src/intl dist/intl",
     "build:plugins": "cp src/plugins/intl/package.json dist/plugins/intl",
     "build:style": "postcss --base src --dir dist 'src/**/*.css'",
     "start": "npm run storybook",
