@@ -1,7 +1,14 @@
+import { dirname } from 'path'
 import { flatten } from 'flat'
 import { CreatePageArgs, Page } from 'gatsby'
 import { DecentralandIntlContext, DecentralandIntlPluginOptions } from './types'
-import { INTL_DEAULT_PATHS } from './utils'
+
+export const INTL_DEAULT_PATHS = [
+  dirname(
+    require.resolve(`decentraland-dapps/dist/modules/translation/defaults`)
+  ),
+  dirname(require.resolve(`../../intl`)),
+]
 
 function loadTransaction(path: string, locale: string): Record<string, string> {
   try {
@@ -52,9 +59,7 @@ function generatePage(
 
 // export function onCreateWebpackConfig(args: CreateWebpackConfigArgs, options: DecentralandIntlPluginOptions) {
 //   options.locales
-
 //   args.actions.setWebpackConfig({
-
 //   })
 // }
 
