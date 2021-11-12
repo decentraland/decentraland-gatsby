@@ -29,6 +29,7 @@ import { getSupportedChainIds } from '../../context/Auth/utils'
 import { ProviderType } from 'decentraland-connect/dist/types'
 import { changeLocale } from '../../plugins/intl/utils'
 import './Layout.css'
+import { DecentralandIntlContext } from '../../plugins/intl/types'
 
 export type LayoutProps = PageProps &
   NavbarProps &
@@ -36,11 +37,7 @@ export type LayoutProps = PageProps &
     hideNavbar?: boolean
     hideFooter?: boolean
     pageContext?: {
-      intl?: {
-        language?: Locale
-        languages?: Locale[]
-        originalPath?: string
-      }
+      intl?: DecentralandIntlContext
     }
     availableProviders?: ProviderType[]
   }
@@ -53,8 +50,8 @@ export default function Layout({
   hideFooter,
   ...props
 }: LayoutProps) {
-  const language: Locale = pageContext?.intl?.language || 'en'
-  const languages: Locale[] = pageContext?.intl?.languages || ['en']
+  const locale = pageContext?.intl?.locale || 'en'
+  const locales = pageContext?.intl?.locales || ['en']
   const [, state] = useAuthContext()
   const scroll = useWindowScroll()
   const isScrolled = scroll.scrollY.get() > 0
@@ -114,8 +111,8 @@ export default function Layout({
       />
       {!hideFooter && (
         <Footer
-          locale={language}
-          locales={languages}
+          locale={locale as Locale}
+          locales={locales as Locale[]}
           isFullscreen={props.isFullscreen}
           className={TokenList.join(['LayoutFooterContainer', props.className])}
           i18n={props.i18n}
