@@ -1,9 +1,9 @@
 import { dirname } from 'path'
 import { flatten } from 'flat'
-import { CreatePageArgs, Page } from 'gatsby'
+import { CreatePageArgs, CreateWebpackConfigArgs, Page } from 'gatsby'
 import { DecentralandIntlContext, DecentralandIntlPluginOptions } from './types'
 
-export const INTL_DEAULT_PATHS = [
+const INTL_DEAULT_PATHS = [
   dirname(
     require.resolve(`decentraland-dapps/dist/modules/translation/defaults`)
   ),
@@ -57,11 +57,15 @@ function generatePage(
   }
 }
 
-// export function onCreateWebpackConfig(args: CreateWebpackConfigArgs, options: DecentralandIntlPluginOptions) {
-//   options.locales
-//   args.actions.setWebpackConfig({
-//   })
-// }
+export function onCreateWebpackConfig(
+  args: CreateWebpackConfigArgs,
+  options: DecentralandIntlPluginOptions
+) {
+  // options.locales
+  // args.rules
+  // args.actions.setWebpackConfig({
+  // })
+}
 
 export function onCreatePage(
   args: CreatePageArgs<{ intl: DecentralandIntlContext }>,
