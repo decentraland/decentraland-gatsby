@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React from 'react'
 import { WrapPageElementBrowserArgs, WrapPageElementNodeArgs } from 'gatsby'
 import { DecentralandIntlContext, DecentralandIntlPluginOptions } from './types'
 import IntlProvider from './IntlProvider'
