@@ -1,3 +1,1 @@
-import WrapPageElement from './WrapPageElement'
-
-export const wrapPageElement = WrapPageElement
+export { default as wrapPageElement } from './wrapPageElement'

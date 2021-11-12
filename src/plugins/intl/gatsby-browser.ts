@@ -1,5 +1,5 @@
+export { default as wrapPageElement } from './wrapPageElement'
 import './utils'
-import WrapPageElement from './WrapPageElement'
 
 export const onRouteUpdate = () => {
   window.___decentralandNavigationUpdates =
@@ -7,5 +7,3 @@ export const onRouteUpdate = () => {
       ? 0
       : window.___decentralandNavigationUpdates + 1
 }
-
-export const wrapPageElement = WrapPageElement
