@@ -25,8 +25,8 @@ export default function IntlProvider(props: IntlProviderProps) {
     () =>
       createIntl(
         {
+          messages,
           locale: props.locale,
-          messages: props.messages,
           defaultLocale: props.defaultLocale,
         },
         intlCache
@@ -35,10 +35,10 @@ export default function IntlProvider(props: IntlProviderProps) {
   )
 
   useEffect(() => {
-    if (window.___decentralandGatsbyIntl !== intl) {
+    if (intl && window.___decentralandGatsbyIntl !== intl) {
       window.___decentralandGatsbyIntl = intl
     }
   }, [intl])
 
-  return <RawIntlProvider value={{} as any}>{props.children}</RawIntlProvider>
+  return <RawIntlProvider value={intl}>{props.children}</RawIntlProvider>
 }
