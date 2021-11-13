@@ -1,4 +1,3 @@
-export { default as wrapPageElement } from './wrapPageElement'
 import './utils'
 
 export const onRouteUpdate = () => {
