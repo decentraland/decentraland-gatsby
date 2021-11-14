@@ -13,6 +13,7 @@ import 'decentraland-ui/dist/themes/alternative/light-theme.css'
 import './src/theme.css'
 
 // import Helmet from "react-helmet"
+import { IntProvider } from 'decentraland-gatsby/dist/plugins/intl'
 import AuthProvider from 'decentraland-gatsby/dist/context/Auth/AuthProvider'
 // import FeatureFlagProvider from "decentraland-gatsby/dist/context/FeatureFlag/FeatureFlagProvider"
 import Layout from 'decentraland-gatsby/dist/components/Layout/Layout'
@@ -33,9 +34,11 @@ export const wrapRootElement = ({ element }) => (
 
 export const wrapPageElement = ({ element, props }) => {
   return (
-    <Layout {...props} rightMenu={<UserMenu />}>
-      {element}
-    </Layout>
+    <IntProvider {...props.pageContext.intl}>
+      <Layout {...props} rightMenu={<UserMenu />}>
+        {element}
+      </Layout>
+    </IntProvider>
   )
 }
 
