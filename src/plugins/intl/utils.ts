@@ -1,5 +1,5 @@
 import { navigate as gatsbyNavigate, withPrefix } from 'gatsby'
-import { NavigateOptions as RouterNavigateOptions } from '@reach/router'
+import { NavigateOptions as RouterNavigateOptions } from '@gatsbyjs/reach-router'
 import './types'
 
 export const INTL_LANGUAGE_KEY = `decentraland-gatsby-intl`

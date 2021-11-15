@@ -65,6 +65,8 @@ Promise.resolve()
       'gatsby-plugin-postcss@5',
       'postcss@8',
       'core-js@3',
+      '@gatsbyjs/reach-router@1',
+      '@reach/router@1',
       'postcss-assets@6',
       'postcss-svg@3',
       'autoprefixer@10',
