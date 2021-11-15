@@ -1,6 +1,6 @@
 import { dirname } from 'path'
 import { flatten } from 'flat'
-import { CreatePageArgs, CreateWebpackConfigArgs, Page } from 'gatsby'
+import { CreatePageArgs, Page } from 'gatsby'
 import { DecentralandIntlContext, DecentralandIntlPluginOptions } from './types'
 
 const INTL_DEAULT_PATHS = [
