@@ -15,11 +15,12 @@ export default function IntlProvider(props: IntlProviderProps) {
     () => merge(ref.current ?? {}, props.messages),
     [props.locale, props.messages]
   )
+
   useEffect(() => {
     if (ref.current !== messages) {
       ref.current = messages
     }
-  })
+  }, [messages])
 
   const intl = useMemo(
     () =>
