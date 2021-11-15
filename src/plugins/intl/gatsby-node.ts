@@ -57,16 +57,6 @@ function generatePage(
   }
 }
 
-export function onCreateWebpackConfig(
-  args: CreateWebpackConfigArgs,
-  options: DecentralandIntlPluginOptions
-) {
-  // options.locales
-  // args.rules
-  // args.actions.setWebpackConfig({
-  // })
-}
-
 export function onCreatePage(
   args: CreatePageArgs<{ intl: DecentralandIntlContext }>,
   options: DecentralandIntlPluginOptions
@@ -77,8 +67,10 @@ export function onCreatePage(
   }
 
   const { createPage, deletePage } = args.actions
-  const { locales, defaultLocale, paths } = options
   const page = { ...args.page }
+  const paths = options.paths || []
+  const locales = options.locales || ['en']
+  const defaultLocale = options.defaultLocale || locales[0] || 'en'
 
   deletePage(args.page)
   for (const locale of locales) {
