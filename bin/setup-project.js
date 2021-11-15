@@ -64,6 +64,7 @@ Promise.resolve()
       'gatsby-plugin-sri@1',
       'gatsby-plugin-postcss@5',
       'postcss@8',
+      'core-js@3',
       'postcss-assets@6',
       'postcss-svg@3',
       'autoprefixer@10',

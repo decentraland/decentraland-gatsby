@@ -6,6 +6,7 @@
 
 // You can delete this file if you're not using it
 import React from 'react'
+import 'core-js/features/set-immediate'
 import 'semantic-ui-css/semantic.min.css'
 import 'balloon-css/balloon.min.css'
 import 'decentraland-ui/dist/themes/base-theme.css'
