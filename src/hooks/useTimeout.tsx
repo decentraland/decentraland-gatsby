@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Time from '../utils/date/Time'
 
 type State<T> = {
@@ -11,7 +11,7 @@ export default function useTimeout<T>(
   fun: () => T,
   at: Pick<Date, 'getTime'>
 ): T | null {
-  const initialValue: State<T> = useMemo(() => {
+  const [state, setState] = useState<State<T>>(() => {
     if (at.getTime() <= Date.now()) {
       return {
         executed: true,
@@ -21,11 +21,9 @@ export default function useTimeout<T>(
     }
 
     return { executed: false, value: null, timeout: null }
-  }, [])
+  })
 
-  const [state, setState] = useState<State<T>>(initialValue)
-
-  const execute = (): void => {
+  const execute = useCallback((): void => {
     if (state.executed) {
       return
     }
@@ -48,7 +46,7 @@ export default function useTimeout<T>(
       value: fun(),
       timeout: null,
     })
-  }
+  }, [state, at.getTime()])
 
   useEffect(() => {
     if (state.executed) {
