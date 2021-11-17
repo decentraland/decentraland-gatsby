@@ -1,6 +1,6 @@
 export type LoggerLevel = 'info' | 'warning' | 'error'
 export type LoggerData = Record<string, any> & { level: LoggerLevel }
-export type LoggerSubscription = (message: string, data: LoggerData) => void
+export type LoggerSubscription = (message: string, data: LoggerData) => any
 
 export class Logger {
   static readonly subscriptions: Map<LoggerLevel, LoggerSubscription[]> =
