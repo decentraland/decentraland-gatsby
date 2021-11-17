@@ -1,66 +1,50 @@
-import { useCallback, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import Time from '../utils/date/Time'
 
-type State<T> = {
-  executed: boolean
-  value: T | null
-  timeout: ReturnType<typeof setTimeout> | null
+type State = {
+  result: boolean
+  timeout: null | ReturnType<typeof setTimeout>
 }
 
-export default function useTimeout<T>(
-  fun: () => T,
-  at: Pick<Date, 'getTime'>
-): T | null {
-  const [state, setState] = useState<State<T>>(() => {
-    if (at.getTime() <= Date.now()) {
-      return {
-        executed: true,
-        value: fun(),
-        timeout: null,
-      }
-    }
+function createTimeoutState(at: Pick<Date, 'getTime'>): State {
+  return {
+    result: at.getTime() > Date.now(),
+    timeout: null,
+  }
+}
 
-    return { executed: false, value: null, timeout: null }
-  })
+function getNextTimeout(at: Pick<Date, 'getTime'>) {
+  const now = Date.now()
+  const time = at.getTime() - now
+  return Math.min(Math.max(time, 0), Time.Day)
+}
 
-  const execute = useCallback((): void => {
-    if (state.executed) {
+export default function useTimeout(at: Pick<Date, 'getTime'>): boolean {
+  const [state, setState] = useState<State>(() => createTimeoutState(at))
+
+  useEffect(() => {
+    if (state.result) {
       return
     }
 
-    if (state.timeout) {
-      clearTimeout(state.timeout)
-    }
+    let cancelled = false
+    if (!state.timeout) {
+      const timeout = setTimeout(() => {
+        if (!cancelled) {
+          setState(createTimeoutState(at))
+        }
+      }, getNextTimeout(at))
 
-    if (at.getTime() > Date.now()) {
-      const time = at.getTime() - Date.now()
-      return setState({
-        executed: false,
-        value: null,
-        timeout: setTimeout(execute, Math.min(time, Time.Day)),
+      setState({
+        ...state,
+        timeout,
       })
     }
 
-    return setState({
-      executed: true,
-      value: fun(),
-      timeout: null,
-    })
-  }, [state, at.getTime()])
-
-  useEffect(() => {
-    if (state.executed) {
-      return
-    }
-
-    execute()
-
     return () => {
-      if (state.timeout) {
-        clearTimeout(state.timeout)
-      }
+      cancelled = true
     }
-  }, [execute, at.getTime()])
+  }, [state])
 
-  return state.value
+  return state.result
 }
