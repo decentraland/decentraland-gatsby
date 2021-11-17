@@ -8,7 +8,7 @@ type State = {
 
 function createTimeoutState(at: Pick<Date, 'getTime'>): State {
   return {
-    result: at.getTime() > Date.now(),
+    result: at.getTime() < Date.now(),
     timeout: null,
   }
 }
