@@ -10,7 +10,7 @@ export class Logger {
     if (process.env.NODE_ENV === 'production') {
       console.log(JSON.stringify({ log: message, data }))
     } else {
-      console.log(message, JSON.stringify(data))
+      console.log(message, JSON.stringify(data, null, 2))
     }
   }
 
