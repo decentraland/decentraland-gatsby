@@ -68,11 +68,14 @@ export function handleExpressError(
     body: (req as any).body,
   }
 
-  logger.error(`error executing request ${req.method} ${req.path}`, {
-    type: 'http',
-    ...data,
-    error: err,
-  })
+  logger.error(
+    `error executing request ${req.method} ${req.baseUrl + req.path}`,
+    {
+      type: 'http',
+      ...data,
+      error: err,
+    }
+  )
 
   if (!res.headersSent) {
     res.status(err.statusCode || RequestError.InternalServerError)
