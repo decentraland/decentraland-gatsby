@@ -6,6 +6,14 @@ export class Logger {
   static readonly subscriptions: Map<LoggerLevel, LoggerSubscription[]> =
     new Map()
 
+  static write(message: string, data: LoggerData) {
+    if (process.env.NODE_ENV === 'production') {
+      console.log(JSON.stringify({ log: message, data }))
+    } else {
+      console.log(message, JSON.stringify(data))
+    }
+  }
+
   static subscribe(level: LoggerLevel, callback: LoggerSubscription) {
     const subscriptions = Logger.subscriptions.get(level) || []
     Logger.subscriptions.set(level, [...subscriptions, callback])
@@ -20,7 +28,7 @@ export class Logger {
   }
 
   static broadcast(message: string, data: LoggerData) {
-    Promise.resolve().then((): any => {
+    queueMicrotask((): any => {
       const subscriptions = Logger.subscriptions.get(data.level)
       if (subscriptions && subscriptions.length > 0) {
         return Promise.all(
@@ -28,14 +36,11 @@ export class Logger {
             try {
               return Promise.resolve(subscription(message, data))
             } catch (err) {
-              console.error(
-                JSON.stringify({
-                  log: 'Error broadcasting logs',
-                  level: 'error',
-                  message,
-                  data,
-                })
-              )
+              Logger.write('Error broadcasting logs', {
+                level: 'error',
+                message,
+                data,
+              })
             }
           })
         )
@@ -61,12 +66,7 @@ export class Logger {
 
   private write(message: string, data: LoggerData) {
     const extended = { ...data, ...this.data }
-    if (process.env.NODE_ENV === 'production') {
-      console.log(JSON.stringify({ log: message, ...extended }))
-    } else {
-      console.log(message, JSON.stringify(extended))
-    }
-
+    Logger.write(message, extended)
     Logger.broadcast(message, extended)
   }
 
