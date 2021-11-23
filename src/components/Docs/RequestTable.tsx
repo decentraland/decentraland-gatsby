@@ -14,6 +14,7 @@ import type {
 import { toArray } from './utils'
 
 import './RequestTable.css'
+import Paragraph from '../Text/Paragraph'
 
 export type RequestTableProps = {
   query?: AjvObjectSchema
@@ -35,6 +36,11 @@ export default React.memo(function RequestTable({
           <Table.Row>
             <Table.Cell colspan="3" className="RequestTable__Section">
               <Header sub>Header</Header>
+              {header.description && (
+                <Paragraph small secondary>
+                  {header.description}
+                </Paragraph>
+              )}
             </Table.Cell>
           </Table.Row>
         )}
@@ -54,6 +60,11 @@ export default React.memo(function RequestTable({
           <Table.Row>
             <Table.Cell colspan="3" className="RequestTable__Section">
               <Header sub>URL</Header>
+              {params.description && (
+                <Paragraph small secondary>
+                  {params.description}
+                </Paragraph>
+              )}
             </Table.Cell>
           </Table.Row>
         )}
@@ -73,6 +84,11 @@ export default React.memo(function RequestTable({
           <Table.Row>
             <Table.Cell colspan="3" className="RequestTable__Section">
               <Header sub>Query params</Header>
+              {query.description && (
+                <Paragraph small secondary>
+                  {query.description}
+                </Paragraph>
+              )}
             </Table.Cell>
           </Table.Row>
         )}
@@ -92,6 +108,11 @@ export default React.memo(function RequestTable({
           <Table.Row>
             <Table.Cell colspan="3" className="RequestTable__Section">
               <Header sub>Body</Header>
+              {body.description && (
+                <Paragraph small secondary>
+                  {body.description}
+                </Paragraph>
+              )}
             </Table.Cell>
           </Table.Row>
         )}
