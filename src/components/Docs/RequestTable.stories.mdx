@@ -10,6 +10,7 @@ import RequestTable from './RequestTable'
   <RequestTable
     params={{
       type: 'object',
+      description: 'This is a param description',
       properties: {
         url_param: {
           type: 'string',
@@ -19,6 +20,7 @@ import RequestTable from './RequestTable'
     }}
     query={{
       type: 'object',
+      description: 'This is a query description',
       properties: {
         query_param: {
           type: 'string',
@@ -28,6 +30,7 @@ import RequestTable from './RequestTable'
     }}
     header={{
       type: 'object',
+      description: 'This is a header description',
       properties: {
         header: {
           type: 'string',
@@ -37,6 +40,7 @@ import RequestTable from './RequestTable'
     }}
     body={{
       type: 'object',
+      description: 'This is a body description',
       properties: {
         body: {
           type: 'string',

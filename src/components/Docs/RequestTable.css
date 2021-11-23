@@ -22,3 +22,7 @@ table.ui.table.RequestTable .RequestTable__Section .ui.header.sub {
   font-weight: 900;
   font-size: 11px;
 }
+
+table.ui.table.RequestTable .RequestTable__Section .dg.Paragraph--small {
+  font-size: 13px;
+}
