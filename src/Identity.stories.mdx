@@ -1,39 +1,106 @@
-import { useState } from 'react'
 import { ChainId } from '@dcl/schemas'
+import { useState, useMemo, useEffect } from 'react'
 import { Source, ArgsTable } from '@storybook/components'
-import { Meta, Story, Preview } from '@storybook/addon-docs'
+import { Meta } from '@storybook/addon-docs'
 import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
-import MissingAuthMessage from './components/Storybook/MissingAuthMessage'
-import Divider from './components/Text/Divider'
+import Container from './components/Storybook/Container'
 import Code from './components/Text/Code'
 import useAsyncTask from './hooks/useAsyncTask'
-import useAuth from './hooks/useAuth'
+import { Wallet } from '@ethersproject/wallet'
+import { Authenticator } from 'dcl-crypto/dist/Authenticator'
 
-<Meta title="Development/DecentralandIdentity" />
+<Meta title="Development/Identity" />
 
-# Generate a new Decentraland Identity
+## Identity Generator
 
-<Divider size="small" />
-
-export const IdentityGenerator = React.memo((props) => {
-  const [account] = useAuth()
-  const [identity, setIdentity] = useState(null)
-  const [creating, create] = useAsyncTask(() => {}, [account])
+export function EphimeralIdentityGenerator() {
+  const [state, setState] = useState({
+    expiration: 60 * 24 * 30,
+  })
+  const [result, setResult] = useState({
+    address: null,
+    privateKey: null,
+    identity: null,
+  })
+  const [generating, generate] = useAsyncTask(async () => {
+    const sourceWallet = Wallet.createRandom()
+    const ephimeralWallet = Wallet.createRandom()
+    const payload = {
+      address: ephimeralWallet.address,
+      privateKey: ephimeralWallet.privateKey,
+      publicKey: ephimeralWallet.publicKey,
+    }
+    const identity = await Authenticator.initializeAuthChain(
+      sourceWallet.address,
+      payload,
+      Number(state.expiration),
+      (message) => sourceWallet.signMessage(message)
+    )
+    setResult({
+      address: sourceWallet.address,
+      privateKey: sourceWallet.privateKey,
+      identity,
+    })
+  }, [state])
   return (
-    <div>
-      {!account && <MissingAuthMessage />}
-      <Button
-        primary
-        onClick={create}
-        disabled={!account || creating}
-        loadin={creating}
-      >
-        create identity
-      </Button>
-      <Code language="json">{JSON.stringify(identity, null, 2)}</Code>
-    </div>
+    <Container>
+      <Grid>
+        <Grid.Row>
+          <Grid.Column tablet="16">
+            <ArgsTable
+              compact={true}
+              updateArgs={(value) => {
+                setState((current) => ({ ...current, ...value }))
+              }}
+              rows={{
+                expiration: {
+                  name: 'expires in (seconds):',
+                  control: {
+                    type: 'number',
+                    value: state.expiration,
+                    placeholder: '',
+                  },
+                },
+              }}
+            />
+            <div style={{ textAlign: 'right' }}>
+              <Button
+                primary
+                size="small"
+                style={{ minWidth: '200px', margin: '0 auto' }}
+                disabled={!state.expiration || generating}
+                loading={generating}
+                onClick={generate}
+              >
+                Generate
+              </Button>
+            </div>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column tablet="16">
+            <Header sub>ADDRESS</Header>
+            <Code inline>{String(result.address)}</Code>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column tablet="16">
+            <Header sub>Private key</Header>
+            <Code inline>{String(result.privateKey)}</Code>
+          </Grid.Column>
+        </Grid.Row>
+        <Grid.Row>
+          <Grid.Column tablet="16">
+            <Code note="Identity" copy language="json">
+              {JSON.stringify(result.identity, null, 2)}
+            </Code>
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
+    </Container>
   )
-})
+}
 
-<IdentityGenerator />
+<EphimeralIdentityGenerator />
