@@ -13,10 +13,14 @@ jobs:
     steps:
       - uses: actions/checkout@v2
 
-      - name: node.js 12
+      - name: Reconfigure git to use HTTP authentication
+        run: >
+          git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
+
+      - name: node.js 16
         uses: actions/setup-node@v2
         with:
-          node-version: 12
+          node-version: 16
           registry-url: https://registry.npmjs.org/
           cache: 'npm'
 
