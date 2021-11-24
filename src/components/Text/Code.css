@@ -22,28 +22,71 @@ pre.dg.Code code {
 pre.dg.Code.Code--block {
   margin: 1.45em 0;
 }
+
 pre.dg.Code.Code--block pre {
-  padding: 1.45em;
   /* background: white; */
   font-size: 14px;
   line-height: 19px;
 }
 
-pre.dg.Code.Code--block.Code--with-note pre {
-  padding-top: 3.25em;
+pre.dg.Code.Code--block pre code {
+  padding: 13px;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+pre.dg.Code.Code--block pre code::-webkit-scrollbar {
+  display: none;
+}
+
+pre.dg.Code.Code--block.Code--with-note pre code {
+  padding-top: 36px;
+}
+
+pre.dg.Code.Code--block.Code--with-copy pre code {
+  padding-bottom: 36px;
+}
+
+pre.dg.Code.Code--block .Code__Note,
+pre.dg.Code.Code--block .Code__Copy {
+  display: block;
+  position: absolute;
+  font-size: 13px;
+  padding: 0.2em 1em;
+  background: var(--background);
+  border: 1px solid var(--divider);
+  border-radius: 8px 0 8px 0;
 }
 
 pre.dg.Code.Code--block .Code__Note {
-  display: block;
-  position: absolute;
   top: 0;
   left: 0;
-  padding: 0.5em 1em;
-  background: var(--background);
-  border-radius: 8px 0 8px 0;
-  border: 1px solid var(--divider);
   border-top: 0;
   border-left: 0;
+  color: var(--secondary-text);
+}
+
+pre.dg.Code.Code--block .Code__Copy {
+  bottom: 0;
+  right: 0;
+  border-bottom: 0;
+  border-right: 0;
+  cursor: pointer;
+  color: var(--text);
+  font-weight: bold;
+  transition: color ease 0.3s, font-weight ease 0.3s;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+pre.dg.Code.Code--block .Code__Copy.active,
+pre.dg.Code.Code--block .Code__Copy:active {
+  color: var(--secondary-text);
+  font-weight: normal;
 }
 
 pre.dg.Code.Code--inline {
