@@ -1,15 +1,18 @@
-import React from 'react'
-import TokenList from '../../utils/dom/TokenList'
+import React, { useCallback } from 'react'
 import Highlight from 'react-highlight'
+import useClipboardCopy from '../../hooks/useClipboardCopy'
+import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
 
 import 'highlight.js/styles/github.css'
 import './Code.css'
+import Time from '../../utils/date/Time'
 
 export type CodeProps = React.HTMLProps<HTMLPreElement> &
   React.HTMLProps<HTMLSpanElement> & {
     inline?: boolean
     note?: React.ReactNode
+    copy?: boolean
     language?: 'json' | 'typescript' | 'javascript' | string
   }
 
@@ -17,10 +20,15 @@ export default React.memo(function Code({
   inline,
   children,
   note,
+  copy,
   value,
   language,
   ...props
 }: CodeProps) {
+  const [copied, state] = useClipboardCopy(Time.Second)
+  const handleCopy = useCallback(() => {
+    state.copy(String(children ?? value ?? ''))
+  }, [state.copy, children, value])
   return (
     <pre
       {...props}
@@ -28,6 +36,7 @@ export default React.memo(function Code({
         StyleNamespace,
         'Code',
         !!note && 'Code--with-note',
+        !!copy && 'Code--with-copy',
         !inline && 'Code--block',
         inline && 'Code--inline',
         props.className,
@@ -37,6 +46,14 @@ export default React.memo(function Code({
       {!language && <pre>{children ?? value}</pre>}
       {language && (
         <Highlight className={language}>{children ?? value}</Highlight>
+      )}
+      {!inline && copy && (
+        <div
+          className={TokenList.join(['Code__Copy', !!copied && 'active'])}
+          onClick={handleCopy}
+        >
+          {!!copied ? 'copied' : 'copy'}
+        </div>
       )}
     </pre>
   )
