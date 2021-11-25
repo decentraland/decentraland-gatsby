@@ -266,6 +266,14 @@ export function SelfIdentityGenerator() {
                 setState((current) => ({ ...current, ...value }))
               }}
               rows={{
+                address: {
+                  name: 'Current address',
+                  control: {
+                    type: 'text',
+                    value: account || '',
+                    placeholder: '',
+                  },
+                },
                 expiration: {
                   name: 'expires in (seconds):',
                   control: {
