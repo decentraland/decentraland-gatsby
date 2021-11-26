@@ -1136,41 +1136,33 @@ exports[`Storyshots Components/Image/ImgFixed sizes 1`] = `
 
 exports[`Storyshots Components/Modal/WrongNetworkModal Multi Network Support 1`] = `
 <div>
-  <div>
-    <div
-      id="ID0"
-    />
-  </div>
+  <div
+    id="ID0"
+  />
 </div>
 `;
 
 exports[`Storyshots Components/Modal/WrongNetworkModal Switch Multi Network 1`] = `
 <div>
-  <div>
-    <div
-      id="ID1"
-    />
-  </div>
+  <div
+    id="ID1"
+  />
 </div>
 `;
 
 exports[`Storyshots Components/Modal/WrongNetworkModal Switch Network 1`] = `
 <div>
-  <div>
-    <div
-      id="ID2"
-    />
-  </div>
+  <div
+    id="ID2"
+  />
 </div>
 `;
 
 exports[`Storyshots Components/Modal/WrongNetworkModal Wrong Network 1`] = `
 <div>
-  <div>
-    <div
-      id="ID3"
-    />
-  </div>
+  <div
+    id="ID3"
+  />
 </div>
 `;
 
