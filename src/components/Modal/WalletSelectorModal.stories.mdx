@@ -3,6 +3,7 @@ import { useState, useMemo, useEffect, useRef } from 'react'
 import { Source, ArgsTable } from '@storybook/components'
 import { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs'
 import { ProviderType } from 'decentraland-connect/dist/types'
+import IntlStorybookProvider from '../Storybook/IntlStorybookProvider'
 import Base from './WalletSelectorModal.tsx'
 import './Modal.stories.css'
 
@@ -20,10 +21,12 @@ export function WalletSelectorModal(props) {
     setMountNode(document.getElementById(id))
   }, [id])
   return (
-    <div>
-      <div id={id} />
-      {mountNode && <Base {...props} mountNode={mountNode} />}
-    </div>
+    <IntlStorybookProvider>
+      <div>
+        <div id={id} />
+        {mountNode && <Base {...props} mountNode={mountNode} />}
+      </div>
+    </IntlStorybookProvider>
   )
 }
 
@@ -43,40 +46,32 @@ export function WalletSelectorModal(props) {
 
 <Canvas>
   <Story name="Metamask as link">
-    <div>
-      <WalletSelectorModal
-        open
-        availableProviders={[
-          ProviderType.FORTMATIC,
-          ProviderType.NETWORK,
-          ProviderType.WALLET_CONNECT,
-        ]}
-      />
-    </div>
+    <WalletSelectorModal
+      open
+      availableProviders={[
+        ProviderType.FORTMATIC,
+        ProviderType.NETWORK,
+        ProviderType.WALLET_CONNECT,
+      ]}
+    />
   </Story>
 </Canvas>
 
 <Canvas>
   <Story name="Detected providers">
-    <div>
-      <WalletSelectorModal open />
-    </div>
+    <WalletSelectorModal open />
   </Story>
 </Canvas>
 
 <Canvas>
   <Story name="Loading">
-    <div>
-      <WalletSelectorModal open loading={true} />
-    </div>
+    <WalletSelectorModal open loading={true} />
   </Story>
 </Canvas>
 
 <Canvas>
   <Story name="Error">
-    <div>
-      <WalletSelectorModal open error={'Could not connect wallet'} />
-    </div>
+    <WalletSelectorModal open error={'Could not connect wallet'} />
   </Story>
 </Canvas>
 

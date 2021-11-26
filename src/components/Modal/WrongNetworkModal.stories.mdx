@@ -1,8 +1,9 @@
 import { useState, useMemo, useEffect } from 'react'
 import { ChainId } from '@dcl/schemas'
-import { ProviderType } from 'decentraland-connect/dist/types'
 import { Source, ArgsTable } from '@storybook/components'
 import { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs'
+import { ProviderType } from 'decentraland-connect/dist/types'
+import IntlStorybookProvider from '../Storybook/IntlStorybookProvider'
 import Base from './WrongNetworkModal.tsx'
 import './Modal.stories.css'
 
@@ -20,60 +21,54 @@ export function WrongNetworkModal(props) {
     setMountNode(document.getElementById(id))
   }, [id])
   return (
-    <div>
-      <div id={id} />
-      {mountNode && <Base {...props} mountNode={mountNode} />}
-    </div>
+    <IntlStorybookProvider>
+      <div>
+        <div id={id} />
+        {mountNode && <Base {...props} mountNode={mountNode} />}
+      </div>
+    </IntlStorybookProvider>
   )
 }
 
 <Canvas isExpanded>
   <Story name="Wrong Network">
-    <div>
-      <WrongNetworkModal
-        open
-        currentNetwork={ChainId.MATIC_MUMBAI}
-        expectedNetwork={ChainId.ETHEREUM_MAINNET}
-      />
-    </div>
+    <WrongNetworkModal
+      open
+      currentNetwork={ChainId.MATIC_MUMBAI}
+      expectedNetwork={ChainId.ETHEREUM_MAINNET}
+    />
   </Story>
 </Canvas>
 
 <Canvas isExpanded>
   <Story name="Multi Network Support">
-    <div>
-      <WrongNetworkModal
-        open
-        currentNetwork={ChainId.MATIC_MUMBAI}
-        expectedNetwork={[ChainId.ETHEREUM_MAINNET, ChainId.MATIC_MAINNET]}
-      />
-    </div>
+    <WrongNetworkModal
+      open
+      currentNetwork={ChainId.MATIC_MUMBAI}
+      expectedNetwork={[ChainId.ETHEREUM_MAINNET, ChainId.MATIC_MAINNET]}
+    />
   </Story>
 </Canvas>
 
 <Canvas isExpanded>
   <Story name="Switch Network">
-    <div>
-      <WrongNetworkModal
-        open
-        providerType={ProviderType.INJECTED}
-        currentNetwork={ChainId.MATIC_MUMBAI}
-        expectedNetwork={ChainId.ETHEREUM_MAINNET}
-      />
-    </div>
+    <WrongNetworkModal
+      open
+      providerType={ProviderType.INJECTED}
+      currentNetwork={ChainId.MATIC_MUMBAI}
+      expectedNetwork={ChainId.ETHEREUM_MAINNET}
+    />
   </Story>
 </Canvas>
 
 <Canvas isExpanded>
   <Story name="Switch Multi Network">
-    <div>
-      <WrongNetworkModal
-        open
-        providerType={ProviderType.INJECTED}
-        currentNetwork={ChainId.MATIC_MUMBAI}
-        expectedNetwork={[ChainId.ETHEREUM_MAINNET, ChainId.MATIC_MAINNET]}
-      />
-    </div>
+    <WrongNetworkModal
+      open
+      providerType={ProviderType.INJECTED}
+      currentNetwork={ChainId.MATIC_MUMBAI}
+      expectedNetwork={[ChainId.ETHEREUM_MAINNET, ChainId.MATIC_MAINNET]}
+    />
   </Story>
 </Canvas>
 
