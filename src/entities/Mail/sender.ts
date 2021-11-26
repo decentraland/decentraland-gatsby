@@ -1,6 +1,5 @@
 import { SES } from 'aws-sdk'
 import chuck from '../../utils/array/chunk'
-import { registerMetric } from '../Prometheus/metrics'
 import { aws_ses_sent_total } from './metrics'
 import { TemplateContent, Destination, TemplateAttributes } from './types'
 import TemplateManager from './template'
