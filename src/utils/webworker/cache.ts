@@ -17,7 +17,8 @@ export function registerNetworkFirstFiles(route: RouteHandler) {
 export function registerGatsbyImmutableFiles() {
   registerRoute(({ url }) => {
     return (
-      url.pathname.startsWith('/static/') ||
+      (self.location.hostname === url.hostname &&
+        url.pathname.startsWith('/static/')) ||
       /[a-f0-9]{20,20}\.(js|css|js\.map|js\.LICENSE\.txt)$/.test(url.pathname)
     )
   }, new strategies.CacheFirst())
