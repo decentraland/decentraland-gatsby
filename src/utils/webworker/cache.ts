@@ -3,7 +3,7 @@ import * as strategies from 'workbox-strategies'
 import { RouteHandler } from './types'
 
 export function registerImmutableFiles(route: RouteHandler) {
-  registerRoute(route, new strategies.CacheOnly())
+  registerRoute(route, new strategies.CacheFirst())
 }
 
 export function registerCacheFirstFiles(route: RouteHandler) {
@@ -20,7 +20,7 @@ export function registerGatsbyImmutableFiles() {
       url.pathname.startsWith('/static/') ||
       /[a-f0-9]{20,20}\.(js|css|js\.map|js\.LICENSE\.txt)$/.test(url.pathname)
     )
-  }, new strategies.CacheOnly())
+  }, new strategies.CacheFirst())
 }
 
 export function registerCatalystImmutableFiles() {
@@ -30,5 +30,5 @@ export function registerCatalystImmutableFiles() {
       url.host.endsWith('.decentraland.org') &&
       url.pathname.startsWith('/content/contents/')
     )
-  }, new strategies.CacheOnly())
+  }, new strategies.CacheFirst())
 }
