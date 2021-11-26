@@ -1,15 +1,17 @@
 import { PushNotificationAttributes } from './types'
+import { logger } from './debug'
 
 export function registerNotification(
   defaultNotificationOptions: NotificationOptions
 ) {
   const worker: ServiceWorkerGlobalScope = self as any
   worker.addEventListener('push', (event) => {
+    const data: PushNotificationAttributes = event.data?.json()
+    logger.log(`New "push" event received with data:`, data)
     if (!(self.Notification && self.Notification.permission === 'granted')) {
       return
     }
 
-    const data: PushNotificationAttributes = event.data?.json()
     if (!data || !data.title) {
       return
     }
