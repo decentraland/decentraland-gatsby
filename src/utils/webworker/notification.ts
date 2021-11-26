@@ -1,5 +1,3 @@
-import { registerRoute } from 'workbox-routing'
-import * as strategies from 'workbox-strategies'
 import { PushNotificationAttributes } from './types'
 
 export function registerNotification(
