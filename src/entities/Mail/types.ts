@@ -28,11 +28,10 @@ export type Template = {
   TextPart: string
 }
 
-export type SendOptions<
+export type TemplateAttributes<
   T extends string = string,
   R extends Record<string, string> = Record<string, string>
 > = {
-  destinations: (string | Destination<R>)[]
   template: T
   defaultReplacement?: R
 }
@@ -41,5 +40,5 @@ export type Destination<
   R extends Record<string, string> = Record<string, string>
 > = {
   email: string
-  replacement: R
+  replacement?: R
 }
