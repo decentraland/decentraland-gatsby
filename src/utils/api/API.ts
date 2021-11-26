@@ -165,7 +165,6 @@ export default class API {
     try {
       res = await fetch(url, opt.toObject())
     } catch (error) {
-      console.error()
       throw new FetchError(url, opt.toObject(), error.message)
     }
 

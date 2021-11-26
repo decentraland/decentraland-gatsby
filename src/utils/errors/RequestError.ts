@@ -10,7 +10,7 @@ export default class RequestError extends Error {
     body: any
   ) {
     super(
-      `Error fetching data from "${url}"${
+      `Error fetching data "${options.method} ${url}"${
         body && body.message
           ? ': ' + body.message
           : body && body.error

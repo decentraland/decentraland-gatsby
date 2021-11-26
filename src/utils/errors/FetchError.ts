@@ -5,6 +5,6 @@ export default class FetchError extends Error {
     public options: RequestInit = {},
     message: string
   ) {
-    super(`Fail to fetch resource from "${url}": ${message}`)
+    super(`Fail to fetch resource "${options.method} ${url}": ${message}`)
   }
 }
