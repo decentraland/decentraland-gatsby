@@ -42,7 +42,7 @@
       "<rootDir>/src/"
     ],
     "transform": {
-      "^.+\\.[tj]sx?$": "./transform.jest.js",
+      "^.+\\.[tj]sx?$": "./jest.transform.js",
       "^.+\\.mdx?$": "@storybook/addon-docs/jest-transform-mdx"
     },
     "moduleNameMapper": {
