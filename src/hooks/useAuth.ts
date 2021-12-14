@@ -282,16 +282,28 @@ export default function useAuth() {
       setState({ ...state, chainId: Number(chainId) })
 
     if (provider) {
-      provider.on('chainChanged', onChainChanged)
-      provider.on('accountsChanged', onDisconnect)
-      provider.on('disconnect', onDisconnect)
+      if (!!provider.on) {
+        provider.on('chainChanged', onChainChanged)
+        provider.on('accountsChanged', onDisconnect)
+        provider.on('disconnect', onDisconnect)
+      } else if (!!provider.addListener) {
+        provider.addListener('chainChanged', onChainChanged)
+        provider.addListener('accountsChanged', onDisconnect)
+        provider.addListener('disconnect', onDisconnect)
+      }
     }
 
     return () => {
       if (provider) {
-        provider.removeListener('chainChanged', onChainChanged)
-        provider.removeListener('accountsChanged', onDisconnect)
-        provider.removeListener('disconnect', onDisconnect)
+        if (!!provider.off) {
+          provider.off('chainChanged', onChainChanged)
+          provider.off('accountsChanged', onDisconnect)
+          provider.off('disconnect', onDisconnect)
+        } else if (!!provider.removeListener) {
+          provider.removeListener('chainChanged', onChainChanged)
+          provider.removeListener('accountsChanged', onDisconnect)
+          provider.removeListener('disconnect', onDisconnect)
+        }
       }
     }
   }, [state])
