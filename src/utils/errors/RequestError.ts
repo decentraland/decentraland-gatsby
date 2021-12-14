@@ -10,7 +10,7 @@ export default class RequestError extends Error {
     body: any
   ) {
     super(
-      `Error fetching data "${options.method} ${url}"${
+      `Error fetching data "${(options.method || 'GET').toLowerCase()} ${url}"${
         body && body.message
           ? ': ' + body.message
           : body && body.error
