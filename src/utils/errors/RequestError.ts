@@ -1,5 +1,6 @@
 export default class RequestError extends Error {
   code: 'REQUEST_ERROR' | 'SERVER_ERROR'
+  method: string
   headers: Record<string, string | null> = {}
   statusCode: number
   body: any
@@ -9,17 +10,22 @@ export default class RequestError extends Error {
     res: Response,
     body: any
   ) {
-    super(
-      `Error fetching data "${(options.method || 'GET').toLowerCase()} ${url}"${
-        body && body.message
-          ? ': ' + body.message
-          : body && body.error
-          ? ': ' + body.error
-          : body
-          ? ': ' + JSON.stringify(body)
-          : ''
-      }`
-    )
+    super()
+    this.method = (options.method || 'get').toLowerCase()
+    const target = new URL(url)
+    target.search = ''
+    target.hash = ''
+    const details =
+      body && body.message
+        ? ': ' + body.message
+        : body && body.error
+        ? ': ' + body.error
+        : body
+        ? ': ' + JSON.stringify(body)
+        : ''
+    this.message = `Error fetching data from "${
+      this.method
+    } ${target.toString()}"${details}`
     res.headers.forEach((value, key) => {
       this.headers[key] = value
     })
