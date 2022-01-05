@@ -19,7 +19,7 @@ if (process.env.STRICT_TRANSPORT_SECURITY === 'true') {
   DEFAULT_API_HEADERS['Strict-Transport-Security'] = 'max-age=63072000'
 }
 
-export type AsyncHandler<R extends Request> = (
+export type AsyncHandler<R extends Request = Request> = (
   req: R,
   res: Response,
   ctx: Context
