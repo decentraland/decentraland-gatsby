@@ -141,7 +141,7 @@ const RequestTableRow = React.memo(
   }: {
     name?: string
     definition: AjvSchema
-    required?: string[]
+    required?: string[] | readonly string[]
   }) => {
     const isRequired = !!name && (required || []).includes(name)
     const items = useMemo(
