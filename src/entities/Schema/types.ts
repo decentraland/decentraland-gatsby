@@ -5,7 +5,7 @@ export type AjvSchema =
   | AjvNamedSchema
 
 export type AjvEnumSchema = {
-  enum: any[]
+  enum: any[] | readonly any[]
 }
 
 export type AjvOperatorSchema = {
@@ -31,7 +31,7 @@ export type AjvObjectSchema = AjvOperatorSchema & {
   additionalProperties?: boolean
   maxProperties?: boolean
   minProperties?: boolean
-  required?: string[]
+  required?: string[] | readonly string[]
   properties?: Record<string, AjvSchema>
   patternProperties?: Record<string, AjvSchema>
   dependentRequired?: Record<string, string[]>
