@@ -94,9 +94,9 @@ export type AjvMultiSchmea = {
   Omit<AjvArraySchema, 'type'> &
   Omit<AjvBooleanSchema, 'type'>
 
-export const FalsyEnum = [false, 0, '0', 'false']
-export const TruthyEnum = [true, 1, '1', 'true']
-export const BooleanEnum = [...TruthyEnum, ...FalsyEnum]
+export const FalsyEnum = [false, 0, '0', 'false'] as const
+export const TruthyEnum = [true, 1, '1', 'true'] as const
+export const BooleanEnum = [...TruthyEnum, ...FalsyEnum] as const
 
 export const apiResultSchema = (data: AjvSchema): AjvObjectSchema => ({
   type: 'object',
