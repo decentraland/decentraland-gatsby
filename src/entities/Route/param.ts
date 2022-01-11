@@ -54,9 +54,6 @@ export function bool(value: any): boolean | null {
     case 'true':
     case 'True':
     case 'TRUE':
-    case 'yes':
-    case 'Yes':
-    case 'YES':
       return true
 
     case 0:
@@ -65,9 +62,6 @@ export function bool(value: any): boolean | null {
     case 'false':
     case 'False':
     case 'FALSE':
-    case 'no':
-    case 'No':
-    case 'NO':
       return false
 
     default:
