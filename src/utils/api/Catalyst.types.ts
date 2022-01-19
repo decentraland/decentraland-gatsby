@@ -115,7 +115,7 @@ export type Position3D = {
 }
 
 export type Servers = {
-  address: string
+  baseUrl: string
   owner: string
   id: string
 }
