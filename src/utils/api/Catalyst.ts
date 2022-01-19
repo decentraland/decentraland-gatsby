@@ -63,7 +63,7 @@ export default class Catalyst extends API {
         .getServers()
         .then((servers) => {
           for (const server of servers) {
-            this.Cache.set(server.address, new Catalyst(server.address))
+            this.Cache.set(server.baseUrl, new Catalyst(server.baseUrl))
           }
         })
     }
