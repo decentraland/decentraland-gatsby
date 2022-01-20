@@ -1,0 +1,51 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - 4.x.x
+      - 3.x.x
+      - 2.x.x
+      - 1.x.x
+
+jobs:
+
+  release:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Reconfigure git to use HTTP authentication
+        run: >
+          git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
+
+      - name: node.js 12
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12
+          registry-url: https://registry.npmjs.org/
+          cache: 'npm'
+
+      - name: installing
+        run: npm ci
+
+      - name: linters
+        uses: wearerequired/lint-action@v1
+        with:
+          prettier: true
+          prettier_extensions: ts,tsx,js,jsx,json,md,mdx,css
+          continue_on_error: false
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: testing
+        run: npm test -- --coverage
+
+      - name: building
+        run: npm run build
+
+      - name: releasing
+        run: npm run semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
