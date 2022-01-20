@@ -1,4 +1,4 @@
-import { ChainId } from '@dcl/schemas'
+import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 
 const CHAIN_ID: ChainId[] = String(
   process.env.GATSBY_CHAIN_ID ||

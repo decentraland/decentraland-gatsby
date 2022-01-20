@@ -1,5 +1,6 @@
 import React from 'react'
-import { Network, ChainId } from '@dcl/schemas'
+import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
+import { Network } from '@dcl/schemas/dist/dapps/network'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import {
   UserMenu as BaseUserMenu,

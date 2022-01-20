@@ -1,4 +1,4 @@
-import type { ChainId } from '@dcl/schemas'
+import type { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import type {
   AnyTransaction,
   TransactionStatus,
