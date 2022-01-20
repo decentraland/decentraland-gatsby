@@ -1134,6 +1134,46 @@ exports[`Storyshots Components/Image/ImgFixed sizes 1`] = `
 </div>
 `;
 
+exports[`Storyshots Components/Modal/WalletSelectorModal All providers 1`] = `
+<div>
+  <div
+    id="ID0"
+  />
+</div>
+`;
+
+exports[`Storyshots Components/Modal/WalletSelectorModal Detected providers 1`] = `
+<div>
+  <div
+    id="ID1"
+  />
+</div>
+`;
+
+exports[`Storyshots Components/Modal/WalletSelectorModal Error 1`] = `
+<div>
+  <div
+    id="ID2"
+  />
+</div>
+`;
+
+exports[`Storyshots Components/Modal/WalletSelectorModal Loading 1`] = `
+<div>
+  <div
+    id="ID3"
+  />
+</div>
+`;
+
+exports[`Storyshots Components/Modal/WalletSelectorModal Metamask as link 1`] = `
+<div>
+  <div
+    id="ID4"
+  />
+</div>
+`;
+
 exports[`Storyshots Components/Modal/WrongNetworkModal Multi Network Support 1`] = `
 <div>
   <div
