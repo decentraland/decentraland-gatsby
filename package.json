@@ -155,6 +155,7 @@
     "juice": "^8.0.0",
     "lodash.omit": "^4.5.0",
     "node-html-parser": "^5.1.0",
+    "pbkdf2": "^3.1.2",
     "prom-client": "^14.0.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
