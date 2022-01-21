@@ -26,9 +26,9 @@ import WrongNetworkModal from '../Modal/WrongNetworkModal'
 import useWindowScroll from '../../hooks/useWindowScroll'
 import useAuthContext from '../../context/Auth/useAuthContext'
 import TokenList from '../../utils/dom/TokenList'
-import './Layout.css'
 import { getSupportedChainIds } from '../../context/Auth/utils'
 import { ProviderType } from 'decentraland-connect/dist/types'
+import './Layout.css'
 
 export type LayoutProps = PageProps &
   NavbarProps &
