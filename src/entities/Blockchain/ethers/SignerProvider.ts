@@ -1,4 +1,4 @@
-import type { ChainId } from '@dcl/schemas'
+import type { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import type { Wallet } from '@ethersproject/wallet'
 import { signTypedData_v4 } from 'eth-sig-util'

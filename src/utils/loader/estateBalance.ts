@@ -1,4 +1,4 @@
-import { ChainId } from '@dcl/schemas'
+import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'

@@ -1,5 +1,6 @@
-import { ChainId, getChainName } from '@dcl/schemas'
-import { Provider, ProviderType } from 'decentraland-connect/dist/types'
+import { ChainId, getChainName } from '@dcl/schemas/dist/dapps/chain-id'
+import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
+import { Provider } from 'decentraland-connect/dist/types'
 import { connection } from 'decentraland-connect/dist/ConnectionManager'
 import { getCurrentIdentity, setCurrentIdentity } from '../utils/auth/storage'
 import segment from '../utils/development/segment'

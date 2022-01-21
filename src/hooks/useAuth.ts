@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { ChainId } from '@dcl/schemas'
-import { ProviderType } from 'decentraland-connect/dist/types'
+import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
+import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import { connection } from 'decentraland-connect/dist/ConnectionManager'
 import { setCurrentIdentity } from '../utils/auth/storage'
 import segment from '../utils/development/segment'

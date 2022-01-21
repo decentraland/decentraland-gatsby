@@ -1,8 +1,8 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Source, ArgsTable } from '@storybook/components'
 import { Meta, Story, Preview } from '@storybook/addon-docs'
-import { ChainId, getChainName } from '@dcl/schemas'
-import { ProviderType } from 'decentraland-connect/dist/types'
+import { ChainId, getChainName } from '@dcl/schemas/dist/dapps/chain-id'
+import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { SelectField } from 'decentraland-ui/dist/components/SelectField/SelectField'
@@ -202,7 +202,7 @@ export const ConnectExample = () => {
 
 ```tsx dark=true
 import React from 'react'
-import { ProviderType, ChainId } from 'decentraland-connect/dist/types'
+import { ProviderType, ChainId } from '@dcl/schemas'
 
 export function ConnectExample() {
   const [account, state] = useAuth()

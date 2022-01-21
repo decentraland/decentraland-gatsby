@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express'
 import verify from 'decentraland-crypto-middleware/lib/verify'
-import { ChainId } from '@dcl/schemas'
+import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { AuthIdentity, AuthChain, AuthLinkType } from 'dcl-crypto/dist/types'
 import {
   Authenticator,

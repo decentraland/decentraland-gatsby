@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Source, ArgsTable } from '@storybook/components'
 import { Meta, Story, Preview } from '@storybook/addon-docs'
-import { ProviderType } from 'decentraland-connect/dist/types'
+import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import FeatureFlagProvider from './FeatureFlagProvider'
 import { Args } from '../../components/Storybook/utils'
@@ -34,7 +34,7 @@ After that you can use this hook in your components
 ```tsx dark=true
 // componenet.jsx
 import React from 'react'
-import { ProviderType, ChainId } from 'decentraland-connect/dist/types'
+import { ProviderType, ChainId } from '@dcl/schemas'
 
 export default function Component() {
   const [ff] = useFeatureFlagContext()

@@ -27,7 +27,7 @@ import useWindowScroll from '../../hooks/useWindowScroll'
 import useAuthContext from '../../context/Auth/useAuthContext'
 import TokenList from '../../utils/dom/TokenList'
 import { getSupportedChainIds } from '../../context/Auth/utils'
-import { ProviderType } from 'decentraland-connect/dist/types'
+import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import './Layout.css'
 
 export type LayoutProps = PageProps &
