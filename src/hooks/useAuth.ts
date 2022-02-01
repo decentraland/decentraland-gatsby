@@ -281,14 +281,14 @@ export default function useAuth() {
     const onChainChanged = (chainId: ChainId) =>
       setState({ ...state, chainId: Number(chainId) })
 
-    if (provider) {
+    if (provider && !provider.isFortmatic) {
       provider.on('chainChanged', onChainChanged)
       provider.on('accountsChanged', onDisconnect)
       provider.on('disconnect', onDisconnect)
     }
 
     return () => {
-      if (provider) {
+      if (provider && !provider.isFortmatic) {
         provider.removeListener('chainChanged', onChainChanged)
         provider.removeListener('accountsChanged', onDisconnect)
         provider.removeListener('disconnect', onDisconnect)
