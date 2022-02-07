@@ -1,5 +1,7 @@
 export type Snapshot = {
   face: string
+  face128: string
+  face256: string
   body: string
 }
 
