@@ -57,13 +57,18 @@ export async function getProfile(
 
 export function redirectToFace(req: Request<{ user: string }>, res: Response) {
   getProfile(req).then((profile) =>
-    redirectTo(res, profile.avatar?.snapshots?.face)
+    redirectTo(
+      res,
+      profile.avatar?.snapshots
+        ? profile.avatar.snapshots.face256 || profile.avatar.snapshots.face
+        : null
+    )
   )
 }
 
 export function redirectToBody(req: Request<{ user: string }>, res: Response) {
   getProfile(req).then((profile) =>
-    redirectTo(res, profile.avatar?.snapshots?.face)
+    redirectTo(res, profile.avatar?.snapshots?.body)
   )
 }
 

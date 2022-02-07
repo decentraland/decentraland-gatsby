@@ -37,10 +37,15 @@ export default React.memo(function Avatar({
   const target = useMemo(() => {
     if (src) {
       return src
-    } else if (failed || !profile?.avatar?.snapshots?.face) {
+    } else if (
+      failed ||
+      !(profile?.avatar?.snapshots?.face256 || profile?.avatar?.snapshots?.face)
+    ) {
       return DEFAULT_AVATAR
     } else {
-      return profile?.avatar?.snapshots?.face
+      return (
+        profile?.avatar?.snapshots?.face256 || profile?.avatar?.snapshots?.face
+      )
     }
   }, [profile, failed])
 
