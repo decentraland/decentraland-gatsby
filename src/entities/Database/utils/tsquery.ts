@@ -44,6 +44,11 @@ Tsquery.prototype.parseFollowedBy = function (str: string) {
   return prefixChildNodes(_parseFollowedBy.call(this, str))
 }
 
+const _parse = Tsquery.prototype.parse
+Tsquery.prototype.parse = function (str: string) {
+  return prefixNode(_parse.call(this, str))
+}
+
 function createParser() {
   const parser = new Tsquery()
   return (str: string) => String(parser.parse(str) || '')
