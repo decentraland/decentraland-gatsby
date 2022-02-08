@@ -1,7 +1,7 @@
 import { Model, raw, SQLStatement, SQL } from 'decentraland-server'
-import { ServiceStartHandler } from '../Server/types'
-import database from './database'
-import { LimitOptions } from './types'
+import { ServiceStartHandler } from '../../Server/types'
+import database from '../database'
+import { LimitOptions } from '../types'
 
 export interface ModelConstructor {
   tableName: string
@@ -69,7 +69,7 @@ export function join(statements: SQLStatement[], glue: SQLStatement = SQL`, `) {
 
 export function offset(value: number | null | undefined) {
   if (typeof value !== 'number' || !Number.isFinite(value) || value <= 0) {
-    return SQL``
+    value = 0
   }
 
   return SQL` OFFSET ${value}`
