@@ -27,33 +27,25 @@ function prefixChildNodes(node?: Node): Node | undefined {
   return node
 }
 
-export class TSQuery extends (tsquery as any).Tsquery {
-  parseOr(str: string) {
-    return prefixChildNodes(super.parseOr(str))
-  }
+const Tsquery: any = (tsquery as any).Tsquery
 
-  parseAnd(str: string) {
-    return prefixChildNodes(super.parseAnd(str))
-  }
+const _parseOr = Tsquery.prototype.parseOr
+Tsquery.prototype.parseOr = function (str: string) {
+  return prefixChildNodes(_parseOr.call(this, str))
+}
 
-  parseFollowedBy(str: string) {
-    return prefixChildNodes(super.parseFollowedBy(str))
-  }
+const _parseAnd = Tsquery.prototype.parseAnd
+Tsquery.prototype.parseAnd = function (str: string) {
+  return prefixChildNodes(_parseAnd.call(this, str))
+}
 
-  // parseWord(str: string) {
-  //   return prefixNode(super.parseWord(str))
-  // }
-
-  parse(str: string): Node {
-    return super.parse(str)
-    // const node = super.parse(str)
-    // console.log(node)
-    // return node
-  }
+const _parseFollowedBy = Tsquery.prototype.parseFollowedBy
+Tsquery.prototype.parseFollowedBy = function (str: string) {
+  return prefixChildNodes(_parseFollowedBy.call(this, str))
 }
 
 function createParser() {
-  const parser = new TSQuery()
+  const parser = new Tsquery()
   return (str: string) => String(parser.parse(str) || '')
 }
 
