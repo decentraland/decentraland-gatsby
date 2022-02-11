@@ -34,6 +34,8 @@ import type {
   CommsStatusOptions,
   CommsStatusWithUsers,
   Peer,
+  Realm,
+  HotScene,
 } from './Catalyst.types'
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
@@ -246,6 +248,14 @@ export default class Catalyst extends API {
       .join('&')
 
     return this.fetch('/content/entities/scene?' + params)
+  }
+
+  async getRealms() {
+    this.fetch<Realm[]>('/lambdas/explore/realms')
+  }
+
+  async getHostScenes() {
+    this.fetch<HotScene[]>('/lambdas/explore/hot-scenes')
   }
 
   async getServers() {

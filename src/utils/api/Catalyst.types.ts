@@ -122,6 +122,26 @@ export type Servers = {
   id: string
 }
 
+export type Realm = {
+  serverName: string
+  url: string
+  usersCount: number
+  maxUsers: number
+  userParcels: [number, number][]
+}
+
+export type HotScene = {
+  id: string
+  name: string
+  baseCoords: [number, number]
+  usersTotalCount: number
+  parcels: [number, number][]
+  thumbnail: string
+  creator: string
+  description: string
+  realms: Realm[]
+}
+
 export type LayerUser = {
   id: string
   userId: string
