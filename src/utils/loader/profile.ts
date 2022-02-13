@@ -17,6 +17,8 @@ export const createDefaultProfile = (address: string): Profile => ({
   avatar: {
     snapshots: {
       face: DEFAULT_AVATAR,
+      face128: DEFAULT_AVATAR,
+      face256: DEFAULT_AVATAR,
       body: '',
     },
     bodyShape: 'dcl://base-avatars/BaseMale',
