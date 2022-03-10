@@ -14,13 +14,14 @@ module.exports = {
     config.resolve.fallback.http = false
     config.resolve.fallback.stream = false
     config.resolve.fallback.os = false
+    // config.resolve.fallback.url = false
     return config
   },
   addons: [
     '@storybook/addon-actions',
     '@storybook/addon-links',
-    '@storybook/addon-docs',
     '@storybook/addon-postcss',
+    '@storybook/addon-docs',
     '@storybook/addon-viewport/register',
     '@storybook/addon-actions/register',
     {

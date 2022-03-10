@@ -59,7 +59,7 @@ export function AuthChainTable({ chain, timestamp, metadata }) {
             )}
             {chain &&
               chain.map((item, i) => (
-                <Table.Row>
+                <Table.Row key={AUTH_CHAIN_HEADER_PREFIX + i}>
                   <Table.Cell style={{ width: '15em' }}>
                     <Paragraph small secondary>
                       {AUTH_CHAIN_HEADER_PREFIX + i}
