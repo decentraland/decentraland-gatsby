@@ -28,19 +28,19 @@ import Catalyst from './utils/api/Catalyst'
 
 export const CatalystLoader = React.memo((props) => {
   const [comms, commsState] = useAsyncState(
-    () => Catalyst.from(props.address).getCommsStatus(),
-    [props.address]
+    () => Catalyst.from(props.baseUrl).getCommsStatus(),
+    [props.baseUrl]
   )
   const [lambdas, lambdasState] = useAsyncState(
-    () => Catalyst.from(props.address).getLambdasStatus(),
-    [props.address]
+    () => Catalyst.from(props.baseUrl).getLambdasStatus(),
+    [props.baseUrl]
   )
   const [content, contentState] = useAsyncState(
-    () => Catalyst.from(props.address).getContentStatus(),
-    [props.address]
+    () => Catalyst.from(props.baseUrl).getContentStatus(),
+    [props.baseUrl]
   )
   const [profile, profileState] = useAsyncState(
-    () => Catalyst.from(props.address).getProfile(props.user),
+    () => Catalyst.from(props.baseUrl).getProfile(props.user),
     [props.user],
     { callWithTruthyDeps: true }
   )
@@ -130,9 +130,9 @@ export const CatalystLoader = React.memo((props) => {
       <Card.Content>
         <Card.Meta>
           <div style={{ display: 'flex', alignItems: 'center' }}>
-            <pre>{props.address}</pre>
+            <pre>{props.baseUrl}</pre>
             <div style={{ flex: 1 }} />
-            <a href={props.address + `/comms/status`} target="_blank">
+            <a href={props.baseUrl + `/comms/status`} target="_blank">
               {commsState.loading && <Label>comms</Label>}
               {commsState.error && <Label color="red">comms</Label>}
               {comms && (
@@ -145,7 +145,7 @@ export const CatalystLoader = React.memo((props) => {
                 </Label>
               )}
             </a>
-            <a href={props.address + `/lambdas/status`} target="_blank">
+            <a href={props.baseUrl + `/lambdas/status`} target="_blank">
               {lambdasState.loading && <Label>lambdas</Label>}
               {lambdasState.error && <Label color="red">lambdas</Label>}
               {lambdas && (
@@ -158,7 +158,7 @@ export const CatalystLoader = React.memo((props) => {
                 </Label>
               )}
             </a>
-            <a href={props.address + `/content/status`} target="_blank">
+            <a href={props.baseUrl + `/content/status`} target="_blank">
               {contentState.loading && <Label>content</Label>}
               {contentState.error && <Label color="red">content</Label>}
               {content && (
