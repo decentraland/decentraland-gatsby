@@ -52,7 +52,7 @@ export function withBearerToken(tokens: string[]) {
     }
 
     if (!authorization.startsWith('Bearer ')) {
-      throw new RequestError(`Ivalid Authorization`, RequestError.BadRequest)
+      throw new RequestError(`Invalid Authorization`, RequestError.BadRequest)
     }
 
     const auth = authorization.slice('Bearer '.length)
