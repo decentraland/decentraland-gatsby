@@ -52,6 +52,10 @@ const getUserAgentData = once((): NavigatorUAData => {
   return defaultGlobalValue
 })
 
+/**
+ * extract or infer the [UserAgentData](https://developer.mozilla.org/en-US/docs/Web/API/Navigator/userAgentData)
+ * that is an object which can be used to access the User-Agent Client Hints API.
+ */
 export default function useUserAgentData(
   initialValue: Partial<Pick<NavigatorUAData, 'mobile' | 'platform'>> = {}
 ): NavigatorUAData {
