@@ -29,7 +29,7 @@ export default function useResponsive() {
     return () => {
       listener.removeEventListener('resize', updateWidth)
     }
-  }, [])
+  }, [width])
 
   return useCallback(
     function responsive(limits: Partial<ResponsiveWidthShorthand> = {}) {
