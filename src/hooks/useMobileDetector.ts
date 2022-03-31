@@ -1,18 +1,17 @@
 import { useState, useEffect } from 'react'
-import isMobile from '../utils/isMobile'
+import once from '../utils/function/once'
+import isMobile from '../utils/react/isMobile'
 
-let IS_MOBILE: boolean | null = null
+let IS_MOBILE: null | boolean = null
+const detectMobile = once(() => isMobile())
 
-export default function useMobileDetector(
-  initialValue: boolean = IS_MOBILE ?? false
-) {
-  const [mobile, setMobile] = useState<boolean>(initialValue)
+export default function useMobileDetector(initialValue: boolean = false) {
+  const [mobile, setMobile] = useState<boolean>(IS_MOBILE ?? initialValue)
 
   useEffect(() => {
     if (IS_MOBILE === null) {
-      IS_MOBILE = isMobile()
-
-      if (IS_MOBILE !== mobile) {
+      IS_MOBILE = detectMobile()
+      if (mobile !== IS_MOBILE) {
         setMobile(IS_MOBILE)
       }
     }
