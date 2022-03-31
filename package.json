@@ -98,7 +98,7 @@
     "lint-staged": "^12.1.2",
     "node-pg-migrate": "^6.0.0",
     "npm": "^8.5.5",
-    "postcss": "^7.0.39",
+    "postcss": "^8.4.12",
     "postcss-assets": "^5.0.0",
     "postcss-cli": "^7.1.2",
     "postcss-svg": "^3.0.0",
