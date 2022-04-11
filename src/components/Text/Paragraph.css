@@ -29,8 +29,8 @@
   color: var(--secondary-text);
 }
 
-.dg.Paragraph.Paragraph--semi,
-.dg.List > .dg.ListItem-bold--semi {
+.dg.Paragraph.Paragraph--semi-bold,
+.dg.List > .dg.ListItem.ListItem--semi-bold {
   font-weight: 400;
 }
 
