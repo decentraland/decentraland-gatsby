@@ -1,6 +1,6 @@
 import { dirname } from 'path'
 import { flatten } from 'flat'
-import { CreatePageArgs, Page } from 'gatsby'
+import { CreatePageArgs, Page, CreateWebpackConfigArgs } from 'gatsby'
 import { DecentralandIntlContext, DecentralandIntlPluginOptions } from './types'
 
 const INTL_DEAULT_PATHS = [
@@ -82,5 +82,27 @@ export function onCreatePage(
         messages: loadTransactions([...INTL_DEAULT_PATHS, ...paths], locale),
       })
     )
+  }
+}
+
+export function onCreateWebpackConfig({
+  stage,
+  getConfig,
+  actions,
+}: CreateWebpackConfigArgs) {
+  // Silence 'conflicting order' warning for CSS modules.
+  // This is only an issue with regular CSS being imported.
+  if (stage === 'build-javascript' || stage === 'develop') {
+    const config = getConfig()
+    // Get the mini-css-extract-plugin
+    const miniCssExtractPlugin = config.plugins.find(
+      (plugin: Function) => plugin.constructor.name === 'MiniCssExtractPlugin'
+    )
+    // Set the option here to true.
+    if (miniCssExtractPlugin) {
+      miniCssExtractPlugin.options.ignoreOrder = true
+    }
+    // Update the config.
+    actions.replaceWebpackConfig(config)
   }
 }
