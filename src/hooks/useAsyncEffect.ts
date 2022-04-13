@@ -9,7 +9,9 @@ export default function useAsyncEffect(
   return useEffect(() => {
     const promise = callback().catch((err) => {
       console.error(`AsyncEffect error: `, err)
-      rollbar((rollbar) => rollbar.error('AsyncEffect error', err))
+      rollbar((rollbar) =>
+        rollbar.error('AsyncEffect error: ' + err.message, err)
+      )
       segment((analytics) =>
         analytics.track('error', {
           ...err,
