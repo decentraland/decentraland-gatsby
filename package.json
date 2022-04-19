@@ -139,7 +139,7 @@
     "ddos": "^0.2.1",
     "decentraland-commons": "^5.1.0",
     "decentraland-crypto-middleware": "^1.0.2",
-    "decentraland-dapps": "^12.35.0",
+    "decentraland-dapps": "^12.40.0",
     "decentraland-server": "^3.0.0",
     "eth-crypto": "^1.9.0",
     "eth-sig-util": "^3.0.1",
