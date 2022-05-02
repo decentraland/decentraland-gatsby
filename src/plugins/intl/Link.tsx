@@ -2,6 +2,7 @@ import React, { useCallback, useMemo } from 'react'
 import BaseLink, { isLocalLink } from '../../components/Text/Link'
 import { navigate } from './utils'
 import { useIntl } from 'react-intl'
+import { isMeta } from '../../utils/dom/isMeta'
 
 export type LinkProps<S extends {} = {}> =
   React.AnchorHTMLAttributes<HTMLAnchorElement> & {
@@ -32,7 +33,7 @@ export default React.memo(function Link(props: LinkProps) {
         props.onClick(e)
       }
 
-      if (!e.defaultPrevented) {
+      if (!e.defaultPrevented && !isMeta(e)) {
         e.preventDefault()
         navigate(props.href || '', {
           locale: hrefLang,

@@ -1,3 +1,4 @@
+import { isMeta } from '../dom/isMeta'
 import once from '../function/once'
 import isMobile from '../isMobile'
 
@@ -58,10 +59,6 @@ export function track(
   } else if (callback) {
     Promise.resolve().then(() => callback())
   }
-}
-
-export function isMeta(event: React.MouseEvent<HTMLAnchorElement>) {
-  return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)
 }
 
 export function createTrackLinkHandler<
