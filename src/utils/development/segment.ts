@@ -21,22 +21,22 @@ const getContext = once((): TrackContext => {
     wallet: !ethereum
       ? 'none'
       : ethereum?.isMetaMask
-        ? 'metamask'
-        : ethereum?.isDapper
-          ? 'dapper'
-          : ethereum?.isCucumber
-            ? 'cucumber'
-            : ethereum?.isTrust
-              ? 'trust'
-              : ethereum?.isToshi
-                ? 'coinbase'
-                : ethereum?.isGoWallet
-                  ? 'goWallet'
-                  : ethereum?.isAlphaWallet
-                    ? 'alphaWallet'
-                    : ethereum?.isStatus
-                      ? 'status'
-                      : 'other',
+      ? 'metamask'
+      : ethereum?.isDapper
+      ? 'dapper'
+      : ethereum?.isCucumber
+      ? 'cucumber'
+      : ethereum?.isTrust
+      ? 'trust'
+      : ethereum?.isToshi
+      ? 'coinbase'
+      : ethereum?.isGoWallet
+      ? 'goWallet'
+      : ethereum?.isAlphaWallet
+      ? 'alphaWallet'
+      : ethereum?.isStatus
+      ? 'status'
+      : 'other',
   }
 })
 
