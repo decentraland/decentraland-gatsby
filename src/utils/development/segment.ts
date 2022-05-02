@@ -1,3 +1,4 @@
+import { isMeta } from '../dom/isMeta'
 import once from '../function/once'
 import isMobile from '../isMobile'
 
@@ -20,22 +21,22 @@ const getContext = once((): TrackContext => {
     wallet: !ethereum
       ? 'none'
       : ethereum?.isMetaMask
-      ? 'metamask'
-      : ethereum?.isDapper
-      ? 'dapper'
-      : ethereum?.isCucumber
-      ? 'cucumber'
-      : ethereum?.isTrust
-      ? 'trust'
-      : ethereum?.isToshi
-      ? 'coinbase'
-      : ethereum?.isGoWallet
-      ? 'goWallet'
-      : ethereum?.isAlphaWallet
-      ? 'alphaWallet'
-      : ethereum?.isStatus
-      ? 'status'
-      : 'other',
+        ? 'metamask'
+        : ethereum?.isDapper
+          ? 'dapper'
+          : ethereum?.isCucumber
+            ? 'cucumber'
+            : ethereum?.isTrust
+              ? 'trust'
+              : ethereum?.isToshi
+                ? 'coinbase'
+                : ethereum?.isGoWallet
+                  ? 'goWallet'
+                  : ethereum?.isAlphaWallet
+                    ? 'alphaWallet'
+                    : ethereum?.isStatus
+                      ? 'status'
+                      : 'other',
   }
 })
 
@@ -58,10 +59,6 @@ export function track(
   } else if (callback) {
     Promise.resolve().then(() => callback())
   }
-}
-
-export function isMeta(event: React.MouseEvent<HTMLAnchorElement>) {
-  return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)
 }
 
 export function createTrackLinkHandler<
