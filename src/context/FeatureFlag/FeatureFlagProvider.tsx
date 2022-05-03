@@ -5,6 +5,7 @@ import useFeatureFlag, {
 } from '../../hooks/useFeatureFlag'
 import { track } from '../../utils/development/segment'
 import useAuthContext from '../Auth/useAuthContext'
+import { listFeatureFlags } from './utils'
 
 const defaultTransactionState: ReturnType<typeof useFeatureFlag> = [
   DEFAULT_FEATURE_FLAG,
@@ -75,7 +76,7 @@ export default React.memo(function FeatureFlagProvider(
 
   useEffect(() => {
     if (ff[0] !== DEFAULT_FEATURE_FLAG) {
-      track('feature_flags', ff[0])
+      track('feature_flags', { featureFlags: listFeatureFlags(ff[0]) })
     }
   }, [ff])
 
