@@ -1,4 +1,4 @@
-import { listFeatureFlags } from './utils'
+import { listFeatureFlags } from './ff'
 
 test(`listFeatureFlags`, () => {
   const ff = {

@@ -5,6 +5,7 @@ import {
   fetchFlags,
 } from '@dcl/feature-flags'
 import useAsyncState from './useAsyncState'
+import { listFeatureFlags } from '../utils/development/ff'
 
 export const DEFAULT_FEATURE_FLAG: FeatureFlagsResult = {
   flags: {},
@@ -61,9 +62,11 @@ export default function useFeatureFlag(options: Partial<FeatureFlagOptions>) {
     [ff]
   )
 
+  const context = useMemo(() => ({ featureFlags: listFeatureFlags(ff) }), [ff])
+
   const state = useMemo(
-    () => ({ ...asyncState, isEnabled, getVariant }),
-    [asyncState, isEnabled, getVariant]
+    () => ({ ...asyncState, isEnabled, getVariant, context }),
+    [asyncState, isEnabled, getVariant, context]
   )
 
   return [ff, state] as const
