@@ -1,4 +1,3 @@
-import { FeatureFlagsResult } from '@dcl/feature-flags'
 import FeatureFlags from './FeatureFlags'
 
 const empty = new FeatureFlags({ flags: {}, variants: {} })
