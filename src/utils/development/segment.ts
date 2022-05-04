@@ -55,7 +55,7 @@ export function track(
 ) {
   if (typeof window !== 'undefined' && window.analytics) {
     const analytics = window.analytics
-    analytics.track(event, { ...getContext(), ...data, callback })
+    analytics.track(event, { ...getContext(), ...data }, callback)
   } else if (callback) {
     Promise.resolve().then(() => callback())
   }

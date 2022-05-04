@@ -5,12 +5,12 @@ import {
   fetchFlags,
 } from '@dcl/feature-flags'
 import useAsyncState from './useAsyncState'
-import { listFeatureFlags } from '../utils/development/ff'
+import FeatureFlags from '../utils/development/FeatureFlags'
 
-export const DEFAULT_FEATURE_FLAG: FeatureFlagsResult = {
+export const DEFAULT_FEATURE_FLAG = new FeatureFlags({
   flags: {},
   variants: {},
-}
+})
 
 export type { FeatureFlagOptions, FeatureFlagsResult }
 
@@ -21,7 +21,8 @@ export default function useFeatureFlag(options: Partial<FeatureFlagOptions>) {
         return DEFAULT_FEATURE_FLAG
       }
 
-      return fetchFlags(options as FeatureFlagOptions)
+      const ff = await fetchFlags(options as FeatureFlagOptions)
+      return new FeatureFlags(ff)
     },
     [
       options.applicationName,
@@ -35,6 +36,7 @@ export default function useFeatureFlag(options: Partial<FeatureFlagOptions>) {
   )
 
   const isEnabled = useCallback(
+    /** @deprecated use ff.enabled(KEY) instead */
     (key: string) => {
       return (
         !!ff &&
@@ -45,7 +47,8 @@ export default function useFeatureFlag(options: Partial<FeatureFlagOptions>) {
     [ff]
   )
 
-  const getVariant = useCallback(
+  const getVariantName = useCallback(
+    /** @deprecated use ff.name(KEY) instead */
     <K extends string = string, D = null>(
       key: string,
       defaultVariant: D
@@ -62,11 +65,33 @@ export default function useFeatureFlag(options: Partial<FeatureFlagOptions>) {
     [ff]
   )
 
-  const context = useMemo(() => ({ featureFlags: listFeatureFlags(ff) }), [ff])
+  const getVariantValue = useCallback(
+    /** @deprecated use ff.payload(KEY) instead */
+    <K extends string = string, D = null>(
+      key: string,
+      defaultVariant: D
+    ): K | D => {
+      if (isEnabled(key)) {
+        const variant = ff.variants[`${options.applicationName}-${key}`]
+        if (variant.payload?.value) {
+          return variant.payload.value as K
+        }
+      }
+
+      return defaultVariant ?? (null as any)
+    },
+    [ff]
+  )
 
   const state = useMemo(
-    () => ({ ...asyncState, isEnabled, getVariant, context }),
-    [asyncState, isEnabled, getVariant, context]
+    () => ({
+      ...asyncState,
+      isEnabled,
+      getVariant: getVariantValue,
+      getVariantValue,
+      getVariantName,
+    }),
+    [asyncState, isEnabled, getVariantName, getVariantValue]
   )
 
   return [ff, state] as const

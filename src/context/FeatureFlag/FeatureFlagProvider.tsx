@@ -17,9 +17,8 @@ const defaultTransactionState: ReturnType<typeof useFeatureFlag> = [
     reload: () => null,
     isEnabled: () => false,
     getVariant: () => null as any,
-    context: {
-      featureFlags: [],
-    },
+    getVariantName: () => null as any,
+    getVariantValue: () => null as any,
   },
 ]
 
@@ -77,9 +76,9 @@ export default React.memo(function FeatureFlagProvider(
   const ff = useFeatureFlag(options)
 
   useEffect(() => {
-    const [features, state] = ff
+    const [features] = ff
     if (features !== DEFAULT_FEATURE_FLAG) {
-      track('feature_flags', state.context)
+      track('feature_flags', { featureFlags: features.list() })
     }
   }, [ff])
 
