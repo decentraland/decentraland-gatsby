@@ -3,7 +3,7 @@ import { track } from '../../utils/development/segment'
 import useAuthContext from '../Auth/useAuthContext'
 import useFeatureFlagContext from '../FeatureFlag/useFeatureFlagContext'
 
-export function useTrackContext() {
+export default function useTrackContext() {
   const [ethAddress] = useAuthContext()
   const [ff] = useFeatureFlagContext()
 
