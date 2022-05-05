@@ -10,6 +10,7 @@ import pluralGetSet from 'dayjs/plugin/pluralGetSet'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import timezone from 'dayjs/plugin/timezone'
+import duration from 'dayjs/plugin/duration'
 
 import 'dayjs/plugin/utc'
 import 'dayjs/plugin/isToday'
@@ -22,6 +23,7 @@ import 'dayjs/plugin/pluralGetSet'
 import 'dayjs/plugin/customParseFormat'
 import 'dayjs/plugin/relativeTime'
 import 'dayjs/plugin/timezone'
+import 'dayjs/plugin/duration'
 import './plugin'
 
 Time.extend(utc)
@@ -35,6 +37,7 @@ Time.extend(pluralGetSet)
 Time.extend(customParseFormat)
 Time.extend(relativeTime)
 Time.extend(timezone)
+Time.extend(duration)
 Time.extend((_options, Dayjs, factory) => {
   const Constants = {
     Millisecond: 1,
