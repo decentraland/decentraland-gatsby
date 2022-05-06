@@ -63,7 +63,7 @@ export const SendTransaction = () => {
     if (sending) {
       Promise.resolve()
         .then(() =>
-          new Web3Provider(provider).getSigner().sendTransaction({
+          new Web3Provider(accountState.provider).getSigner().sendTransaction({
             from: account,
             to: account,
             value: 1,
