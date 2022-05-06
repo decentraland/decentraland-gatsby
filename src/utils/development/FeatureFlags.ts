@@ -13,9 +13,6 @@ export default class FeatureFlags {
   readonly flags: FeatureFlagsResult['flags']
   readonly variants: FeatureFlagsResult['variants']
   readonly error: FeatureFlagsResult['error']
-
-  private _names = new Map<string, string>()
-  private _payloads = new Map<string, any>()
   private _list: string[]
 
   constructor(ff: Partial<FeatureFlagsResult>) {
@@ -25,54 +22,40 @@ export default class FeatureFlags {
     this._list = FeatureFlags.toArray(this)
   }
 
-  private getFrom<R>(map: Map<string, R>, key: string, callback: () => R): R {
-    if (map.has(key)) {
-      return map.get(key)!
-    }
-
-    const result = callback()
-    map.set(key, result)
-    return result
-  }
-
   enabled(key: string) {
     return !this.flags[key]
   }
 
   name<T extends string>(key: string, defaultValue: T): T {
-    return this.getFrom<T>(this._names as any, key, () => {
-      if (
-        this.enabled(key) &&
-        this.variants[key] &&
-        this.variants[key].enabled &&
-        this.variants[key].name
-      ) {
-        return this.variants[key]?.name as T
-      }
+    if (
+      this.enabled(key) &&
+      this.variants[key] &&
+      this.variants[key].enabled &&
+      this.variants[key].name
+    ) {
+      return this.variants[key]?.name as T
+    }
 
-      return defaultValue
-    })
+    return defaultValue
   }
 
-  payload<T>(key: string, defaultValue: T): T {
-    return this.getFrom<T>(this._payloads, key, () => {
-      if (
-        this.enabled(key) &&
-        this.variants[key] &&
-        this.variants[key].enabled &&
-        this.variants[key].payload
-      ) {
-        const { type, value } = this.variants[key].payload!
-        switch (type) {
-          case 'json':
-            return JSON.parse(value)
-          default:
-            return value
-        }
+  payload(key: string, defaultValue: any): any {
+    if (
+      this.enabled(key) &&
+      this.variants[key] &&
+      this.variants[key].enabled &&
+      this.variants[key].payload
+    ) {
+      const { type, value } = this.variants[key].payload!
+      switch (type) {
+        case 'json':
+          return JSON.parse(value)
+        default:
+          return value
       }
+    }
 
-      return defaultValue
-    })
+    return defaultValue
   }
 
   list() {
