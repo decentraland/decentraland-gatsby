@@ -17,6 +17,8 @@ export type CarouselState = {
   running: boolean
   timer: number | null
   carouselScrollHeight: string | undefined
+  touchStart: number
+  touchEnd: number
 }
 
 export default React.memo(function Carousel({
@@ -38,6 +40,8 @@ export default React.memo(function Carousel({
     timer: null,
     running: true,
     carouselScrollHeight: undefined,
+    touchStart: 0,
+    touchEnd: 0,
   })
 
   useEffect(() => {
@@ -105,6 +109,30 @@ export default React.memo(function Carousel({
     handleMove(prev)
   }, [state, handleMove])
 
+  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    handleTimerOff()
+    patchState({
+      touchStart: e.targetTouches[0].clientX,
+    })
+  }
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    patchState({
+      touchEnd: e.targetTouches[0].clientX,
+    })
+  }
+
+  const handleTouchEnd = () => {
+    handleTimerOn()
+    if (state.touchStart - state.touchEnd > 150) {
+      handleNext()
+    }
+
+    if (state.touchStart - state.touchEnd < -150) {
+      handlePrev()
+    }
+  }
+
   return (
     <div {...props} className={TokenList.join(['Carousel', className])}>
       <div className="Carousel__Items">
@@ -113,6 +141,9 @@ export default React.memo(function Carousel({
           onMouseEnter={handleTimerOff}
           onMouseLeave={handleTimerOn}
           style={{ height: state.carouselScrollHeight }}
+          onTouchStart={(touchStartEvent) => handleTouchStart(touchStartEvent)}
+          onTouchMove={(touchMoveEvent) => handleTouchMove(touchMoveEvent)}
+          onTouchEnd={() => handleTouchEnd()}
         >
           {React.Children.map(children, (child, i) => (
             <div
