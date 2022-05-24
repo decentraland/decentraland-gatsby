@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 import usePatchState from '../../hooks/usePatchState'
 import TokenList from '../../utils/dom/TokenList'
 import './Carousel.css'
