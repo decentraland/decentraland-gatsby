@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import usePatchState from '../../hooks/usePatchState'
 import TokenList from '../../utils/dom/TokenList'
 import './Carousel.css'
@@ -9,12 +9,14 @@ export type CarouselProps = React.HTMLProps<HTMLDivElement> & {
   onMove?: (index: number) => void
   progress?: boolean
   time?: number | false
+  autoResize?: boolean
 }
 
 export type CarouselState = {
   current: number
   running: boolean
   timer: number | null
+  carouselScrollHeight: string | undefined
 }
 
 export default React.memo(function Carousel({
@@ -23,14 +25,19 @@ export default React.memo(function Carousel({
   progress,
   onMove,
   time,
+  autoResize,
   ...props
 }: CarouselProps) {
   const timeout = !progress ? (time ?? 5000) || false : false
   const size = React.Children.count(children)
+
+  const childrenRefs = useRef(new Array(size))
+
   const [state, patchState] = usePatchState<CarouselState>({
     current: 0,
     timer: null,
     running: true,
+    carouselScrollHeight: undefined,
   })
 
   useEffect(() => {
@@ -41,7 +48,9 @@ export default React.memo(function Carousel({
 
   useEffect(() => {
     if (timeout && state.running) {
-      patchState({ timer: setTimeout(handleNext, timeout) as any })
+      patchState({
+        timer: setTimeout(handleNext, timeout) as any,
+      })
     }
 
     return () => {
@@ -65,7 +74,20 @@ export default React.memo(function Carousel({
 
   const handleMove = useCallback(
     (to: number) => {
-      patchState({ current: to })
+      if (autoResize) {
+        let height = 0
+
+        height = childrenRefs.current[to]
+
+        patchState({ current: to, carouselScrollHeight: height + 'px' })
+      } else {
+        let height = 0
+        childrenRefs.current.map((element) => {
+          height = Math.max(element, height)
+        })
+        patchState({ current: to, carouselScrollHeight: height + 'px' })
+      }
+
       if (onMove) {
         onMove(to)
       }
@@ -90,10 +112,14 @@ export default React.memo(function Carousel({
           className="Carousel__Scroll"
           onMouseEnter={handleTimerOff}
           onMouseLeave={handleTimerOn}
+          style={{ height: state.carouselScrollHeight }}
         >
           {React.Children.map(children, (child, i) => (
             <div
               key={'item:' + i}
+              ref={(el) => {
+                childrenRefs.current[i] = el?.scrollHeight
+              }}
               className={TokenList.join([
                 'Carousel__Item',
                 i === 0 && 'Carousel__Item--first',
