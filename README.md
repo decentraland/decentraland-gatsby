@@ -119,6 +119,21 @@ GATSBY_CATALYST_API=
 
 # default endpoint for utils/api/Land
 GATSBY_LAND_API=
+
+# supported chains ids (id user login with other network will app will be prompt to change it, ethereum_mainnet as default)
+GATSBY_CHAIN_ID=
+
+# default (ethereum)
+# GATSBY_CHAIN_ID=1
+
+# production (ethereum, polygon)
+# GATSBY_CHAIN_ID=1,137
+
+# test (ropsten, mumbai)
+# GATSBY_CHAIN_ID=3,80001
+
+# any
+# GATSBY_CHAIN_ID=1,3,4,5,42,137,80001
 ```
 
 ## Project commands
