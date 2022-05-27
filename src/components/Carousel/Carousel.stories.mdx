@@ -70,3 +70,41 @@ import Land from '../../utils/api/Land.ts'
 </Canvas>
 
 <Divider size="small" />
+
+## With different height fixed
+
+<Canvas isExpanded>
+  <Story name="With different height fixed">
+    <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
+      <Carousel>
+        <ImgFixed src={Land.get().getParcelImage([25, 74])} dimension="wide" />
+        <ImgFixed
+          src={Land.get().getParcelImage([26, 9])}
+          dimension="vertical"
+        />
+        <ImgFixed src={Land.get().getParcelImage([26, 9])} dimension="wide" />
+      </Carousel>
+    </div>
+  </Story>
+</Canvas>
+
+<Divider size="small" />
+
+## With different height autosize
+
+<Canvas isExpanded>
+  <Story name="With different height autosize">
+    <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
+      <Carousel autoResize>
+        <ImgFixed src={Land.get().getParcelImage([25, 74])} dimension="wide" />
+        <ImgFixed
+          src={Land.get().getParcelImage([26, 9])}
+          dimension="vertical"
+        />
+        <ImgFixed src={Land.get().getParcelImage([26, 9])} dimension="wide" />
+      </Carousel>
+    </div>
+  </Story>
+</Canvas>
+
+<Divider size="small" />
