@@ -20,3 +20,7 @@ export default function isAdmin(user?: string | null | undefined) {
 
   return adminAddresses.has(user)
 }
+
+export function listAdmins() {
+  return Array.from(adminAddresses.values())
+}
