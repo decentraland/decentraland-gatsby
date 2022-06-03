@@ -48,6 +48,7 @@ const [account, state] = useAuth()
         'ProviderType.INJECTED',
         'ProviderType.FORTMATIC',
         'ProviderType.WALLET_CONNECT',
+        'ProviderType.WALLET_LINK',
         null,
       ])
     ),
@@ -78,7 +79,7 @@ export const ConnectExample = () => {
   const connectFortmatic = () => state.connect(ProviderType.FORTMATIC, chain)
   const connectWalletConnect = () =>
     state.connect(ProviderType.WALLET_CONNECT, chain)
-  const connectWalletLink = () => null
+  const connectWalletLink = () => state.connect(ProviderType.WALLET_LINK, chain)
   const disconnect = () => state.disconnect()
   return (
     <Container>
@@ -158,16 +159,16 @@ export const ConnectExample = () => {
           >
             wallet connect
           </Button>
-          {/* <Button
+          <Button
             primary
             size="small"
             style={{ margin: '0 .5em .5em 0' }}
-            disabled={true}
+            disabled={!!account}
             loading={state.loading}
             onClick={connectWalletLink}
-            >
-              connect wallet link
-            </Button>*/}
+          >
+            connect wallet link
+          </Button>
           <Button
             primary
             size="small"
@@ -213,6 +214,8 @@ export function ConnectExample() {
     state.connect(ProviderType.FORTMATIC, ChainId.ETHEREUM_MAINNET)
   const connectWalletConnect = () =>
     state.connect(ProviderType.WALLET_CONNECT, ChainId.ETHEREUM_MAINNET)
+  const connectWalletLink = () =>
+    state.connect(ProviderType.WALLET_LINK, ChainId.ETHEREUM_MAINNET)
   const disconnect = () => state.disconnect()
 
   return (
@@ -237,6 +240,13 @@ export function ConnectExample() {
         onClick={connectWalletConnect}
       >
         connect wallet connect
+      </button>
+      <button
+        disabled={!!account}
+        loading={state.loading}
+        onClick={connectWalletLink}
+      >
+        connect wallet link
       </button>
       <button disabled={!account} loading={state.loading} onClick={disconnect}>
         disconnect

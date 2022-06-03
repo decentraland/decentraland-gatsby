@@ -13,10 +13,10 @@ import { ChainId } from '../../utils/loader/ensBalance'
 import { getChainId } from '../../context/Auth/utils'
 import useAnchor from '../../hooks/useAnchor'
 import Loader from '../Progress/Loader'
-import 'decentraland-ui/dist/components/LoginModal/LoginModal.css'
-import './WalletSelectorModal.css'
 import useFormatMessage from '../../hooks/useFormatMessage'
 import Markdown from '../Text/Markdown'
+import 'decentraland-ui/dist/components/LoginModal/LoginModal.css'
+import './WalletSelectorModal.css'
 
 export type WalletSelectorProps = {
   open?: boolean
@@ -78,6 +78,10 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
     () => handleConnect(ProviderType.WALLET_CONNECT, getChainId()),
     [handleConnect]
   )
+  const handleConnectWalletLink = useCallback(
+    () => handleConnect(ProviderType.WALLET_LINK, getChainId()),
+    [handleConnect]
+  )
 
   return (
     <Modal
@@ -102,6 +106,12 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
           <LoginModal.Option
             type={LoginModalOptionType.WALLET_CONNECT}
             onClick={handleConnectWalletConnect}
+          />
+        )}
+        {availableProviders.has(ProviderType.WALLET_LINK) && (
+          <LoginModal.Option
+            type={LoginModalOptionType.WALLET_LINK}
+            onClick={handleConnectWalletLink}
           />
         )}
         <small className="message">
