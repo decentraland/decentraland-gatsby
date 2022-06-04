@@ -1,10 +1,11 @@
-import React from 'react'
-import { GatsbyLinkProps } from 'gatsby'
 import { Locale } from 'decentraland-ui/dist/components/Language/Language'
-import Menu from 'semantic-ui-react/dist/commonjs/collections/Menu/Menu'
+import { GatsbyLinkProps } from 'gatsby'
+import React from 'react'
 import Responsive from 'semantic-ui-react/dist/commonjs/addons/Responsive/Responsive'
-import trackEvent from '../../utils/segment/trackEvent'
+import Menu from 'semantic-ui-react/dist/commonjs/collections/Menu/Menu'
+
 import Link from '../../plugins/intl/Link'
+import trackEvent from '../../utils/segment/trackEvent'
 
 export const Label = {
   en: 'ENG',

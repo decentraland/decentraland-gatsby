@@ -1,5 +1,7 @@
 import React from 'react'
+
 import TokenList from '../../utils/dom/TokenList'
+
 import './Label.css'
 
 export type LabelProps = React.HTMLProps<HTMLLabelElement>

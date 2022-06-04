@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo } from 'react'
-import BaseLink, { isLocalLink } from '../../components/Text/Link'
-import { navigate } from './utils'
 import { useIntl } from 'react-intl'
+
+import BaseLink, { isLocalLink } from '../../components/Text/Link'
 import { isMeta } from '../../utils/dom/isMeta'
+import { navigate } from './utils'
 
 export type LinkProps<S extends {} = {}> =
   React.AnchorHTMLAttributes<HTMLAnchorElement> & {

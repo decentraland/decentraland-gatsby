@@ -1,8 +1,9 @@
 import React from 'react'
-import Paragraph from '../Text/Paragraph'
-import RequestTable, { RequestTableProps } from './RequestTable'
-import SubTitle from '../Text/SubTitle'
+
 import Blockquote from '../Text/Blockquote'
+import Paragraph from '../Text/Paragraph'
+import SubTitle from '../Text/SubTitle'
+import RequestTable, { RequestTableProps } from './RequestTable'
 
 export type ApiDetailsProps = {
   title?: string

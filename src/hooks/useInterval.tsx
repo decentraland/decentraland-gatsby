@@ -1,4 +1,4 @@
-import { useEffect, useState, DependencyList } from 'react'
+import { DependencyList, useEffect, useState } from 'react'
 
 export default function useInterval<T>(
   fun: () => T,

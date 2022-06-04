@@ -1,9 +1,10 @@
 import React from 'react'
+
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
+import Paragraph from '../Text/Paragraph'
 
 import './Input.css'
-import Paragraph from '../Text/Paragraph'
 
 export type InputProps = Omit<React.HTMLProps<HTMLInputElement>, 'size'> & {
   error?: boolean

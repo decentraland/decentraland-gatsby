@@ -1,6 +1,8 @@
 import React from 'react'
+
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
+
 import './Bold.css'
 
 export type BoldProps = React.Props<HTMLSpanElement> &

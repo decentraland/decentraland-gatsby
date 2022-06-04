@@ -1,7 +1,9 @@
 import React from 'react'
+
+import TokenList from '../../utils/dom/TokenList'
 import { createId } from '../../utils/react/createId'
 import { StyleNamespace } from '../../variables'
-import TokenList from '../../utils/dom/TokenList'
+
 import './Title.css'
 
 export type TitleProps = React.HTMLAttributes<HTMLHeadingElement> & {

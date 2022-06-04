@@ -1,6 +1,8 @@
-import React from 'react'
-import TokenList from '../../utils/dom/TokenList'
 import { FieldProps } from 'decentraland-ui/dist/components/Field/Field'
+import React from 'react'
+
+import TokenList from '../../utils/dom/TokenList'
+
 import './RadioGroup.css'
 
 export type RadioGroupProps = Omit<FieldProps, 'onAction'>

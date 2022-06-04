@@ -5,10 +5,10 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React from 'react'
-import PropTypes from 'prop-types'
-import Helmet from 'react-helmet'
 import { Locale } from 'decentraland-ui/dist/components/Language/Language'
+import PropTypes from 'prop-types'
+import React from 'react'
+import Helmet from 'react-helmet'
 
 export type MetaProps = JSX.IntrinsicElements['meta']
 
@@ -155,9 +155,6 @@ function preloadType(file: string) {
 
     case 'mov':
       return 'video/quicktime'
-
-    case 'webm':
-      return 'video/webm'
 
     default:
       return undefined

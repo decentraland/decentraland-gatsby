@@ -1,7 +1,11 @@
-import React, { useMemo } from 'react'
-import { Table } from 'decentraland-ui/dist/components/Table/Table'
 import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { Table } from 'decentraland-ui/dist/components/Table/Table'
+import React, { useMemo } from 'react'
+
 import Code from '../Text/Code'
+import Paragraph from '../Text/Paragraph'
+import { toArray } from './utils'
+
 import type {
   AjvArraySchema,
   AjvEnumSchema,
@@ -11,10 +15,8 @@ import type {
   AjvSchema,
   AjvStringSchema,
 } from '../../entities/Schema/types'
-import { toArray } from './utils'
 
 import './RequestTable.css'
-import Paragraph from '../Text/Paragraph'
 
 export type RequestTableProps = {
   query?: AjvObjectSchema

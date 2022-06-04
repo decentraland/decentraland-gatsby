@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, RefObject } from 'react'
-import * as THREE from 'three/src/Three'
+import React, { RefObject, useEffect, useRef } from 'react'
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass'
+import * as THREE from 'three/src/Three'
+
 import SingletonListener from '../../../utils/dom/SingletonListener'
 
 function render(ref: RefObject<HTMLCanvasElement>) {
@@ -93,7 +94,7 @@ function render(ref: RefObject<HTMLCanvasElement>) {
   const particularGruop = new THREE.Object3D()
   const modularGruop = new THREE.Object3D()
 
-  function generateParticle(num: number, amp: number = 2) {
+  function generateParticle(num: number, amp = 2) {
     const gparticular = new THREE.CircleGeometry(0.25, manaShape)
 
     for (let i = 1; i < num; i++) {
@@ -120,7 +121,7 @@ function render(ref: RefObject<HTMLCanvasElement>) {
   scene.add(sceneGruop)
 
   function mathRandom(num = 1) {
-    var setNumber = -Math.random() * num + Math.random() * num
+    const setNumber = -Math.random() * num + Math.random() * num
     return setNumber
   }
 
@@ -128,13 +129,13 @@ function render(ref: RefObject<HTMLCanvasElement>) {
   camera.position.set(0, 0, cameraRange)
 
   //------------------------------------------------------------- SCENE
-  var ambientLight = new THREE.AmbientLight(0xffffff, 0.3)
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.3)
   scene.add(ambientLight)
 
-  var light = new THREE.SpotLight(0xffffff, 1)
+  const light = new THREE.SpotLight(0xffffff, 1)
   light.position.set(5, 5, 2)
 
-  var lightBack = new THREE.PointLight(0x0fffff, 5)
+  const lightBack = new THREE.PointLight(0x0fffff, 5)
   lightBack.position.set(0, -3, -1)
 
   scene.add(sceneGruop)
@@ -173,8 +174,8 @@ function render(ref: RefObject<HTMLCanvasElement>) {
     }
 
     //---
-    for (var i = 0, l = particularGruop.children.length; i < l; i++) {
-      var newObject = particularGruop.children[i]
+    for (let i = 0, l = particularGruop.children.length; i < l; i++) {
+      const newObject = particularGruop.children[i]
       newObject.rotation.x += (newObject as any).speedValue / 10
       newObject.rotation.y += (newObject as any).speedValue / 10
       newObject.rotation.z += (newObject as any).speedValue / 10

@@ -1,12 +1,13 @@
 import React, { useCallback } from 'react'
 import Highlight from 'react-highlight'
+
 import useClipboardCopy from '../../hooks/useClipboardCopy'
+import Time from '../../utils/date/Time'
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
 
 import 'highlight.js/styles/github.css'
 import './Code.css'
-import Time from '../../utils/date/Time'
 
 export type CodeProps = React.HTMLProps<HTMLPreElement> &
   React.HTMLProps<HTMLSpanElement> & {
@@ -52,7 +53,7 @@ export default React.memo(function Code({
           className={TokenList.join(['Code__Copy', !!copied && 'active'])}
           onClick={handleCopy}
         >
-          {!!copied ? 'copied' : 'copy'}
+          {copied ? 'copied' : 'copy'}
         </div>
       )}
     </pre>

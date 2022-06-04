@@ -1,7 +1,8 @@
-import React from 'react'
 import { Card } from 'decentraland-ui/dist/components/Card/Card'
-import { Stats } from 'decentraland-ui/dist/components/Stats/Stats'
 import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { Stats } from 'decentraland-ui/dist/components/Stats/Stats'
+import React from 'react'
+
 import Accordion from '../Accordion/Accordion'
 import Code from '../Text/Code'
 import Paragraph from '../Text/Paragraph'

@@ -1,4 +1,3 @@
-import React from 'react'
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { Network } from '@dcl/schemas/dist/dapps/network'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
@@ -7,12 +6,15 @@ import {
   UserMenuProps as BaseUserMenuProps,
   UserMenuI18N,
 } from 'decentraland-ui/dist/components/UserMenu/UserMenu'
+import React from 'react'
+
 import useAuthContext from '../../context/Auth/useAuthContext'
 import useProfileInjected from '../../context/Auth/useProfileContext'
 import useAsyncState from '../../hooks/useAsyncState'
 import useChainId from '../../hooks/useChainId'
 import { fetchManaBalance } from '../../utils/loader/manaBalance'
 import Avatar from './Avatar'
+
 import './UserMenu.css'
 
 type UserMenuBalances = Partial<Record<Network, number>>

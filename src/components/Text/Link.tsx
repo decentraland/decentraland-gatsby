@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react'
+
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
+
 import './Link.css'
 
 export type LinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {

@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect, useRef } from 'react'
+
 import usePatchState from '../../hooks/usePatchState'
 import TokenList from '../../utils/dom/TokenList'
-import './Carousel.css'
 import Next from './Next'
 import Prev from './Prev'
+
+import './Carousel.css'
 
 export type CarouselProps = React.HTMLProps<HTMLDivElement> & {
   onMove?: (index: number) => void

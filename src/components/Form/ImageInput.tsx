@@ -1,7 +1,8 @@
-import React, { useMemo, useEffect } from 'react'
-import ImgFixed, { ImgFixedProps } from '../Image/ImgFixed'
-import TokenList from '../../utils/dom/TokenList'
 import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
+import React, { useEffect, useMemo } from 'react'
+
+import TokenList from '../../utils/dom/TokenList'
+import ImgFixed, { ImgFixedProps } from '../Image/ImgFixed'
 
 import './ImageInput.css'
 
