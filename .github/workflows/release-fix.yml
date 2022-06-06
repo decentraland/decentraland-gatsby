@@ -35,6 +35,7 @@ jobs:
         with:
           eslint: true
           eslint_extensions: ts,tsx,js,jsx
+          eslint_dir: src/
           prettier: true
           prettier_extensions: ts,tsx,js,jsx,json,md,mdx,css
           continue_on_error: false
