@@ -6,14 +6,16 @@ The following will describe the steps to install ESLint and all the necessary pl
 
 First needed packages are
 
+```bash
+npm i --save-dev eslint
+npm i --save-dev @typescript-eslint/parser
+npm i --save-dev @typescript-eslint/eslint-plugin
+npm i --save-dev prettier
+npm i --save-dev eslint-config-prettier
+npm i --save-dev eslint-plugin-prettier
 ```
-eslint
-@typescript-eslint/parser
-@typescript-eslint/eslint-plugin
-prettier
-eslint-config-prettier
-eslint-plugin-prettier
-```
+
+_To avoid conflicts and to see the progress of the installations, the packages were installed one by one, and in the case of `@typescript-eslint/parser` and `@typescript-eslint/eslint-plugin` we installed the specific versions 4_
 
 With the installation of these packages we will need the `.eslintrc.js` file with the following base configuration
 

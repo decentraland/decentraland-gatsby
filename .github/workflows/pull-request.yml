@@ -31,6 +31,7 @@ jobs:
       - name: linters
         uses: wearerequired/lint-action@v1
         with:
+          eslint: true
           prettier: true
           prettier_extensions: ts,tsx,js,jsx,json,md,mdx,css
           continue_on_error: false
