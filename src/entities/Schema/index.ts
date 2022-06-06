@@ -1,8 +1,8 @@
 import Ajv from 'ajv'
 import addFormas, { FormatsPluginOptions } from 'ajv-formats'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
-import isNumeric from 'validator/lib/isNumeric'
 import isInt from 'validator/lib/isInt'
+import isNumeric from 'validator/lib/isNumeric'
 
 const formats: FormatsPluginOptions = [
   'time',

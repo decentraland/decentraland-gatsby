@@ -1,6 +1,6 @@
 export default function random(to: number): number
 export default function random(from: number, to: number): number
-export default function random(from: number = 0, to?: number): number {
+export default function random(from = 0, to?: number): number {
   if (to === undefined) {
     to = from
     from = 0

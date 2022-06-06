@@ -1,6 +1,6 @@
-export default function* chuck<T>(arr: T[], size: number = 1) {
+export default function* chuck<T>(arr: T[], size = 1) {
   let current = 0
-  let limit = arr.length
+  const limit = arr.length
   size = Math.max(1, size)
   while (current < limit) {
     yield arr.slice(current, current + size)

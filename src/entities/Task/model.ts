@@ -1,9 +1,10 @@
 import { v4 as uuid } from 'uuid'
+
 import Time from '../../utils/date/Time'
 import { Model } from '../Database/model'
-import { join, SQL, SQLStatement, table } from '../Database/utils'
-import { CreateTaskAttributes, TaskAttributes, TaskStatus } from './types'
+import { SQL, SQLStatement, join, table } from '../Database/utils'
 import Task from './Task'
+import { CreateTaskAttributes, TaskAttributes, TaskStatus } from './types'
 
 export default class TaskModel extends Model<TaskAttributes> {
   static tableName = 'tasks'

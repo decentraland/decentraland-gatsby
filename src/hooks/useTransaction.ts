@@ -1,16 +1,17 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
+import { getTransaction } from 'decentraland-dapps/dist/modules/transaction/txUtils'
+import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+
 import Time from '../utils/date/Time'
+import rollbar from '../utils/development/rollbar'
+import segment from '../utils/development/segment'
 import {
   clearTransactions,
   restoreTransactions,
   storeTransactions,
 } from '../utils/tx/storage'
 import { Transaction } from '../utils/tx/type'
-import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
-import { getTransaction } from 'decentraland-dapps/dist/modules/transaction/txUtils'
-import rollbar from '../utils/development/rollbar'
-import segment from '../utils/development/segment'
 
 type TransactionState = Transaction<any>[]
 

@@ -1,7 +1,7 @@
 import SingletonListener from './SingletonListener'
 
 const createTarget = () => {
-  let target = new SingletonListener({
+  const target = new SingletonListener({
     addEventListener: () => null,
     removeEventListener: () => null,
   })
@@ -16,8 +16,8 @@ const createTarget = () => {
 }
 
 describe(SingletonListener.name, () => {
-  let handleMock1 = jest.fn()
-  let handleMock2 = jest.fn()
+  const handleMock1 = jest.fn()
+  const handleMock2 = jest.fn()
 
   const data = {} as any
   const target = createTarget()

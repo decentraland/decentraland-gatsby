@@ -1,7 +1,8 @@
 import client from 'prom-client'
-import { registry } from './metrics'
+
 import { handleRaw } from '../Route/handle'
 import routes from '../Route/routes'
+import { registry } from './metrics'
 import { withPrometheusToken } from './middleware'
 
 const PROMETHEUS_REGISTRIES = [registry, client.register]

@@ -1,4 +1,5 @@
 import { ChainId, getChainName } from '@dcl/schemas/dist/dapps/chain-id'
+
 import env from '../../utils/env'
 import once from '../../utils/function/once'
 import roundRobin from '../../utils/iterator/roundRobin'

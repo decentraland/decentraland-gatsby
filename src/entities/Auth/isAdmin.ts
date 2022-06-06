@@ -1,5 +1,6 @@
 import { yellow } from 'colors/safe'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
+
 import env from '../../utils/env'
 
 const adminAddresses = new Set(

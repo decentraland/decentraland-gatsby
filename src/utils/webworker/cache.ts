@@ -1,8 +1,9 @@
+import { RangeRequestsPlugin } from 'workbox-range-requests'
 import { registerRoute } from 'workbox-routing'
 import * as strategies from 'workbox-strategies'
-import { RangeRequestsPlugin } from 'workbox-range-requests'
-import { RouteHandler } from './types'
+
 import { ServiceWorkerLoggerPlugin } from './debug'
+import { RouteHandler } from './types'
 
 export function registerImmutableFiles(route: RouteHandler) {
   registerRoute(
@@ -15,7 +16,7 @@ export function registerImmutableFiles(route: RouteHandler) {
 
 export function registerCacheFirstFiles(
   route: RouteHandler,
-  name: string = 'RegisterCacheFirstFiles'
+  name = 'RegisterCacheFirstFiles'
 ) {
   registerRoute(
     route,
@@ -27,7 +28,7 @@ export function registerCacheFirstFiles(
 
 export function registerNetworkFirstFiles(
   route: RouteHandler,
-  name: string = 'RegisterNetworkFirstFiles'
+  name = 'RegisterNetworkFirstFiles'
 ) {
   registerRoute(
     route,

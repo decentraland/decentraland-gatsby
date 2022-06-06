@@ -1,10 +1,12 @@
-import { Server } from 'http'
 import cluster from 'cluster'
-import { Application } from 'express'
+import { Server } from 'http'
 import { networkInterfaces } from 'os'
-import { yellow, green } from 'colors/safe'
-import { emptyServiceInitializer, ServiceStartHandler } from './types'
+
+import { green, yellow } from 'colors/safe'
+import { Application } from 'express'
+
 import { clusterInitializer } from '../Cluster/utils'
+import { ServiceStartHandler, emptyServiceInitializer } from './types'
 
 export const DEFAULT_PORT = 4000
 export const DEFAULT_HOST = '0.0.0.0'

@@ -1,16 +1,17 @@
-import { Request, Router, Response } from 'express'
 import bodyParser from 'body-parser'
-import Ddos from 'ddos'
 import expressCors from 'cors'
+import Ddos from 'ddos'
+import { Request, Response, Router } from 'express'
+
+import logger from '../Development/logger'
+import RequestError from './error'
 import { middleware } from './handle'
 import {
+  BodyParserOptions,
+  CorsOptions,
   DDosOptions,
   createCorsOptions,
-  CorsOptions,
-  BodyParserOptions,
 } from './types'
-import RequestError from './error'
-import logger from '../Development/logger'
 
 export function withBody(options: BodyParserOptions = {}) {
   const router = Router()

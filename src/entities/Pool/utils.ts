@@ -1,8 +1,8 @@
 import {
-  createPool as createGenericPool,
   Factory,
   Options,
   Pool,
+  createPool as createGenericPool,
 } from 'generic-pool'
 
 export { Pool }

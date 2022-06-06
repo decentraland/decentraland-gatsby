@@ -61,7 +61,7 @@ export default class EntityStore<E extends object> {
     return this.state.data[id] || null
   }
 
-  getList(listName: string = 'default') {
+  getList(listName = 'default') {
     if (this.state.lists[listName]) {
       const list = this.state.lists[listName]!
       return list.map((id) => this.state.data[id])
@@ -83,7 +83,7 @@ export default class EntityStore<E extends object> {
     this.listener.dispatch('change' as any, this.state)
   }
 
-  setEntities(entities: E[], listName: string = 'default') {
+  setEntities(entities: E[], listName = 'default') {
     const data: Record<string, E> = {}
     const list: string[] = []
 
@@ -117,7 +117,7 @@ export default class EntityStore<E extends object> {
     this.listener.dispatch('change' as any, this.state)
   }
 
-  setLoading(value: boolean = true) {
+  setLoading(value = true) {
     if (this.state.loading !== value) {
       this.state = {
         ...this.state,
@@ -134,7 +134,7 @@ export default class EntityStore<E extends object> {
     return !!this.state.loading
   }
 
-  clearList(listName: string = 'default') {
+  clearList(listName = 'default') {
     const lists = listName
       ? { ...this.state.lists, [listName]: null }
       : this.state.lists

@@ -1,8 +1,9 @@
 import { AuthLinkType } from 'dcl-crypto/dist/types'
-import SingletonListener from '../dom/SingletonListener'
-import { Identity } from './types'
+
 import Time from '../date/Time'
+import SingletonListener from '../dom/SingletonListener'
 import { PersistedKeys } from '../loader/types'
+import { Identity } from './types'
 
 const STORE_LEGACY_KEY = 'auth'
 let CURRENT_IDENTITY: Identity | null = null

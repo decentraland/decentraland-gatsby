@@ -1,4 +1,5 @@
 import { hash } from 'immutable'
+
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
 

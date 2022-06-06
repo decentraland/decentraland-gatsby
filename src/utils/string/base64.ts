@@ -20,7 +20,7 @@ export function fromBase64(encoded: string) {
 
 export function fromWebPushKey(base64String: string) {
   const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
-  const base64 = (base64String + padding).replace(/\-/g, '+').replace(/_/g, '/')
+  const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/')
 
   const rawData = fromBase64(base64)
   const outputArray = new Uint8Array(rawData.length)

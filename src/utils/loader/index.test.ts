@@ -1,8 +1,9 @@
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
-import manaBalance from './manaBalance'
+
 import { fetchEnsBalance } from './ensBalance'
-import { fetchLandBalance } from './landBalance'
 import { fetchEstateBalance } from './estateBalance'
+import { fetchLandBalance } from './landBalance'
+import manaBalance from './manaBalance'
 
 describe('manaBalance', () => {
   test('should load mana balance', async () => {

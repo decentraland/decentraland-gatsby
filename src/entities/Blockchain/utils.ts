@@ -1,4 +1,5 @@
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
+
 import { ConnectionOptions, ConnectionType } from './types'
 
 export type FuncWithConnectionOptions<T> = (options: ConnectionOptions) => T

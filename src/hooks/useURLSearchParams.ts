@@ -1,5 +1,5 @@
-import { useMemo } from 'react'
 import { useLocation } from '@gatsbyjs/reach-router'
+import { useMemo } from 'react'
 
 export default function useURLSearchParams() {
   const location = useLocation()

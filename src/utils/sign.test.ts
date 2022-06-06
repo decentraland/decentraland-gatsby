@@ -1,4 +1,4 @@
-import { sign, decode, verify } from './sign'
+import { decode, sign, verify } from './sign'
 
 describe('utils/sign', () => {
   test(`sign`, () =>

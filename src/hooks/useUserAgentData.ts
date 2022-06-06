@@ -1,6 +1,7 @@
-import { useState, useEffect, useMemo } from 'react'
-import once from '../utils/function/once'
+import { useEffect, useMemo, useState } from 'react'
 import { UAParser } from 'ua-parser-js'
+
+import once from '../utils/function/once'
 import isMobile from '../utils/react/isMobile'
 
 export type NavigatorUAData = {

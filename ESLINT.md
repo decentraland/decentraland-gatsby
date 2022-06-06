@@ -43,7 +43,7 @@ module.exports = {
 The next recommended step is to try to run ESLint to identify if there are any errors or warnings prior to installing the following packages, and if this is the case they can be fixed before proceeding. To do this, add the following scripts inside `package.json` and then run `npm run lint:fix`
 
 ```
-  "lint": "eslint --ext '*.{ts,tsx,js,jsx}' ./src",
+  "lint": "eslint --ext .ts,.tsx,.js,.jsx ./src",
   "lint:fix": "npm run lint -- --fix"
 ```
 

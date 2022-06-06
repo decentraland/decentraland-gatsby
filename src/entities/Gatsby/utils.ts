@@ -1,5 +1,6 @@
 import escaper from 'html-escaper'
-import { parse, HTMLElement } from 'node-html-parser'
+import { HTMLElement, parse } from 'node-html-parser'
+
 import { MetadataOptions } from './types'
 
 function escape(text: string): string {

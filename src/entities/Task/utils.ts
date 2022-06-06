@@ -1,5 +1,5 @@
 import { clusterInitializer } from '../Cluster/utils'
-import { emptyServiceInitializer, ServiceStartHandler } from '../Server/types'
+import { ServiceStartHandler, emptyServiceInitializer } from '../Server/types'
 import TaskManager from './TaskManager'
 
 export const taskInitializer = (manager: TaskManager): ServiceStartHandler => {

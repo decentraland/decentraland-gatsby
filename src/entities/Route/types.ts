@@ -61,9 +61,9 @@ export function createCorsOptions(options: CorsOptions = {}) {
 }
 
 export const defaultOrigin = [
-  /https?:\/\/localhost(\:\d{4,6})?/,
-  /https?:\/\/127\.0\.0\.1(\:\d{4,6})?/,
-  /https?:\/\/192\.168\.\d{1,3}\.\d{1,3}(\:\d{4,6})?/,
+  /https?:\/\/localhost(:\d{4,6})?/,
+  /https?:\/\/127\.0\.0\.1(:\d{4,6})?/,
+  /https?:\/\/192\.168\.\d{1,3}\.\d{1,3}(:\d{4,6})?/,
   /https:\/\/([a-zA-Z0-9\-_]+\.)*dcl\.gg/,
   /https:\/\/([a-zA-Z0-9\-_]+\.)*decentraland\.systems/,
   /https:\/\/([a-zA-Z0-9\-_]+\.)*decentraland\.today/,

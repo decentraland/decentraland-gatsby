@@ -1,6 +1,7 @@
-import type { SES } from 'aws-sdk'
 import { TemplateContent } from './types'
 import { readTemplate } from './utils'
+
+import type { SES } from 'aws-sdk'
 
 export default class TemplateManager {
   loaded: Set<string> = new Set()

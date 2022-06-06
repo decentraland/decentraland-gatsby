@@ -1,5 +1,5 @@
-/* eslint-disable @typescript-eslint/camelcase */
 import { MigrationBuilder } from 'node-pg-migrate'
+
 import Model from './model'
 import { TaskStatus } from './types'
 

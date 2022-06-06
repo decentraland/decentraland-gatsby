@@ -1,17 +1,20 @@
-import logger from '../../entities/Development/logger'
-import FetchError from '../errors/FetchError'
-import RequestError from '../errors/RequestError'
-import Options, { RequestOptions } from './Options'
-import type { Identity } from '../auth/types'
-import { signPayload } from '../auth/identify'
-import { getCurrentIdentity } from '../auth/storage'
 import {
   AUTH_CHAIN_HEADER_PREFIX,
   AUTH_METADATA_HEADER,
   AUTH_TIMESTAMP_HEADER,
 } from 'decentraland-crypto-middleware/lib/types'
-import 'isomorphic-fetch'
+
+import logger from '../../entities/Development/logger'
+import { signPayload } from '../auth/identify'
+import { getCurrentIdentity } from '../auth/storage'
+import FetchError from '../errors/FetchError'
+import RequestError from '../errors/RequestError'
 import { toBase64 } from '../string/base64'
+import Options, { RequestOptions } from './Options'
+
+import type { Identity } from '../auth/types'
+
+import 'isomorphic-fetch'
 
 export default class API {
   static catch<T>(prom: Promise<T>) {
@@ -23,7 +26,7 @@ export default class API {
 
   static url(
     base: string,
-    path: string = '',
+    path = '',
     query: Record<string, string> | URLSearchParams = {}
   ) {
     if (base.endsWith('/')) {
@@ -49,7 +52,7 @@ export default class API {
   readonly baseUrl: string = ''
   readonly defaultOptions: Options = new Options({})
 
-  constructor(baseUrl: string = '', defaultOptions: Options = new Options({})) {
+  constructor(baseUrl = '', defaultOptions: Options = new Options({})) {
     this.baseUrl = baseUrl || ''
     this.defaultOptions = defaultOptions
   }
@@ -100,7 +103,7 @@ export default class API {
         )
       }
 
-      if (!!identity?.authChain) {
+      if (identity?.authChain) {
         options.header(
           'Authorization',
           'Bearer ' + toBase64(JSON.stringify(identity.authChain))
@@ -127,7 +130,7 @@ export default class API {
         )
       }
 
-      if (!!identity?.authChain) {
+      if (identity?.authChain) {
         const timestamp = String(Date.now())
         const pathname = new URL(this.url(path)).pathname
         const method = options.getMethod() || 'GET'
@@ -154,7 +157,7 @@ export default class API {
     options: Options = new Options({})
   ): Promise<T> {
     let res: Response
-    let body: string = ''
+    let body = ''
     let json: T = null as any
     const url = this.url(path)
 

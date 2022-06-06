@@ -1,10 +1,11 @@
 import { v4 as uuid } from 'uuid'
+
 import Time from '../../utils/date/Time'
 import random from '../../utils/number/random'
+import globalLogger, { Logger } from '../Development/logger'
 import TaskModel from './model'
 import Task from './Task'
 import { CreateTaskAttributes, TaskAttributes } from './types'
-import globalLogger, { Logger } from '../Development/logger'
 
 type TaskManagerOptions = {
   concurrency: number

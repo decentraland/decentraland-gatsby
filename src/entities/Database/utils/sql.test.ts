@@ -1,12 +1,13 @@
 import { Model } from 'decentraland-server/dist/Model'
+
 import {
-  table,
-  conditional,
   SQL,
   columns,
-  values,
-  objectValues,
+  conditional,
   join,
+  objectValues,
+  table,
+  values,
 } from './sql'
 
 describe('table', () => {

@@ -1,4 +1,5 @@
 import { Request } from 'express'
+
 import RequestError from './error'
 
 export type ParamOptions = {

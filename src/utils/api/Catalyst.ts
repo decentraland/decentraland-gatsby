@@ -1,7 +1,28 @@
-import type { AuthChain } from 'dcl-crypto'
-import random from '../number/random'
+import rollbar from '../development/rollbar'
+import segment from '../development/segment'
 import env from '../env'
+import random from '../number/random'
 import API from './API'
+
+import type {
+  Avatar,
+  CommsStatus,
+  CommsStatusOptions,
+  CommsStatusWithLayers,
+  CommsStatusWithUsers,
+  ContentStatus,
+  EntityScene,
+  HotScene,
+  LambdasStatus,
+  Layer,
+  LayerUser,
+  Peer,
+  Position,
+  ProfileResponse,
+  Realm,
+  Servers,
+} from './Catalyst.types'
+import type { AuthChain } from 'dcl-crypto'
 export type {
   Snapshot,
   BodyColor,
@@ -19,26 +40,6 @@ export type {
   LayerUser,
   EntityScene,
 } from './Catalyst.types'
-import type {
-  Avatar,
-  ProfileResponse,
-  Layer,
-  CommsStatus,
-  CommsStatusWithLayers,
-  LambdasStatus,
-  ContentStatus,
-  Position,
-  Servers,
-  LayerUser,
-  EntityScene,
-  CommsStatusOptions,
-  CommsStatusWithUsers,
-  Peer,
-  Realm,
-  HotScene,
-} from './Catalyst.types'
-import rollbar from '../development/rollbar'
-import segment from '../development/segment'
 
 export default class Catalyst extends API {
   static Url =

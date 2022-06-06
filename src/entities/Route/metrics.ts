@@ -1,4 +1,5 @@
 import client from 'prom-client'
+
 import { registerMetric } from '../Prometheus/metrics'
 
 export const http_request_pool_size = new client.Gauge({

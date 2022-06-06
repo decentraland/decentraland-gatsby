@@ -1,16 +1,18 @@
 import { CronJob } from 'cron'
 import { v4 as uuid } from 'uuid'
-import { JobSettings, TimePresets, CronTime } from './types'
+
+import logger from '../Development/logger'
+import { Pool, createVoidPool } from '../Pool/utils'
 import JobContext from './context'
-import { createVoidPool, Pool } from '../Pool/utils'
+import { job_manager_duration_seconds, job_manager_pool_size } from './metrics'
 import MemoryModel from './model/memory'
 import DatabaseModel from './model/model'
-import { job_manager_duration_seconds, job_manager_pool_size } from './metrics'
-import logger from '../Development/logger'
+import { CronTime, JobSettings, TimePresets } from './types'
+
 import type { Job } from './job'
 
 export default class JobManager {
-  memory: boolean = false
+  memory = false
   runningJobs = new Set<string>()
   jobs: Map<string, Job<any>> = new Map()
   crons: CronJob[] = []
@@ -18,7 +20,7 @@ export default class JobManager {
   interval: NodeJS.Timeout
   initialInterval: NodeJS.Timeout
   queue: Job[]
-  running: boolean = false
+  running = false
 
   constructor(settings: JobSettings) {
     const max = settings.concurrency || Infinity
