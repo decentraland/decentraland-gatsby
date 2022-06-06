@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { memo, useMemo } from 'react'
 
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
@@ -9,7 +9,7 @@ export type LinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
   secondary?: boolean
 }
 
-export default React.memo(function Link({
+export default memo(function Link({
   secondary,
   target,
   rel,

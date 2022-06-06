@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { memo, useMemo } from 'react'
 import Label from 'semantic-ui-react/dist/commonjs/elements/Label'
 
 export type MethodLabelProps = {
@@ -13,7 +13,7 @@ export type MethodLabelProps = {
     | string
 }
 
-export default React.memo(function MethodLabel(props: MethodLabelProps) {
+export default memo(function MethodLabel(props: MethodLabelProps) {
   const color = useMemo(() => {
     switch ((props.method || '')?.toLowerCase()) {
       case 'get':

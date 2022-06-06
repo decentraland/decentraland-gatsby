@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import TokenList from '../../utils/dom/TokenList'
 import { createId } from '../../utils/react/createId'
@@ -10,7 +10,7 @@ export type TitleProps = React.HTMLAttributes<HTMLHeadingElement> & {
   small?: boolean
 }
 
-export default React.memo(function Title({ small, ...props }: TitleProps) {
+export default memo(function Title({ small, ...props }: TitleProps) {
   return (
     <h2
       id={createId(props)}

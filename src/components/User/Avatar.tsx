@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { memo, useMemo, useState } from 'react'
 
 import useAsyncState from '../../hooks/useAsyncState'
 import TokenList from '../../utils/dom/TokenList'
@@ -21,7 +21,7 @@ export type AvatarProps = Omit<
 > &
   Props
 
-export default React.memo(function Avatar({
+export default memo(function Avatar({
   address,
   size,
   src,

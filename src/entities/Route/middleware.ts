@@ -1,4 +1,4 @@
-import bodyParser from 'body-parser'
+import { json, urlencoded } from 'body-parser'
 import expressCors from 'cors'
 import Ddos from 'ddos'
 import { Request, Response, Router } from 'express'
@@ -16,11 +16,11 @@ import {
 export function withBody(options: BodyParserOptions = {}) {
   const router = Router()
   if (options.urlencode !== false) {
-    router.use(bodyParser.urlencoded({ extended: false }))
+    router.use(urlencoded({ extended: false }))
   }
 
   if (options.json !== false) {
-    router.use(bodyParser.json())
+    router.use(json())
   }
 
   return router

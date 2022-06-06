@@ -1,6 +1,6 @@
-import React from 'react'
+import React, { memo } from 'react'
 
-export default React.memo(function Next() {
+export default memo(function Next() {
   return (
     <svg width="48" height="48" viewBox="0 0 48 48">
       <g fill="none" fillRule="evenodd" opacity=".32">

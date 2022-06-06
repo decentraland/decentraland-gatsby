@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { memo, useMemo } from 'react'
 
 import Time from '../../utils/date/Time'
 
@@ -9,7 +9,7 @@ export type DateBoxProps = {
   utc?: boolean
 }
 
-export default React.memo(function DateBox(props: DateBoxProps) {
+export default memo(function DateBox(props: DateBoxProps) {
   const date = useMemo(
     () => Time.from(props.date, { utc: props.utc }),
     [props.date.getTime(), props.utc]

@@ -55,20 +55,18 @@ export default function Textarea({
     <div
       className={TokenList.join([
         'dcl field',
-        props.error && 'error',
+        error && 'error',
         props.disabled && 'disabled',
         StyleNamespace,
         'Textarea',
       ])}
     >
-      <div className="ui sub header">{props.label}</div>
+      <div className="ui sub header">{label}</div>
       <div className="ui input">
-        {props.error && (
-          <i aria-hidden="true" className="warning circle icon" />
-        )}
+        {error && <i aria-hidden="true" className="warning circle icon" />}
         <textarea {...extra} ref={ref} onChange={handleChange} />
       </div>
-      <p className="message">{props.message}&nbsp;</p>
+      <p className="message">{message}&nbsp;</p>
     </div>
   )
 }

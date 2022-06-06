@@ -1,10 +1,10 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import Blockquote from '../Text/Blockquote'
 import Link from '../Text/Link'
 import Paragraph from '../Text/Paragraph'
 
-export default React.memo(function MissingAuthMessage() {
+export default memo(function MissingAuthMessage() {
   return (
     <Blockquote>
       <Paragraph small secondary>

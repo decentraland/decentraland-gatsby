@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
@@ -17,7 +17,7 @@ export type ParagraphProps = React.HTMLAttributes<HTMLParagraphElement> & {
   uppercase?: boolean
 }
 
-export default React.memo(function Paragraph({
+export default memo(function Paragraph({
   primary,
   secondary,
   small,

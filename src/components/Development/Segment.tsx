@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 export type SegmentProps = React.Props<HTMLScriptElement> &
   React.HTMLProps<HTMLScriptElement> & {
@@ -14,7 +14,7 @@ export type SegmentProps = React.Props<HTMLScriptElement> &
     trackPage?: boolean
   }
 
-export default React.memo(function Segment({
+export default memo(function Segment({
   analyticsKey,
   analyticsJS,
   segmentKey,

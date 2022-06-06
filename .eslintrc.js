@@ -29,13 +29,11 @@ module.exports = {
   ],
   rules: {
     // TODO: Review rules with off, in order to activate it, code review is going to be required
-    'import/export': 'off',
-    'no-case-declarations': 'off',
-    'import/no-named-export': 'off',
-    'import/no-named-as-default': 'off',
-    'import/no-named-as-default-member': 'off',
-    '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/no-unused-vars': 'off',
+    'import/no-named-as-default-member': 'off',
+
+    'no-case-declarations': 'off',
+    '@typescript-eslint/ban-types': 'off',
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-empty-function': 'off',

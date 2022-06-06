@@ -1,4 +1,4 @@
-import PropTypes from 'prop-types'
+import { array, object, string } from 'prop-types'
 import React from 'react'
 
 import Segment from './Development/Segment'
@@ -37,10 +37,10 @@ export default function HTML(props: any) {
 }
 
 HTML.propTypes = {
-  htmlAttributes: PropTypes.object,
-  headComponents: PropTypes.array,
-  bodyAttributes: PropTypes.object,
-  preBodyComponents: PropTypes.array,
-  body: PropTypes.string,
-  postBodyComponents: PropTypes.array,
+  htmlAttributes: object,
+  headComponents: array,
+  bodyAttributes: object,
+  preBodyComponents: array,
+  body: string,
+  postBodyComponents: array,
 }

@@ -26,7 +26,8 @@
     "migrate": "DOTENV_CONFIG_PATH=.env.development ts-node -r dotenv/config ./node_modules/node-pg-migrate/bin/node-pg-migrate -j ts -m src/migrations -d CONNECTION_STRING",
     "precommit": "lint-staged --config .husky/pre-commit.js",
     "lint": "eslint --ext .ts,.tsx,.js,.jsx ./src",
-    "lint:fix": "npm run lint -- --fix"
+    "lint:fix": "npm run lint -- --fix",
+    "ts-node": "ts-node"
   },
   "repository": {
     "type": "git",

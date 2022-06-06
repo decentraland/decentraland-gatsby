@@ -6,9 +6,9 @@
  */
 
 import { Locale } from 'decentraland-ui/dist/components/Language/Language'
-import PropTypes from 'prop-types'
+import { arrayOf, object, string } from 'prop-types'
 import React from 'react'
-import Helmet from 'react-helmet'
+import { default as Helmet } from 'react-helmet'
 
 export type MetaProps = JSX.IntrinsicElements['meta']
 
@@ -239,8 +239,8 @@ SEO.defaultProps = {
 }
 
 SEO.propTypes = {
-  description: PropTypes.string,
-  lang: PropTypes.string,
-  meta: PropTypes.arrayOf(PropTypes.object),
-  title: PropTypes.string.isRequired,
+  description: string,
+  lang: string,
+  meta: arrayOf(object),
+  title: string.isRequired,
 }

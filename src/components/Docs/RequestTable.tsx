@@ -1,6 +1,6 @@
 import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import { Table } from 'decentraland-ui/dist/components/Table/Table'
-import React, { useMemo } from 'react'
+import React, { memo, useMemo } from 'react'
 
 import Code from '../Text/Code'
 import Paragraph from '../Text/Paragraph'
@@ -25,7 +25,7 @@ export type RequestTableProps = {
   body?: AjvObjectSchema
 }
 
-export default React.memo(function RequestTable({
+export default memo(function RequestTable({
   params,
   query,
   body,
@@ -135,7 +135,7 @@ export default React.memo(function RequestTable({
   )
 })
 
-const RequestTableRow = React.memo(
+const RequestTableRow = memo(
   ({
     name,
     definition,
@@ -196,7 +196,7 @@ const RequestTableRow = React.memo(
   }
 )
 
-const RequestTableNameCell = React.memo(function ({
+const RequestTableNameCell = memo(function ({
   required,
   name,
 }: {
@@ -214,7 +214,7 @@ const RequestTableNameCell = React.memo(function ({
   )
 })
 
-const RequestTableTypeCell = React.memo(function ({
+const RequestTableTypeCell = memo(function ({
   definition,
 }: {
   definition: AjvSchema
@@ -277,7 +277,7 @@ const restrictionProps = [
   'additionalProperties',
 ]
 
-const RequestTableDescriptionCell = React.memo(function ({
+const RequestTableDescriptionCell = memo(function ({
   required,
   definition,
 }: {

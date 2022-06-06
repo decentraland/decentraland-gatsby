@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { memo, useCallback, useEffect, useRef, useState } from 'react'
 
 import TokenList from '../../utils/dom/TokenList'
 import Next from '../Carousel/Next'
@@ -14,7 +14,7 @@ export type AccordionProps = {
   description?: React.ReactNode
 }
 
-export default React.memo(function Accordion(props: AccordionProps) {
+export default memo(function Accordion(props: AccordionProps) {
   const ref = useRef<HTMLDivElement>(null)
   const [open, setOpen] = useState(false)
   const [height, setHeight] = useState(0)

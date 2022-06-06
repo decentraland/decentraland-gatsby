@@ -1,10 +1,10 @@
-import escaper from 'html-escaper'
+import { escape as _escape } from 'html-escaper'
 import { HTMLElement, parse } from 'node-html-parser'
 
 import { MetadataOptions } from './types'
 
 function escape(text: string): string {
-  return escaper.escape(text).replace(/\n+/gi, ' ')
+  return _escape(text).replace(/\n+/gi, ' ')
 }
 
 export function replaceHelmetMetadata(

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { memo, useCallback, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
 import BaseLink, { isLocalLink } from '../../components/Text/Link'
@@ -11,7 +11,7 @@ export type LinkProps<S extends {} = {}> =
     replace?: boolean
   }
 
-export default React.memo(function Link(props: LinkProps) {
+export default memo(function Link(props: LinkProps) {
   props.state
   props.replace
   const intl = useIntl()

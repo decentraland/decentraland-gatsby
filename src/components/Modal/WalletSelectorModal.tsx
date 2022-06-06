@@ -7,7 +7,7 @@ import {
 } from 'decentraland-ui/dist/components/LoginModal/LoginModal'
 import { Modal } from 'decentraland-ui/dist/components/Modal/Modal'
 import { ModalNavigation } from 'decentraland-ui/dist/components/ModalNavigation/ModalNavigation'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { memo, useCallback, useEffect, useState } from 'react'
 import ModalContent from 'semantic-ui-react/dist/commonjs/modules/Modal/ModalContent'
 
 import { getChainId } from '../../context/Auth/utils'
@@ -33,7 +33,7 @@ export type WalletSelectorProps = {
 
 export { LoginModalOptionType }
 
-export default React.memo(function WalletSelector(props: WalletSelectorProps) {
+export default memo(function WalletSelector(props: WalletSelectorProps) {
   const l = useFormatMessage()
   const [provider, setProvider] = useState(LoginModalOptionType.METAMASK)
   const [availableProviders, setAvailableProviders] = useState(

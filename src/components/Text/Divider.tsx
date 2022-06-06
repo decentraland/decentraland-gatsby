@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { memo } from 'react'
 
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
@@ -18,11 +18,7 @@ export type DividerProps = Omit<React.HTMLProps<HTMLDivElement>, 'size'> & {
     | 'massive'
 }
 
-export default React.memo(function Divider({
-  line,
-  size,
-  ...props
-}: DividerProps) {
+export default memo(function Divider({ line, size, ...props }: DividerProps) {
   return (
     <div
       {...props}
