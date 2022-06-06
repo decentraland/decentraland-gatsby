@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+
 import RequestError from './error'
 
 export type ParamOptions<T> = {
@@ -31,7 +32,9 @@ export default class Context {
       return null
     }
 
-    let finalValue: T = options.parser ? options.parser(value) : (value as any)
+    const finalValue: T = options.parser
+      ? options.parser(value)
+      : (value as any)
 
     if (options.validator && !options.validator(finalValue)) {
       if (options.required) {
@@ -48,7 +51,7 @@ export default class Context {
   }
 
   param<T = string>(name: string, options: ParamOptions<T> = {}): T | null {
-    let value =
+    const value =
       this.req.params[name] ?? this.req.body[name] ?? this.req.query[name]
     return this.value(name, value, options)
   }

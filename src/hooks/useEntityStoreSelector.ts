@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
+
 import EntityStore, { EntityStoreState } from '../utils/EntityStore'
 
 export type Selector<E extends object, R> = (store: EntityStoreState<E>) => R

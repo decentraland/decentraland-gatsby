@@ -80,6 +80,8 @@ Run the setup command
 
   .gitlab-ci.yml    ...... CI configuration file
 
+  .eslintrc.js      ...... eslint and plugins config file
+
   .prettierignore   ...... prettier files
   .prettierrc
 
@@ -157,3 +159,7 @@ Production
   npm run build       # build end files
   npm run production  # run production server
 ```
+
+## ESLint and plugins configuration
+
+In order to understand the steps to install ESLint and the plugins needed to order the imports please follow this [link](ESLINT.md)

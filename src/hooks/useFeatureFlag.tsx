@@ -1,11 +1,12 @@
-import { useCallback, useMemo } from 'react'
 import {
-  FeatureFlagsResult,
   FeatureFlagOptions,
+  FeatureFlagsResult,
   fetchFlags,
 } from '@dcl/feature-flags'
-import useAsyncState from './useAsyncState'
+import { useCallback, useMemo } from 'react'
+
 import FeatureFlags from '../utils/development/FeatureFlags'
+import useAsyncState from './useAsyncState'
 
 export const DEFAULT_FEATURE_FLAG = new FeatureFlags({
   flags: {},

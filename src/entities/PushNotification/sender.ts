@@ -1,4 +1,5 @@
-import { sendNotification, RequestOptions, PushSubscription } from 'web-push'
+import { PushSubscription, RequestOptions, sendNotification } from 'web-push'
+
 import chunk from '../../utils/array/chunk'
 import { PushNotificationAttributes } from '../../utils/webworker/types'
 import logger from '../Development/logger'
@@ -17,7 +18,7 @@ export default class PushNotificationSender {
     this.privateKey = options.privateKey
   }
 
-  inc(value: number = 1) {
+  inc(value = 1) {
     web_notification_sent_total.inc({}, value)
   }
 

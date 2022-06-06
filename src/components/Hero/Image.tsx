@@ -1,5 +1,6 @@
+import { MotionProps, motion } from 'framer-motion'
 import React from 'react'
-import { motion, MotionProps } from 'framer-motion'
+
 import TokenList from '../../utils/dom/TokenList'
 
 import './Image.css'

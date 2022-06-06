@@ -1,10 +1,12 @@
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import React from 'react'
-import Input from './Input'
+import isEmail from 'validator/lib/isEmail'
+
+import usePatchState from '../../hooks/usePatchState'
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
-import { Button } from 'decentraland-ui/dist/components/Button/Button'
-import usePatchState from '../../hooks/usePatchState'
-import isEmail from 'validator/lib/isEmail'
+import Input from './Input'
+
 import 'isomorphic-fetch'
 
 import './Subscribe.css'

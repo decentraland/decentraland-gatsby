@@ -1,15 +1,16 @@
 import { ChainId, getChainName } from '@dcl/schemas/dist/dapps/chain-id'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
-import { Provider } from 'decentraland-connect/dist/types'
 import { connection } from 'decentraland-connect/dist/ConnectionManager'
-import { getCurrentIdentity, setCurrentIdentity } from '../utils/auth/storage'
-import segment from '../utils/development/segment'
-import rollbar from '../utils/development/rollbar'
-import { identify, Identity } from '../utils/auth'
-import SingletonListener from '../utils/dom/SingletonListener'
-import { ownerAddress } from '../utils/auth/identify'
+import { Provider } from 'decentraland-connect/dist/types'
 import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import { AddEthereumChainParameters } from 'decentraland-dapps/dist/modules/wallet/types'
+
+import { Identity, identify } from '../utils/auth'
+import { ownerAddress } from '../utils/auth/identify'
+import { getCurrentIdentity, setCurrentIdentity } from '../utils/auth/storage'
+import rollbar from '../utils/development/rollbar'
+import segment from '../utils/development/segment'
+import SingletonListener from '../utils/dom/SingletonListener'
 
 export const chains = [
   ChainId.ETHEREUM_MAINNET,

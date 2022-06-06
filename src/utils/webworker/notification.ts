@@ -1,5 +1,5 @@
-import { PushNotificationAttributes } from './types'
 import { logger } from './debug'
+import { PushNotificationAttributes } from './types'
 
 export function registerNotification(
   defaultNotificationOptions: NotificationOptions

@@ -1,8 +1,10 @@
-import glob from 'glob'
-import { Router } from 'express'
 import { resolve } from 'path'
-import redirect from './redirect'
+
+import { Router } from 'express'
+import glob from 'glob'
+
 import file from './file'
+import redirect from './redirect'
 
 export type FilesystemHandleOptions = {
   indexFile: string

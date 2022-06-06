@@ -1,13 +1,14 @@
-import { Request, Response, NextFunction } from 'express'
 import { NextHandleFunction } from 'connect'
+import { NextFunction, Request, Response } from 'express'
+
+import isStream from '../../utils/stream/isStream'
+import logger from '../Development/logger'
 import Context from './context'
 import RequestError from './error'
-import isStream from '../../utils/stream/isStream'
 import {
-  http_request_pool_size,
   http_request_duration_seconds,
+  http_request_pool_size,
 } from './metrics'
-import logger from '../Development/logger'
 
 const DEFAULT_API_HEADERS: Record<string, string> = {
   'Content-Security-Policy': `default-src 'none'; frame-ancestors 'none'`,

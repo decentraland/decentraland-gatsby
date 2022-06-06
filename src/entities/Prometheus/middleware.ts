@@ -1,6 +1,6 @@
-import { middleware } from '../Route/handle'
 import env from '../../utils/env'
 import { withBearerToken } from '../Auth/middleware'
+import { middleware } from '../Route/handle'
 
 const PROMETHEUS_BEARER_TOKEN = env('PROMETHEUS_BEARER_TOKEN', '')
 

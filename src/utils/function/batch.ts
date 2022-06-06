@@ -2,10 +2,7 @@ import logger from '../../entities/Development/logger'
 
 type BatchCallback<T> = (batch: T[]) => Promise<any>
 
-export default function batch<T>(
-  callback: BatchCallback<T>,
-  limit: number = 100
-) {
+export default function batch<T>(callback: BatchCallback<T>, limit = 100) {
   let queue: { item: T; callback: () => void }[] = []
   let exec: null | Promise<any> = null
 

@@ -6,12 +6,12 @@
  * @example `assert.equal(extension("./file.min.js?query"), "js")`
  */
 export function extension(file: string) {
-  let questionMarkPosition = file.indexOf('?')
+  const questionMarkPosition = file.indexOf('?')
   if (questionMarkPosition >= 0) {
     file = file.slice(0, questionMarkPosition)
   }
 
-  let dotPosition = file.lastIndexOf('.')
+  const dotPosition = file.lastIndexOf('.')
   if (dotPosition >= 0) {
     return file.slice(dotPosition + 1)
   }

@@ -1,7 +1,9 @@
-import min from 'htmlmin'
 import { readFileSync } from 'fs'
-import { replaceHelmetMetadata } from './utils'
+
+import min from 'htmlmin'
+
 import { MetadataOptions } from './types'
+import { replaceHelmetMetadata } from './utils'
 
 describe(`src/entities/Gatsby/utils`, () => {
   describe(`replaceHelmetMetadata`, () => {

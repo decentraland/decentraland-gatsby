@@ -1,9 +1,11 @@
-import React, { useState } from 'react'
-import { Radio } from 'decentraland-ui/dist/components/Radio/Radio'
 import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { Radio } from 'decentraland-ui/dist/components/Radio/Radio'
+import React, { useState } from 'react'
+
 import TokenList from '../../utils/dom/TokenList'
-import Textarea, { TextareaProps } from './Textarea'
 import Markdown from '../Text/Markdown'
+import Textarea, { TextareaProps } from './Textarea'
+
 // import Label from './Label'
 import './MarkdownTextarea.css'
 

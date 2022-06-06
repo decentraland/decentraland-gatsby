@@ -1,9 +1,10 @@
 import { Request, Response } from 'express'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
 import isURL from 'validator/lib/isURL'
+
 import API from '../../utils/api/API'
 import Catalyst from '../../utils/api/Catalyst'
-import { createDefaultProfile, Profile } from '../../utils/loader/profile'
+import { Profile, createDefaultProfile } from '../../utils/loader/profile'
 import routes from '../Route/routes'
 
 const DEFAULT_AVATAR = 'https://decentraland.org/images/male.png'

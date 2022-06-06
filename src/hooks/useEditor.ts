@@ -1,5 +1,5 @@
-import { useCallback, useMemo, useState } from 'react'
 import omit from 'lodash.omit'
+import { useCallback, useMemo, useState } from 'react'
 
 export type Editor<P extends {} = {}> = (state: P, newProps: Partial<P>) => P
 export type EditorError<P extends {} = {}> = Partial<

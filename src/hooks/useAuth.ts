@@ -1,13 +1,14 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import { connection } from 'decentraland-connect/dist/ConnectionManager'
-import { setCurrentIdentity } from '../utils/auth/storage'
-import segment from '../utils/development/segment'
-import rollbar from '../utils/development/rollbar'
-import { Identity } from '../utils/auth'
-import { PersistedKeys } from '../utils/loader/types'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+
 import logger from '../entities/Development/logger'
+import { Identity } from '../utils/auth'
+import { setCurrentIdentity } from '../utils/auth/storage'
+import rollbar from '../utils/development/rollbar'
+import segment from '../utils/development/segment'
+import { PersistedKeys } from '../utils/loader/types'
 import useAsyncTask from './useAsyncTask'
 import {
   AuthEvent,
@@ -29,7 +30,7 @@ export default function useAuth() {
   const [state, setState] = useState<AuthState>({ ...initialState })
 
   const select = useCallback(
-    (selecting: boolean = true) => {
+    (selecting = true) => {
       if (isLoading(state.status)) {
         return
       }
@@ -282,11 +283,11 @@ export default function useAuth() {
       setState({ ...state, chainId: Number(chainId) })
 
     if (provider && !provider.isFortmatic) {
-      if (!!provider.on) {
+      if (provider.on) {
         provider.on('chainChanged', onChainChanged)
         provider.on('accountsChanged', onDisconnect)
         provider.on('disconnect', onDisconnect)
-      } else if (!!provider.addListener) {
+      } else if (provider.addListener) {
         provider.addListener('chainChanged', onChainChanged)
         provider.addListener('accountsChanged', onDisconnect)
         provider.addListener('disconnect', onDisconnect)
@@ -295,11 +296,11 @@ export default function useAuth() {
 
     return () => {
       if (provider && !provider.isFortmatic) {
-        if (!!provider.off) {
+        if (provider.off) {
           provider.off('chainChanged', onChainChanged)
           provider.off('accountsChanged', onDisconnect)
           provider.off('disconnect', onDisconnect)
-        } else if (!!provider.removeListener) {
+        } else if (provider.removeListener) {
           provider.removeListener('chainChanged', onChainChanged)
           provider.removeListener('accountsChanged', onDisconnect)
           provider.removeListener('disconnect', onDisconnect)

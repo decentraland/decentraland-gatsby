@@ -1,11 +1,13 @@
-import { Response } from 'express'
 import { createHash } from 'crypto'
 import { readFile } from 'fs'
-import { promisify } from 'util'
 import { extname } from 'path'
+import { promisify } from 'util'
+
+import { Response } from 'express'
+
 import handle from '../handle'
 
-export default function file(path: string, status: number = 200) {
+export default function file(path: string, status = 200) {
   let reader: Promise<readonly [Buffer, string]> | null = null
   return handle(async (_, res: Response) => {
     if (!reader) {

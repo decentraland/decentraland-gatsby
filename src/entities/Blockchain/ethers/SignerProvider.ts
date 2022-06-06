@@ -1,8 +1,10 @@
-import type { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { JsonRpcProvider } from '@ethersproject/providers'
-import type { Wallet } from '@ethersproject/wallet'
 import { signTypedData_v4 } from 'eth-sig-util'
+
 import { getEnvironmentKey } from '../keys'
+
+import type { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
+import type { Wallet } from '@ethersproject/wallet'
 
 export default class SignerProvider extends JsonRpcProvider {
   wallet: Wallet

@@ -1,6 +1,8 @@
 import { dirname } from 'path'
+
 import { flatten } from 'flat'
-import { CreatePageArgs, Page, CreateWebpackConfigArgs } from 'gatsby'
+import { CreatePageArgs, CreateWebpackConfigArgs, Page } from 'gatsby'
+
 import { DecentralandIntlContext, DecentralandIntlPluginOptions } from './types'
 
 const INTL_DEAULT_PATHS = [
@@ -31,7 +33,7 @@ function loadTransaction(path: string, locale: string): Record<string, string> {
 }
 
 function loadTransactions(paths: string[], locale: string) {
-  let messages: Record<string, string>[] = []
+  const messages: Record<string, string>[] = []
   for (const path of paths) {
     messages.push(loadTransaction(path, locale))
   }

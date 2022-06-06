@@ -1,4 +1,5 @@
 import { Request, Response } from 'express'
+
 import { withPrometheusToken } from '../Prometheus/middleware'
 import { handleRaw } from '../Route/handle'
 import routes from '../Route/routes'

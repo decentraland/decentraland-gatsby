@@ -110,7 +110,7 @@ export const apiResultSchema = (data: AjvSchema): AjvObjectSchema => ({
 })
 
 export const timePropertiesSchema = (
-  name: string = 'record'
+  name = 'record'
 ): Record<'created_at' | 'update_at', AjvSchema> => ({
   created_at: {
     type: 'string',

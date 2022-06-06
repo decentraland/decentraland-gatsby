@@ -5,31 +5,31 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React from 'react'
-import { DropdownProps } from 'semantic-ui-react'
-import { PageProps } from 'gatsby'
-
-import trackEvent from '../../utils/segment/trackEvent'
-import { Locale } from 'decentraland-ui/dist/components/LanguageIcon/LanguageIcon'
+import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import {
   Footer,
   FooterProps,
 } from 'decentraland-ui/dist/components/Footer/Footer'
+import { Locale } from 'decentraland-ui/dist/components/LanguageIcon/LanguageIcon'
 import {
   Navbar,
   NavbarProps,
 } from 'decentraland-ui/dist/components/Navbar/Navbar'
+import { PageProps } from 'gatsby'
+import React from 'react'
+import { DropdownProps } from 'semantic-ui-react'
 
+import useAuthContext from '../../context/Auth/useAuthContext'
+import { getSupportedChainIds } from '../../context/Auth/utils'
+import useWindowScroll from '../../hooks/useWindowScroll'
+import { DecentralandIntlContext } from '../../plugins/intl/types'
+import { changeLocale } from '../../plugins/intl/utils'
+import TokenList from '../../utils/dom/TokenList'
+import trackEvent from '../../utils/segment/trackEvent'
 import WalletSelectorModal from '../Modal/WalletSelectorModal'
 import WrongNetworkModal from '../Modal/WrongNetworkModal'
-import useWindowScroll from '../../hooks/useWindowScroll'
-import useAuthContext from '../../context/Auth/useAuthContext'
-import TokenList from '../../utils/dom/TokenList'
-import { getSupportedChainIds } from '../../context/Auth/utils'
-import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
-import { changeLocale } from '../../plugins/intl/utils'
+
 import './Layout.css'
-import { DecentralandIntlContext } from '../../plugins/intl/types'
 
 export type LayoutProps = PageProps &
   NavbarProps &
@@ -53,7 +53,7 @@ export default function Layout({
   const locale = pageContext?.intl?.locale || 'en'
   const locales = pageContext?.intl?.locales || ['en']
   const [, state] = useAuthContext()
-  const scroll = useWindowScroll()
+  const scroll = useWindowScroll() || null
   const isScrolled = scroll.scrollY.get() > 0
 
   const handleChangeLocal = function (

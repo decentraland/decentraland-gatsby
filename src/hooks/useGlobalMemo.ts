@@ -1,5 +1,5 @@
 import { hash } from 'immutable'
-import { useMemo, DependencyList } from 'react'
+import { DependencyList, useMemo } from 'react'
 
 const globalMemo = new Map<string, any>()
 export default function useGlobalMemo<T>(

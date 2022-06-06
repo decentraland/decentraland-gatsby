@@ -1,6 +1,8 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
+
 import TokenList from '../../utils/dom/TokenList'
 import Next from '../Carousel/Next'
+
 import './Accordion.css'
 
 export type AccordionProps = {

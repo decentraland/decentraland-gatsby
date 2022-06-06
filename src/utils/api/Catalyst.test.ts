@@ -1,5 +1,6 @@
+import { AuthIdentity, AuthLinkType, Authenticator } from 'dcl-crypto'
+
 import Catalyst from './Catalyst'
-import { Authenticator, AuthLinkType, AuthIdentity } from 'dcl-crypto'
 
 const TEST_IDENTITY: AuthIdentity = {
   ephemeralIdentity: {

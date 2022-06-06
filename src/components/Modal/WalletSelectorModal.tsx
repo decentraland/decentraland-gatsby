@@ -1,20 +1,22 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import ModalContent from 'semantic-ui-react/dist/commonjs/modules/Modal/ModalContent'
+import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
+import { connection } from 'decentraland-connect/dist/ConnectionManager'
+import { toModalOptionType } from 'decentraland-dapps/dist/containers/LoginModal/utils'
 import {
   LoginModal,
   LoginModalOptionType,
 } from 'decentraland-ui/dist/components/LoginModal/LoginModal'
 import { Modal } from 'decentraland-ui/dist/components/Modal/Modal'
 import { ModalNavigation } from 'decentraland-ui/dist/components/ModalNavigation/ModalNavigation'
-import { toModalOptionType } from 'decentraland-dapps/dist/containers/LoginModal/utils'
-import { connection } from 'decentraland-connect/dist/ConnectionManager'
-import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
-import { ChainId } from '../../utils/loader/ensBalance'
+import React, { useCallback, useEffect, useState } from 'react'
+import ModalContent from 'semantic-ui-react/dist/commonjs/modules/Modal/ModalContent'
+
 import { getChainId } from '../../context/Auth/utils'
 import useAnchor from '../../hooks/useAnchor'
-import Loader from '../Progress/Loader'
 import useFormatMessage from '../../hooks/useFormatMessage'
+import { ChainId } from '../../utils/loader/ensBalance'
+import Loader from '../Progress/Loader'
 import Markdown from '../Text/Markdown'
+
 import 'decentraland-ui/dist/components/LoginModal/LoginModal.css'
 import './WalletSelectorModal.css'
 

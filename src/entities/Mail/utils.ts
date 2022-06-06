@@ -1,10 +1,12 @@
-import React from 'react'
-import ReactDOMServer from 'react-dom/server'
+import { readFile } from 'fs'
+import { promisify } from 'util'
+
 import cherio from 'cherio'
 import htmlmin from 'htmlmin'
 import juice from 'juice'
-import { readFile } from 'fs'
-import { promisify } from 'util'
+import React from 'react'
+import ReactDOMServer from 'react-dom/server'
+
 import { Template, TemplateProps } from './types'
 
 const read = promisify(readFile)

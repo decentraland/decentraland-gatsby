@@ -1,4 +1,5 @@
 import { createHash } from 'crypto'
+
 import {
   Model as BaseModel,
   OnConflict,
@@ -6,6 +7,7 @@ import {
   QueryPart,
   SQLStatement,
 } from 'decentraland-server'
+
 import { DatabaseMetricParams, withDatabaseMetrics } from './metrics'
 
 export const QUERY_HASHES = new Map<string, string>()

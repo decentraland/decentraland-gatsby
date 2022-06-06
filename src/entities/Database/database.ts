@@ -1,5 +1,6 @@
 import { yellow } from 'colors/safe'
 import { db } from 'decentraland-server'
+
 import env from '../../utils/env'
 
 const pg = db.clients.postgres

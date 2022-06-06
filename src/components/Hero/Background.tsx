@@ -1,4 +1,5 @@
 import React from 'react'
+
 import TokenList from '../../utils/dom/TokenList'
 
 import './Background.css'

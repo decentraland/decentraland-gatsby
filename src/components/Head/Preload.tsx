@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { extension } from './utils'
 
 export type PreloadProps = {

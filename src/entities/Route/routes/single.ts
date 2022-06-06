@@ -1,8 +1,9 @@
-import type { Request } from 'express'
 import handle, { AsyncHandler } from '../handle'
 
+import type { Request } from 'express'
+
 export default function single<R extends Request>(handler: AsyncHandler<R>) {
-  let loaders = new Map<string, Promise<any>>()
+  const loaders = new Map<string, Promise<any>>()
 
   return handle(async (req, res, ctx) => {
     if (loaders.has(req.path)) {

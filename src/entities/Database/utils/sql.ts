@@ -1,4 +1,5 @@
-import { Model, raw, SQLStatement, SQL } from 'decentraland-server'
+import { Model, SQL, SQLStatement, raw } from 'decentraland-server'
+
 import { ServiceStartHandler } from '../../Server/types'
 import database from '../database'
 import { LimitOptions } from '../types'

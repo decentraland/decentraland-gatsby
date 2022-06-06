@@ -1,6 +1,7 @@
 import { Model, SQL, raw } from 'decentraland-server'
-import { JobAttributes } from '../types'
 import isUUID from 'validator/lib/isUUID'
+
+import { JobAttributes } from '../types'
 
 export default class Job extends Model<JobAttributes> {
   static tableName = 'jobs'

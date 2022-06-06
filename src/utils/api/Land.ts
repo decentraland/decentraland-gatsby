@@ -1,6 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber'
-import API from './API'
+
 import env from '../env'
+import API from './API'
 import Options from './Options'
 
 export type GetListOptions = {
@@ -128,8 +129,8 @@ export default class Land extends API {
     const uintX = x < 0 ? FACTOR_LOW.sub(absX) : absX
     const uintY = y < 0 ? FACTOR.sub(absY) : absY
 
-    let bX = BigNumber.from(uintX).mul(FACTOR).and(CLEAR_LOW)
-    let bY = BigNumber.from(uintY).and(CLEAR_HIGH)
+    const bX = BigNumber.from(uintX).mul(FACTOR).and(CLEAR_LOW)
+    const bY = BigNumber.from(uintY).and(CLEAR_HIGH)
     return bX.or(bY).toString()
   }
 

@@ -1,8 +1,9 @@
-import React from 'react'
 import { Container } from 'decentraland-ui/dist/components/Container/Container'
+import React from 'react'
+
 import Head from '../Head/Head'
-import Title from '../Text/Title'
 import Paragraph from '../Text/Paragraph'
+import Title from '../Text/Title'
 
 export type NotFoundProps = {
   title?: string

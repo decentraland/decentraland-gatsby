@@ -1,4 +1,5 @@
-import { useState, useEffect, useCallback, DependencyList } from 'react'
+import { DependencyList, useCallback, useEffect, useState } from 'react'
+
 import rollbar from '../utils/development/rollbar'
 import segment from '../utils/development/segment'
 

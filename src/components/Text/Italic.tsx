@@ -1,6 +1,8 @@
 import React from 'react'
+
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
+
 import './Italic.css'
 
 export type ItalicProps = React.Props<HTMLSpanElement> &

@@ -1,9 +1,9 @@
 export default function pad(
   value: number,
-  prefixLength: number = 0,
-  decimalLength: number = 0
+  prefixLength = 0,
+  decimalLength = 0
 ) {
-  let n = Number(value)
+  const n = Number(value)
   if (Number.isNaN(n)) {
     return 'NaN'
   }
@@ -13,7 +13,7 @@ export default function pad(
     fixed = '0'
   }
 
-  const [, sig, num, decimals] = fixed.match(/^(\-)?(\d+)(\.\d+)?$/)!
+  const [, sig, num, decimals] = fixed.match(/^(-)?(\d+)(\.\d+)?$/)!
   const padLength = Math.max(prefixLength - num.length, 0)
   const pad = '0'.repeat(padLength)
   return [sig || '', pad, num, decimals].join('')

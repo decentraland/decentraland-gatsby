@@ -1,5 +1,5 @@
-import API from './API'
 import fetch from '../../entities/Development/fetch.test'
+import API from './API'
 import '../../entities/Development/logger.test'
 
 const HTTPBIN_ENDPOINT = process.env.HTTPBIN_ENDPOINT || 'https://httpbin.org'

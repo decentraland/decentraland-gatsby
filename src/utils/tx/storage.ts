@@ -1,6 +1,7 @@
-import type { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { PersistedKeys } from '../loader'
 import { Transaction } from './type'
+
+import type { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 
 const transactions = new Map<string, Transaction[]>()
 

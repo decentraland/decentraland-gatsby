@@ -1,6 +1,7 @@
-import { useState, useEffect, useCallback, useMemo } from 'react'
-import { Provider } from 'decentraland-connect/dist/types'
 import { Web3Provider } from '@ethersproject/providers'
+import { Provider } from 'decentraland-connect/dist/types'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+
 import logger from '../entities/Development/logger'
 
 type SignState = {

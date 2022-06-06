@@ -1,6 +1,7 @@
-import { NextFunction, Request, Response } from 'express'
-import verify from 'decentraland-crypto-middleware/lib/verify'
 import { AUTH_CHAIN_HEADER_PREFIX } from 'decentraland-crypto-middleware/lib/types'
+import verify from 'decentraland-crypto-middleware/lib/verify'
+import { NextFunction, Request, Response } from 'express'
+
 import RequestError from '../Route/error'
 import { middleware } from '../Route/handle'
 

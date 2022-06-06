@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+
 import SingletonListener from '../utils/dom/SingletonListener'
 
 export default function useFileDrop(callback: (event: DragEvent) => void) {

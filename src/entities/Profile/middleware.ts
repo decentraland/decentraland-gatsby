@@ -1,11 +1,12 @@
 import { Request } from 'express'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
-import Catalyst, { Avatar } from '../../utils/api/Catalyst'
+
 import API from '../../utils/api/API'
-import RequestError from '../Route/error'
-import param from '../Route/param'
+import Catalyst, { Avatar } from '../../utils/api/Catalyst'
 import { WithAuth } from '../Auth/middleware'
+import RequestError from '../Route/error'
 import { middleware } from '../Route/handle'
+import param from '../Route/param'
 
 export type WithProfile<R extends Request = Request> = R & {
   profile?: Avatar

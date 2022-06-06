@@ -1,19 +1,20 @@
-import React from 'react'
-import ReactMarkdown, { Options, Components } from 'react-markdown'
-import gfm from 'remark-gfm'
-import emoji from 'remark-emoji'
-import { Table } from 'decentraland-ui/dist/components/Table/Table'
 import { Radio } from 'decentraland-ui/dist/components/Radio/Radio'
-import MainTitle from './MainTitle'
-import Title from './Title'
-import SubTitle from './SubTitle'
-import Paragraph from './Paragraph'
-import Italic from './Italic'
+import { Table } from 'decentraland-ui/dist/components/Table/Table'
+import React from 'react'
+import ReactMarkdown, { Components, Options } from 'react-markdown'
+import emoji from 'remark-emoji'
+import gfm from 'remark-gfm'
+
+import Blockquote from './Blockquote'
 import Bold from './Bold'
 import Code from './Code'
+import Italic from './Italic'
 import Link from './Link'
-import Blockquote from './Blockquote'
 import List, { ListItem } from './List'
+import MainTitle from './MainTitle'
+import Paragraph from './Paragraph'
+import SubTitle from './SubTitle'
+import Title from './Title'
 
 export type MarkdownProps = Omit<
   Options,
@@ -33,7 +34,7 @@ export const components: Components = {
   em: React.memo(({ node, ...props }) => <Italic {...(props as any)} />),
   a: React.memo(({ node, ...props }) => <Link {...props} />),
   code: React.memo(({ node, ...props }) => {
-    const result = (props.className || '').match(/^language\-(\w+)$/)
+    const result = (props.className || '').match(/^language-(\w+)$/)
     const language = result ? result[1] : undefined
     return <Code language={language} {...(props as any)} />
   }),

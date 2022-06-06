@@ -1,6 +1,7 @@
+import { formatUnits } from '@ethersproject/units'
 import { MANA_GRAPH_BY_CHAIN_ID } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
-import { formatUnits } from '@ethersproject/units'
+
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
 import Loader from './Loader'

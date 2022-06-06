@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo, useRef } from 'react'
 import { merge } from 'immutable'
-import { createIntl, createIntlCache, RawIntlProvider } from 'react-intl'
+import React, { useEffect, useMemo, useRef } from 'react'
+import { RawIntlProvider, createIntl, createIntlCache } from 'react-intl'
+
 import { DecentralandIntlContext } from './types'
 
 const intlCache = createIntlCache()

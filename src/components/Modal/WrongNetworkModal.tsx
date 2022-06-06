@@ -1,9 +1,10 @@
-import React, { useMemo } from 'react'
 import { ChainId, getChainName } from '@dcl/schemas/dist/dapps/chain-id'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
-import { Modal, ModalProps } from 'decentraland-ui/dist/components/Modal/Modal'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Modal, ModalProps } from 'decentraland-ui/dist/components/Modal/Modal'
 import { ModalNavigation } from 'decentraland-ui/dist/components/ModalNavigation/ModalNavigation'
+import React, { useMemo } from 'react'
+
 import useFormatMessage from '../../hooks/useFormatMessage'
 
 export type WrongNetworkModalProps = ModalProps & {

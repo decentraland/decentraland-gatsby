@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
 import clipboardCopy from 'clipboard-copy'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 export default function useClipboardCopy(timeout?: number) {
   const [state, setState] = useState<string | number | boolean | null>(null)
