@@ -1,3 +1,4 @@
+/** @deprecated use `loadsh/chuck` instead */
 export default function* chuck<T>(arr: T[], size = 1) {
   let current = 0
   const limit = arr.length
