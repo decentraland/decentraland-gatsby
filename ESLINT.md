@@ -99,6 +99,30 @@ module.exports = {
           'type',
           'unknown',
         ],
+        pathGroupsExcludedImportTypes: ['react', 'gatsby', 'react-*'],
+        pathGroups: [
+          {
+            pattern: 'react',
+            group: 'builtin',
+            position: 'before',
+          },
+          {
+            pattern: 'react-*',
+            group: 'builtin',
+          },
+          {
+            pattern: 'gatsby',
+            group: 'builtin',
+          },
+          {
+            pattern: 'decentraland-*',
+            group: 'internal',
+          },
+          {
+            pattern: 'semantic-ui-react',
+            group: 'internal',
+          },
+        ],
         'newlines-between': 'always',
         alphabetize: {
           order: 'asc',
