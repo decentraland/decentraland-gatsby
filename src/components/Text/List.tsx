@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React from 'react'
 
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
@@ -14,7 +14,7 @@ export type ListProps = (
   depth?: number
 }
 
-export default memo(function List(props: ListProps) {
+export default React.memo(function List(props: ListProps) {
   if (props.ordered) {
     return (
       <ol
@@ -34,7 +34,7 @@ export default memo(function List(props: ListProps) {
 
 export type ListItem = React.LiHTMLAttributes<HTMLLIElement>
 
-export const ListItem = memo(function (props: ListItem) {
+export const ListItem = React.memo(function (props: ListItem) {
   return (
     <li
       {...props}

@@ -3,23 +3,23 @@ import SingletonListener from './dom/SingletonListener'
 /**
  * @deprecated
  */
-export type EntityStoreState<E extends object> = {
+export type EntityStoreState<E extends {}> = {
   error: string | null
   loading: boolean
   data: Record<string, E>
   lists: Record<string, string[] | null>
 }
 
-export type EntityStoreOptions<E extends object> = {
+export type EntityStoreOptions<E extends {}> = {
   identifier: (state: E) => string
   initialState: Partial<EntityStoreState<E>>
 }
 
-export interface EntityStoreConstructor<E extends object> {
+export interface EntityStoreConstructor<E extends {}> {
   new (): EntityStore<E>
 }
 
-export default class EntityStore<E extends object> {
+export default class EntityStore<E extends {}> {
   private config: EntityStoreOptions<E> = {
     identifier: (entity: E) => (entity as any).id,
     initialState: {},

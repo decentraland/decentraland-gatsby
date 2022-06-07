@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React from 'react'
 
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
@@ -11,7 +11,7 @@ export type BlockquoteProps = React.HTMLAttributes<HTMLQuoteElement> & {
   error?: boolean
 }
 
-export default memo(function Blockquote({
+export default React.memo(function Blockquote({
   primary,
   danger,
   error,

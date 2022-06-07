@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React from 'react'
 
 export type RollbarProps = React.ScriptHTMLAttributes<HTMLScriptElement> &
   React.HTMLProps<HTMLScriptElement> & {
@@ -9,7 +9,7 @@ export type RollbarProps = React.ScriptHTMLAttributes<HTMLScriptElement> &
     version?: string
   }
 
-export default memo(function Rollbar({
+export default React.memo(function Rollbar({
   accessToken,
   captureUncaught,
   captureUnhandledRejections,

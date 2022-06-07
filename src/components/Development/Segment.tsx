@@ -1,24 +1,18 @@
-import React, { memo } from 'react'
+import React from 'react'
 
 export type SegmentProps = React.Props<HTMLScriptElement> &
   React.HTMLProps<HTMLScriptElement> & {
     /** @deprecated use segmentKey instead */
     analyticsKey?: string
-    /** @deprecated use src instead */
-    analyticsJS?: string
     /** Segment key */
     segmentKey?: string
-    /** @deprecated Alternative source */
-    src?: string
     /** Alternative source */
     trackPage?: boolean
   }
 
-export default memo(function Segment({
+export default React.memo(function Segment({
   analyticsKey,
-  analyticsJS,
   segmentKey,
-  src,
   trackPage,
   ...props
 }: SegmentProps) {

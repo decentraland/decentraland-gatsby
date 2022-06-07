@@ -1,10 +1,11 @@
+import React from 'react'
+
 import { readFile } from 'fs'
 import { promisify } from 'util'
 
 import cherio from 'cherio'
 import htmlmin from 'htmlmin'
 import juice from 'juice'
-import React from 'react'
 import { renderToNodeStream } from 'react-dom/server'
 
 import { Template, TemplateProps } from './types'

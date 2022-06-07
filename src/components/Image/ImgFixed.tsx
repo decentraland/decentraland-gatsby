@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React from 'react'
 
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
@@ -12,7 +12,7 @@ export type ImgFixedProps = Omit<React.HTMLProps<HTMLDivElement>, 'size'> & {
   background?: string
 }
 
-export default memo(function ImgFixed({
+export default React.memo(function ImgFixed({
   src,
   dimension,
   size,
@@ -42,7 +42,7 @@ export default memo(function ImgFixed({
   )
 })
 
-const Img = memo(function (props: Pick<ImgFixedProps, 'dimension'>) {
+const Img = React.memo(function (props: Pick<ImgFixedProps, 'dimension'>) {
   switch (props.dimension) {
     case 'vertical':
       return (

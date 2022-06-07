@@ -7,9 +7,7 @@ import EntityStore, { EntityStoreState } from '../utils/EntityStore'
  * @param store
  * @returns
  */
-export default function useEntityStore<E extends object>(
-  store: EntityStore<E>
-) {
+export default function useEntityStore<E extends {}>(store: EntityStore<E>) {
   const [state, setState] = useState(store.getState())
 
   useEffect(() => {

@@ -1,5 +1,6 @@
+import React from 'react'
+
 import { Container } from 'decentraland-ui/dist/components/Container/Container'
-import React, { memo } from 'react'
 
 import Head from '../Head/Head'
 import Paragraph from '../Text/Paragraph'
@@ -11,7 +12,7 @@ export type NotFoundProps = {
   image?: string
 }
 
-export default memo(function NotFound(props: NotFoundProps) {
+export default React.memo(function NotFound(props: NotFoundProps) {
   const title = props.title || 'Not found'
   const description =
     props.description || "You just hit a route that doesn't exist..."

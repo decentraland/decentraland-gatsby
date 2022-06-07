@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React from 'react'
 
 import Code from '../Text/Code'
 
@@ -7,7 +7,7 @@ export type ApiCodeProps = {
   data?: any
 }
 
-export default memo(function ApiCode(props: ApiCodeProps) {
+export default React.memo(function ApiCode(props: ApiCodeProps) {
   return (
     <Code note={props.note} language="json">
       {JSON.stringify(props.data, null, 2)}

@@ -1,7 +1,8 @@
+import React from 'react'
+
 import { Card } from 'decentraland-ui/dist/components/Card/Card'
 import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import { Stats } from 'decentraland-ui/dist/components/Stats/Stats'
-import React, { memo } from 'react'
 
 import Accordion from '../Accordion/Accordion'
 import Code from '../Text/Code'
@@ -27,7 +28,7 @@ export type ApiCardProps = {
   children?: React.ReactNode
 }
 
-export default memo(function ApiCard(props: ApiCardProps) {
+export default React.memo(function ApiCard(props: ApiCardProps) {
   return (
     <Card className="ApiCard">
       <Card.Content>

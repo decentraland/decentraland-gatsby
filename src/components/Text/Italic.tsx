@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React from 'react'
 
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
@@ -11,7 +11,7 @@ export type ItalicProps = React.Props<HTMLSpanElement> &
     secondary?: boolean
   }
 
-export default memo(function Italic({
+export default React.memo(function Italic({
   primary,
   secondary,
   ...props

@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React from 'react'
 
 import Blockquote from '../Text/Blockquote'
 import Paragraph from '../Text/Paragraph'
@@ -13,7 +13,7 @@ export type ApiDetailsProps = {
   cors?: 'site' | 'decentraland' | '*'
 } & RequestTableProps
 
-export default memo(function ApiDetails(props: ApiDetailsProps) {
+export default React.memo(function ApiDetails(props: ApiDetailsProps) {
   return (
     <>
       {props.title && <SubTitle>{props.title}</SubTitle>}

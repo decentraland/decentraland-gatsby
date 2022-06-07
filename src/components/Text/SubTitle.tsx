@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React from 'react'
 
 import TokenList from '../../utils/dom/TokenList'
 import { createId } from '../../utils/react/createId'
@@ -8,7 +8,7 @@ import './SubTitle.css'
 
 export type SubTitleProps = React.HTMLAttributes<HTMLHeadingElement>
 
-export default memo(function SubTitle(props: SubTitleProps) {
+export default React.memo(function SubTitle(props: SubTitleProps) {
   return (
     <h3
       id={createId(props)}

@@ -1,4 +1,5 @@
-import React, { memo, useCallback } from 'react'
+import React, { useCallback } from 'react'
+
 import Highlight from 'react-highlight'
 
 import useClipboardCopy from '../../hooks/useClipboardCopy'
@@ -17,7 +18,7 @@ export type CodeProps = React.HTMLProps<HTMLPreElement> &
     language?: 'json' | 'typescript' | 'javascript' | string
   }
 
-export default memo(function Code({
+export default React.memo(function Code({
   inline,
   children,
   note,

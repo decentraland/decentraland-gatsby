@@ -10,7 +10,7 @@ const INITIAL_STATE = {}
  * @param deps
  * @returns
  */
-export default function useStore<E extends object>(
+export default function useStore<E extends {}>(
   initialState: Partial<EntityStoreState<E>> = INITIAL_STATE,
   deps: React.DependencyList = []
 ) {

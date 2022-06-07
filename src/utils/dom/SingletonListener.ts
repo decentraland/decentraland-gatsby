@@ -71,6 +71,7 @@ export default class SingletonListener<T extends TargetListener> {
       return this
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
     const _this = this
     const callback = function (this: HTMLElement, data: any) {
       const listeners = _this.listeners.get(event) || []

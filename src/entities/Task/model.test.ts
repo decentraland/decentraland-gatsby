@@ -1,19 +1,22 @@
-import { SQLStatement } from 'decentraland-server'
 import { format } from 'sql-formatter'
 import { v4 as uuid } from 'uuid'
 import isUUID from 'validator/lib/isUUID'
+
+import { SQLStatement } from 'decentraland-server'
 
 import TaskModel from './model'
 import Task from './Task'
 import { TaskStatus } from './types'
 
 let query: jest.MockedFunction<any>
-const rawQuery = jest.fn((sql: SQLStatement) => ({
+const rawQueryResults = {
   rows: [],
   fields: [],
   command: '',
   rowCount: 0,
-}))
+}
+
+const rawQuery = jest.fn((sql: SQLStatement) => sql && rawQueryResults)
 
 const sqlFormat = (sql: string) =>
   format(sql)

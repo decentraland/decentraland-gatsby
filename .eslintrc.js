@@ -28,19 +28,36 @@ module.exports = {
     'plugin:css-import-order/recommended',
   ],
   rules: {
-    // TODO: Review rules with off, in order to activate it, code review is going to be required
-    '@typescript-eslint/no-unused-vars': 'off',
-    'import/no-named-as-default-member': 'off',
-
-    'no-case-declarations': 'off',
-    '@typescript-eslint/ban-types': 'off',
-    '@typescript-eslint/no-var-requires': 'off',
+    'import/no-named-as-default-member': 'off', // This rule goes
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/ban-types': [
+      'error',
+      {
+        types: {
+          '{}': false,
+        },
+      },
+    ],
     '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-non-null-assertion': 'off',
-    '@typescript-eslint/no-this-alias': 'off',
-    // end to review lines
+    'no-restricted-imports': 'off',
+    '@typescript-eslint/no-restricted-imports': [
+      'error',
+      {
+        paths: [
+          'lodash',
+          'decentraland-ui',
+          'decentraland-dapps',
+          'decentraland-connect',
+          'decentraland-gatsby',
+          'semantic-ui-react',
+          '@dcl/schemas',
+        ],
+        patterns: ['lodash.*'],
+      },
+    ],
+
     'autofix/no-debugger': 'error',
     'sort-imports': [
       'error',
@@ -62,6 +79,30 @@ module.exports = {
           'object',
           'type',
           'unknown',
+        ],
+        pathGroupsExcludedImportTypes: ['react', 'gatsby', 'react-*'],
+        pathGroups: [
+          {
+            pattern: 'react',
+            group: 'builtin',
+            position: 'before',
+          },
+          {
+            pattern: 'react-*',
+            group: 'builtin',
+          },
+          {
+            pattern: 'gatsby',
+            group: 'builtin',
+          },
+          {
+            pattern: 'decentraland-*',
+            group: 'internal',
+          },
+          {
+            pattern: 'semantic-ui-react',
+            group: 'internal',
+          },
         ],
         'newlines-between': 'always',
         alphabetize: {

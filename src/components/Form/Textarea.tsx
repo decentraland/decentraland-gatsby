@@ -1,5 +1,6 @@
-import { FieldProps } from 'decentraland-ui/dist/components/Field/Field'
 import React, { useEffect, useRef } from 'react'
+
+import { FieldProps } from 'decentraland-ui/dist/components/Field/Field'
 
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'

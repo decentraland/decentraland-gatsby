@@ -1,7 +1,7 @@
+import { CreatePageArgs, CreateWebpackConfigArgs, Page } from 'gatsby'
 import { dirname } from 'path'
 
 import { flatten } from 'flat'
-import { CreatePageArgs, CreateWebpackConfigArgs, Page } from 'gatsby'
 
 import { DecentralandIntlContext, DecentralandIntlPluginOptions } from './types'
 
@@ -14,6 +14,7 @@ const INTL_DEAULT_PATHS = [
 
 function loadTransaction(path: string, locale: string): Record<string, string> {
   try {
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
     const messages = require(`${path}/${locale}.json`)
     return flatten(messages)
   } catch (err) {
@@ -98,7 +99,7 @@ export function onCreateWebpackConfig({
     const config = getConfig()
     // Get the mini-css-extract-plugin
     const miniCssExtractPlugin = config.plugins.find(
-      (plugin: Function) => plugin.constructor.name === 'MiniCssExtractPlugin'
+      (plugin: any) => plugin.constructor.name === 'MiniCssExtractPlugin'
     )
     // Set the option here to true.
     if (miniCssExtractPlugin) {

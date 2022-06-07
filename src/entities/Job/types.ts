@@ -1,4 +1,4 @@
-export type JobAttributes<P extends object = {}> = {
+export type JobAttributes<P extends {} = {}> = {
   id: string
   name: string
   payload: P
@@ -46,10 +46,10 @@ export type JobSettings = {
 export type ScheduleFunction = (
   jobName: string,
   date: Date,
-  payload?: object
+  payload?: Record<string, any>
 ) => Promise<void>
 
 export type UpdatePayloadFunction = (
   id: string,
-  payload?: object
+  payload?: Record<string, any>
 ) => Promise<void>

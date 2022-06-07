@@ -159,10 +159,7 @@ export default class Land extends API {
     return [x, y]
   }
 
-  async fetch<T extends object>(
-    url: string,
-    options: Options = new Options({})
-  ) {
+  async fetch<T extends {}>(url: string, options: Options = new Options({})) {
     const result = await super.fetch<{ ok: boolean; data: T }>(url, options)
     return result.data
   }
@@ -210,7 +207,9 @@ export default class Land extends API {
 
   /** @deprecated */
   async getMapContent(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     nw: [number, number],
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     se: [number, number]
   ): Promise<MapContent> {
     throw new Error(`Endpoint /v1/map is deprecated`)

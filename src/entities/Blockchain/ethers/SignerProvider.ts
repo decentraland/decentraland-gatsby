@@ -25,7 +25,7 @@ export default class SignerProvider extends JsonRpcProvider {
       case 'eth_requestAccounts':
         return this.wallet ? [this.wallet.address.toString().toLowerCase()] : []
 
-      case 'eth_signTypedData_v4':
+      case 'eth_signTypedData_v4': {
         const [signer, raw] = (params || ['', '']) as [string, string]
         if (!this.wallet) {
           throw new Error(`Empty account`)
@@ -45,7 +45,7 @@ export default class SignerProvider extends JsonRpcProvider {
           Buffer.from(this.wallet.privateKey.slice(2), 'hex'),
           { data }
         )
-
+      }
       default:
         return super.send(method, params)
     }

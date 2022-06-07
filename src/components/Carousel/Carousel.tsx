@@ -1,4 +1,4 @@
-import React, { Children, memo, useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 
 import usePatchState from '../../hooks/usePatchState'
 import TokenList from '../../utils/dom/TokenList'
@@ -23,7 +23,7 @@ export type CarouselState = {
   touchEnd: number
 }
 
-export default memo(function Carousel({
+export default React.memo(function Carousel({
   className,
   children,
   progress,
@@ -33,7 +33,7 @@ export default memo(function Carousel({
   ...props
 }: CarouselProps) {
   const timeout = !progress ? (time ?? 5000) || false : false
-  const size = Children.count(children)
+  const size = React.Children.count(children)
 
   const childrenRefs = useRef(new Array(size))
 
@@ -147,7 +147,7 @@ export default memo(function Carousel({
           onTouchMove={(touchMoveEvent) => handleTouchMove(touchMoveEvent)}
           onTouchEnd={() => handleTouchEnd()}
         >
-          {Children.map(children, (child, i) => (
+          {React.Children.map(children, (child, i) => (
             <div
               key={'item:' + i}
               ref={(el) => {
@@ -168,7 +168,7 @@ export default memo(function Carousel({
       </div>
       {size > 1 && (
         <div className="Carousel__List">
-          {Children.map(children, (_, i) => (
+          {React.Children.map(children, (_, i) => (
             <div
               key={'list:' + i}
               onClick={() => handleMove(i)}

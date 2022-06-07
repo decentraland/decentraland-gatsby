@@ -1,5 +1,6 @@
-import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
 import React, { useEffect, useMemo } from 'react'
+
+import { Loader } from 'decentraland-ui/dist/components/Loader/Loader'
 
 import TokenList from '../../utils/dom/TokenList'
 import ImgFixed, { ImgFixedProps } from '../Image/ImgFixed'

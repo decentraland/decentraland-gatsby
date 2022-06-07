@@ -34,14 +34,14 @@ export function replaceHelmetMetadata(
   const injected: string[] = []
   for (const name of Object.keys(options)) {
     switch (name) {
-      case 'title':
+      case 'title': {
         const title = escape(options[name] || '')
         injected.push(`<title>${title}</title>`)
         injected.push(`<meta name="twitter:title" content="${title}" />`)
         injected.push(`<meta property="og:title" content="${title}" />`)
         break
-
-      case `description`:
+      }
+      case `description`: {
         let descriptionValue = (options[name] || '').trim()
         const descriptionParragraphPosition = descriptionValue.indexOf(`\n\n`)
         if (descriptionParragraphPosition > 0) {
@@ -58,7 +58,7 @@ export function replaceHelmetMetadata(
           `<meta property="og:description" content="${description}" />`
         )
         break
-
+      }
       case `image`:
         injected.push(
           `<meta name="twitter:image" content="${options[name]}" />`

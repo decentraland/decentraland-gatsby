@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React from 'react'
 
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
@@ -11,7 +11,11 @@ export type BoldProps = React.Props<HTMLSpanElement> &
     secondary?: boolean
   }
 
-export default memo(function Bold({ primary, secondary, ...props }: BoldProps) {
+export default React.memo(function Bold({
+  primary,
+  secondary,
+  ...props
+}: BoldProps) {
   return (
     <span
       {...props}

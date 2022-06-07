@@ -1,4 +1,4 @@
-import React, { createContext, memo, useEffect, useMemo } from 'react'
+import React, { createContext, useEffect, useMemo } from 'react'
 
 import useFeatureFlag, {
   DEFAULT_FEATURE_FLAG,
@@ -30,7 +30,7 @@ export type FeatureFlagProviderProps = React.PropsWithChildren<{}> &
     endpoint: string
   }
 
-export default memo(function FeatureFlagProvider(
+export default React.memo(function FeatureFlagProvider(
   props: React.PropsWithChildren<{}> &
     Partial<Omit<FeatureFlagOptions, 'userId'>> & { endpoint: string }
 ) {

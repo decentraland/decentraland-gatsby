@@ -1,9 +1,10 @@
+import React, { useMemo } from 'react'
+
 import { ChainId, getChainName } from '@dcl/schemas/dist/dapps/chain-id'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { Modal, ModalProps } from 'decentraland-ui/dist/components/Modal/Modal'
 import { ModalNavigation } from 'decentraland-ui/dist/components/ModalNavigation/ModalNavigation'
-import React, { memo, useMemo } from 'react'
 
 import useFormatMessage from '../../hooks/useFormatMessage'
 
@@ -24,7 +25,7 @@ const anyNetwork = [
   ChainId.MATIC_MUMBAI,
 ]
 
-export default memo(function WrongNetworkModal({
+export default React.memo(function WrongNetworkModal({
   open,
   currentNetwork,
   expectedNetwork,

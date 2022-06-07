@@ -1,6 +1,8 @@
-import { Locale } from 'decentraland-ui/dist/components/Language/Language'
-import { GatsbyLinkProps } from 'gatsby'
 import React from 'react'
+
+import { GatsbyLinkProps } from 'gatsby'
+
+import { Locale } from 'decentraland-ui/dist/components/Language/Language'
 import Responsive from 'semantic-ui-react/dist/commonjs/addons/Responsive/Responsive'
 import Menu from 'semantic-ui-react/dist/commonjs/collections/Menu/Menu'
 

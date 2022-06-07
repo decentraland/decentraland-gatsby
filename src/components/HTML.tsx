@@ -1,5 +1,6 @@
-import { array, object, string } from 'prop-types'
 import React from 'react'
+
+import { array, object, string } from 'prop-types'
 
 import Segment from './Development/Segment'
 

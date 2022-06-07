@@ -1,7 +1,7 @@
 import logger from '../Development/logger'
 import { ScheduleFunction, UpdatePayloadFunction } from './types'
 
-export default class JobContext<P extends object = {}> {
+export default class JobContext<P extends {} = {}> {
   constructor(
     public id: string | null,
     public handler: string | null,
@@ -38,13 +38,17 @@ export default class JobContext<P extends object = {}> {
     logger.error(msg, data)
   }
 
-  async updatePayload(payload: object = {}) {
+  async updatePayload(payload: Record<string, any> = {}) {
     if (this.id) {
       await this._update(this.id, payload)
     }
   }
 
-  async schedule(name: string | null, date: Date, payload: object = {}) {
+  async schedule(
+    name: string | null,
+    date: Date,
+    payload: Record<string, any> = {}
+  ) {
     if (name) {
       await this._schedule(name, date, payload)
     }
