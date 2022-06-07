@@ -1,4 +1,4 @@
-import Time, { extend } from 'dayjs'
+import Time from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import duration from 'dayjs/plugin/duration'
 import isBetween from 'dayjs/plugin/isBetween'
@@ -14,19 +14,19 @@ import utc from 'dayjs/plugin/utc'
 
 import './plugin'
 
-extend(utc)
-extend(isToday)
-extend(isTomorrow)
-extend(isYesterday)
-extend(isBetween)
-extend(isSameOrAfter)
-extend(isSameOrBefore)
-extend(pluralGetSet)
-extend(customParseFormat)
-extend(relativeTime)
-extend(timezone)
-extend(duration)
-extend((_options, Dayjs, factory) => {
+Time.extend(utc)
+Time.extend(isToday)
+Time.extend(isTomorrow)
+Time.extend(isYesterday)
+Time.extend(isBetween)
+Time.extend(isSameOrAfter)
+Time.extend(isSameOrBefore)
+Time.extend(pluralGetSet)
+Time.extend(customParseFormat)
+Time.extend(relativeTime)
+Time.extend(timezone)
+Time.extend(duration)
+Time.extend((_options, Dayjs, factory) => {
   const Constants = {
     Millisecond: 1,
     Second: 1000 /* milliseconds */,
