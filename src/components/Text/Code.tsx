@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react'
+
 import Highlight from 'react-highlight'
 
 import useClipboardCopy from '../../hooks/useClipboardCopy'

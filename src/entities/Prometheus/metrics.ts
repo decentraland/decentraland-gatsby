@@ -1,4 +1,4 @@
-import client from 'prom-client'
+import client, { Registry, collectDefaultMetrics } from 'prom-client'
 const defaultLabels: Record<string, string> = {}
 
 if (process.env.SERVICE_NAME) {
@@ -14,9 +14,9 @@ if (process.env.SERVICE_URL) {
 }
 
 export default client
-export const registry = new client.Registry()
+export const registry = new Registry()
 registry.setDefaultLabels(defaultLabels)
-client.collectDefaultMetrics({ register: registry })
+collectDefaultMetrics({ register: registry })
 
 const alreadyRegisted = new Set<client.Metric<string>>()
 export function registerMetric(metric: client.Metric<string>) {

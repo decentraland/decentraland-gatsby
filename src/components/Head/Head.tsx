@@ -5,9 +5,11 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import { Locale } from 'decentraland-ui/dist/components/Language/Language'
 import React from 'react'
-import Helmet from 'react-helmet'
+
+import { Helmet } from 'react-helmet'
+
+import { Locale } from 'decentraland-ui/dist/components/Language/Language'
 
 export type MetaProps = JSX.IntrinsicElements['meta']
 

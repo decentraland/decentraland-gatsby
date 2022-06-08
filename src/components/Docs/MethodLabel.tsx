@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+
 import Label from 'semantic-ui-react/dist/commonjs/elements/Label'
 
 export type MethodLabelProps = {

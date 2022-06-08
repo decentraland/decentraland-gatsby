@@ -1,6 +1,6 @@
-export default function random(to: number): number
-export default function random(from: number, to: number): number
-export default function random(from = 0, to?: number): number {
+function random(to: number): number
+function random(from: number, to: number): number
+function random(from = 0, to?: number): number {
   if (to === undefined) {
     to = from
     from = 0
@@ -13,3 +13,5 @@ export default function random(from = 0, to?: number): number {
     Math.random() * Math.abs(Math.abs(innerTo) - Math.abs(innerFrom)) * order
   return from + (value > 0 ? Math.floor(value) : Math.ceil(value))
 }
+
+export default random

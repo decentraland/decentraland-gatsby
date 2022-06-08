@@ -2,7 +2,7 @@ import { createAsyncStateState } from '../../hooks/useAsyncState'
 import useAuthContext from './useAuthContext'
 import { getDefaultChainId } from './utils'
 
-const fakeState = createAsyncStateState(getDefaultChainId())
+const fakeState = createAsyncStateState<ReturnType<typeof getDefaultChainId>>()
 
 /**
  *

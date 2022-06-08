@@ -5,16 +5,9 @@ import { StyleNamespace } from '../../variables'
 
 import './Link.css'
 
-export type LinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement> & {
-  secondary?: boolean
-}
+export type LinkProps = React.AnchorHTMLAttributes<HTMLAnchorElement>
 
-export default React.memo(function Link({
-  secondary,
-  target,
-  rel,
-  ...props
-}: LinkProps) {
+export default React.memo(function Link({ target, rel, ...props }: LinkProps) {
   const isLocal = useMemo(() => isLocalLink(props.href), [props.href])
   const linkTarget = useMemo(
     () => (!target && !isLocal ? '_blank' : target || undefined),

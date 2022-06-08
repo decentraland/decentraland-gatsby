@@ -1,5 +1,6 @@
-import { Model, SQL, raw } from 'decentraland-server'
 import isUUID from 'validator/lib/isUUID'
+
+import { Model, SQL, raw } from 'decentraland-server'
 
 import { JobAttributes } from '../types'
 
@@ -27,7 +28,7 @@ export default class Job extends Model<JobAttributes> {
     }
   }
 
-  static async updatePayload(id: string, payload: object = {}) {
+  static async updatePayload(id: string, payload: Record<string, any> = {}) {
     if (!id) {
       return
     }
@@ -47,7 +48,7 @@ export default class Job extends Model<JobAttributes> {
     id: string,
     name: string,
     date: Date,
-    payload: object = {}
+    payload: Record<string, any> = {}
   ) {
     const job: JobAttributes = {
       id,

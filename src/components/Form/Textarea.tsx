@@ -1,5 +1,7 @@
-import { FieldProps } from 'decentraland-ui/dist/components/Field/Field'
 import React, { useEffect, useRef } from 'react'
+
+import { FieldProps } from 'decentraland-ui/dist/components/Field/Field'
+import omit from 'lodash/omit'
 
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
@@ -49,8 +51,6 @@ export default function Textarea({
 
   useEffect(() => handleRowChange(), [])
 
-  const { error, label, message, ...extra } = props
-
   return (
     <div
       className={TokenList.join([
@@ -66,7 +66,11 @@ export default function Textarea({
         {props.error && (
           <i aria-hidden="true" className="warning circle icon" />
         )}
-        <textarea {...extra} ref={ref} onChange={handleChange} />
+        <textarea
+          {...omit(props, ['error', 'label', 'message'])}
+          ref={ref}
+          onChange={handleChange}
+        />
       </div>
       <p className="message">{props.message}&nbsp;</p>
     </div>

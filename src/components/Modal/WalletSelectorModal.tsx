@@ -1,3 +1,5 @@
+import React, { useCallback, useEffect, useState } from 'react'
+
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import { connection } from 'decentraland-connect/dist/ConnectionManager'
 import { toModalOptionType } from 'decentraland-dapps/dist/containers/LoginModal/utils'
@@ -7,7 +9,6 @@ import {
 } from 'decentraland-ui/dist/components/LoginModal/LoginModal'
 import { Modal } from 'decentraland-ui/dist/components/Modal/Modal'
 import { ModalNavigation } from 'decentraland-ui/dist/components/ModalNavigation/ModalNavigation'
-import React, { useCallback, useEffect, useState } from 'react'
 import ModalContent from 'semantic-ui-react/dist/commonjs/modules/Modal/ModalContent'
 
 import { getChainId } from '../../context/Auth/utils'

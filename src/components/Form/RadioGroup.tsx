@@ -1,5 +1,6 @@
-import { FieldProps } from 'decentraland-ui/dist/components/Field/Field'
 import React from 'react'
+
+import { FieldProps } from 'decentraland-ui/dist/components/Field/Field'
 
 import TokenList from '../../utils/dom/TokenList'
 

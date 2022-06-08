@@ -1,11 +1,12 @@
+import React from 'react'
+
 import { readFile } from 'fs'
 import { promisify } from 'util'
 
 import cherio from 'cherio'
 import htmlmin from 'htmlmin'
 import juice from 'juice'
-import React from 'react'
-import ReactDOMServer from 'react-dom/server'
+import { renderToNodeStream } from 'react-dom/server'
 
 import { Template, TemplateProps } from './types'
 
@@ -39,7 +40,7 @@ export async function renderTemplate(
   const SubjectPart = (element.props && element.props.subject) || ''
   const TextPart = (element.props && element.props.text) || ''
   const HtmlPart = await new Promise<string>((resolve, reject) => {
-    const stream = ReactDOMServer.renderToNodeStream(element)
+    const stream = renderToNodeStream(element)
     let result = ''
 
     stream.setEncoding('utf8')

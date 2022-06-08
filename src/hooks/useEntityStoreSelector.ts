@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 
 import EntityStore, { EntityStoreState } from '../utils/EntityStore'
 
-export type Selector<E extends object, R> = (store: EntityStoreState<E>) => R
+export type Selector<E extends {}, R> = (store: EntityStoreState<E>) => R
 
 const defaultSelector = (state: EntityStoreState<any>) => state as any
 
@@ -12,7 +12,7 @@ const defaultSelector = (state: EntityStoreState<any>) => state as any
  * @param selector
  * @returns
  */
-export default function useEntityStoreSelector<E extends object, R>(
+export default function useEntityStoreSelector<E extends {}, R>(
   store: EntityStore<E>,
   selector: (store: EntityStoreState<E>) => R = defaultSelector
 ) {

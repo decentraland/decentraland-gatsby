@@ -1,5 +1,6 @@
-import { Container } from 'decentraland-ui/dist/components/Container/Container'
 import React from 'react'
+
+import { Container } from 'decentraland-ui/dist/components/Container/Container'
 
 import Paragraph from '../Text/Paragraph'
 import Title from '../Text/Title'

@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
+
 import { useIntl } from 'react-intl'
 
 import BaseLink, { isLocalLink } from '../../components/Text/Link'

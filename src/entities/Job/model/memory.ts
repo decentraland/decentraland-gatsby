@@ -14,7 +14,7 @@ export default class MemoryModel {
     id: string,
     name: string,
     date: Date,
-    payload: object = {}
+    payload: Record<string, any> = {}
   ) {
     const job: JobAttributes = {
       id,
@@ -28,7 +28,7 @@ export default class MemoryModel {
     return job
   }
 
-  static async updatePayload(id: string, payload: object = {}) {
+  static async updatePayload(id: string, payload: Record<string, any> = {}) {
     const prev = this.cache.get(id)
     if (prev) {
       this.cache.set(id, { ...prev, payload })

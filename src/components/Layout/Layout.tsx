@@ -5,6 +5,10 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
+import React from 'react'
+
+import type { PageProps } from 'gatsby'
+
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import {
   Footer,
@@ -15,9 +19,7 @@ import {
   Navbar,
   NavbarProps,
 } from 'decentraland-ui/dist/components/Navbar/Navbar'
-import { PageProps } from 'gatsby'
-import React from 'react'
-import { DropdownProps } from 'semantic-ui-react'
+import { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Dropdown'
 
 import useAuthContext from '../../context/Auth/useAuthContext'
 import { getSupportedChainIds } from '../../context/Auth/utils'

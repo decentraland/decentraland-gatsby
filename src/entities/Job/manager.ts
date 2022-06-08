@@ -110,14 +110,14 @@ export default class JobManager {
     }
   }
 
-  updatePayload = async (id: string, payload: object = {}) => {
+  updatePayload = async (id: string, payload: Record<string, any> = {}) => {
     await this.getModel().updatePayload(id, payload)
   }
 
   schedule = async (
     handler: string | Job<any>,
     date: Date,
-    payload: object = {}
+    payload: Record<string, any> = {}
   ) => {
     const name =
       typeof handler === 'string' ? handler : handler.jobName || handler.name

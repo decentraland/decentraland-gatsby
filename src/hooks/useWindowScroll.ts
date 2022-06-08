@@ -1,5 +1,6 @@
-import { useMotionValue } from 'framer-motion'
 import { useEffect, useState } from 'react'
+
+import { useMotionValue } from 'framer-motion'
 
 import SingletonListener from '../utils/dom/SingletonListener'
 

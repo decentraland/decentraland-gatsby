@@ -36,9 +36,10 @@ export type AsyncStateResult<T, I = null> = readonly [
   AsyncStateResultState<T, I>
 ]
 
-export function createAsyncStateState<T, I = null>(
-  value: T | I
-): AsyncStateResultState<T, I> {
+export function createAsyncStateState<T, I = null>(): AsyncStateResultState<
+  T,
+  I
+> {
   return {
     version: 0,
     loading: false,

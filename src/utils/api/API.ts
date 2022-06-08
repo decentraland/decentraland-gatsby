@@ -152,7 +152,7 @@ export default class API {
     return options
   }
 
-  async fetch<T extends object>(
+  async fetch<T extends {}>(
     path: string,
     options: Options = new Options({})
   ): Promise<T> {

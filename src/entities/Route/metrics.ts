@@ -1,15 +1,15 @@
-import client from 'prom-client'
+import { Gauge, Histogram } from 'prom-client'
 
 import { registerMetric } from '../Prometheus/metrics'
 
-export const http_request_pool_size = new client.Gauge({
+export const http_request_pool_size = new Gauge({
   name: 'http_request_pool_size',
   help: 'The number of requests that are running at the same time',
   registers: [],
   labelNames: ['method', 'handler'],
 })
 
-export const http_request_duration_seconds = new client.Histogram({
+export const http_request_duration_seconds = new Histogram({
   name: 'http_request_duration_seconds',
   help: 'The time (in seconds) it takes for a request to be handled',
   registers: [],

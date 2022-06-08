@@ -1,5 +1,6 @@
-import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import React from 'react'
+
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import isEmail from 'validator/lib/isEmail'
 
 import usePatchState from '../../hooks/usePatchState'
