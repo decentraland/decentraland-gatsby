@@ -1,3 +1,4 @@
+/* eslint-disable import/no-duplicates */
 import Time from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import duration from 'dayjs/plugin/duration'
@@ -12,6 +13,18 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 
+import 'dayjs/plugin/utc'
+import 'dayjs/plugin/isToday'
+import 'dayjs/plugin/isTomorrow'
+import 'dayjs/plugin/isYesterday'
+import 'dayjs/plugin/isBetween'
+import 'dayjs/plugin/isSameOrAfter'
+import 'dayjs/plugin/isSameOrBefore'
+import 'dayjs/plugin/pluralGetSet'
+import 'dayjs/plugin/customParseFormat'
+import 'dayjs/plugin/relativeTime'
+import 'dayjs/plugin/timezone'
+import 'dayjs/plugin/duration'
 import './plugin'
 
 Time.extend(utc)
