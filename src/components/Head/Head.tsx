@@ -7,7 +7,7 @@
 
 import React from 'react'
 
-import { default as Helmet } from 'react-helmet'
+import { Helmet } from 'react-helmet'
 
 import { Locale } from 'decentraland-ui/dist/components/Language/Language'
 

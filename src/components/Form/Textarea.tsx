@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 
 import { FieldProps } from 'decentraland-ui/dist/components/Field/Field'
+import omit from 'lodash/omit'
 
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
@@ -50,24 +51,28 @@ export default function Textarea({
 
   useEffect(() => handleRowChange(), [])
 
-  const { error, label, message, ...extra } = props
-
   return (
     <div
       className={TokenList.join([
         'dcl field',
-        error && 'error',
+        props.error && 'error',
         props.disabled && 'disabled',
         StyleNamespace,
         'Textarea',
       ])}
     >
-      <div className="ui sub header">{label}</div>
+      <div className="ui sub header">{props.label}</div>
       <div className="ui input">
-        {error && <i aria-hidden="true" className="warning circle icon" />}
-        <textarea {...extra} ref={ref} onChange={handleChange} />
+        {props.error && (
+          <i aria-hidden="true" className="warning circle icon" />
+        )}
+        <textarea
+          {...omit(props, ['error', 'label', 'message'])}
+          ref={ref}
+          onChange={handleChange}
+        />
       </div>
-      <p className="message">{message}&nbsp;</p>
+      <p className="message">{props.message}&nbsp;</p>
     </div>
   )
 }
