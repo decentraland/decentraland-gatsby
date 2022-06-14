@@ -35,6 +35,38 @@ import {
 
 <Meta title="Development/AuthChain" />
 
+export function AuthChainCURL({ chain, timestamp, metadata, options }) {
+  const baseUrl = options.baseUrl || ''
+  let curl = []
+  if (options.path) {
+    curl.push(`curl '${baseUrl + options.path}'`)
+  }
+  if (options.method) {
+    curl.push(`-X '${options.method}'`)
+  }
+  if (chain) {
+    curl.push(
+      ...chain.map(
+        (item, i) =>
+          `-H '${AUTH_CHAIN_HEADER_PREFIX + i}: ${JSON.stringify(item)}'`
+      )
+    )
+  }
+  if (timestamp) {
+    curl.push(`-H '${AUTH_TIMESTAMP_HEADER}: ${JSON.stringify(timestamp)}'`)
+  }
+  if (timestamp) {
+    curl.push(`-H '${AUTH_METADATA_HEADER}: ${metadata}'`)
+  }
+  return (
+    <Grid.Row>
+      <Grid.Column mobile="16">
+        <Source language="bash" code={curl.join(' \\\n  ')} />
+      </Grid.Column>
+    </Grid.Row>
+  )
+}
+
 export function AuthChainTable({ chain, timestamp, metadata }) {
   return (
     <Grid.Row>
@@ -117,6 +149,7 @@ export function AuthChainStandar() {
     method: 'GET',
     path: '/path/to/resource',
     metadata: '{}',
+    baseUrl: '',
   })
   const [value, setValue] = useState({})
   const [signing, sign] = useAsyncTask(async () => {
@@ -176,6 +209,14 @@ export function AuthChainStandar() {
                     placeholder: '{}',
                   },
                 },
+                baseUrl: {
+                  name: 'base url',
+                  control: {
+                    type: 'text',
+                    value: state.baseUrl,
+                    placeholder: 'https://httpbin.org/anything',
+                  },
+                },
               }}
             />
           </Grid.Column>
@@ -196,6 +237,12 @@ export function AuthChainStandar() {
             />
           </Grid.Column>
         </Grid.Row>
+        <AuthChainCURL
+          options={value}
+          chain={value.chain}
+          timestamp={value.timestamp}
+          metadata={value.metadata}
+        />
         <AuthChainTable
           chain={value.chain}
           timestamp={value.timestamp}
