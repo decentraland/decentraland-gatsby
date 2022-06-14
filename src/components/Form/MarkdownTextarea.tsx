@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import { Radio } from 'decentraland-ui/dist/components/Radio/Radio'
@@ -7,7 +7,6 @@ import TokenList from '../../utils/dom/TokenList'
 import Markdown from '../Text/Markdown'
 import Textarea, { TextareaProps } from './Textarea'
 
-// import Label from './Label'
 import './MarkdownTextarea.css'
 
 type MarkdownTextarea = TextareaProps & {
@@ -15,7 +14,7 @@ type MarkdownTextarea = TextareaProps & {
   previewLabel?: string
 }
 
-export default function MarkdownTextarea({
+export default React.memo(function MarkdownTextarea({
   preview,
   label,
   previewLabel,
@@ -24,15 +23,18 @@ export default function MarkdownTextarea({
 }: MarkdownTextarea) {
   const [value, setValue] = useState(props.initialValue ?? '')
   const [previewing, setPreviewing] = useState(preview)
-  function handleChange(e: React.FormEvent<any>, data: any) {
-    if (props.onChange) {
-      props.onChange(e, data)
-    }
+  const handleChange = useCallback(
+    function (e: React.FormEvent<any>, data: any) {
+      if (props.onChange) {
+        props.onChange(e, data)
+      }
 
-    if (!e.defaultPrevented) {
-      setValue(data.value || '')
-    }
-  }
+      if (!e.defaultPrevented) {
+        setValue(data.value || '')
+      }
+    },
+    [props.onChange]
+  )
 
   return (
     <div
@@ -70,4 +72,4 @@ export default function MarkdownTextarea({
       {previewing && <p className="message"> {props.message} &nbsp; </p>}
     </div>
   )
-}
+})

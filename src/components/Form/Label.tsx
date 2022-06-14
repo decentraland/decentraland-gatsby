@@ -6,8 +6,8 @@ import './Label.css'
 
 export type LabelProps = React.HTMLProps<HTMLLabelElement>
 
-export default function Label(props: LabelProps) {
+export default React.memo(function Label(props: LabelProps) {
   return (
     <label {...props} className={TokenList.join(['Label', props.className])} />
   )
-}
+})
