@@ -4,6 +4,7 @@ import PropTypes from 'prop-types'
 
 import Segment from './Development/Segment'
 
+/** @deprecated */
 export default function HTML(props: any) {
   return (
     <html {...props.htmlAttributes}>
