@@ -5,7 +5,7 @@ import { NextFunction, Request, Response } from 'express'
 import RequestError from '../Route/error'
 import { middleware } from '../Route/handle'
 
-export type WithAuth<R extends Request = Request> = R & {
+export type AuthData = {
   auth: string | undefined
   authMetadata: Record<string, string | number> | undefined
 }
@@ -13,6 +13,8 @@ export type WithAuth<R extends Request = Request> = R & {
 export type AuthOptions = {
   optional?: boolean
 }
+
+export type WithAuth<R extends Request = Request> = R & AuthData
 
 export function withChainHeader(options: AuthOptions = {}) {
   return middleware(async (req: Request) => {

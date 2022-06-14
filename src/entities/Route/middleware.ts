@@ -3,6 +3,7 @@ import expressCors from 'cors'
 import Ddos from 'ddos'
 import { Request, Response, Router } from 'express'
 
+import { AuthData } from '../Auth/middleware'
 import logger from '../Development/logger'
 import RequestError from './error'
 import { middleware } from './handle'
@@ -31,7 +32,7 @@ export function withCors(options: CorsOptions = {}) {
 }
 
 export function withLogs() {
-  return middleware(async (req: Request & { auth?: any }, res) => {
+  return middleware(async (req: Request & Partial<AuthData>, res) => {
     const start = Date.now()
 
     res.on('close', function requestLogger() {
@@ -39,7 +40,8 @@ export function withLogs() {
         status: res.statusCode,
         time: (Date.now() - start) / 1000,
         ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
-        auth: req.auth,
+        auth: req.auth || null,
+        metadata: req.authMetadata || null,
       }
 
       if (req.headers['referer']) {
