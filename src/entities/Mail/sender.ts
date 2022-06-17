@@ -30,6 +30,7 @@ export default class Sender {
     this.source = source || ''
     this.path = path ?? process.cwd()
     this.bulk = bulk ?? false
+    this.template = new TemplateManager(this.ses, this.path)
 
     if (options.region) {
       this.region = options.region
