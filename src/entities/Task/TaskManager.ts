@@ -82,7 +82,16 @@ export default class TaskManager {
         }
 
         const tasks = Array.from(this._tasks.values())
-        await TaskModel.initialize(tasks)
+        try {
+          await TaskModel.initialize(tasks)
+        } catch (err) {
+          this._logger.error(`error initializing tasks: ${err.message}`, {
+            stack: err.stack,
+            ...err,
+            tasks,
+          })
+        }
+
         this.runTasksCycle()
       }, random(0, this._intervalTime))
 
@@ -110,7 +119,11 @@ export default class TaskManager {
   }
 
   async runTackTimeout() {
-    await TaskModel.releaseTimeout()
+    try {
+      await TaskModel.releaseTimeout()
+    } catch (err) {
+      this._logger.error(`error releasing timeout: ${err.message}`, err)
+    }
   }
 
   async runTasksCycle() {
@@ -119,7 +132,12 @@ export default class TaskManager {
     }
 
     const start = Date.now()
-    await this.runTasks()
+
+    try {
+      await this.runTasks()
+    } catch (err) {
+      this._logger.error(`error running tasks cycle`, err)
+    }
 
     const nextCycle = this._intervalTime - (Date.now() - start)
     this._nextCycle = setTimeout(
@@ -139,10 +157,14 @@ export default class TaskManager {
       limit: this._concurrency,
     })
 
+    if (tasks.length === 0) {
+      return
+    }
+
     const results = await Promise.all(
       tasks.map((task) =>
         this.runTask(task).catch((err: Error) => {
-          this.logger.error(`Error runngin task "${task.id}": ${err.message}`, {
+          this.logger.error(`error runngin task "${task.id}": ${err.message}`, {
             ...err,
             stack: err.stack,
             id: task.id,
