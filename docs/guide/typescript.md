@@ -20,11 +20,11 @@ In integration testing all code of your software is tested combined. Because you
 
 ## Formatting
 
-All formatting enforce ar defined on [`/.eslintrc.js`](../../.eslintrc.js) and [/.prettierrc](../../.prettierrc), but as summary
+> TODO(braianj): update to @dcl/eslint-config/gatsby
 
-### Variable and Function
+All formatting enforcement are defined on [`/.eslintrc.js`](../../.eslintrc.js) and [/.prettierrc](../../.prettierrc), but as summary
 
-### Import
+## Imports
 
 Prevent imports from big repositories like `lodash` or `semantic-ui-react`
 
