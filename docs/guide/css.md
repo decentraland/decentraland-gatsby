@@ -2,7 +2,7 @@
 
 BEM is preferred as a naming convention: [http://getbem.com/](http://getbem.com/naming/)
 
-## Summary
+## Structure of a class
 
 write BEM standard format as follow:
 
@@ -16,7 +16,54 @@ where:
 - `element`: Parts of a block and have no standalone meaning. Any element is semantically tied to its block.
 - `modifier`: Flags on blocks or elements. Use them to change appearance, behavior or state.
 
-Additionally for components exposed as library you should add an extra class as namespace
+Example:
+
+```css
+/* button.css */
+.button {
+  /* */
+}
+.button--primary {
+  background: red;
+  color: white;
+}
+
+.button--secondary {
+  background: grey;
+  color: black;
+}
+
+.button--small {
+  padding: 2px;
+}
+
+.button--big {
+  padding: 8px;
+}
+
+.button .button__icon {
+  width: 1em;
+  height: auto;
+}
+
+.button .button__icon--left {
+  margin-right: 0.2em;
+}
+.button .button__icon--right {
+  margin-left: 0.2em;
+}
+```
+
+```tsx
+<a className="button button--primary">
+  <i className="button__icon button__icon--left" />
+  this is a button
+</a>
+```
+
+## Namespaced components
+
+Components exposed as a library you should add an extra class as namespace to avoid collision with other styles:
 
 - namespace class: `ui`
 
