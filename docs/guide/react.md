@@ -12,7 +12,7 @@ Use `PascalCase` for filenames. Example: Use `MyComponent.tsx`
 
 ## Formatting
 
-All formatting enforce ar defined on [`/.eslintrc.js`](../../.eslintrc.js) and [/.prettierrc](../../.prettierrc), but as summary:
+All formatting enforce are defined on [`/.eslintrc.js`](../../.eslintrc.js) and [/.prettierrc](../../.prettierrc), but as summary:
 
 ### Use `camelCase` for prop names, or `PascalCase` if the prop value is a React component
 
