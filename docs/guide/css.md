@@ -68,7 +68,7 @@ Components exposed as a library you should add an extra class as namespace to av
 - namespace class: `ui`
 
   - repo: `semantic-ui`
-  - example: `.ui.button`, `.ui.button.button--pirmary`
+  - example: `.ui.button`, `.ui.button.button--primary`
 
 - namespace class: `dcl`
 

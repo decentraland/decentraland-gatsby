@@ -20,9 +20,8 @@ In integration testing all code of your software is tested combined. Because you
 
 ## Formatting
 
-> TODO(braianj): update to @dcl/eslint-config/gatsby
-
-All formatting enforcement are defined on [`/.eslintrc.js`](../../.eslintrc.js) and [/.prettierrc](../../.prettierrc), but as summary
+All eslint related formatting application, its rules and the imports sort we use the [gatsby](https://github.com/decentraland/eslint-config/blob/main/gatsby.js) configuration inside the [dcl/eslint-config](https://github.com/decentraland/eslint-config) plugin.
+Regarding the prettier related configuration we use [/.prettierrc](../../.prettierrc)
 
 ## Imports
 
@@ -96,7 +95,7 @@ const box: Box = new BigBox()
 
 Any other definition is preferred as `type`
 
-### named vs default export
+### Named vs default export
 
 Exports are communicating intensions, use `export default` only if the code inside a file has only one main objective export any other related export as named.
 
