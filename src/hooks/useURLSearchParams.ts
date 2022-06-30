@@ -1,3 +1,4 @@
+// TODO(2fd): remove on v6, better be explicit on this
 import { useMemo } from 'react'
 
 import { useLocation } from '@gatsbyjs/reach-router'

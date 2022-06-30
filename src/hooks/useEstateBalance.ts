@@ -1,3 +1,4 @@
+// TODO(2fd): unify `use*Balance` on a single file
 import { ChainId, fetchEstateBalance } from '../utils/loader/estateBalance'
 import useAsyncState from './useAsyncState'
 

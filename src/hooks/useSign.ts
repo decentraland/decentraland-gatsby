@@ -57,10 +57,10 @@ export default function useSign(
     [state.signature, state.message]
   )
 
-  const publecActions = useMemo(
+  const publicActions = useMemo(
     () => ({ sign, signing: state.signing, error: state.error }),
     [sign, state.signing, state.error]
   )
 
-  return [publicState, publecActions] as const
+  return [publicState, publicActions] as const
 }

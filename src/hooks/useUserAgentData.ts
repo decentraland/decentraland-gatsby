@@ -1,3 +1,4 @@
+// TODO(2fd): add Docs, set as good practice
 import { useEffect, useMemo, useState } from 'react'
 
 import { UAParser } from 'ua-parser-js'

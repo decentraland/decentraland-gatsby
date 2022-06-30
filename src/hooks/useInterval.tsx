@@ -1,3 +1,4 @@
+// TODO(2fd): add Docs
 import { DependencyList, useEffect, useState } from 'react'
 
 export default function useInterval<T>(

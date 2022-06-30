@@ -1,3 +1,4 @@
+// TODO(2fd): document de proper way to detect a mobile device
 import { useEffect, useState } from 'react'
 
 import once from '../utils/function/once'

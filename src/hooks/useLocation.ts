@@ -1,7 +1,11 @@
+// TODO(2fd): remove on v6
 import { useEffect, useState } from 'react'
 
 import SingletonListener from '../utils/dom/SingletonListener'
 
+/**
+ * @deprecated use the one from gatsby
+ */
 export default function useLocation() {
   const [location, setLocation] = useState<URL | null>(null)
 

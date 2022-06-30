@@ -1,8 +1,12 @@
+// TODO(2fd): remove on v6
 import { DependencyList, useMemo } from 'react'
 
 import { hash } from 'immutable'
 
 const globalMemo = new Map<string, any>()
+/**
+ * @deprecated
+ */
 export default function useGlobalMemo<T>(
   callback: () => T,
   deps: DependencyList

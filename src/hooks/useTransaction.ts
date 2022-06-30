@@ -1,3 +1,4 @@
+// TODO(2fd): looks to big, refactor?
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'

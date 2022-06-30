@@ -1,3 +1,4 @@
+// TODO(2fd): add Docs
 import { useCallback, useState } from 'react'
 
 export default function usePatchState<T extends {}>(initialState: T) {
