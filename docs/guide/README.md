@@ -26,8 +26,6 @@
   - [Prefer `#` over `private`](./typescript.md#prefer--over-private)
 - [React](./react.md)
   - [Filenames](./react.md#filenames)
-    - [Use `camelCase` for prop names, or `PascalCase` if the prop value is a React component](./react.md#use-camelcase-for-prop-names-or-pascalcase-if-the-prop-value-is-a-react-component)
-    - [Omit the value of the prop when it is explicitly true](./react.md#omit-the-value-of-the-prop-when-it-is-explicitly-true)
   - [Formatting](./react.md#formatting)
   - [Exports](./react.md#exports)
 - Stand Alone Server: TODO(2fd)

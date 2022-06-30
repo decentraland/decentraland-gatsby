@@ -12,36 +12,8 @@ Use `PascalCase` for filenames. Example: Use `MyComponent.tsx`
 
 ## Formatting
 
-All formatting enforce are defined on [`/.eslintrc.js`](../../.eslintrc.js) and [/.prettierrc](../../.prettierrc), but as summary:
-
-### Use `camelCase` for prop names, or `PascalCase` if the prop value is a React component
-
-```ts
-// GOOD
-<Foo userName="hello" phoneNumber={12345678} Component={SomeComponent} />
-```
-
-```ts
-// BAD
-<Foo UserName="hello" phone_number={12345678} />
-```
-
-### Omit the value of the prop when it is explicitly true
-
-```ts
-// VERY GOOD
-<Foo hidden />
-```
-
-```ts
-// GOOD
-<Foo hidden />
-```
-
-```ts
-// BAD
-<Foo hidden={true} />
-```
+All eslint related formatting application, its rules and the imports sort we use the [gatsby](https://github.com/decentraland/eslint-config/blob/main/gatsby.js) configuration inside the [dcl/eslint-config](https://github.com/decentraland/eslint-config) plugin.
+Regarding the prettier related configuration we use [/.prettierrc](../../.prettierrc).
 
 ## Exports
 
