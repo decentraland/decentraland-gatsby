@@ -9,6 +9,7 @@ import SingletonListener from '../utils/dom/SingletonListener'
 
 let CURRENT_WIDTH = Responsive.onlyMobile.maxWidth as number
 
+/** @deprecated use decentraland-gatsby/dist/components/Media/Media */
 export default function useResponsive() {
   const [width, setWidth] = useState(CURRENT_WIDTH)
 
