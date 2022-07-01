@@ -1,3 +1,2 @@
-export function isMeta(event: React.MouseEvent<HTMLAnchorElement>) {
-  return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey)
-}
+// TODO(2fd): remove on V6
+export { isMeta as isMeta } from './events'

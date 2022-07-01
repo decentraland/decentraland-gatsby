@@ -1,3 +1,4 @@
+import { getMouseEventData, getMouseEventName } from '../dom/events'
 import { isMeta } from '../dom/isMeta'
 import once from '../function/once'
 import isMobile from '../isMobile'
@@ -61,30 +62,20 @@ export function track(
   }
 }
 
+/** @deprecated use useTrackLinkContext instead */
 export function createTrackLinkHandler<
-  T extends (
-    event: React.MouseEvent<HTMLAnchorElement>,
-    ...extra: any[]
-  ) => void
+  T extends (event: React.MouseEvent<any>, ...extra: any[]) => void
 >(callback: T): T {
-  return ((event: React.MouseEvent<HTMLAnchorElement>, ...extra: any[]) => {
-    const el = event.currentTarget
-    const target = el.target
-    const data = {
-      location: location.toString(),
-      text: el.innerText.trim() || el.title.trim(),
-      href:
-        el.getAttribute('href') ||
-        el.getAttributeNS('http://www.w3.org/1999/xlink', 'href') ||
-        el.getAttribute('xlink:href'),
-    }
+  return ((event: React.MouseEvent<any>, ...extra: any[]) => {
+    const name = getMouseEventName(event)
+    const data = getMouseEventData(event)
 
     callback(event, ...extra)
     let trackCallback = emptyCallback
     if (
-      !event.defaultPrevented &&
       data.href &&
-      target !== '_blank' &&
+      data.target !== '_blank' &&
+      !event.defaultPrevented &&
       !isMeta(event)
     ) {
       event.preventDefault()
@@ -93,6 +84,6 @@ export function createTrackLinkHandler<
       }
     }
 
-    track('click', data, trackCallback)
+    track(name, data, trackCallback)
   }) as T
 }
