@@ -1,3 +1,4 @@
+import { isBlankTarget, isLocalLink } from '../../components/Text/Link'
 import { getMouseEventData, getMouseEventName, isMeta } from '../dom/events'
 import once from '../function/once'
 import isMobile from '../isMobile'
@@ -72,10 +73,10 @@ export function createTrackLinkHandler<
     callback(event, ...extra)
     let trackCallback = emptyCallback
     if (
-      data.href &&
-      data.target !== '_blank' &&
-      !event.defaultPrevented &&
-      !isMeta(event)
+      !isLocalLink(data.href) &&
+      !isBlankTarget(data.target) &&
+      !isMeta(event) &&
+      !event.defaultPrevented
     ) {
       event.preventDefault()
       trackCallback = () => {

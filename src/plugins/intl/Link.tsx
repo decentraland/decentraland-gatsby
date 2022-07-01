@@ -2,7 +2,10 @@ import React, { useCallback, useMemo } from 'react'
 
 import { useIntl } from 'react-intl'
 
-import BaseLink, { isLocalLink } from '../../components/Text/Link'
+import BaseLink, {
+  isBlankTarget,
+  isLocalLink,
+} from '../../components/Text/Link'
 import { isMeta } from '../../utils/dom/events'
 import { navigate } from './utils'
 
@@ -35,7 +38,7 @@ export default React.memo(function Link(props: LinkProps) {
         props.onClick(e)
       }
 
-      const isBlank = e.currentTarget.target === '_blank'
+      const isBlank = isBlankTarget(e.currentTarget.target)
       if (!e.defaultPrevented && !isBlank && !isMeta(e)) {
         e.preventDefault()
         navigate(props.href || '', {

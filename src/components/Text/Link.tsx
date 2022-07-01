@@ -34,7 +34,11 @@ export default React.memo(function Link({ target, rel, ...props }: LinkProps) {
   )
 })
 
-export function isLocalLink(href?: string) {
+export function isBlankTarget(target?: string | null) {
+  return target === '_blank'
+}
+
+export function isLocalLink(href?: string | null) {
   return (
     !!href &&
     !href.startsWith('https://') &&

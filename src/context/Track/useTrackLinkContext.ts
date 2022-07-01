@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
 
+import { isBlankTarget, isLocalLink } from '../../components/Text/Link'
 import { track } from '../../utils/development/segment'
 import {
   getMouseEventData,
@@ -66,8 +67,8 @@ export default function useTrackLinkContext<H extends Handler>(
       }
 
       if (
-        data.href &&
-        data.target !== '_blank' &&
+        !isLocalLink(data.href) &&
+        !isBlankTarget(data.target) &&
         !isMeta(event) &&
         !event.defaultPrevented
       ) {
