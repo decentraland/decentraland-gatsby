@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react'
 
 import { track } from '../../utils/development/segment'
-import { getMouseEventData, getMouseEventName } from '../../utils/dom/events'
-import { isMeta } from '../../utils/dom/isMeta'
-import useAuthContext from '../Auth/useAuthContext'
-import useFeatureFlagContext from '../FeatureFlag/useFeatureFlagContext'
+import {
+  getMouseEventData,
+  getMouseEventName,
+  isMeta,
+} from '../../utils/dom/events'
 
 export type Handler = (event: React.MouseEvent<any>, ...extra: any[]) => void
 
@@ -55,9 +56,6 @@ export default function useTrackLinkContext<H extends Handler>(
   callback?: H,
   deps: React.DependencyList = []
 ): H {
-  const [ethAddress] = useAuthContext()
-  const [ff] = useFeatureFlagContext()
-
   return useCallback(
     ((event: React.MouseEvent<any>, ...extra: any[]) => {
       const name = getMouseEventName(event)
@@ -81,6 +79,6 @@ export default function useTrackLinkContext<H extends Handler>(
         track(name, data)
       }
     }) as H,
-    [ethAddress, ff, ...deps]
+    deps
   )
 }
