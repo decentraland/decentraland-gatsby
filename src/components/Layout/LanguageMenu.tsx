@@ -3,11 +3,12 @@ import React from 'react'
 import { GatsbyLinkProps } from 'gatsby'
 
 import { Locale } from 'decentraland-ui/dist/components/Language/Language'
-import Responsive from 'semantic-ui-react/dist/commonjs/addons/Responsive/Responsive'
+import { NotMobile } from 'decentraland-ui/dist/components/Media/Media'
 import Menu from 'semantic-ui-react/dist/commonjs/collections/Menu/Menu'
+import { MenuItemProps } from 'semantic-ui-react/dist/commonjs/collections/Menu/MenuItem'
 
+import useTrackLinkContext from '../../context/Track/useTrackLinkContext'
 import Link from '../../plugins/intl/Link'
-import trackEvent from '../../utils/segment/trackEvent'
 
 export const Label = {
   en: 'ENG',
@@ -22,40 +23,36 @@ export type HandleClick = (
   event: React.MouseEvent<GatsbyLinkProps<any>>
 ) => void
 
-export type LanguageMenuProps = React.Props<Responsive> & {
-  onClick?: HandleClick
+export type LanguageMenuProps = {
+  onClick?: MenuItemProps['onClick']
   languages?: Locale[]
   value?: Locale
   to?: string
 }
 
-export default function LanguageMenu(props: LanguageMenuProps) {
+export default React.memo(function LanguageMenu(props: LanguageMenuProps) {
   if (!props.languages || props.languages.length < 2) {
     return null
   }
 
-  const minWidth = Responsive.onlyTablet.minWidth
-
-  function handleClick(event: React.MouseEvent<any>) {
-    if (props.onClick) {
-      props.onClick(event)
-    }
-  }
+  const handleClick = useTrackLinkContext(props.onClick)
 
   return (
-    <Responsive as={Menu} secondary stackable minWidth={minWidth}>
-      {props.languages.map((lang) => (
-        <Menu.Item
-          key={lang}
-          as={Link}
-          active={props.value === lang}
-          language={lang}
-          onClick={trackEvent(handleClick)}
-          to={props.to || '/'}
-        >
-          {Label[lang]}
-        </Menu.Item>
-      ))}
-    </Responsive>
+    <NotMobile>
+      <Menu secondary stackable>
+        {props.languages.map((lang) => (
+          <Menu.Item
+            key={lang}
+            as={Link}
+            active={props.value === lang}
+            language={lang}
+            onClick={handleClick}
+            to={props.to || '/'}
+          >
+            {Label[lang]}
+          </Menu.Item>
+        ))}
+      </Menu>
+    </NotMobile>
   )
-}
+})
