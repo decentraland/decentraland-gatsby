@@ -1,5 +1,4 @@
-import { getMouseEventData, getMouseEventName } from '../dom/events'
-import { isMeta } from '../dom/isMeta'
+import { getMouseEventData, getMouseEventName, isMeta } from '../dom/events'
 import once from '../function/once'
 import isMobile from '../isMobile'
 
