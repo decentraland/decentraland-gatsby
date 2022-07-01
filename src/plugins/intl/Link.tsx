@@ -33,22 +33,28 @@ export default React.memo(function Link(props: LinkProps) {
   )
 
   const handleClick = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>) => {
+    (event: React.MouseEvent<HTMLAnchorElement>, ...extra: any[]) => {
       if (props.onClick) {
-        props.onClick(e)
+        ;(props.onClick as any)(event, ...extra)
       }
 
-      const isBlank = isBlankTarget(e.currentTarget.target)
-      if (!e.defaultPrevented && !isBlank && !isMeta(e)) {
-        e.preventDefault()
-        navigate(props.href || '', {
+      const isBlank = isBlankTarget(event.currentTarget.target)
+      if (
+        !!href &&
+        !!isLocal &&
+        !event.defaultPrevented &&
+        !isBlank &&
+        !isMeta(event)
+      ) {
+        event.preventDefault()
+        navigate(href, {
           locale: hrefLang,
           state: props.state,
           replace: props.replace,
         })
       }
     },
-    [props.onClick, hrefLang, props.state, props.replace, isLocalLink]
+    [props.onClick, href, hrefLang, isLocal, props.state, props.replace]
   )
 
   return (
