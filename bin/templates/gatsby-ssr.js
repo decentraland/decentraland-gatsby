@@ -5,9 +5,10 @@
  */
 
 // You can delete this file if you're not using it
-import React from 'react'
-import Segment from 'decentraland-gatsby/dist/components/Segment/Segment'
-export { wrapPageElement, wrapRootElement } from './gatsby-browser'
+import React from "react"
+import Segment from "decentraland-gatsby/dist/components/Development/Segment"
+import Rollbar from "decentraland-gatsby/dist/components/Development/Rollbar"
+export { wrapPageElement, wrapRootElement } from "./gatsby-browser"
 
 /**
  * @see https://www.gatsbyjs.com/docs/reference/config-files/gatsby-ssr/#onPreRenderHTML
@@ -25,7 +26,7 @@ export function onPreRenderHTML(
   pluginOptions
 ) {
   const headComponents = getHeadComponents().map((component) => {
-    if (component.type !== 'style' || !component.props['data-href']) {
+    if (component.type !== "style" || !component.props["data-href"]) {
       return component
     }
 
@@ -33,7 +34,7 @@ export function onPreRenderHTML(
       <link
         rel="stylesheet"
         id={component.props.id}
-        href={component.props['data-href']}
+        href={component.props["data-href"]}
       />
     )
   })
@@ -48,6 +49,16 @@ export function onPreRenderHTML(
         trackPage={false}
       />
     )
+  } else {
+    console.warn("Missing GATSBY_SEGMENT_KEY environment")
+  }
+
+  if (process.env.GATSBY_ROLLBAR_TOKEN) {
+    postBodyComponents.push(
+      <Rollbar key="rollbar" />
+    )
+  } else {
+    console.warn("Missing GATSBY_ROLLBAR_TOKEN environment")
   }
 
   replaceHeadComponents(headComponents)
