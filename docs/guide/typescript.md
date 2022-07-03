@@ -2,6 +2,10 @@
 
 > This guide is intended to be apply on `.ts` files, for react files (`.tsx`) read [./react.md](./react.md)
 
+## Target ES6/ES2015
+
+Modern browsers support all [ES6 features](https://caniuse.com/es6), so `es6/es2015` is the preferred choice. You might choose to set a lower target if your code is deployed to older environments, or a higher target if your code is guaranteed to run in newer environments.
+
 ## Filenames
 
 Use dash on filenames, not `underscores`, not `camelCase`.
@@ -25,7 +29,7 @@ Regarding the prettier related configuration we use [/.prettierrc](../../.pretti
 
 ## Imports
 
-Prevent imports from big repositories like `lodash` or `semantic-ui-react`
+Avoid imports from the root of any big library like `lodash` or `semantic-ui-react`
 
 ```ts
 // GOOD
@@ -37,9 +41,7 @@ import unique 'lodash/unique'
 import { unique } 'lodash'
 ```
 
-## Exports
-
-### Types, Classes and Interfaces
+## Exports: Types, Classes and Interfaces
 
 - Use `PascalCase` for type names.
 - Do not use `I` as a prefix for interface names.
@@ -77,7 +79,7 @@ class RemoteStorage<T> implements Storage<T> {
 }
 ```
 
-Remember you can `extends` and `implements` from any class (`Map` and `Set` are examples)
+Remember, you can `extends` and `implements` from any class (`Map` and `Set` are examples)
 
 ```ts
 class Box {
@@ -95,7 +97,7 @@ const box: Box = new BigBox()
 
 Any other definition is preferred as `type`
 
-### Named vs default export
+## Exports: Named vs default export
 
 Exports are communicating intensions, use `export default` only if the code inside a file has only one main objective export any other related export as named.
 
@@ -118,7 +120,7 @@ import env, {
 import { env } from 'utils/env'
 ```
 
-## Exports (functions): max 2 args, put the rest into an options object
+### Functions: max 2 args, put the rest into an options object
 
 When designing function interfaces, stick to the following rules.
 
@@ -219,18 +221,6 @@ export interface PWrite {
 export function pwrite(options: PWrite) {}
 ```
 
-[reference](https://deno.land/manual/contributing/style_guide#exported-functions-max-2-args-put-the-rest-into-an-options-object)
-
-## Exports (functions): Pick only used props
-
-When you function accept a business object use `Pick` to select only the props required to work
-
-```ts
-function getPublicUrl(user: Pick<UserAttributes, 'id' | 'status'>) {
-  // ...
-}
-```
-
 ## Top-level functions should not use arrow syntax
 
 Top-level functions should use the `function` keyword. Arrow syntax should be limited to closures.
@@ -248,8 +238,6 @@ export const foo = (): string => {
   return 'bar'
 }
 ```
-
-[reference](https://deno.land/manual/contributing/style_guide#top-level-functions-should-not-use-arrow-syntax)
 
 ## Use JSDoc for exported symbols
 
@@ -332,7 +320,7 @@ TODO comments should usually include an issue or the author's github username in
 
 ## Prefer `#` over `private`
 
-We prefer the private fields (`#`) syntax over `private` keyword of TypeScript in the standard modules codebase. The private fields make the properties and methods private even at runtime. On the other hand, `private` keyword of TypeScript guarantee it private only at compile time and the fields are publicly accessible at runtime.
+We prefer the private fields (`#`) syntax over `private` keyword of TypeScript in the standard modules codebase. The private fields make the properties and methods private even at runtime. On the other hand, `private` keyword of TypeScript guarantee it private only at compile time and the fields are publicly accessible at runtime ([Reference](https://deno.land/manual/contributing/style_guide#prefer--over-private)).
 
 ```ts
 // GOOD.
@@ -350,4 +338,12 @@ class MyClass {
 }
 ```
 
-[reference](https://deno.land/manual/contributing/style_guide#prefer--over-private)
+If you have `es5` as target `#` props are not supported, in that case use `private` and `_` to conform with other javascript guidelines.
+
+```ts
+// GOOD (ONLY ON ES5 OR BELLOW)
+class MyClass {
+  private _foo = 1
+  private _bar() {}
+}
+```
