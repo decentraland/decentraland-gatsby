@@ -1,3 +1,5 @@
+import { InvalidCharacterError } from '../errors/InvalidCharacterError'
+
 export type Token = string | undefined | null | false
 
 /**
@@ -7,146 +9,190 @@ export type Token = string | undefined | null | false
  *
  * @see https://developer.mozilla.org/en-US/docs/Web/API/DOMTokenList
  */
-export default class TokenList {
-  static join(tokens: Token[]) {
-    return new TokenList().add(...tokens).value
+export default class TokenList implements DOMTokenList {
+  static parse(value: Token): string[] {
+    if (!value) {
+      return []
+    }
+
+    const set = new Set()
+    const list = String(value).split(/\s+/)
+    return list.filter((value) => {
+      if (Boolean(value) && !set.has(value)) {
+        set.add(value)
+        return true
+      }
+
+      return false
+    })
   }
 
-  private tokens: string[] = []
+  static from(...tokens: Token[]) {
+    const list = new TokenList()
+    for (const token of tokens) {
+      list.add(...this.parse(token))
+    }
 
-  constructor(initialValue?: Token) {
-    if (initialValue) {
-      this.add(initialValue)
+    return list
+  }
+
+  static join(tokens: Token[]): string {
+    return this.from(...tokens).value
+  }
+
+  static isToken(token: string) {
+    return !token || !/\s+/.test(token)
+  }
+
+  [index: number]: string
+  #tokens: string[] = []
+
+  #validate(method: string, token: string) {
+    if (!token) {
+      throw new SyntaxError(
+        `Failed to execute '${method}' on 'TokenList': The token provided must not be empty.`
+      )
+    }
+
+    if (!TokenList.isToken(token)) {
+      throw new InvalidCharacterError(
+        `Failed to execute '${token}' on 'TokenList': The token provided ('${token}') contains HTML space characters, which are not valid in tokens.`
+      )
+    }
+
+    return true
+  }
+
+  /** Returns the number of tokens. */
+  get length() {
+    return this.#tokens.length
+  }
+
+  /**
+   * Returns the associated set as string.
+   *
+   * Can be set, to change the associated attribute.
+   */
+  get value() {
+    return this.#tokens.join(' ')
+  }
+
+  /**
+   * Returns the associated set as string.
+   *
+   * Can be set, to change the associated attribute.
+   */
+  set value(value: string) {
+    this.#tokens = TokenList.parse(value)
+  }
+
+  item(index: number): string | null {
+    return this.#tokens[index] ?? null
+  }
+
+  contains(token: string) {
+    return this.#tokens.includes(token)
+  }
+
+  add(...tokens: string[]): void {
+    if (tokens.length === 0) {
+      return
+    }
+
+    const set = new Set(this.#tokens)
+    for (const token of tokens) {
+      this.#validate('add', token)
+      if (!set.has(token)) {
+        this.#tokens.push(token)
+      }
     }
   }
 
-  get length() {
-    return this.tokens.length
+  remove(...tokens: string[]): void {
+    if (tokens.length === 0) {
+      return
+    }
+
+    const set = new Set<string>()
+    for (const token of tokens) {
+      this.#validate('remove', token)
+      set.add(token)
+    }
+
+    this.#tokens = this.#tokens.filter((currentToken) => !set.has(currentToken))
   }
 
-  get value() {
-    return Array.from(this.tokens.values()).join(' ')
-  }
+  replace(oldToken: string, newToken: string): boolean {
+    this.#validate('replace', oldToken)
+    this.#validate('replace', newToken)
 
-  item(index: number) {
-    return this.tokens[index]
-  }
-
-  contains(token: Token) {
-    if (!token) {
+    if (!this.#tokens.includes(oldToken)) {
       return false
     }
 
-    return token.split(/\s+/).every((current) => this.tokens.includes(current))
+    if (this.#tokens.includes(newToken)) {
+      this.#tokens = this.#tokens.filter((token) => token !== oldToken)
+    } else {
+      this.#tokens = this.#tokens.map((token) =>
+        token === oldToken ? newToken : token
+      )
+    }
+
+    return true
   }
 
-  add(...tokens: Token[]) {
-    for (const token of tokens) {
-      if (typeof token === 'string') {
-        for (const each of token.split(/\s+/)) {
-          if (Boolean(each) && !this.contains(each)) {
-            this.tokens.push(each)
-          }
-        }
-      }
-    }
-
-    return this
+  supports(): boolean {
+    throw new TypeError(
+      `Failed to execute 'supports' on 'TokenList': TokenList has no supported tokens.`
+    )
   }
 
-  remove(...tokens: Token[]) {
-    for (const token of tokens) {
-      if (typeof token === 'string') {
-        for (const each of token.split(' ')) {
-          if (each) {
-            this.tokens = this.tokens.filter((current) => current !== each)
-          }
-        }
-      }
-    }
-
-    return this
-  }
-
-  replace(oldToken: Token, newToken: Token) {
-    if (!oldToken || !newToken) {
-      return this
-    }
-
-    if (/s+/.test(newToken)) {
-      return this
-    }
-
-    const oldExists = this.tokens.includes(oldToken)
-    const newExists = this.tokens.includes(newToken)
-    const duplicated = oldExists && newExists
-    const newTokens = [] as string[]
-
-    for (const current of this.tokens) {
-      if (duplicated && current === newToken) {
-        // ignore
-      } else if (current === oldToken) {
-        newTokens.push(newToken)
-      } else {
-        newTokens.push(current)
-      }
-    }
-
-    this.tokens = newTokens
-    return this
-  }
-
-  toggle(token: Token, force?: boolean) {
-    if (!token) {
-      return this
-    }
-
-    if (/s+/.test(token)) {
-      return this
-    }
-
+  toggle(token: string, force?: boolean): boolean {
+    this.#validate('toggle', token)
     switch (force) {
       case true:
         this.add(token)
-        return this
+        return true
 
       case false:
         this.remove(token)
-        return this
+        return false
 
       default:
-      // ignore
+        if (!this.#tokens.includes(token)) {
+          this.add(token)
+          return true
+        } else {
+          this.remove(token)
+          return false
+        }
     }
-
-    const newTokens = this.tokens.filter((current) => current !== token)
-
-    // token was removed
-    if (newTokens.length !== this.tokens.length) {
-      this.tokens = newTokens
-    } else {
-      this.tokens.push(token)
-    }
-
-    return this
   }
 
   entries() {
-    return this.tokens.entries()
+    return this.#tokens.entries()
   }
 
   forEach(
-    callback: (value: string, index: number, arr: string[]) => void,
+    callbackfn: (value: string, key: number, parent: DOMTokenList) => void,
     thisArg?: any
-  ) {
-    return this.tokens.forEach(callback, thisArg)
+  ): void {
+    this.#tokens.forEach(
+      (value, key) => callbackfn.call(thisArg ?? this, value, key, this),
+      thisArg
+    )
   }
 
   keys() {
-    return this.tokens.keys()
+    return this.#tokens.keys()
   }
 
   values() {
-    return this.tokens.values()
+    return this.#tokens.values()
+  }
+
+  toString(): string {
+    return this.value
   }
 
   [Symbol.iterator]() {
