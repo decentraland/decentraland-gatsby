@@ -15,9 +15,9 @@ module.exports = {
     `gatsby-plugin-sharp`,
     `gatsby-transformer-sharp`,
     {
-      resolve: "gatsby-plugin-sri",
+      resolve: 'gatsby-plugin-sri',
       options: {
-        hash: "sha512", // 'sha256', 'sha384' or 'sha512' ('sha512' = default)
+        hash: 'sha512', // 'sha256', 'sha384' or 'sha512' ('sha512' = default)
         crossorigin: false, // Optional
       },
     },

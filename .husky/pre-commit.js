@@ -4,5 +4,5 @@ module.exports = {
     () => 'tsc-files --noEmit'
   ],
   '**/*.{ts,tsx,js,jsx,json,md,mdx,css}': ['prettier --write'],
-  '*.{js,jsx,ts,tsx}': ['eslint --fix'],
+  'src/**/*.{js,jsx,ts,tsx}': ['eslint --fix'],
 }

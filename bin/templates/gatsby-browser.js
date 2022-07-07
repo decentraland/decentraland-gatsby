@@ -25,7 +25,6 @@ import AuthProvider from 'decentraland-gatsby/dist/context/Auth/AuthProvider'
 import { IntlProvider } from 'decentraland-gatsby/dist/plugins/intl'
 import segment from 'decentraland-gatsby/dist/utils/development/segment'
 
-
 export const registerServiceWorker = () => true
 
 export const wrapRootElement = ({ element }) => (
@@ -39,9 +38,7 @@ export const wrapRootElement = ({ element }) => (
 export const wrapPageElement = ({ element, props }) => {
   return (
     <IntlProvider {...props.pageContext.intl}>
-      <Layout {...props}>
-        {element}
-      </Layout>
+      <Layout {...props}>{element}</Layout>
     </IntlProvider>
   )
 }
