@@ -15,7 +15,7 @@ export default React.memo(function Link({ target, rel, ...props }: LinkProps) {
   )
   const linkRel = useMemo(
     () =>
-      !isLocal ? new TokenList(rel).add('noopener', 'noreferrer').value : rel,
+      !isLocal ? TokenList.from(rel, 'noopener', 'noreferrer').value : rel,
     [isLocal, rel]
   )
 
