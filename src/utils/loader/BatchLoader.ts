@@ -4,6 +4,7 @@ export default class BatchLoader<V, K = string | number> {
   private loader: Dataloader<K, V>
   cache: Map<K, Promise<V>> = new Map()
   data: Map<K, V> = new Map()
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   readonly handle: (key: K[]) => Promise<V[]>
 
   constructor(
