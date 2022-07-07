@@ -1,13 +1,14 @@
 // TODO: add Docs
 import { useCallback, useEffect, useState } from 'react'
 
-import Responsive, {
-  ResponsiveWidthShorthand,
-} from 'semantic-ui-react/dist/commonjs/addons/Responsive'
-
 import SingletonListener from '../utils/dom/SingletonListener'
 
-let CURRENT_WIDTH = Responsive.onlyMobile.maxWidth as number
+let CURRENT_WIDTH = 767 as number
+
+export interface ResponsiveWidthShorthand {
+  minWidth?: number | string
+  maxWidth?: number | string
+}
 
 /** @deprecated use decentraland-gatsby/dist/components/Media/Media */
 export default function useResponsive() {
