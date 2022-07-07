@@ -159,7 +159,7 @@
     "decentraland-crypto-middleware": "^1.0.2",
     "decentraland-dapps": "^13.4.0",
     "decentraland-server": "^3.0.0",
-    "eth-crypto": "^1.9.0",
+    "eth-crypto": "^2.3.0",
     "eth-sig-util": "^3.0.1",
     "express": "^4.17.1",
     "fetch-mock": "^9.11.0",
