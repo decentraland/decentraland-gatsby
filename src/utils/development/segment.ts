@@ -1,5 +1,5 @@
-import { isBlankTarget, isLocalLink } from '../../components/Text/Link'
 import { getMouseEventData, getMouseEventName, isMeta } from '../dom/events'
+import { isBlankTarget, isLocalLink } from '../dom/links'
 import once from '../function/once'
 import isMobile from '../isMobile'
 
