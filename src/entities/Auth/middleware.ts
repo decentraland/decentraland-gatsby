@@ -2,6 +2,7 @@ import { AUTH_CHAIN_HEADER_PREFIX } from 'decentraland-crypto-middleware/lib/typ
 import verify from 'decentraland-crypto-middleware/lib/verify'
 import { NextFunction, Request, Response } from 'express'
 
+import logger from '../Development/logger'
 import RequestError from '../Route/error'
 import { middleware } from '../Route/handle'
 
@@ -22,6 +23,15 @@ export function withChainHeader(options: AuthOptions = {}) {
       const data = await verify(req.method, req.baseUrl + req.path, req.headers)
       Object.assign(req, data)
     } catch (err) {
+      if (err.statusCode === 401) {
+        logger.error(err.message, {
+          ...err,
+          stack: err.stack,
+          method: req.method,
+          path: req.baseUrl + req.path,
+          headers: req.headers,
+        })
+      }
       if (err.statusCode === 400 || !options.optional) {
         throw new RequestError(err.message, err.statusCode)
       }
