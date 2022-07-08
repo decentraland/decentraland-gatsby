@@ -39,7 +39,11 @@ export function withLogs() {
       const data: Record<string, any> = {
         status: res.statusCode,
         time: (Date.now() - start) / 1000,
-        ip: req.headers['x-forwarded-for'] || req.connection.remoteAddress,
+        ip:
+          req.headers['x-forwarded-for'] ||
+          req.socket.remoteAddress ||
+          req.connection.remoteAddress,
+        includeUserAgent: false,
         auth: req.auth || null,
         metadata: req.authMetadata || null,
       }
