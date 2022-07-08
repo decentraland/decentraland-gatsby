@@ -2,11 +2,9 @@ import React, { useCallback, useMemo } from 'react'
 
 import { useIntl } from 'react-intl'
 
-import BaseLink, {
-  isBlankTarget,
-  isLocalLink,
-} from '../../components/Text/Link'
+import BaseLink from '../../components/Text/Link'
 import { isMeta } from '../../utils/dom/events'
+import { isBlankTarget, isLocalLink } from '../../utils/dom/links'
 import { navigate } from './utils'
 
 export type LinkProps<S extends {} = {}> =

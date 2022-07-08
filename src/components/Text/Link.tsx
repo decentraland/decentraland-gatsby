@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 
+import { isLocalLink } from '../../utils/dom/links'
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
 
@@ -33,16 +34,3 @@ export default React.memo(function Link({ target, rel, ...props }: LinkProps) {
     />
   )
 })
-
-export function isBlankTarget(target?: string | null) {
-  return target === '_blank'
-}
-
-export function isLocalLink(href?: string | null) {
-  return (
-    !!href &&
-    !href.startsWith('https://') &&
-    !href.startsWith('http://') &&
-    !href.startsWith('//')
-  )
-}

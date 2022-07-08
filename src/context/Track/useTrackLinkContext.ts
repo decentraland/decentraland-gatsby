@@ -1,12 +1,12 @@
 import React, { useCallback } from 'react'
 
-import { isBlankTarget, isLocalLink } from '../../components/Text/Link'
 import { track } from '../../utils/development/segment'
 import {
   getMouseEventData,
   getMouseEventName,
   isMeta,
 } from '../../utils/dom/events'
+import { isBlankTarget, isLocalLink } from '../../utils/dom/links'
 
 export type Handler = (event: React.MouseEvent<any>, ...extra: any[]) => void
 
