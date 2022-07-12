@@ -22,7 +22,7 @@ export default function useFeatureSupported(feature: keyof typeof features) {
     }
 
     if (isSupported !== cache.get(feature)) {
-      setSupported(isSupported)
+      setSupported(cache.get(feature)!)
     }
   }, [])
 
