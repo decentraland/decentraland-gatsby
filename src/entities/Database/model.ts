@@ -21,27 +21,33 @@ function hash(query: SQLStatement) {
 }
 
 export class Model<T extends {}> extends BaseModel<T> {
+  static getQueryNameLabel<U extends {} = any>(
+    method: string,
+    conditions?: PrimaryKey | Partial<U>,
+    orderBy?: Partial<U>
+  ): Partial<DatabaseMetricParams> {
+    let queryNameLabel = `${this.tableName}_${method}`
+
+    if (conditions) {
+      queryNameLabel += `_${Object.keys(conditions).sort().join('_')}`
+    }
+
+    if (orderBy) {
+      queryNameLabel += `_${Object.keys(orderBy).sort().join('_')}`
+    }
+    return {
+      query: queryNameLabel,
+    }
+  }
+
   static async find<U extends {} = any>(
     conditions?: Partial<U>,
     orderBy?: Partial<U>,
     extra?: string
   ): Promise<U[]> {
-    const params: Partial<DatabaseMetricParams> = {
-      table: this.tableName,
-      method: 'find',
-    }
-
-    if (conditions) {
-      params.conditions = Object.keys(conditions).sort().join(',')
-    }
-
-    if (orderBy) {
-      params.orderBy = Object.keys(orderBy).sort().join(',')
-    }
-
     return withDatabaseMetrics(
       () => super.find(conditions, orderBy, extra),
-      params
+      this.getQueryNameLabel('find', conditions, orderBy)
     )
   }
 
@@ -57,22 +63,9 @@ export class Model<T extends {}> extends BaseModel<T> {
     conditions: PrimaryKey | Partial<U>,
     orderBy?: Partial<P>
   ): Promise<U | undefined> {
-    const params: Partial<DatabaseMetricParams> = {
-      table: this.tableName,
-      method: 'findOne',
-    }
-
-    if (conditions) {
-      params.conditions = Object.keys(conditions).sort().join(',')
-    }
-
-    if (orderBy) {
-      params.orderBy = Object.keys(orderBy).sort().join(',')
-    }
-
     return withDatabaseMetrics(
       () => super.findOne(conditions as PrimaryKey, orderBy),
-      params
+      this.getQueryNameLabel('findOne', conditions)
     )
   }
 
@@ -80,72 +73,51 @@ export class Model<T extends {}> extends BaseModel<T> {
     conditions: Partial<U>,
     extra?: string
   ): Promise<number> {
-    const params: Partial<DatabaseMetricParams> = {
-      table: this.tableName,
-      method: 'count',
-    }
-
-    if (conditions) {
-      params.conditions = Object.keys(conditions).sort().join(',')
-    }
-
-    return withDatabaseMetrics(() => super.count(conditions, extra), params)
+    return withDatabaseMetrics(
+      () => super.count(conditions, extra),
+      this.getQueryNameLabel('count', conditions)
+    )
   }
 
   static async create<U extends QueryPart = any>(row: U): Promise<U> {
-    return withDatabaseMetrics(() => super.create(row), {
-      table: this.tableName,
-      method: 'create',
-      rows: Object.keys(row).sort().join(','),
-    })
+    return withDatabaseMetrics(
+      () => super.create(row),
+      this.getQueryNameLabel('create')
+    )
   }
 
   static async upsert<U extends QueryPart = any>(
     row: U,
     onConflict?: OnConflict<U>
   ): Promise<U> {
-    return withDatabaseMetrics(() => super.upsert(row, onConflict), {
-      table: this.tableName,
-      method: 'upsert',
-      rows: Object.keys(row).sort().join(','),
-    })
+    return withDatabaseMetrics(
+      () => super.upsert(row, onConflict),
+      this.getQueryNameLabel('upsert')
+    )
   }
 
   static async update<U extends QueryPart = any, P extends QueryPart = any>(
     changes: Partial<U>,
     conditions: Partial<P>
   ): Promise<any> {
-    const params: Partial<DatabaseMetricParams> = {
-      table: this.tableName,
-      method: 'update',
-    }
-
-    if (changes) {
-      params.updates = Object.keys(changes).sort().join(',')
-    }
-
-    if (conditions) {
-      params.conditions = Object.keys(conditions).sort().join(',')
-    }
-
-    return withDatabaseMetrics(() => super.update(changes, conditions), params)
+    return withDatabaseMetrics(
+      () => super.update(changes, conditions),
+      this.getQueryNameLabel('update', conditions)
+    )
   }
 
   static async delete<U extends QueryPart = any>(
     conditions: Partial<U>
   ): Promise<any> {
-    return withDatabaseMetrics(() => super.delete(conditions), {
-      table: this.tableName,
-      method: 'delete',
-      conditions: Object.keys(conditions).sort().join(','),
-    })
+    return withDatabaseMetrics(
+      () => super.delete(conditions),
+      this.getQueryNameLabel('delete', conditions)
+    )
   }
 
   static async query<U extends {} = any>(query: SQLStatement): Promise<U[]> {
     return withDatabaseMetrics(() => super.query(query.text, query.values), {
-      table: this.tableName,
-      method: 'query',
-      hash: hash(query),
+      query: hash(query),
     })
   }
 
@@ -159,9 +131,7 @@ export class Model<T extends {}> extends BaseModel<T> {
         return result.rowCount
       },
       {
-        table: this.tableName,
-        method: 'rowCount',
-        hash: hash(query),
+        query: hash(query),
       }
     )
   }
