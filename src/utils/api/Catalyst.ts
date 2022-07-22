@@ -51,7 +51,7 @@ export default class Catalyst extends API {
     process.env.REACT_APP_PROFILE_URL ||
     process.env.STORYBOOK_PROFILE_URL ||
     process.env.PROFILE_URL ||
-    'https://peer-lb.decentraland.org'
+    'https://peer.decentraland.org'
 
   static Servers: Promise<void> | null = null
   static Cache = new Map<string, Catalyst>()

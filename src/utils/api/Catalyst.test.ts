@@ -159,7 +159,7 @@ describe('utils/api/Catalyst', () => {
   })
 
   describe(`.getPeers()`, () => {
-    test(`should return an instance of a Catalyst`, async () => {
+    test.skip(`should return an instance of a Catalyst`, async () => {
       const catalyst = Catalyst.get()
       const peers = await catalyst.getPeers()
       expect(Array.isArray(peers)).toBe(true)
