@@ -12,7 +12,7 @@ export const http_request_duration_seconds = new Histogram({
   ],
 })
 
-// bucket sizes: 0, 8Kb, 128Kb, 512Kb, 1Mb, 2Mb, 5Mb, 10Mb, 20Mb
+// bucket sizes: 0Kb, 8Kb, 128Kb, 512Kb, 1Mb, 2Mb, 5Mb, 10Mb, 20Mb
 export const http_request_size_bytes = new Histogram({
   name: 'http_request_size_bytes',
   help: 'Duration of HTTP requests size in bytes',
