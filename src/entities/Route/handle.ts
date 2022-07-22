@@ -103,11 +103,12 @@ function handleIncommingMessage<R extends Request>(
       handler: req.baseUrl + (req.route?.path || ''),
     }
 
-    http_requests_total.inc(labels)
     const endTimer = http_request_duration_seconds.startTimer(labels)
 
     res.on('close', () => {
       endTimer({ code: res.statusCode })
+
+      http_requests_total.inc({ ...labels, code: res.statusCode })
 
       if (req.headers['content-length']) {
         http_request_size_bytes.observe(
