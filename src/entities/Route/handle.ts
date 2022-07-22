@@ -109,10 +109,12 @@ function handleIncommingMessage<R extends Request>(
     res.on('close', () => {
       endTimer({ code: res.statusCode })
 
-      http_request_size_bytes.observe(
-        { ...labels, code: res.statusCode },
-        Number(req.headers['content-length'])
-      )
+      if (req.headers['content-length']) {
+        http_request_size_bytes.observe(
+          { ...labels, code: res.statusCode },
+          Number(req.headers['content-length'])
+        )
+      }
     })
 
     Promise.resolve()
