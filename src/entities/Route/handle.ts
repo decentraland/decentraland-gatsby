@@ -7,7 +7,8 @@ import Context from './context'
 import RequestError from './error'
 import {
   http_request_duration_seconds,
-  http_request_pool_size,
+  http_request_size_bytes,
+  http_requests_total,
 } from './metrics'
 
 const DEFAULT_API_HEADERS: Record<string, string> = {
@@ -102,11 +103,18 @@ function handleIncommingMessage<R extends Request>(
       handler: req.baseUrl + (req.route?.path || ''),
     }
 
-    http_request_pool_size.inc(labels)
+    http_requests_total.inc(labels)
     const endTimer = http_request_duration_seconds.startTimer(labels)
+
     res.on('close', () => {
-      endTimer({ statusCode: res.statusCode })
-      http_request_pool_size.dec(labels)
+      endTimer({ code: res.statusCode })
+
+      if (req.headers['content-length']) {
+        http_request_size_bytes.observe(
+          { ...labels, code: res.statusCode },
+          Number(req.headers['content-length'])
+        )
+      }
     })
 
     Promise.resolve()
