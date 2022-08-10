@@ -10,7 +10,7 @@ export interface ResponsiveWidthShorthand {
   maxWidth?: number | string
 }
 
-/** @deprecated use decentraland-gatsby/dist/components/Media/Media */
+/** @deprecated use decentraland-ui/dist/components/Media/Media */
 export default function useResponsive() {
   const [width, setWidth] = useState(CURRENT_WIDTH)
 
