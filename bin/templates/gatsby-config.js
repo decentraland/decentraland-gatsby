@@ -1,13 +1,18 @@
+/* eslint-disable */
+const {
+  default: developMiddleware,
+} = require('decentraland-gatsby/dist/utils/development/developMiddleware')
+
 module.exports = {
   siteMetadata: {
     title: `Decentraland`,
     description: `Decentraland`,
     author: `@decentraland`,
   },
-  proxy: {
+  developMiddleware: developMiddleware({
     prefix: `/api`,
     url: `http://localhost:4000`,
-  },
+  }),
   plugins: [
     `gatsby-plugin-react-helmet`,
     `gatsby-plugin-postcss`,
