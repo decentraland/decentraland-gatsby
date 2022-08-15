@@ -34,7 +34,8 @@ export default async function identify(connection: ConnectionResponse) {
       address,
       payload,
       expiration,
-      (message) => new RequestManager(provider).personal_sign(message, address, '')
+      (message) =>
+        new RequestManager(provider).personal_sign(message, address, '')
     )
 
     return identity
