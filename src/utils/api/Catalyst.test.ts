@@ -1,4 +1,4 @@
-import { AuthIdentity, AuthLinkType, Authenticator } from 'dcl-crypto'
+import { AuthIdentity, AuthLinkType, Authenticator } from '@dcl/crypto'
 
 import Catalyst from './Catalyst'
 

@@ -24,7 +24,7 @@ import type {
   Realm,
   Servers,
 } from './Catalyst.types'
-import type { AuthChain } from 'dcl-crypto'
+import type { AuthChain } from '@dcl/crypto'
 export type {
   Snapshot,
   BodyColor,
