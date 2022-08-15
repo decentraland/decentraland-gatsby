@@ -1,3 +1,5 @@
+import type { EntityType } from '@dcl/schemas/dist/platform/entity'
+
 export type Snapshot = {
   face: string
   face128: string
@@ -36,9 +38,11 @@ export type Avatar = {
   tutorialStep: number
 }
 
-export type ProfileResponse = {
+export type ProfileMetadata = {
   avatars: Avatar[]
 }
+
+export type ProfileResponse = ProfileMetadata
 
 export type Layer = {
   name: string
@@ -207,4 +211,150 @@ export type Peer = {
   parcel: [number, number]
   position: [number, number, number]
   lastPing: number
+}
+
+export enum ContentDeploymentSortingField {
+  LocalTimestamp = 'local_timestamp',
+  EntityTimestamp = 'entity_timestamp',
+}
+
+export enum ContentDeploymentSortingOrder {
+  ASCENDING = 'ASC',
+  DESCENDING = 'DESC',
+}
+
+export type ContentDeploymentOptions = {
+  offset: number
+  limit: number
+  from: number | Date
+  to: number | Date
+  onlyCurrentlyPointed: boolean
+  lastId: string
+  entityIds: string[]
+  entityTypes: EntityType[]
+  sortingField: ContentDeploymentSortingField
+  sortingOrder: ContentDeploymentSortingOrder
+}
+
+export type ContentDepoyment =
+  | ContentDepoymentScene
+  | ContentDepoymentProfile
+  | ContentDepoymentWearable
+  | ContentDepoymentStore
+  | ContentDepoymentEmote
+
+export type ContentDepoymentBase = {
+  entityId: string
+  entityTimestamp: number
+  localTimestamp: number
+  deployedBy: string
+  pointers: string[]
+  content: { key: string; hash: string }[]
+}
+
+export type SceneMetadata = {
+  display: {
+    title: string // "City Art Gallery j",
+    favicon: string // "favicon_asset",
+    navmapThumbnail: string // "scene-thumbnail.png" | "https://decentraland.org/images/thumbnail.png"
+  }
+  owner: string
+  contact: {
+    name: string
+    email: string
+  }
+  main: string // "bin/game.js",
+  tags: string[]
+  scene: {
+    parcels: string[]
+    base: string
+  }
+  communications: {
+    type: string // "webrtc",
+    signalling: string // "https://signalling-01.decentraland.org"
+  }
+  policy: {
+    contentRating: string
+    fly: boolean
+    voiceEnabled: boolean
+    blacklist: string[]
+    teleportPosition: string
+  }
+  source: {
+    version: number
+    origin: string
+    projectId: string
+    point: {
+      x: number
+      y: number
+    }
+    rotation: string // "north",
+    layout: {
+      rows: number // 2,
+      cols: number // 1
+    }
+  }
+}
+
+export type ContentDepoymentScene = ContentDepoymentBase & {
+  entityType: EntityType.SCENE
+  metadata: SceneMetadata
+}
+
+export type ContentDepoymentProfile = ContentDepoymentBase & {
+  entityType: EntityType.PROFILE
+  metadata: ProfileMetadata
+}
+
+export type WearableMetadata = {
+  id: string
+  thumbnail: string
+  data: {
+    tags: string[]
+    category: string
+    representations: {
+      mainFile: string // "Earring_SquareEarring.glb"
+      bodyShapes: string[] // [ "urn:decentraland:off-chain:base-avatars:BaseFemale" ]
+      contents: string[] // [ "AvatarWearables_TX.png", "Earring_SquareEarring.glb" ]
+    }[]
+  }
+  i18n: { code: string; text: string }[]
+  createdAt: number
+  updatedAt: number
+}
+
+export type ContentDepoymentWearable = ContentDepoymentBase & {
+  entityType: EntityType.WEARABLE
+  metadata: WearableMetadata
+}
+
+export type StoreMetadata = {
+  id: string
+  description: string
+  images: { name: string; file: string }[]
+  links: { name: string; url: string }[]
+  owner: string
+  version: number
+}
+
+export type ContentDepoymentStore = ContentDepoymentBase & {
+  entityType: EntityType.STORE
+  metadata: StoreMetadata
+}
+
+export type ContentDepoymentEmote = ContentDepoymentBase & {
+  entityType: EntityType.EMOTE
+  metadata: {} // TODO
+}
+
+export type ContentDeploymentResponse = {
+  deployments: ContentDepoyment[]
+  filters: Pick<
+    ContentDeploymentOptions,
+    'from' | 'to' | 'entityIds' | 'entityTypes'
+  >
+  pagination: Pick<ContentDeploymentOptions, 'offset' | 'limit' | 'lastId'> & {
+    moreData: boolean
+    next: string
+  }
 }

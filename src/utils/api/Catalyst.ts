@@ -10,6 +10,8 @@ import type {
   CommsStatusOptions,
   CommsStatusWithLayers,
   CommsStatusWithUsers,
+  ContentDeploymentOptions,
+  ContentDeploymentResponse,
   ContentStatus,
   EntityScene,
   HotScene,
@@ -305,6 +307,29 @@ export default class Catalyst extends API {
       `/comms/peers`
     )
     return result.peers
+  }
+
+  async getContentDeployments(
+    options: ContentDeploymentOptions
+  ): Promise<ContentDeploymentResponse> {
+    const { entityIds, entityTypes, ...data } = options
+    const params = API.searchParams(data as any, { dataToTimestamp: true })
+
+    if (Array.isArray(entityIds)) {
+      for (const entityId of entityIds) {
+        params.append('entityId', entityId)
+      }
+    }
+
+    if (Array.isArray(entityTypes)) {
+      for (const entityType of entityTypes) {
+        params.append('entityType', entityType)
+      }
+    }
+
+    const query = params.toString()
+
+    return this.fetch('/content/deployments' + query ? '?' : '' + query)
   }
 
   async verifySignature(
