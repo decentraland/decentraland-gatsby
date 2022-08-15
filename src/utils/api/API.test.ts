@@ -17,6 +17,32 @@ describe('utils/api/API', () => {
     })
   })
 
+  describe('#searchParams', () => {
+    test('should parse primitives values', () => {
+      expect(
+        API.searchParams({
+          string: 'string',
+          number: 123456789,
+          boolean: false,
+          null: null,
+          undefined: undefined,
+        }).toString()
+      ).toBe('string=string&number=123456789&boolean=false')
+    })
+
+    test('should parse date values', () => {
+      const now = new Date()
+      const expectedDate = new URLSearchParams({ now: now.toJSON() })
+      const expectedTimestamp = new URLSearchParams({
+        now: String(now.getTime()),
+      })
+      expect(API.searchParams({ now }).toString()).toBe(expectedDate.toString())
+      expect(
+        API.searchParams({ now }, { dataToTimestamp: true }).toString()
+      ).toBe(expectedTimestamp.toString())
+    })
+  })
+
   describe('#url', () => {
     test('should return root path from base', () => {
       expect(API.url('')).toBe('')

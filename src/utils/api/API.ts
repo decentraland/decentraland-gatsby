@@ -16,12 +16,44 @@ import type { Identity } from '../auth/types'
 
 import 'isomorphic-fetch'
 
+export type SearchParamValue = boolean | number | string | Date
+export type SearchParamOptions = Partial<{
+  dataToTimestamp: boolean
+}>
+
 export default class API {
   static catch<T>(prom: Promise<T>) {
     return prom.catch((err) => {
       logger.error(err)
       return null
     })
+  }
+
+  static #searchParamsValue(
+    value: SearchParamValue,
+    options: SearchParamOptions
+  ): string {
+    if (value instanceof Date) {
+      return options.dataToTimestamp ? String(value.getTime()) : value.toJSON()
+    }
+
+    return String(value)
+  }
+
+  static searchParams(
+    data: Record<string, undefined | null | SearchParamValue>,
+    options: SearchParamOptions = {}
+  ): URLSearchParams {
+    const params = new URLSearchParams()
+    const keys = Object.keys(data)
+    for (const key of keys) {
+      const value = data[key] as undefined | null | SearchParamValue
+      if (value !== undefined && value !== null) {
+        params.append(key, this.#searchParamsValue(value, options))
+      }
+    }
+
+    return params
   }
 
   static url(
