@@ -1,6 +1,6 @@
 import '../buffer/buffer'
-import { Web3Provider } from '@ethersproject/providers'
 import { Wallet } from '@ethersproject/wallet'
+import { RequestManager } from 'eth-connect'
 
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
@@ -34,7 +34,7 @@ export default async function identify(connection: ConnectionResponse) {
       address,
       payload,
       expiration,
-      (message) => new Web3Provider(provider).getSigner().signMessage(message)
+      (message) => new RequestManager(provider).personal_sign(message, address, '')
     )
 
     return identity
