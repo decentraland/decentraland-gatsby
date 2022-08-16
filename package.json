@@ -154,7 +154,6 @@
     "cssnano": "^4.1.11",
     "dataloader": "^2.0.0",
     "dayjs": "^1.10.4",
-    "dcl-crypto": "^2.3.0",
     "ddos": "^0.2.1",
     "decentraland-commons": "^5.1.0",
     "decentraland-crypto-middleware": "^1.0.2",
