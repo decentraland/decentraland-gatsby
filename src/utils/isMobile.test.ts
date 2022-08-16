@@ -1,3 +1,4 @@
+/** @jest-environment jsdom */
 import isMobile from './isMobile'
 
 describe('isMobile', () => {

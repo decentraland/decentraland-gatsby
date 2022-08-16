@@ -7,10 +7,10 @@ import segment from '../development/segment'
 import EmptyAccountsError from '../errors/EmptyAccountsError'
 import once from '../function/once'
 
-import type { AuthChain, AuthIdentity } from 'dcl-crypto/dist/types'
+import type { AuthChain, AuthIdentity } from '@dcl/crypto/dist/types'
 import type { ConnectionResponse } from 'decentraland-connect/dist/types'
 
-const authenticator = once(() => import('dcl-crypto/dist/Authenticator'))
+const authenticator = once(() => import('@dcl/crypto/dist/Authenticator'))
 
 export default async function identify(connection: ConnectionResponse) {
   try {
