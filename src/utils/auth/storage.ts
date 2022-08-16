@@ -1,4 +1,4 @@
-import { AuthLinkType } from 'dcl-crypto/dist/types'
+import { AuthLinkType } from '@dcl/crypto/dist/types'
 
 import Time from '../date/Time'
 import SingletonListener from '../dom/SingletonListener'
