@@ -100,7 +100,7 @@ export const BooleanEnum = [...TruthyEnum, ...FalsyEnum] as const
 
 export const apiResultSchema = (
   data: AjvSchema,
-  extra: Record<string, AjvMultiSchema>
+  extra?: Record<string, AjvMultiSchema>
 ): AjvObjectSchema => ({
   type: 'object',
   properties: {
