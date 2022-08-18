@@ -113,7 +113,7 @@ describe('utils/api/Catalyst', () => {
   })
 
   describe(`.getStatus() / .getCommsStatus()`, () => {
-    test(`should return an instance of a Catalyst`, async () => {
+    test.skip(`should return an instance of a Catalyst`, async () => {
       const catalyst = Catalyst.get()
       const status = await catalyst.getStatus()
       expect(typeof status.name).toEqual('string')
