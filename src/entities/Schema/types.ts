@@ -24,7 +24,7 @@ export type AjvNamedSchema =
   | AjvBooleanSchema
   | AjvNullSchema
   | AjvArraySchema
-  | AjvMultiSchmea
+  | AjvMultiSchema
 
 export type AjvObjectSchema = AjvOperatorSchema & {
   type: 'object'
@@ -78,7 +78,7 @@ export type AjvNullSchema = AjvOperatorSchema & {
   type: 'null'
 }
 
-export type AjvMultiSchmea = {
+export type AjvMultiSchema = {
   type: (
     | AjvNullSchema['type']
     | AjvObjectSchema['type']
@@ -98,7 +98,10 @@ export const FalsyEnum = [false, 0, '0', 'false'] as const
 export const TruthyEnum = [true, 1, '1', 'true'] as const
 export const BooleanEnum = [...TruthyEnum, ...FalsyEnum] as const
 
-export const apiResultSchema = (data: AjvSchema): AjvObjectSchema => ({
+export const apiResultSchema = (
+  data: AjvSchema,
+  extra: Record<string, AjvMultiSchema>
+): AjvObjectSchema => ({
   type: 'object',
   properties: {
     ok: {
@@ -106,6 +109,7 @@ export const apiResultSchema = (data: AjvSchema): AjvObjectSchema => ({
       description: 'Define where the request was completed',
     },
     data,
+    ...extra,
   },
 })
 
