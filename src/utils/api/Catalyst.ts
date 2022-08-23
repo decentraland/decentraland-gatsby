@@ -310,7 +310,7 @@ export default class Catalyst extends API {
   }
 
   async getContentDeployments(
-    options: ContentDeploymentOptions
+    options: Partial<ContentDeploymentOptions>
   ): Promise<ContentDeploymentResponse> {
     const { entityIds, entityTypes, ...data } = options
     const params = API.searchParams(data as any, { dataToTimestamp: true })
