@@ -329,7 +329,7 @@ export default class Catalyst extends API {
 
     const query = params.toString()
 
-    return this.fetch('/content/deployments' + query ? '?' : '' + query)
+    return this.fetch('/content/deployments' + (query ? '?' : '') + query)
   }
 
   async verifySignature(
