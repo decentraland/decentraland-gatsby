@@ -253,15 +253,16 @@ export type ContentDepoymentBase = {
 }
 
 export type SceneMetadata = {
-  display: {
-    title: string // "City Art Gallery j",
-    favicon: string // "favicon_asset",
-    navmapThumbnail: string // "scene-thumbnail.png" | "https://decentraland.org/images/thumbnail.png"
+  display?: {
+    title?: string // "My Cool Scene",
+    description?: string // "You won't believe how cool this scene is",
+    favicon?: string // "favicon_asset",
+    navmapThumbnail?: string // "scene-thumbnail.png" | "https://decentraland.org/images/thumbnail.png"
   }
   owner: string
-  contact: {
-    name: string
-    email: string
+  contact?: {
+    name?: string
+    email?: string
   }
   main: string // "bin/game.js",
   tags: string[]
