@@ -116,9 +116,18 @@ export class Model<T extends {}> extends BaseModel<T> {
   }
 
   static async query<U extends {} = any>(query: SQLStatement): Promise<U[]> {
-    return withDatabaseMetrics(() => super.query(query.text, query.values), {
-      query: hash(query),
-    })
+    return withDatabaseMetrics(
+      async () => {
+        try {
+          return super.query(query.text, query.values)
+        } catch (err) {
+          throw Object.assign(err, { text: query.text, values: query.values })
+        }
+      },
+      {
+        query: hash(query),
+      }
+    )
   }
 
   /**
@@ -127,8 +136,12 @@ export class Model<T extends {}> extends BaseModel<T> {
   static async rowCount(query: SQLStatement): Promise<number> {
     return withDatabaseMetrics(
       async () => {
-        const result = await this.db.client.query(query)
-        return result.rowCount
+        try {
+          const result = await this.db.client.query(query)
+          return result.rowCount
+        } catch (err) {
+          throw Object.assign(err, { text: query.text, values: query.values })
+        }
       },
       {
         query: hash(query),
