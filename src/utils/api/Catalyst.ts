@@ -23,6 +23,7 @@ import type {
   ProfileResponse,
   Realm,
   Servers,
+  StatsParcel,
 } from './Catalyst.types'
 import type { AuthChain } from '@dcl/crypto'
 export type {
@@ -330,6 +331,10 @@ export default class Catalyst extends API {
     const query = params.toString()
 
     return this.fetch('/content/deployments' + (query ? '?' : '') + query)
+  }
+
+  async getStatsParcels() {
+    return this.fetch<{ parcels: StatsParcel[] }>('/stats/parcels')
   }
 
   async verifySignature(

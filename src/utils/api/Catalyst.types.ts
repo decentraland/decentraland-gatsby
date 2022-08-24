@@ -359,3 +359,11 @@ export type ContentDeploymentResponse = {
     next: string
   }
 }
+
+export type StatsParcel = {
+  peersCount: number
+  parcel: {
+    x: number
+    y: number
+  }
+}
