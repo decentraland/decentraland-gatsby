@@ -160,7 +160,7 @@ export default class TaskModel extends Model<TaskAttributes> {
     return this.rowCount(SQL`
       UPDATE ${table(this)}
       SET
-        "runner" IS NULL,
+        "runner" = NULL,
         "status" = ${TaskStatus.pending}::type_task_status,
         "updated_at" = ${now}
       WHERE

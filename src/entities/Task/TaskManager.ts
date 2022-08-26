@@ -81,6 +81,15 @@ export default class TaskManager {
           return
         }
 
+        try {
+          await this.runTaskTimeout()
+        } catch (err) {
+          this._logger.error(`error releasing old tasks: ${err.message}`, {
+            stack: err.stack,
+            ...err,
+          })
+        }
+
         const tasks = Array.from(this._tasks.values())
         try {
           await TaskModel.initialize(tasks)
@@ -98,7 +107,7 @@ export default class TaskManager {
       // run task timeout
       setTimeout(async () => {
         this._nextTimeoutRelease = setInterval(async () => {
-          await this.runTackTimeout()
+          await this.runTaskTimeout()
         }, Time.Minute * 10)
       }, random(Time.Minute, Time.Minute * 1000))
     }
@@ -118,7 +127,7 @@ export default class TaskManager {
     }
   }
 
-  async runTackTimeout() {
+  async runTaskTimeout() {
     try {
       await TaskModel.releaseTimeout()
     } catch (err) {

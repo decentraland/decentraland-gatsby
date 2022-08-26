@@ -424,7 +424,7 @@ describe(`src/entities/Task/model`, () => {
         sqlFormat(`
         UPDATE "tasks"
         SET
-          "runner" IS NULL,
+          "runner" = NULL,
           "status" = $1::type_task_status,
           "updated_at" = $2
         WHERE
