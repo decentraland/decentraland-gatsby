@@ -214,7 +214,7 @@ export default function useAuth() {
               }
 
               segment((analytics, context) => {
-                analytics.identify(conn.account!)
+                analytics.identify(conn)
                 analytics.track(AuthEvent.Connected, { ...context, ...conn })
               })
 
