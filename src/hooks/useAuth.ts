@@ -209,6 +209,7 @@ export default function useAuth() {
             if (result.status === AuthStatus.Connected) {
               const conn = {
                 account: result.account,
+                ethAddress: result.account,
                 providerType: state.providerType,
                 chainId: state.chainId,
               }
