@@ -97,6 +97,7 @@ export default class API {
     return new Options(options)
   }
 
+  /** @deprecated use API.searchParams instead */
   query<T extends {} = {}>(qs?: T) {
     if (!qs) {
       return ''
