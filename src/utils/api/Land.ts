@@ -19,9 +19,16 @@ export type GetImageOptions = {
   publications?: boolean
 }
 
-export type GetMapImageOptions = Omit<GetImageOptions, 'publications'> & {
+export type GetMapImageOptions = GetImageOptions & {
   center?: [number, number]
   selected?: [number, number][]
+}
+
+export type Position = string | [number, number]
+
+export type GetMapImageV2Options = Omit<GetImageOptions, 'publications'> & {
+  center?: Position
+  selected?: Position[]
 }
 
 type Token = {
@@ -109,6 +116,22 @@ export default class Land extends API {
     }
 
     return this.Cache.get(baseUrl)!
+  }
+
+  static encodePosition(position: Position): string {
+    if (typeof position === 'string') {
+      return position
+    } else {
+      return position.slice(0, 2).join(',')
+    }
+  }
+
+  static decodePosition(position: Position): [number, number] {
+    if (typeof position === 'string') {
+      return position.split(',').slice(0, 2).map(Number) as [number, number]
+    } else {
+      return position
+    }
   }
 
   static encodeParcelId(coordinates: [number, number]): string {
@@ -278,7 +301,7 @@ export default class Land extends API {
     return this.url(`/v1/estates/${id}/map.png` + this.query(options))
   }
 
-  getMapImage(options: GetMapImageOptions = {}) {
+  getMapImage(options: GetMapImageV2Options = {}) {
     const params = new URLSearchParams()
 
     let width: number
@@ -303,12 +326,14 @@ export default class Land extends API {
     if (options.selected && options.selected.length) {
       params.set(
         'selected',
-        options.selected.map((position) => position.join(',')).join(';')
+        options.selected
+          .map((position) => Land.encodePosition(position))
+          .join(';')
       )
     }
 
     if (options.center) {
-      params.set('center', options.center.join(','))
+      params.set('center', Land.encodePosition(options.center))
     }
 
     if (options.size) {
@@ -320,8 +345,12 @@ export default class Land extends API {
       options.selected &&
       options.selected.length
     ) {
-      const Xs = options.selected.map((position) => position[0])
-      const Ys = options.selected.map((position) => position[1])
+      const Xs = options.selected.map(
+        (position) => Land.decodePosition(position)[0]
+      )
+      const Ys = options.selected.map(
+        (position) => Land.decodePosition(position)[1]
+      )
       const maxX = Math.max(...Xs)
       const minX = Math.min(...Xs)
       const maxY = Math.max(...Ys)
