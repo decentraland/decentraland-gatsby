@@ -19,7 +19,7 @@ export type GetImageOptions = {
   publications?: boolean
 }
 
-export type GetMapImageOptions = GetImageOptions & {
+export type GetMapImageOptions = Omit<GetImageOptions, 'publications'> & {
   center?: [number, number]
   selected?: [number, number][]
 }
@@ -261,6 +261,7 @@ export default class Land extends API {
     return Land.decodeParcelId(parcelId)
   }
 
+  /** @deprecated use getMapImage instead */
   getImage(options: GetMapImageOptions = {}) {
     const { selected: rawSelected } = options
     const selected =
@@ -275,5 +276,74 @@ export default class Land extends API {
 
   getEstateImage(id: number | string, options: GetImageOptions = {}) {
     return this.url(`/v1/estates/${id}/map.png` + this.query(options))
+  }
+
+  getMapImage(options: GetMapImageOptions = {}) {
+    const params = new URLSearchParams()
+
+    let width: number
+    let height: number
+    if (!!options.width && !!options.height) {
+      height = options.height
+      width = options.width
+    } else if (!!options.width && !options.height) {
+      height = options.width
+      width = options.width
+    } else if (!options.width && !!options.height) {
+      height = options.height
+      width = options.height
+    } else {
+      height = 1024
+      width = 1024
+    }
+
+    params.set('height', String(height))
+    params.set('width', String(width))
+
+    if (options.selected && options.selected.length) {
+      params.set(
+        'selected',
+        options.selected.map((position) => position.join(',')).join(';')
+      )
+    }
+
+    if (options.center) {
+      params.set('center', options.center.join(','))
+    }
+
+    if (options.size) {
+      params.set('center', String(options.size))
+    }
+
+    if (
+      (!options.center || !options.size) &&
+      options.selected &&
+      options.selected.length
+    ) {
+      const Xs = options.selected.map((position) => position[0])
+      const Ys = options.selected.map((position) => position[1])
+      const maxX = Math.max(...Xs)
+      const minX = Math.min(...Xs)
+      const maxY = Math.max(...Ys)
+      const minY = Math.min(...Ys)
+
+      if (!options.center) {
+        const centerX = Math.floor((minX + maxX) / 2)
+        const centerY = Math.floor((minY + maxY) / 2)
+        params.set('center', `${centerX},${centerY}`)
+      }
+
+      if (!options.size) {
+        const sizeX = maxX - minX
+        const sizeY = maxY - minY
+        const size = Math.floor(
+          Math.min(height, width) / Math.max(sizeX, sizeY)
+        )
+        params.set('size', String(Math.min(Math.max(size, 5), 20)))
+      }
+    }
+
+    const qs = params.toString()
+    return this.url('/v2/map.png' + (qs ? '?' : '') + qs)
   }
 }
