@@ -14,10 +14,7 @@ process.stdin.on('close', () => {
     const file = `[${todo.file}](${todo.file}#L${todo.line})`
 
     let ref = `      `
-    if (todo.ref && todo.ref.startsWith('#')) {
-      const issue = `issues/${todo.ref.slice(1)}`
-      ref = `[${issue}](${issue})`
-    } else if (todo.ref && todo.ref.startsWith('@')) {
+    if (todo.ref && (todo.ref.startsWith('@') || todo.ref.startsWith('#'))) {
       ref = todo.ref
     } else if (todo.ref) {
       ref = '@' + todo.ref
