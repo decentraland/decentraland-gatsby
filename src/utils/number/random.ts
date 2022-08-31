@@ -1,3 +1,4 @@
+// TODO(#323): remove on v6, use radash random instead https://radash-docs.vercel.app/docs/curry-random
 function random(to: number): number
 function random(from: number, to: number): number
 function random(from = 0, to?: number): number {

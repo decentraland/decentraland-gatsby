@@ -1,2 +1,2 @@
-// TODO(2fd): remove on V6
+// TODO(#323): remove on v6
 export { isMeta as isMeta } from './events'

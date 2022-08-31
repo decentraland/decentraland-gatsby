@@ -1,3 +1,4 @@
+// TODO(#323): remove on v6 move it to ./entities/Development
 export default function env(name: string, defaultValue: string): string {
   return (
     process.env[name] ||

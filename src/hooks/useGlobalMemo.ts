@@ -1,4 +1,4 @@
-// TODO(2fd): remove on v6
+// TODO(#323): remove on v6
 import { DependencyList, useMemo } from 'react'
 
 import { hash } from 'immutable'

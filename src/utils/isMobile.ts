@@ -1,3 +1,4 @@
+// TODO(#323): remove on v6, use hook useUserAgentData
 import getUserAgent from './dom/getUserAgent'
 
 /**

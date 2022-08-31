@@ -1,3 +1,4 @@
+// TODO(#323): remove on v6, use radash debounce instead https://radash-docs.vercel.app/docs/curry-debounce
 export type Callback = (...args: any) => void
 
 export default function debounce<C extends Callback>(

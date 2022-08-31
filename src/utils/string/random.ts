@@ -1,3 +1,4 @@
+// TODO(#323): remove on v6, use radash uid instead https://radash-docs.vercel.app/docs/random-uid
 import randomNumber from '../number/random'
 
 export function randomFrom(raw: string, len = 1) {

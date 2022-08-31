@@ -1,3 +1,4 @@
+// TODO(#323): remove on v6, use radash retry instead https://radash-docs.vercel.app/docs/async-retry
 import logger from '../../entities/Development/logger'
 
 export default async function retry<T>(

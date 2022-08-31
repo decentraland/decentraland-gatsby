@@ -1,4 +1,4 @@
-// TODO(2fd): remove on v6, better be explicit on this
+// TODO(#323): remove on v6
 import { useMemo } from 'react'
 
 import { useLocation } from '@gatsbyjs/reach-router'

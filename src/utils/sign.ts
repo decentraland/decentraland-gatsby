@@ -1,3 +1,4 @@
+// TODO(#323): remove on v6, move it to ../entities/Development
 import { createHmac } from 'crypto'
 
 export function sign(data: any, secret: string) {

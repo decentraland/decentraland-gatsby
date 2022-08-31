@@ -1,3 +1,4 @@
+// TODO(#323): move to ../iterator
 import logger from '../../entities/Development/logger'
 
 type BatchCallback<T> = (batch: T[]) => Promise<any>
