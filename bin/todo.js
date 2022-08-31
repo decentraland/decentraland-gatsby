@@ -22,7 +22,8 @@ process.stdin.on('close', () => {
     } else if (todo.ref && todo.ref.startsWith('@')) {
       ref = todo.ref
     } else if (todo.ref) {
-      ref = '@' + todo.ref
+      const user = todo.ref.startsWith('@') ? todo.ref.slice(1) : todo.ref
+      ref = `[@${user}](https://github.com/${user})`
     }
 
     console.log(`| ${file} | ${ref} | ${todo.text} |`)
