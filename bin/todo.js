@@ -14,7 +14,12 @@ process.stdin.on('close', () => {
     const file = `[${todo.file}](${todo.file}#L${todo.line})`
 
     let ref = `      `
-    if (todo.ref && (todo.ref.startsWith('@') || todo.ref.startsWith('#'))) {
+    if (todo.ref && todo.ref.indexOf('#') >= 0) {
+      const [repo, num] = todo.ref.split('#')
+      ref = `[${repo}#${num}](https://github.com/${
+        repo || 'decentraland/decentraland-gatsby'
+      }/issues/${num})`
+    } else if (todo.ref && todo.ref.startsWith('@')) {
       ref = todo.ref
     } else if (todo.ref) {
       ref = '@' + todo.ref
