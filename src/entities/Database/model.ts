@@ -116,6 +116,13 @@ export class Model<T extends {}> extends BaseModel<T> {
   }
 
   static async query<U extends {} = any>(query: SQLStatement): Promise<U[]> {
+    return this.namedQuery(hash(query), query)
+  }
+
+  static async namedQuery<U extends {} = any>(
+    name: string,
+    query: SQLStatement
+  ): Promise<U[]> {
     return withDatabaseMetrics(
       async () => {
         try {
@@ -125,7 +132,7 @@ export class Model<T extends {}> extends BaseModel<T> {
         }
       },
       {
-        query: hash(query),
+        query: name,
       }
     )
   }
@@ -134,6 +141,16 @@ export class Model<T extends {}> extends BaseModel<T> {
    * Execute a query and returns the number of row affected
    */
   static async rowCount(query: SQLStatement): Promise<number> {
+    return this.namedRowCount(hash(query), query)
+  }
+
+  /**
+   * Execute a query and returns the number of row affected
+   */
+  static async namedRowCount(
+    name: string,
+    query: SQLStatement
+  ): Promise<number> {
     return withDatabaseMetrics(
       async () => {
         try {
@@ -144,7 +161,7 @@ export class Model<T extends {}> extends BaseModel<T> {
         }
       },
       {
-        query: hash(query),
+        query: name,
       }
     )
   }
