@@ -1,4 +1,4 @@
-// TODO: add Docs
+// TODO(#323): remove on v6
 import { useCallback, useEffect, useState } from 'react'
 
 import SingletonListener from '../utils/dom/SingletonListener'
