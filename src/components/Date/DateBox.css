@@ -20,3 +20,9 @@
   font-weight: 600;
   color: #16141a;
 }
+
+.DateBox .DateBox__Year {
+  color: #736e7d;
+  font-size: 12px;
+  font-weight: 600;
+}
