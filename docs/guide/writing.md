@@ -65,6 +65,7 @@ For words that have multiple spellings, prefer the US English word over British 
 
 - `color` over `colour`
 - `behavior` over `behaviour`
+- `favorite` over `favourite`
 
 ### Use apps that help you edit
 
