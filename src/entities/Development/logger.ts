@@ -39,7 +39,7 @@ export class Logger {
             try {
               return Promise.resolve(subscription(message, data))
             } catch (err) {
-              Logger.write('Error broadcasting logs', {
+              Logger.write('error broadcasting logs: ' + err.message, {
                 level: 'error',
                 message,
                 data,
