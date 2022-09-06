@@ -1,7 +1,7 @@
 import bodyParser from 'body-parser'
 import expressCors from 'cors'
 import Ddos from 'ddos'
-import { Request, Response, Router } from 'express'
+import { Response, Router } from 'express'
 
 import { AuthData } from '../Auth/middleware'
 import logger from '../Development/logger'
@@ -11,6 +11,7 @@ import {
   BodyParserOptions,
   CorsOptions,
   DDosOptions,
+  Request,
   createCorsOptions,
 } from './types'
 

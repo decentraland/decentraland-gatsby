@@ -1,6 +1,5 @@
 import handle, { AsyncHandler } from '../handle'
-
-import type { Request } from 'express'
+import { Request } from '../types'
 
 export default function single<R extends Request>(handler: AsyncHandler<R>) {
   const loaders = new Map<string, Promise<any>>()

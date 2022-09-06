@@ -1,6 +1,7 @@
-import { Request, Response } from 'express'
+import { Response } from 'express'
 
 import RequestError from './error'
+import { Request } from './types'
 
 export type ParamOptions<T> = {
   validator?: (value: any) => boolean

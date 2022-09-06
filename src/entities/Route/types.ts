@@ -1,5 +1,8 @@
+import * as http from 'http'
+
 import { Router, RouterOptions } from 'express'
 
+import type * as fetch from 'node-fetch'
 export type RouterHandler = (router: Router) => void
 export type RoutesOptions = RouterOptions
 
@@ -23,6 +26,39 @@ export type BodyParserOptions = {
   json?: boolean
   urlencode?: boolean
 }
+
+export type Request = fetch.Request & {
+  method: string // or type like "CONNECT" | "DELETE" | "GET" | "HEAD" | "OPTIONS" | "PATCH" | "POST" | "PUT" | "TRACE"
+  hostname: string
+  path: string
+  baseUrl: string
+  originalUrl: string
+  connection: {
+    remoteAddress?: string
+  }
+  socket: {
+    remoteAddress?: string
+  }
+  route?: {
+    path: string
+  }
+  headers: [{ [key: string]: string }]
+  header?: any
+  body?: any
+  params?: any
+  query?: any
+  IncomingMessage: {
+    clone?: any
+    context?: any
+    redirect?: any
+    referrer?: any
+  }
+}
+
+export type NextFunction = (err?: any) => void
+/*   (deferToNext: 'router'): void
+  (deferToNext: 'route'): void
+} */
 
 export function createCorsOptions(options: CorsOptions = {}) {
   if (options.corsOrigin) {

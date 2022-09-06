@@ -1,5 +1,9 @@
 import { NextHandleFunction } from 'connect'
-import { NextFunction, Request, Response } from 'express'
+import {
+  NextFunction as NextFunctionExpress,
+  Request as RequestExpress,
+  Response,
+} from 'express'
 
 import isStream from '../../utils/stream/isStream'
 import logger from '../Development/logger'
@@ -10,6 +14,7 @@ import {
   http_request_size_bytes,
   http_requests_total,
 } from './metrics'
+import { NextFunction, Request } from './types'
 
 const DEFAULT_API_HEADERS: Record<string, string> = {
   'Content-Security-Policy': `default-src 'none'; frame-ancestors 'none'`,
@@ -169,7 +174,7 @@ export function middleware<R extends Request>(
 /** @deprecated */
 export async function useMiddlaware(
   middlaware: NextHandleFunction,
-  req: Request,
+  req: RequestExpress,
   res: Response
 ) {
   return new Promise<void>((resolve, reject) => {
