@@ -42,6 +42,11 @@ jobs:
         run: npm test -- --coverage
 
       - name: coveralls
+        uses: coverallsapp/github-action@v1.1.3
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: coveralls
         uses: coverallsapp/github-action@v1.1.2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
