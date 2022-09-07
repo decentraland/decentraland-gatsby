@@ -1,14 +1,13 @@
 import { JsonRpcProvider } from '@ethersproject/providers'
-
-import { getEnvironmentKey } from '../keys'
+import { RPC_URLS } from 'decentraland-connect/dist/connectors/NetworkConnector'
 
 import type { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 
-export default class SignerProvider extends JsonRpcProvider {
+export default class DecentralandProvider extends JsonRpcProvider {
   constructor(chainId: ChainId) {
     super(
       {
-        url: getEnvironmentKey({ chainId, type: 'https' }),
+        url: RPC_URLS[chainId],
         headers: { Referer: 'https://decentraland.org' },
       },
       chainId

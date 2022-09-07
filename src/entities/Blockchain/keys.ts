@@ -1,3 +1,4 @@
+// TODO(#323): remove on v6
 import { ChainId, getChainName } from '@dcl/schemas/dist/dapps/chain-id'
 
 import env from '../../utils/env'
@@ -7,10 +8,13 @@ import { ConnectionOptions } from './types'
 import { onceWithConnectionOptions } from './utils'
 
 const INFURA_KEYS = env('INFURA_KEYS', '')
+
+/** @deprecated */
 export const getEnvironmentKeys = once(() => {
   return INFURA_KEYS.split(',').filter(Boolean)
 })
 
+/** @deprecated */
 export function getInfuraHttp(key: string, chainId: ChainId) {
   switch (chainId) {
     case ChainId.ETHEREUM_MAINNET:
@@ -30,6 +34,7 @@ export function getInfuraHttp(key: string, chainId: ChainId) {
   }
 }
 
+/** @deprecated */
 export function getInfuraWs(key: string, chainId: ChainId) {
   switch (chainId) {
     case ChainId.ETHEREUM_MAINNET:
@@ -49,6 +54,7 @@ export function getInfuraWs(key: string, chainId: ChainId) {
   }
 }
 
+/** @deprecated */
 function getChainSubdomain(chainId: ChainId) {
   switch (chainId) {
     case ChainId.ETHEREUM_MAINNET:
@@ -70,6 +76,7 @@ function getChainSubdomain(chainId: ChainId) {
   }
 }
 
+/** @deprecated */
 const getEnvironmentKeyRoundRoby = onceWithConnectionOptions(
   ({ chainId, type }: ConnectionOptions) => {
     return roundRobin(
@@ -85,5 +92,6 @@ const getEnvironmentKeyRoundRoby = onceWithConnectionOptions(
   }
 )
 
+/** @deprecated */
 export const getEnvironmentKey = (options: ConnectionOptions) =>
   getEnvironmentKeyRoundRoby(options)()
