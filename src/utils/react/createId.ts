@@ -6,6 +6,7 @@ export type CreateIdProps = Pick<
   'id' | 'children'
 >
 
+/** @deprecated */
 export function createId(props: CreateIdProps): string | undefined {
   if (props.id) {
     return props.id

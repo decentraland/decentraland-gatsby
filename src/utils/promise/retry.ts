@@ -1,6 +1,7 @@
 // TODO(#323): remove on v6, use radash retry instead https://radash-docs.vercel.app/docs/async-retry
 import logger from '../../entities/Development/logger'
 
+/** @deprecated use radash retry instead https://radash-docs.vercel.app/docs/async-retry */
 export default async function retry<T>(
   times: number,
   fun: () => Promise<T>
