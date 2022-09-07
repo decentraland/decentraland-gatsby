@@ -4,7 +4,7 @@ import { NextFunction, Request, Response } from 'express'
 
 import logger from '../Development/logger'
 import RequestError from '../Route/error'
-import { middleware } from '../Route/handle'
+import middleware from '../Route/handle/middleware'
 
 export type AuthData = {
   auth: string | undefined
@@ -57,6 +57,7 @@ export function auth(options: AuthOptions = {}) {
   }
 }
 
+/** @deprecated */
 export function withBearerToken(tokens: string[]) {
   return middleware(async (req: Request) => {
     const authorization = req.headers.authorization
