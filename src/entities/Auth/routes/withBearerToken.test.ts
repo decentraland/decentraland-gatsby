@@ -9,12 +9,12 @@ describe('withBearerToken', () => {
   const withAuthOptional = withBearerToken({ tokens: [token], optional: true })
 
   test(`should fail if the request doesn't have an Authorization header`, async () => {
-    const request = new Request('')
+    const request = new Request('/')
     expect(async () => withAuth({ request })).rejects.toThrowError()
   })
 
   test(`should fail if the request doesn't use and Bearer autorization`, async () => {
-    const request = new Request('', {
+    const request = new Request('/', {
       headers: { authorization: 'Basic user:12345' },
     })
 
@@ -22,7 +22,7 @@ describe('withBearerToken', () => {
   })
 
   test(`should fail if the request doesn't use one of the token in params`, async () => {
-    const request = new Request('', {
+    const request = new Request('/', {
       headers: { authorization: 'Bearer ' + uid(24) },
     })
 
@@ -30,7 +30,7 @@ describe('withBearerToken', () => {
   })
 
   test(`should returns the token used on the authorization`, async () => {
-    const request = new Request('', {
+    const request = new Request('/', {
       headers: { authorization: 'Bearer ' + token },
     })
 
@@ -38,14 +38,14 @@ describe('withBearerToken', () => {
   })
 
   test(`should return null if the authentication fails but is optional`, async () => {
-    const unauthorized = new Request('')
-    const invalidAutorization = new Request('', {
+    const unauthorized = new Request('/')
+    const invalidAutorization = new Request('/', {
       headers: { authorization: 'Basic user:12345' },
     })
-    const invalidToken = new Request('', {
+    const invalidToken = new Request('/', {
       headers: { authorization: 'Bearer ' + uid(24) },
     })
-    const validToken = new Request('', {
+    const validToken = new Request('/', {
       headers: { authorization: 'Bearer ' + token },
     })
 
