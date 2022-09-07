@@ -10,6 +10,10 @@ import {
 
 import { DatabaseMetricParams, withDatabaseMetrics } from './metrics'
 
+export type OrderBy<U extends Record<string, any> = {}> = Partial<
+  Record<keyof U, 'asc' | 'desc'>
+>
+
 export const QUERY_HASHES = new Map<string, string>()
 function hash(query: SQLStatement) {
   const hash = createHash('sha1').update(query.text).digest('hex')
@@ -24,7 +28,7 @@ export class Model<T extends {}> extends BaseModel<T> {
   static getQueryNameLabel<U extends {} = any>(
     method: string,
     conditions?: PrimaryKey | Partial<U>,
-    orderBy?: Partial<U>
+    orderBy?: OrderBy<U>
   ): Partial<DatabaseMetricParams> {
     let queryNameLabel = `${this.tableName}_${method}`
 
@@ -42,29 +46,29 @@ export class Model<T extends {}> extends BaseModel<T> {
 
   static async find<U extends {} = any>(
     conditions?: Partial<U>,
-    orderBy?: Partial<U>,
+    orderBy?: OrderBy<U>,
     extra?: string
   ): Promise<U[]> {
     return withDatabaseMetrics(
-      () => super.find(conditions, orderBy, extra),
+      () => super.find(conditions, orderBy as any, extra),
       this.getQueryNameLabel('find', conditions, orderBy)
     )
   }
 
   static findOne<U extends {} = any, P extends QueryPart = any>(
     primaryKey: PrimaryKey,
-    orderBy?: Partial<P>
+    orderBy?: OrderBy<P>
   ): Promise<U | undefined>
   static findOne<U extends QueryPart = any, P extends QueryPart = any>(
     conditions: Partial<U>,
-    orderBy?: Partial<P>
+    orderBy?: OrderBy<P>
   ): Promise<U | undefined>
   static async findOne<U extends QueryPart = any, P extends QueryPart = any>(
     conditions: PrimaryKey | Partial<U>,
-    orderBy?: Partial<P>
+    orderBy?: OrderBy<P>
   ): Promise<U | undefined> {
     return withDatabaseMetrics(
-      () => super.findOne(conditions as PrimaryKey, orderBy),
+      () => super.findOne(conditions as PrimaryKey, orderBy as any),
       this.getQueryNameLabel('findOne', conditions)
     )
   }
