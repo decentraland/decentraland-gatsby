@@ -1,1 +1,1 @@
-export { Request } from 'node-fetch'
+export { Request, RequestInit, RequestInfo } from 'node-fetch'
