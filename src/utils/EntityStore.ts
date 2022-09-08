@@ -1,9 +1,7 @@
 // TODO(#323): remove on v6
 import SingletonListener from './dom/SingletonListener'
 
-/**
- * @deprecated
- */
+/** @deprecated */
 export type EntityStoreState<E extends {}> = {
   error: string | null
   loading: boolean
@@ -11,15 +9,18 @@ export type EntityStoreState<E extends {}> = {
   lists: Record<string, string[] | null>
 }
 
+/** @deprecated */
 export type EntityStoreOptions<E extends {}> = {
   identifier: (state: E) => string
   initialState: Partial<EntityStoreState<E>>
 }
 
+/** @deprecated */
 export interface EntityStoreConstructor<E extends {}> {
   new (): EntityStore<E>
 }
 
+/** @deprecated */
 export default class EntityStore<E extends {}> {
   private config: EntityStoreOptions<E> = {
     identifier: (entity: E) => (entity as any).id,

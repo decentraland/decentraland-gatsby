@@ -5,7 +5,7 @@ import { promisify } from 'util'
 
 import { Response } from 'express'
 
-import handle from '../handle'
+import handle from '../handle/handleAPI'
 
 export default function file(path: string, status = 200) {
   let reader: Promise<readonly [Buffer, string]> | null = null

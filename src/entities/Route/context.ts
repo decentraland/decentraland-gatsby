@@ -2,6 +2,7 @@ import { Request, Response } from 'express'
 
 import RequestError from './error'
 
+/** @deprecated */
 export type ParamOptions<T> = {
   validator?: (value: any) => boolean
   parser?: (value: any) => T | null
@@ -9,6 +10,7 @@ export type ParamOptions<T> = {
   defaultValue?: T
 }
 
+/** @deprecated */
 export default class Context {
   constructor(public readonly req: Request, public readonly res: Response) {}
 

@@ -5,7 +5,7 @@ import API from '../../utils/api/API'
 import Catalyst, { Avatar } from '../../utils/api/Catalyst'
 import { WithAuth } from '../Auth/middleware'
 import RequestError from '../Route/error'
-import { middleware } from '../Route/handle'
+import middleware from '../Route/handle/middleware'
 import param from '../Route/param'
 
 export type WithProfile<R extends Request = Request> = R & {

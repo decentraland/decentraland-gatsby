@@ -1,5 +1,4 @@
-import { Router, RouterOptions } from 'express'
-
+import type { Router, RouterOptions } from 'express'
 export type RouterHandler = (router: Router) => void
 export type RoutesOptions = RouterOptions
 

@@ -52,7 +52,16 @@
     },
     "moduleNameMapper": {
       "\\.(css|less|sass|scss|gif|ttf|eot|svg)$": "jest-transform-stub"
-    }
+    },
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      ".github",
+      ".husky",
+      ".storybook",
+      "docs",
+      "static",
+      "storybook-static"
+    ]
   },
   "author": "",
   "license": "MIT",
@@ -141,6 +150,8 @@
     "@types/reach__router": "^1.3.9",
     "@types/react-helmet": "^6.1.4",
     "@types/validator": "^13.6.6",
+    "@well-known-components/http-server": "^1.1.2",
+    "@well-known-components/interfaces": "^1.1.1",
     "ajv": "^8.6.3",
     "ajv-formats": "^2.1.1",
     "analytics-node": "^6.2.0",
@@ -181,6 +192,7 @@
     "pbkdf2": "^3.1.2",
     "pg-tsquery": "^8.3.0",
     "prom-client": "^14.0.1",
+    "radash": "^7.1.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",

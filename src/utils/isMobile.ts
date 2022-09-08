@@ -3,6 +3,7 @@ import getUserAgent from './dom/getUserAgent'
 
 /**
  * Detect mobile browser
+ * @deprecated use useUserAgentData instead
  * @see http://detectmobilebrowsers.com/
  */
 export default function isMobile(userAgent: string = getUserAgent()) {
