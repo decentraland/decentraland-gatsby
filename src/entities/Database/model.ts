@@ -119,6 +119,10 @@ export class Model<T extends {}> extends BaseModel<T> {
     )
   }
 
+  /**
+   * @deprecated use namedQuery instead
+   * @returns
+   */
   static async query<U extends {} = any>(query: SQLStatement): Promise<U[]> {
     return this.namedQuery(hash(query), query)
   }
@@ -142,6 +146,7 @@ export class Model<T extends {}> extends BaseModel<T> {
   }
 
   /**
+   * @deprecated use namedRowCount instead
    * Execute a query and returns the number of row affected
    */
   static async rowCount(query: SQLStatement): Promise<number> {
