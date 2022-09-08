@@ -1,5 +1,5 @@
 import { Request, RequestInit } from '../request/Request'
-import Context from './Context'
+import { FullContext } from './Context'
 
 export type RequestContextInit = Omit<RequestInit, 'headers'> & {
   // query?: URLSearchParams | string | Record<string, string | ReadonlyArray<string>> | Iterable<[string, string]> | ReadonlyArray<[string, string]>
@@ -8,7 +8,7 @@ export type RequestContextInit = Omit<RequestInit, 'headers'> & {
 
 export default class RequestContext<
   Params extends Record<string, string> = {}
-> extends Context<Params> {
+> extends FullContext<Params> {
   constructor(params: Params, init: RequestContextInit = {}) {
     super()
     this.params = params

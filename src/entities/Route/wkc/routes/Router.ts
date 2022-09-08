@@ -13,11 +13,14 @@ import type { IHttpServerComponent } from '@well-known-components/interfaces/dis
 
 export { JSONSchemaType }
 
+export type MomorizableHandler = (
+  ctx: Context<any>,
+  ...args: any[]
+) => Promise<any>
 export type Handler<
   Params extends {} = {},
   ReturnType = Response
 > = IMiddlewareAdapterHandler<Context<Params>, ReturnType>
-
 export type RouterOptions = express.RouterOptions
 
 export default class Router {
@@ -71,12 +74,7 @@ export default class Router {
    * Wrap a request handle with memo to get a function back that automagically
    * returns values that have already been calculated for the same request.
    */
-  static memo<
-    H extends Handler<Record<string, string>, any> = Handler<
-      Record<string, string>,
-      any
-    >
-  >(handle: H): H {
+  static memo<H extends MomorizableHandler>(handle: H): H {
     const key = Symbol('@memo')
     return async function (
       ctx: Context & { [key]: Response },

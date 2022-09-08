@@ -1,14 +1,13 @@
 import { getRequestFromNodeMessage } from '@well-known-components/http-server/dist/logic'
 
-import Request from './Context'
+import { FullContext } from './Context'
 
 import type { IHttpServerComponent } from '@well-known-components/interfaces/dist/components/http-server'
 import type * as express from 'express'
 
-export default class ExpressContext<P extends {} = {}> extends Request<P> {
+export default class ExpressContext<P extends {} = {}> extends FullContext<P> {
   constructor(request: express.Request) {
     super()
-
     this.url = new URL(
       `${request.protocol}://${request.hostname}${request.originalUrl}`
     )

@@ -2,7 +2,7 @@ import type { IHttpServerComponent } from '@well-known-components/interfaces/dis
 import type { Query } from 'express-serve-static-core'
 import type { IncomingHttpHeaders } from 'http'
 
-export default class Context<P extends {} = {}> {
+export class FullContext<P extends Record<string, string> = {}> {
   url: URL
 
   request: IHttpServerComponent.IRequest
@@ -63,3 +63,9 @@ export default class Context<P extends {} = {}> {
 
   // static from
 }
+
+export type Context<
+  P extends Record<string, string> = {},
+  K extends keyof FullContext = keyof FullContext
+> = Pick<FullContext<P>, K>
+export default Context
