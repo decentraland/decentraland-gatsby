@@ -6,6 +6,8 @@ import withBearerToken from './withBearerToken'
 const token = uid(24)
 const withAuth = withBearerToken({ tokens: [token] })
 const withAuthOptional = withBearerToken({ tokens: [token], optional: true })
+const withEmptyAuth = withBearerToken({ tokens: [] })
+const withEmptyAuthOptional = withBearerToken({ tokens: [], optional: true })
 
 test(`should fail if the request doesn't have an Authorization header`, async () => {
   const request = new Request('/')
@@ -52,4 +54,40 @@ test(`should return null if the authentication fails but is optional`, async () 
   expect(await withAuthOptional({ request: invalidAutorization })).toBe(null)
   expect(await withAuthOptional({ request: invalidToken })).toBe(null)
   expect(await withAuthOptional({ request: validToken })).toBe(token)
+})
+
+test(`should always fails if tokens is empty`, async () => {
+  const unauthorized = new Request('/')
+  const invalidAutorization = new Request('/', {
+    headers: { authorization: 'Basic user:12345' },
+  })
+  const invalidToken = new Request('/', {
+    headers: { authorization: 'Bearer ' + uid(24) },
+  })
+
+  expect(async () =>
+    withEmptyAuth({ request: unauthorized })
+  ).rejects.toThrowError()
+  expect(async () =>
+    withEmptyAuth({ request: invalidAutorization })
+  ).rejects.toThrowError()
+  expect(async () =>
+    withEmptyAuth({ request: invalidToken })
+  ).rejects.toThrowError()
+})
+
+test(`should always returns null if tokens is empty but is optional`, async () => {
+  const unauthorized = new Request('/')
+  const invalidAutorization = new Request('/', {
+    headers: { authorization: 'Basic user:12345' },
+  })
+  const invalidToken = new Request('/', {
+    headers: { authorization: 'Bearer ' + uid(24) },
+  })
+
+  expect(await withEmptyAuthOptional({ request: unauthorized })).toBe(null)
+  expect(await withEmptyAuthOptional({ request: invalidAutorization })).toBe(
+    null
+  )
+  expect(await withEmptyAuthOptional({ request: invalidToken })).toBe(null)
 })

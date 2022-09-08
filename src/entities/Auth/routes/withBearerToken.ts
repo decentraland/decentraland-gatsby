@@ -25,7 +25,7 @@ export function withBearerToken(
 ): (ctx: Pick<Context, 'request'>) => Promise<string | null>
 export function withBearerToken(options: WithBearerTokenOptions = {}) {
   return Router.memo(async function (ctx: Pick<Context, 'request'>) {
-    if (!options.tokens) {
+    if (!options.tokens || options.tokens.length === 0) {
       if (options.optional) {
         return null
       }
