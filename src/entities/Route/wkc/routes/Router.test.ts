@@ -13,15 +13,14 @@ describe(`Router.memo`, () => {
 
     const value1 = await memorized(request1)
     const value2 = await memorized(request1)
+    expect(fn.mock.calls.length).toBe(1)
+    expect(value1).toBe(value2)
 
     const value3 = await memorized(request2)
     const value4 = await memorized(request2)
-
-    expect(value1).toBe(value2)
+    expect(fn.mock.calls.length).toBe(2)
     expect(value1).not.toBe(value3)
     expect(value3).toBe(value4)
-
-    expect(fn.mock.calls.length).toBe(2)
   })
 })
 
@@ -42,7 +41,3 @@ describe(`Router.validator`, () => {
     expect(await validate('123')).toBe('123')
   })
 })
-
-// describe(`Router`, () => {
-
-// })
