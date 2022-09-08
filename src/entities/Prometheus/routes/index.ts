@@ -14,7 +14,7 @@ export default routes((router) => {
 })
 
 const auth = withPrometheusToken()
-export async function getMetrics(ctx: Context) {
+export async function getMetrics(ctx: Pick<Context, 'request'>) {
   await auth(ctx)
   const body = await PROMETHEUS_REGISTRY.metrics()
   return new ContentTypeResponse(body, register.contentType)
