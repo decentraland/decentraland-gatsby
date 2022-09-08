@@ -449,13 +449,16 @@ export default class Response {
    * @param target The target response to copy to.
    * @param source The source response from which to copy properties.
    */
-  static assign(target: Response, source: Response): Response {
+  static assign(target: Response, ...sources: Response[]): Response {
     const targetHeaders = target.headers
-    const sourceHeaders = source.headers
-    Object.assign(target, source)
 
-    if (targetHeaders && sourceHeaders) {
-      target.headers = Object.assign(targetHeaders, sourceHeaders)
+    for (const source of sources) {
+      const sourceHeaders = source.headers
+      Object.assign(target, source)
+
+      if (targetHeaders && sourceHeaders) {
+        target.headers = Object.assign(targetHeaders, sourceHeaders)
+      }
     }
 
     return target
