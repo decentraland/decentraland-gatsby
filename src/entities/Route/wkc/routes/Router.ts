@@ -11,9 +11,7 @@ import { route } from './utils'
 import type { IMiddlewareAdapterHandler } from '@well-known-components/interfaces/dist/components/base-component'
 import type { IHttpServerComponent } from '@well-known-components/interfaces/dist/components/http-server'
 
-export type SimpleHandler<Params extends {} = {}, ReturnType = Response> = (
-  ctx: Context<Params>
-) => Promise<ReturnType>
+export { JSONSchemaType }
 export type Handler<
   Params extends {} = {},
   ReturnType = Response
@@ -26,7 +24,10 @@ export default class Router {
    * Creates an ajv validator to that can be call inside a router
    * and will automatically exist the execution if fails
    */
-  static validator<Result>(schema: JSONSchemaType<any>, ajv: Ajv = defaultAjv) {
+  static validator<Result = any>(
+    schema: JSONSchemaType<Result>,
+    ajv: Ajv = defaultAjv
+  ) {
     const getValidator = memo(() => ajv.compile(schema))
     return async function (data: any): Promise<Result> {
       const validator = getValidator()
