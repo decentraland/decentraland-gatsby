@@ -12,6 +12,7 @@ import type { IMiddlewareAdapterHandler } from '@well-known-components/interface
 import type { IHttpServerComponent } from '@well-known-components/interfaces/dist/components/http-server'
 
 export { JSONSchemaType }
+
 export type Handler<
   Params extends {} = {},
   ReturnType = Response
@@ -70,7 +71,12 @@ export default class Router {
    * Wrap a request handle with memo to get a function back that automagically
    * returns values that have already been calculated for the same request.
    */
-  static memo<H extends Handler<{}, any> = Handler<{}, any>>(handle: H): H {
+  static memo<
+    H extends Handler<Record<string, string>, any> = Handler<
+      Record<string, string>,
+      any
+    >
+  >(handle: H): H {
     const key = Symbol('@memo')
     return async function (
       ctx: Context & { [key]: Response },
