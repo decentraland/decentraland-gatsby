@@ -1,7 +1,7 @@
 import Context from '../../Route/wkc/context/Context'
 import ErrorResponse from '../../Route/wkc/response/ErrorResponse'
 import Response from '../../Route/wkc/response/Response'
-import Router, { SimpleHandler } from '../../Route/wkc/routes/Router'
+import Router from '../../Route/wkc/routes/Router'
 
 export type WithBearerTokenOptions = {
   tokens?: string[]
