@@ -1,5 +1,6 @@
 import Ajv, { JSONSchemaType } from 'ajv'
 import * as express from 'express'
+import { memo } from 'radash/dist/curry'
 
 import defaultAjv from '../../../Schema/index'
 import Context from '../context/Context'
@@ -26,8 +27,9 @@ export default class Router {
    * and will automatically exist the execution if fails
    */
   static validator<Result>(schema: JSONSchemaType<any>, ajv: Ajv = defaultAjv) {
-    const validator = ajv.compile(schema)
-    return function (data: Record<string, any> = {}): Result {
+    const getValidator = memo(() => ajv.compile(schema))
+    return async function (data: any): Promise<Result> {
+      const validator = getValidator()
       if (!validator(data) && validator.errors && validator.errors.length > 0) {
         const messages = validator.errors
           .map((error) => {
@@ -50,7 +52,7 @@ export default class Router {
 
         throw new ErrorResponse(
           Response.BadRequest,
-          'Invalid data was sent to the server',
+          'Error validating input:\n- ' + messages.join('\n- '),
           {
             messages,
             body: data,
