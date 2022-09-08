@@ -52,7 +52,16 @@
     },
     "moduleNameMapper": {
       "\\.(css|less|sass|scss|gif|ttf|eot|svg)$": "jest-transform-stub"
-    }
+    },
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      ".github",
+      ".husky",
+      ".storybook",
+      "docs",
+      "static",
+      "storybook-static"
+    ]
   },
   "author": "",
   "license": "MIT",
