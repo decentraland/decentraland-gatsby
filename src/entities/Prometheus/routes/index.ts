@@ -4,7 +4,7 @@ import Context from '../../Route/wkc/context/Context'
 import ContentTypeResponse from '../../Route/wkc/response/ContentTypeResponse'
 import routes from '../../Route/wkc/routes'
 import { registry } from '../metrics'
-import { withPrometheusToken } from './withPrometheusToken'
+import withPrometheusToken from './withPrometheusToken'
 
 const PROMETHEUS_REGISTRIES = [registry, register]
 let PROMETHEUS_REGISTRY = Registry.merge(PROMETHEUS_REGISTRIES)
