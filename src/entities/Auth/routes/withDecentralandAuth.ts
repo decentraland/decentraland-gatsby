@@ -18,15 +18,13 @@ export type WithDecentralandAuthHandler<D> = (
   ctx: Context<{}> | Pick<WithAuth, 'auth' | 'authMetadata' | 'app'>
 ) => Promise<D>
 
-export function withDecentralandAuth(
+function withDecentralandAuth(
   options?: { optional?: false } & VerifyAuthChainHeadersOptions
 ): WithDecentralandAuthHandler<DecentralandSignatureData>
-export function withDecentralandAuth(
+function withDecentralandAuth(
   options: { optional: true } & VerifyAuthChainHeadersOptions
 ): WithDecentralandAuthHandler<DecentralandSignatureData | null>
-export function withDecentralandAuth(
-  options: WithDecentralandAuthOptions = {}
-) {
+function withDecentralandAuth(options: WithDecentralandAuthOptions = {}) {
   return Router.memo(
     async (
       ctx: Context<{}> | Pick<WithAuth, 'auth' | 'authMetadata' | 'app'>

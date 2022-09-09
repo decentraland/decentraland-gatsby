@@ -12,18 +12,18 @@ export type WithBearerTokenOptions = {
  * Creates a request handler that will fails if the request dosn't have
  * a bearer token that match one of the tokens received as param
  */
-export function withBearerToken(options?: {
+function withBearerToken(options?: {
   optional?: false
   tokens?: string[]
 }): (ctx: Pick<Context, 'request'>) => Promise<string>
-export function withBearerToken(options?: {
+function withBearerToken(options?: {
   optional: true
   tokens?: string[]
 }): (ctx: Pick<Context, 'request'>) => Promise<string | null>
-export function withBearerToken(
+function withBearerToken(
   options?: WithBearerTokenOptions
 ): (ctx: Pick<Context, 'request'>) => Promise<string | null>
-export function withBearerToken(options: WithBearerTokenOptions = {}) {
+function withBearerToken(options: WithBearerTokenOptions = {}) {
   return Router.memo(async function (ctx: Pick<Context, 'request'>) {
     if (!options.tokens || options.tokens.length === 0) {
       if (options.optional) {

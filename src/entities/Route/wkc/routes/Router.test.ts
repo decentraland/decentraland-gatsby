@@ -4,7 +4,7 @@ import Router from './Router'
 
 describe(`Router.memo`, () => {
   test(`should call the handle only once per request`, async () => {
-    // eslint-disable-next-line no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const fn = jest.fn(async (_ctx: {}) => uid(24))
     const memorized = Router.memo(fn)
 

@@ -64,8 +64,9 @@ export class FullContext<P extends Record<string, string> = {}> {
   // static from
 }
 
-export type Context<
+type Context<
   P extends Record<string, string> = {},
   K extends keyof FullContext = keyof FullContext
 > = Pick<FullContext<P>, K>
+
 export default Context
