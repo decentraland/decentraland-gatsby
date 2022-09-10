@@ -1,15 +1,23 @@
 import Response from './Response'
 
-export default class ApiResponse<Data = any> implements Response {
+export type ApiResponseBody<
+  Data = any,
+  Extra extends Record<string, any> = {}
+> = {
+  ok: boolean
+  data: Data
+} & Extra
+
+export default class ApiResponse<
+  Data = any,
+  Extra extends Record<string, any> = {}
+> implements Response
+{
   headers: Record<string, string>
 
-  body: {
-    ok: boolean
-    data: Data
-    [key: string]: any
-  }
+  body: ApiResponseBody<Data, Extra>
 
-  constructor(data: Data, extra: Record<string, any> = {}) {
+  constructor(data: Data, extra?: Extra) {
     this.headers = {
       'content-type': 'application/json',
     }
@@ -18,6 +26,6 @@ export default class ApiResponse<Data = any> implements Response {
       ...extra,
       ok: true,
       data,
-    }
+    } as ApiResponseBody<Data, Extra>
   }
 }
