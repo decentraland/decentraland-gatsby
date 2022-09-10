@@ -1,4 +1,3 @@
-import Ajv, { JSONSchemaType } from 'ajv'
 import * as express from 'express'
 import { memo } from 'radash/dist/curry'
 
@@ -10,6 +9,7 @@ import { route } from './utils'
 
 import type { IMiddlewareAdapterHandler } from '@well-known-components/interfaces/dist/components/base-component'
 import type { IHttpServerComponent } from '@well-known-components/interfaces/dist/components/http-server'
+import type { default as Ajv, JSONSchemaType } from 'ajv'
 
 export { JSONSchemaType }
 

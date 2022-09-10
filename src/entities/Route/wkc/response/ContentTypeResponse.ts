@@ -1,6 +1,8 @@
-import Response from './Response'
+import Response, { ResponseBody } from './Response'
 
-export default class ContentTypeResponse<Data = any> implements Response {
+export default class ContentTypeResponse<Data extends ResponseBody>
+  implements Response
+{
   headers: Record<string, string>
 
   body: Data

@@ -1,9 +1,15 @@
 import type { IHttpServerComponent } from '@well-known-components/interfaces/dist/components/http-server'
 
+export type ResponseBody =
+  | IHttpServerComponent.JsonBody
+  | Uint8Array
+  | Buffer
+  | string
+
 export default class Response {
   status?: number
   statusText?: string
-  body?: IHttpServerComponent.JsonBody | Uint8Array | Buffer | string
+  body?: ResponseBody
   headers?: Record<string, string>
 
   /**
