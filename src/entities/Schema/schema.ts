@@ -71,7 +71,7 @@ export function params<
   Properties extends Record<string, JSONSchemaType<string>>
 >(properties: Properties) {
   return {
-    type: 'object',
+    type: 'object' as const,
     required: Object.keys(properties) as (keyof Properties)[],
     additionalItems: true,
     properties,
