@@ -1,5 +1,4 @@
 import type { IHttpServerComponent } from '@well-known-components/interfaces/dist/components/http-server'
-import type { JSONSchemaType } from 'ajv/dist/types/json-schema'
 
 export type ResponseBody =
   | IHttpServerComponent.JsonBody
