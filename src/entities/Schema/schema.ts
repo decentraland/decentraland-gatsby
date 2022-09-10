@@ -73,7 +73,7 @@ export function params<
   return {
     type: 'object' as const,
     required: Object.keys(properties) as (keyof Properties)[],
-    additionalItems: true,
+    additionalProperties: true,
     properties,
   }
 }
