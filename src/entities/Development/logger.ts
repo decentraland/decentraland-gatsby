@@ -51,10 +51,14 @@ export class Logger {
     })
   }
 
-  constructor(private data: Record<string, any> = {}) {}
+  #data: Record<string, any>
+
+  constructor(data: Record<string, any> = {}) {
+    this.#data = data
+  }
 
   extend(data: Record<string, any> = {}) {
-    return new Logger({ ...this.data, ...data })
+    return new Logger({ ...this.#data, ...data })
   }
 
   subscribe(level: LoggerLevel, callback: LoggerSubscription) {
@@ -68,7 +72,7 @@ export class Logger {
   }
 
   private write(message: string, data: LoggerData) {
-    const extended = { ...data, ...this.data }
+    const extended = { ...data, ...this.#data }
     Logger.write(message, extended)
     Logger.broadcast(message, extended)
   }
