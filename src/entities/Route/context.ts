@@ -12,7 +12,12 @@ export type ParamOptions<T> = {
 
 /** @deprecated */
 export default class Context {
-  constructor(public readonly req: Request, public readonly res: Response) {}
+  readonly req: Request
+  readonly res: Response
+  constructor(req: Request, res: Response) {
+    this.req = req
+    this.res = res
+  }
 
   header(name: string, defaultValue: string | undefined = undefined) {
     return this.req.header(name) ?? defaultValue
