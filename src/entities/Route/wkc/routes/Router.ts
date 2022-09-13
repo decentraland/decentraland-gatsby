@@ -95,75 +95,90 @@ export default class Router {
     this.#router = express.Router(options)
   }
 
+  #add<Path extends string>(
+    method:
+      | 'all'
+      | 'get'
+      | 'post'
+      | 'put'
+      | 'delete'
+      | 'patch'
+      | 'options'
+      | 'head'
+      | 'connect'
+      | 'trace',
+    path: Path,
+    handler: Handler<IHttpServerComponent.ParseUrlParams<Path>>
+  ) {
+    if (typeof handler !== 'function') {
+      throw new Error(
+        `Handler for ${method} ${path} is not a function (is a ${typeof handler})`
+      )
+    }
+
+    this.#router[method](path, route(handler))
+    return this
+  }
+
   all<Path extends string>(
     path: Path,
     handler: Handler<IHttpServerComponent.ParseUrlParams<Path>>
   ) {
-    this.#router.all(path, route(handler))
-    return this
+    return this.#add('all', path, handler)
   }
   get<Path extends string>(
     path: Path,
     handler: Handler<IHttpServerComponent.ParseUrlParams<Path>>
   ) {
-    this.#router.get(path, route(handler))
-    return this
+    return this.#add('get', path, handler)
   }
   post<Path extends string>(
     path: Path,
     handler: Handler<IHttpServerComponent.ParseUrlParams<Path>>
   ) {
-    this.#router.post(path, route(handler))
-    return this
+    return this.#add('post', path, handler)
   }
   put<Path extends string>(
     path: Path,
     handler: Handler<IHttpServerComponent.ParseUrlParams<Path>>
   ) {
-    this.#router.put(path, route(handler))
-    return this
+    return this.#add('put', path, handler)
   }
   delete<Path extends string>(
     path: Path,
     handler: Handler<IHttpServerComponent.ParseUrlParams<Path>>
   ) {
-    this.#router.delete(path, route(handler))
-    return this
+    return this.#add('delete', path, handler)
   }
   patch<Path extends string>(
     path: Path,
     handler: Handler<IHttpServerComponent.ParseUrlParams<Path>>
   ) {
-    this.#router.patch(path, route(handler))
-    return this
+    return this.#add('patch', path, handler)
   }
   options<Path extends string>(
     path: Path,
     handler: Handler<IHttpServerComponent.ParseUrlParams<Path>>
   ) {
-    this.#router.options(path, route(handler))
-    return this
+    return this.#add('options', path, handler)
   }
   head<Path extends string>(
     path: Path,
     handler: Handler<IHttpServerComponent.ParseUrlParams<Path>>
   ) {
-    this.#router.head(path, route(handler))
-    return this
+    return this.#add('head', path, handler)
   }
   connect<Path extends string>(
     path: Path,
     handler: Handler<IHttpServerComponent.ParseUrlParams<Path>>
   ) {
-    this.#router.connect(path, route(handler))
-    return this
+    return this.#add('connect', path, handler)
   }
   trace<Path extends string>(
     path: Path,
     handler: Handler<IHttpServerComponent.ParseUrlParams<Path>>
   ) {
-    this.#router.trace(path, route(handler))
-    return this
+    return this.#add('trace', path, handler)
   }
 
   getRouter() {
