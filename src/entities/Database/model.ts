@@ -20,6 +20,8 @@ import {
   values,
 } from './utils/sql'
 
+import type { QueryResult } from 'pg'
+
 export type OrderBy<U extends Record<string, any> = {}> = Partial<
   Record<keyof U, 'asc' | 'desc'>
 >
@@ -270,7 +272,7 @@ export class Model<T extends {}> extends BaseModel<T> {
 
   static async delete<U extends QueryPart = any>(
     conditions: Partial<U>
-  ): Promise<any> {
+  ): Promise<QueryResult<never>> {
     return withDatabaseMetrics(
       () => super.delete(conditions),
       this.getLabels('delete', conditions)
