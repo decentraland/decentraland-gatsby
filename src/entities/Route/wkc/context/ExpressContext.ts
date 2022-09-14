@@ -13,7 +13,7 @@ export default class ExpressContext<P extends {} = {}> extends FullContext<P> {
       `${request.protocol}://${request.hostname}${request.originalUrl}`
     )
     this.request = new Request(
-      this.url,
+      this.url.toString(),
       getRequestFromNodeMessage(request, request.hostname, request.protocol)
     )
 
