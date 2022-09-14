@@ -1498,10 +1498,34 @@ exports[`Storyshots Components/Image/ImgFixed sizes 1`] = `
 </div>
 `;
 
+exports[`Storyshots Components/Modal/FilterContainerModal Full 1`] = `
+<div>
+  <div
+    id="modal_container_0"
+  />
+</div>
+`;
+
+exports[`Storyshots Components/Modal/FilterContainerModal Open 1`] = `
+<div>
+  <div
+    id="modal_container_1"
+  />
+</div>
+`;
+
+exports[`Storyshots Components/Modal/FilterContainerModal Open with filters 1`] = `
+<div>
+  <div
+    id="modal_container_2"
+  />
+</div>
+`;
+
 exports[`Storyshots Components/Modal/WalletSelectorModal All providers 1`] = `
 <div>
   <div
-    id="ID0"
+    id="modal_container_3"
   />
 </div>
 `;
@@ -1509,7 +1533,7 @@ exports[`Storyshots Components/Modal/WalletSelectorModal All providers 1`] = `
 exports[`Storyshots Components/Modal/WalletSelectorModal Detected providers 1`] = `
 <div>
   <div
-    id="ID1"
+    id="modal_container_4"
   />
 </div>
 `;
@@ -1517,7 +1541,7 @@ exports[`Storyshots Components/Modal/WalletSelectorModal Detected providers 1`] 
 exports[`Storyshots Components/Modal/WalletSelectorModal Error 1`] = `
 <div>
   <div
-    id="ID2"
+    id="modal_container_5"
   />
 </div>
 `;
@@ -1525,7 +1549,7 @@ exports[`Storyshots Components/Modal/WalletSelectorModal Error 1`] = `
 exports[`Storyshots Components/Modal/WalletSelectorModal Loading 1`] = `
 <div>
   <div
-    id="ID3"
+    id="modal_container_6"
   />
 </div>
 `;
@@ -1533,7 +1557,7 @@ exports[`Storyshots Components/Modal/WalletSelectorModal Loading 1`] = `
 exports[`Storyshots Components/Modal/WalletSelectorModal Metamask as link 1`] = `
 <div>
   <div
-    id="ID4"
+    id="modal_container_7"
   />
 </div>
 `;
@@ -1541,7 +1565,7 @@ exports[`Storyshots Components/Modal/WalletSelectorModal Metamask as link 1`] = 
 exports[`Storyshots Components/Modal/WrongNetworkModal Multi Network Support 1`] = `
 <div>
   <div
-    id="ID0"
+    id="modal_container_8"
   />
 </div>
 `;
@@ -1549,7 +1573,7 @@ exports[`Storyshots Components/Modal/WrongNetworkModal Multi Network Support 1`]
 exports[`Storyshots Components/Modal/WrongNetworkModal Switch Multi Network 1`] = `
 <div>
   <div
-    id="ID1"
+    id="modal_container_9"
   />
 </div>
 `;
@@ -1557,7 +1581,7 @@ exports[`Storyshots Components/Modal/WrongNetworkModal Switch Multi Network 1`] 
 exports[`Storyshots Components/Modal/WrongNetworkModal Switch Network 1`] = `
 <div>
   <div
-    id="ID2"
+    id="modal_container_10"
   />
 </div>
 `;
@@ -1565,7 +1589,7 @@ exports[`Storyshots Components/Modal/WrongNetworkModal Switch Network 1`] = `
 exports[`Storyshots Components/Modal/WrongNetworkModal Wrong Network 1`] = `
 <div>
   <div
-    id="ID3"
+    id="modal_container_11"
   />
 </div>
 `;

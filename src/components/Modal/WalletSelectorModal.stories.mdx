@@ -3,36 +3,15 @@ import { useState, useMemo, useEffect, useRef } from 'react'
 import { Source, ArgsTable } from '@storybook/components'
 import { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
-import IntlStorybookProvider from '../Storybook/IntlStorybookProvider'
-import Base from './WalletSelectorModal.tsx'
-import './Modal.stories.css'
+import ModalContainer from '../Storybook/ModalContainer'
+import WalletSelectorModal from './WalletSelectorModal'
 
 <Meta title="Components/Modal/WalletSelectorModal" />
 
-export let ID = 0
-export function getID() {
-  return ID++
-}
-
-export function WalletSelectorModal(props) {
-  const [id] = useState(() => 'ID' + getID())
-  const [mountNode, setMountNode] = useState()
-  useEffect(() => {
-    setMountNode(document.getElementById(id))
-  }, [id])
-  return (
-    <IntlStorybookProvider>
-      <div>
-        <div id={id} />
-        {mountNode && <Base {...props} mountNode={mountNode} />}
-      </div>
-    </IntlStorybookProvider>
-  )
-}
-
 <Canvas isExpanded>
   <Story name="All providers">
-    <WalletSelectorModal
+    <ModalContainer
+      Modal={WalletSelectorModal}
       open
       availableProviders={[
         ProviderType.INJECTED,
@@ -47,7 +26,8 @@ export function WalletSelectorModal(props) {
 
 <Canvas>
   <Story name="Metamask as link">
-    <WalletSelectorModal
+    <ModalContainer
+      Modal={WalletSelectorModal}
       open
       availableProviders={[
         ProviderType.FORTMATIC,
@@ -61,19 +41,23 @@ export function WalletSelectorModal(props) {
 
 <Canvas>
   <Story name="Detected providers">
-    <WalletSelectorModal open />
+    <ModalContainer Modal={WalletSelectorModal} open />
   </Story>
 </Canvas>
 
 <Canvas>
   <Story name="Loading">
-    <WalletSelectorModal open loading={true} />
+    <ModalContainer Modal={WalletSelectorModal} open loading={true} />
   </Story>
 </Canvas>
 
 <Canvas>
   <Story name="Error">
-    <WalletSelectorModal open error={'Could not connect wallet'} />
+    <ModalContainer
+      Modal={WalletSelectorModal}
+      open
+      error={'Could not connect wallet'}
+    />
   </Story>
 </Canvas>
 

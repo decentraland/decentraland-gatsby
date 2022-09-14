@@ -1,0 +1,139 @@
+import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
+import { useState, useMemo, useEffect, useRef } from 'react'
+import { Source, ArgsTable } from '@storybook/components'
+import { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs'
+import Icon from 'semantic-ui-react/dist/commonjs/elements/Icon/Icon'
+import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
+import { ToggleBox } from 'decentraland-ui/dist/components/ToggleBox/ToggleBox'
+import ModalContainer from '../Storybook/ModalContainer'
+import FilterContainerModal, {
+  FilterContainerMobileModal,
+} from './FilterContainerModal'
+
+<Meta title="Components/Modal/FilterContainerModal" />
+
+<Canvas isExpanded>
+  <Story name="Open">
+    <ModalContainer Modal={FilterContainerMobileModal} title="Filters" open />
+  </Story>
+</Canvas>
+
+<Canvas isExpanded>
+  <Story name="Open with filters">
+    <ModalContainer Modal={FilterContainerMobileModal} title="Filters" open>
+      <ToggleBox
+        header="Options"
+        items={[
+          {
+            key: 1,
+            value: 1,
+            title: 'Option #1',
+            description: 'This is the option 1',
+          },
+          {
+            key: 2,
+            value: 2,
+            title: 'Option #2',
+            description: 'This is the option 2',
+          },
+          {
+            key: 3,
+            value: 3,
+            title: 'Option #3',
+            description: 'This is the option 3',
+          },
+          {
+            key: 4,
+            value: 4,
+            title: 'Option #4',
+            description: 'This is the option 4',
+          },
+          {
+            key: 5,
+            value: 5,
+            title: 'Option #5',
+            description: 'This is the option 5',
+          },
+          {
+            key: 6,
+            value: 6,
+            title: 'Option #6',
+            description: 'This is the option 6',
+          },
+          {
+            key: 7,
+            value: 7,
+            title: 'Option #7',
+            description: 'This is the option 7',
+          },
+        ]}
+      />
+    </ModalContainer>
+  </Story>
+</Canvas>
+
+<Canvas isExpanded>
+  <Story name="Full">
+    <ModalContainer
+      Modal={FilterContainerModal}
+      modal
+      title="Filters"
+      action={
+        <>
+          <Icon name="filter" /> sort and filter
+        </>
+      }
+      open
+    >
+      <ToggleBox
+        header="Options"
+        items={[
+          {
+            key: 1,
+            value: 1,
+            title: 'Option #1',
+            description: 'This is the option 1',
+          },
+          {
+            key: 2,
+            value: 2,
+            title: 'Option #2',
+            description: 'This is the option 2',
+          },
+          {
+            key: 3,
+            value: 3,
+            title: 'Option #3',
+            description: 'This is the option 3',
+          },
+          {
+            key: 4,
+            value: 4,
+            title: 'Option #4',
+            description: 'This is the option 4',
+          },
+          {
+            key: 5,
+            value: 5,
+            title: 'Option #5',
+            description: 'This is the option 5',
+          },
+          {
+            key: 6,
+            value: 6,
+            title: 'Option #6',
+            description: 'This is the option 6',
+          },
+          {
+            key: 7,
+            value: 7,
+            title: 'Option #7',
+            description: 'This is the option 7',
+          },
+        ]}
+      />
+    </ModalContainer>
+  </Story>
+</Canvas>
+
+<Divider size="small" />
