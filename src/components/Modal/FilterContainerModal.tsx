@@ -6,25 +6,27 @@ import { useMobileMediaQuery } from 'decentraland-ui/dist/components/Media/Media
 import { Modal } from 'decentraland-ui/dist/components/Modal/Modal'
 import Icon from 'semantic-ui-react/dist/commonjs/elements/Icon/Icon'
 
+import useFormatMessage from '../../hooks/useFormatMessage'
 import TokenList from '../../utils/dom/TokenList'
 
 import './FilterContainerModal.css'
 
-export type FilterContainerBaseProps = {
+export type FilterContainerBaseModalProps = {
   className?: string
 }
 
-export type FilterContainerProps = FilterContainerBaseProps &
-  FilterContainerMobileProps & {
+export type FilterContainerModalProps = FilterContainerBaseModalProps &
+  FilterContainerMobileModalProps & {
     action?: React.ReactNode
     modal?: boolean
   }
 
-export default React.memo(function FilterContainer({
+export default React.memo(function FilterContainerModal({
   action,
   modal,
   ...props
-}: FilterContainerProps) {
+}: FilterContainerModalProps) {
+  const l = useFormatMessage()
   const [open, setOpen] = useState(false)
   const handleOpen = useCallback(() => setOpen(true), [])
   const handleClose = useCallback(() => setOpen(false), [])
@@ -45,7 +47,7 @@ export default React.memo(function FilterContainer({
           secondary
           onClick={handleOpen}
         >
-          {action || 'Filters'}
+          {action || l('@growth.WalletSelector.action')}
         </Button>
       )}
       {asModal && (
@@ -61,7 +63,7 @@ export default React.memo(function FilterContainer({
   )
 })
 
-export type FilterContainerMobileProps = FilterContainerBaseProps & {
+export type FilterContainerMobileModalProps = FilterContainerBaseModalProps & {
   open?: boolean
   title?: React.ReactNode
   onClose?: (event: React.SyntheticEvent<any>) => void
@@ -75,12 +77,14 @@ export const FilterContainerMobileModal = React.memo(
     onClear,
     title,
     ...props
-  }: FilterContainerMobileProps) {
+  }: FilterContainerMobileModalProps) {
+    const l = useFormatMessage()
     return (
       <Modal {...props} className={TokenList.join(['filter-container__modal'])}>
         <Modal.Header>
-          {typeof title === 'string' && <Header>{title}</Header>}
-          {typeof title !== 'string' && title}
+          {!title && <Header>{l('@growth.WalletSelector.title')}</Header>}
+          {!!title && typeof title === 'string' && <Header>{title}</Header>}
+          {!!title && typeof title !== 'string' && title}
           <Button icon onClick={props.onClose}>
             <Icon name="close" />
           </Button>
@@ -88,10 +92,10 @@ export const FilterContainerMobileModal = React.memo(
         <Modal.Content>{children}</Modal.Content>
         <Modal.Actions>
           <Button secondary onClick={onClear}>
-            CLEAR ALL
+            {l('@growth.WalletSelector.clear')}
           </Button>
           <Button primary onClick={props.onClose}>
-            DONE
+            {l('@growth.WalletSelector.done')}
           </Button>
         </Modal.Actions>
       </Modal>

@@ -1,5 +1,11 @@
 {
   "@growth": {
+    "FilterContainerModal": {
+      "action": "filter",
+      "title": "filters",
+      "done": "done",
+      "clear": "clear all"
+    },
     "WalletSelector": {
       "title": "Sign In",
       "subtitle": "Choose a method to connect",
