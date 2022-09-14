@@ -14,8 +14,13 @@ export type WithDecentralandAuthOptions = VerifyAuthChainHeadersOptions & {
   optional?: boolean
 }
 
+export type DecentralandAuthData = {
+  address: string
+  metadata: Record<string, any>
+}
+
 export type WithDecentralandAuthHandler<D> = (
-  ctx: Context<{}> | Pick<WithAuth, 'auth' | 'authMetadata' | 'app'>
+  ctx: Context<{}, 'request'> | Pick<WithAuth, 'auth' | 'authMetadata' | 'app'>
 ) => Promise<D>
 
 function withDecentralandAuth(
@@ -27,34 +32,43 @@ function withDecentralandAuth(
 function withDecentralandAuth(options: WithDecentralandAuthOptions = {}) {
   return Router.memo(
     async (
-      ctx: Context<{}> | Pick<WithAuth, 'auth' | 'authMetadata' | 'app'>
+      ctx:
+        | Context<{}, 'request'>
+        | Pick<WithAuth, 'auth' | 'authMetadata' | 'app'>
     ) => {
       const req = ctx as Partial<DecentralandSignatureData>
       if (req.auth) {
         return { auth: req.auth!, authMetadata: req.authMetadata! }
       }
 
-      const context = ctx as Context<{}>
+      const context = ctx as Context<{}, 'request'>
+      const method = context.request.method
+      const url = new URL(context.request.url, 'http://0.0.0.0/')
+      const path = url.pathname
+      const headers: Record<string, string> = {}
+      context.request.headers.forEach((value, header) => {
+        headers[header] = value
+      })
+
       try {
-        const data = await verify(
-          context.method,
-          context.baseUrl + context.path,
-          context.headers,
-          options
-        )
-        return data
+        const data = await verify(method, path, headers, options)
+
+        return {
+          address: data.auth,
+          metadata: data.authMetadata,
+        }
       } catch (err) {
         if (err.statusCode === 401) {
           logger.error(err.message, {
             ...err,
             stack: err.stack,
-            method: context.method,
-            path: context.baseUrl + context.path,
-            headers: context.headers,
+            method,
+            path,
+            headers,
           })
         }
 
-        if (err.statusCode === 400 || !options.optional) {
+        if (!options.optional) {
           throw new ErrorResponse(err.statusCode, err.message)
         }
 
