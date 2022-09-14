@@ -11,12 +11,12 @@ import { withAuth, withAuthOptional } from './withDecentralandAuth'
 test(`should be compatible with express.Request + auth middleware`, async () => {
   const expressRequestMock: WithAuth = { auth: 'user', authMetadata: {} } as any
   const auth = await withAuth(expressRequestMock)
-  expect(auth.auth).toBe(expressRequestMock.auth)
-  expect(auth.authMetadata).toBe(expressRequestMock.authMetadata)
+  expect(auth.address).toBe(expressRequestMock.auth)
+  expect(auth.metadata).toBe(expressRequestMock.authMetadata)
 
   const authOptional = await withAuthOptional(expressRequestMock)
-  expect(authOptional?.auth).toBe(expressRequestMock.auth)
-  expect(authOptional?.authMetadata).toBe(expressRequestMock.authMetadata)
+  expect(authOptional?.address).toBe(expressRequestMock.auth)
+  expect(authOptional?.metadata).toBe(expressRequestMock.authMetadata)
 })
 
 describe(`withAuth`, () => {

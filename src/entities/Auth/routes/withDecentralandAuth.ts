@@ -38,7 +38,7 @@ function withDecentralandAuth(options: WithDecentralandAuthOptions = {}) {
     ) => {
       const req = ctx as Partial<DecentralandSignatureData>
       if (req.auth) {
-        return { auth: req.auth!, authMetadata: req.authMetadata! }
+        return { address: req.auth!, metadata: req.authMetadata! }
       }
 
       const context = ctx as Context<{}, 'request'>
