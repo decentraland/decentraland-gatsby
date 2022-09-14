@@ -25,10 +25,10 @@ export type WithDecentralandAuthHandler<D> = (
 
 function withDecentralandAuth(
   options?: { optional?: false } & VerifyAuthChainHeadersOptions
-): WithDecentralandAuthHandler<DecentralandSignatureData>
+): WithDecentralandAuthHandler<DecentralandAuthData>
 function withDecentralandAuth(
   options: { optional: true } & VerifyAuthChainHeadersOptions
-): WithDecentralandAuthHandler<DecentralandSignatureData | null>
+): WithDecentralandAuthHandler<DecentralandAuthData | null>
 function withDecentralandAuth(options: WithDecentralandAuthOptions = {}) {
   return Router.memo(
     async (
