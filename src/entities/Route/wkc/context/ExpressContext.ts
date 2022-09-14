@@ -1,5 +1,6 @@
 import { getRequestFromNodeMessage } from '@well-known-components/http-server/dist/logic'
 
+import { Request } from '../request/Request'
 import { FullContext } from './Context'
 
 import type { IHttpServerComponent } from '@well-known-components/interfaces/dist/components/http-server'
@@ -11,12 +12,10 @@ export default class ExpressContext<P extends {} = {}> extends FullContext<P> {
     this.url = new URL(
       `${request.protocol}://${request.hostname}${request.originalUrl}`
     )
-    this.request = getRequestFromNodeMessage(
-      request,
-      request.hostname,
-      request.protocol
+    this.request = new Request(
+      this.url,
+      getRequestFromNodeMessage(request, request.hostname, request.protocol)
     )
-    this.request.url = this.url.toString()
 
     this.params = request.params as any
     this.routePath = request.baseUrl + (request.route?.path || '')
