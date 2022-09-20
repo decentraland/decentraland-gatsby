@@ -1,5 +1,6 @@
 import { IMiddlewareAdapterHandler } from '@well-known-components/interfaces/dist/components/base-component'
 
+import logger from '../../../Development/logger'
 import {
   http_request_duration_seconds,
   http_request_size_bytes,
@@ -68,6 +69,10 @@ export function route<R extends Context<{}> = Context<{}>>(
     try {
       res = await handler(ctx, async () => ({}))
     } catch (err) {
+      logger.error(
+        `executing request ${request.method} ${request.originalUrl}`,
+        err
+      )
       res = ErrorResponse.toResponse(err)
     }
 
