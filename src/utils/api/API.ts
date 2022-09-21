@@ -41,14 +41,30 @@ export default class API {
   }
 
   static searchParams(
-    data: Record<string, undefined | null | SearchParamValue>,
+    data: Record<
+      string,
+      undefined | null | SearchParamValue | SearchParamValue[]
+    >,
     options: SearchParamOptions = {}
   ): URLSearchParams {
     const params = new URLSearchParams()
     const keys = Object.keys(data)
+
     for (const key of keys) {
-      const value = data[key] as undefined | null | SearchParamValue
-      if (value !== undefined && value !== null) {
+      const value = data[key] as
+        | undefined
+        | null
+        | SearchParamValue
+        | SearchParamValue[]
+      if (value === undefined || value === null) {
+        continue
+      }
+
+      if (Array.isArray(value)) {
+        for (const each of value) {
+          params.append(key, this.#searchParamsValue(each, options))
+        }
+      } else {
         params.append(key, this.#searchParamsValue(value, options))
       }
     }

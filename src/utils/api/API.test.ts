@@ -41,6 +41,12 @@ describe('utils/api/API', () => {
         API.searchParams({ now }, { dataToTimestamp: true }).toString()
       ).toBe(expectedTimestamp.toString())
     })
+
+    test('should add multiple values for arrays', () => {
+      expect(API.searchParams({ id: ['1', '2', '3'] }).toString()).toBe(
+        'id=1&id=2&id=3'
+      )
+    })
   })
 
   describe('#url', () => {
