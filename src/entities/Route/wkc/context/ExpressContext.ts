@@ -1,6 +1,5 @@
 import { getRequestFromNodeMessage } from '@well-known-components/http-server/dist/logic'
 
-import { Request } from '../request/Request'
 import { FullContext } from './Context'
 
 import type { IHttpServerComponent } from '@well-known-components/interfaces/dist/components/http-server'
