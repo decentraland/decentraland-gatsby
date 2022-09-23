@@ -1,3 +1,4 @@
+import logger from '../../../Development/logger'
 import { Request, RequestInit } from '../request/Request'
 import { FullContext } from './Context'
 
@@ -22,6 +23,10 @@ export default class RequestContext<
     this.url = new URL(originalUrl, 'https://dcl.eth')
     this.request = new Request(this.url.toString(), init)
     this.routePath = pathname
+    this.logger = logger.extend({
+      url_params: this.params,
+      http_handler: this.routePath,
+    })
     this.method = (init.method as any) || 'GET'
     this.headers = Object.fromEntries(this.request.headers.entries())
     this.query = Object.fromEntries(searchParams.entries())

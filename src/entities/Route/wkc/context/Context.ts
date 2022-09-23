@@ -1,3 +1,5 @@
+import { Logger } from '../../../Development/logger'
+
 import type { IHttpServerComponent } from '@well-known-components/interfaces/dist/components/http-server'
 import type { Query } from 'express-serve-static-core'
 import type { IncomingHttpHeaders } from 'http'
@@ -10,6 +12,8 @@ export class FullContext<P extends Record<string, string> = {}> {
   params: P
 
   routePath: string
+
+  logger: Logger
 
   /**
    * @deprecated use ctx.request.method

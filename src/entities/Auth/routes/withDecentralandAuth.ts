@@ -4,7 +4,7 @@ import {
 } from 'decentraland-crypto-middleware/lib/types'
 import verify from 'decentraland-crypto-middleware/lib/verify'
 
-import logger from '../../Development/logger'
+import globalLogger from '../../Development/logger'
 import Context from '../../Route/wkc/context/Context'
 import ErrorResponse from '../../Route/wkc/response/ErrorResponse'
 import Router from '../../Route/wkc/routes/Router'
@@ -20,7 +20,9 @@ export type DecentralandAuthData = {
 }
 
 export type WithDecentralandAuthHandler<D> = (
-  ctx: Context<{}, 'request'> | Pick<WithAuth, 'auth' | 'authMetadata' | 'app'>
+  ctx:
+    | (Context<{}, 'request'> & Partial<Context<{}, 'logger'>>)
+    | Pick<WithAuth, 'auth' | 'authMetadata' | 'app'>
 ) => Promise<D>
 
 function withDecentralandAuth(
@@ -33,7 +35,7 @@ function withDecentralandAuth(options: WithDecentralandAuthOptions = {}) {
   return Router.memo(
     async (
       ctx:
-        | Context<{}, 'request'>
+        | (Context<{}, 'request'> & Partial<Context<{}, 'logger'>>)
         | Pick<WithAuth, 'auth' | 'authMetadata' | 'app'>
     ) => {
       const req = ctx as Partial<DecentralandSignatureData>
@@ -41,7 +43,9 @@ function withDecentralandAuth(options: WithDecentralandAuthOptions = {}) {
         return { address: req.auth!, metadata: req.authMetadata! }
       }
 
-      const context = ctx as Context<{}, 'request'>
+      const context = ctx as Context<{}, 'request'> &
+        Partial<Context<{}, 'logger'>>
+      const logger = context.logger || globalLogger
       const method = context.request.method
       const url = new URL(context.request.url, 'http://0.0.0.0/')
       const path = url.pathname

@@ -1,5 +1,6 @@
 import { getRequestFromNodeMessage } from '@well-known-components/http-server/dist/logic'
 
+import logger from '../../../Development/logger'
 import { FullContext } from './Context'
 
 import type { IHttpServerComponent } from '@well-known-components/interfaces/dist/components/http-server'
@@ -14,6 +15,10 @@ export default class ExpressContext<P extends {} = {}> extends FullContext<P> {
     this.request = getRequestFromNodeMessage(request, request.hostname)
     this.params = request.params as any
     this.routePath = request.baseUrl + (request.route?.path || '')
+    this.logger = logger.extend({
+      url_params: this.params,
+      http_handler: this.routePath,
+    })
     this.headers = request.headers
     this.method =
       request.method.toUpperCase() as IHttpServerComponent.HTTPMethod
