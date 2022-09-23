@@ -49,6 +49,28 @@ describe('utils/api/API', () => {
     })
   })
 
+  describe('#fromPagination', () => {
+    test(`should convert a page object into an limit/offset one`, () => {
+      expect(API.fromPagination({ page: 1 }, { pageSize: 25 })).toEqual({
+        limit: 25,
+        offset: 0,
+      })
+      expect(API.fromPagination({ page: 2 }, { pageSize: 25 })).toEqual({
+        limit: 25,
+        offset: 25,
+      })
+    })
+
+    test(`should preserv any extra param`, () => {
+      const value = Math.random()
+      expect(API.fromPagination({ page: 1, value }, { pageSize: 25 })).toEqual({
+        value,
+        limit: 25,
+        offset: 0,
+      })
+    })
+  })
+
   describe('#url', () => {
     test('should return root path from base', () => {
       expect(API.url('')).toBe('')
