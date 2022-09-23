@@ -84,6 +84,8 @@ describe('utils/api/API', () => {
     })
 
     test('should attach path', () => {
+      expect(API.url('/api', '')).toBe('/api')
+      expect(API.url('/api', '/path')).toBe('/api/path')
       expect(API.url('https://decentraland.org/path', '')).toBe(
         'https://decentraland.org/path'
       )

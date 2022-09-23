@@ -192,7 +192,7 @@ export default class API {
 
       if (identity?.authChain) {
         const timestamp = String(Date.now())
-        const pathname = new URL(this.url(path)).pathname
+        const pathname = new URL(this.url(path), 'https://localhost').pathname
         const method = options.getMethod() || 'GET'
         const metadata = JSON.stringify(options.getMetadata())
         const payload = [method, pathname, timestamp, metadata]
