@@ -51,3 +51,7 @@ export function numeric(value: any, options?: { min?: number; max?: number }) {
   }
   return value
 }
+
+export function oneOf<T>(value: any, list: readonly T[]): T | null {
+  return list.find((item) => item === value) || null
+}

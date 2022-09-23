@@ -1,4 +1,4 @@
-import { bool, numeric } from './utils'
+import { bool, numeric, oneOf } from './utils'
 
 test('bool', () => {
   expect(bool(1)).toBe(true)
@@ -32,4 +32,9 @@ test('numeric', () => {
   expect(async () => numeric(2, { min: 3, max: 1 })).rejects.toThrowError(
     'Invalid numeric options'
   )
+})
+
+test('oneOf', () => {
+  expect(oneOf(1, [1, 2, 3, 4, 5, 6])).toBe(1)
+  expect(oneOf(10, [1, 2, 3, 4, 5, 6])).toBe(null)
 })
