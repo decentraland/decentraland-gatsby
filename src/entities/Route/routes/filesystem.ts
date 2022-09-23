@@ -28,7 +28,7 @@ export default function filesystem(
   notFoundPage: string | Partial<FilesystemHandleOptions>,
   options?: {
     defaultHeaders?: Record<string, string>
-    api: boolean
+    api?: boolean
   }
 ) {
   const router = Router()
