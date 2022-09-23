@@ -27,7 +27,7 @@ export default function filesystem(
   path: string,
   notFoundPage: string | Partial<FilesystemHandleOptions>,
   options?: {
-    defaultHeaders: Record<string, string>
+    defaultHeaders?: Record<string, string>
     api: boolean
   }
 ) {
