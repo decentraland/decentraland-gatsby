@@ -12,7 +12,7 @@ export default function file(
   path: string,
   status = 200,
   options?: {
-    defaultHeaders: Record<string, string>
+    defaultHeaders?: Record<string, string>
     api: boolean
   }
 ) {
