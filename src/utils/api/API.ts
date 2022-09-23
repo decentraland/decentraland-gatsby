@@ -40,6 +40,17 @@ export default class API {
     return String(value)
   }
 
+  static fromPagination<T extends { page: number }>(
+    { page, ...data }: T,
+    options: { pageSize: number }
+  ): Omit<T, 'page'> & { limit: number; offset: number } {
+    return {
+      ...data,
+      limit: options.pageSize,
+      offset: (page - 1) * options.pageSize,
+    }
+  }
+
   static searchParams(
     data: Record<
       string,
