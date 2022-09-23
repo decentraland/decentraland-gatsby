@@ -13,7 +13,7 @@ export default function file(
   status = 200,
   options?: {
     defaultHeaders?: Record<string, string>
-    api: boolean
+    api?: boolean
   }
 ) {
   let reader: Promise<readonly [Buffer, string]> | null = null
