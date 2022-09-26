@@ -47,6 +47,21 @@ describe('utils/api/API', () => {
         'id=1&id=2&id=3'
       )
     })
+
+    test('should exclude default values', () => {
+      expect(
+        API.searchParams(
+          {
+            string: 'string',
+            number: 123456789,
+            boolean: false,
+            null: null,
+            undefined: undefined,
+          },
+          { default: { boolean: false, string: 'string', number: 123 } }
+        ).toString()
+      ).toBe('number=123456789')
+    })
   })
 
   describe('#fromPagination', () => {

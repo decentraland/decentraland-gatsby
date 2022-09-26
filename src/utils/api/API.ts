@@ -17,9 +17,15 @@ import type { Identity } from '../auth/types'
 import 'isomorphic-fetch'
 
 export type SearchParamValue = boolean | number | string | Date
-export type SearchParamOptions = Partial<{
-  dataToTimestamp: boolean
-}>
+export type SearchParamData = Record<
+  string,
+  undefined | null | SearchParamValue | SearchParamValue[]
+>
+export type SearchParamOptions<D extends SearchParamData = SearchParamData> =
+  Partial<{
+    dataToTimestamp: boolean
+    default: Partial<D>
+  }>
 
 export default class API {
   static catch<T>(prom: Promise<T>) {
@@ -51,12 +57,9 @@ export default class API {
     }
   }
 
-  static searchParams(
-    data: Record<
-      string,
-      undefined | null | SearchParamValue | SearchParamValue[]
-    >,
-    options: SearchParamOptions = {}
+  static searchParams<D extends SearchParamData>(
+    data: D,
+    options: SearchParamOptions<D> = {}
   ): URLSearchParams {
     const params = new URLSearchParams()
     const keys = Object.keys(data)
@@ -77,6 +80,14 @@ export default class API {
         }
       } else {
         params.append(key, this.#searchParamsValue(value, options))
+      }
+    }
+
+    if (options?.default) {
+      for (const param of Object.keys(options.default)) {
+        if (data[param] === options.default[param]) {
+          params.delete(param)
+        }
       }
     }
 
