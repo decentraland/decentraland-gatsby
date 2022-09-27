@@ -6,7 +6,7 @@ import Divider from '../Text/Divider'
 import IntlStorybookProvider from '../Storybook/IntlStorybookProvider'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 
-<Meta title="Components/Layout" />
+<Meta title="Components/Layout/Menu" />
 
 <Canvas isExpanded>
   <Story name="Basic">
@@ -44,6 +44,7 @@ import { Button } from 'decentraland-ui/dist/components/Button/Button'
     <IntlStorybookProvider>
       <NavigationMenu
         isMobile={false}
+        isFullScreen={true}
         leftMenu={
           <>
             <NavigationMenu.Item
