@@ -824,6 +824,176 @@ exports[`Storyshots Components/Carousel Carousel time 1`] = `
 </div>
 `;
 
+exports[`Storyshots Components/Carousel With dash indicators 1`] = `
+<div
+  style={
+    Object {
+      "margin": "0 auto",
+      "maxWidth": "600px",
+      "width": "90%",
+    }
+  }
+>
+  <div
+    className="Carousel dash-indicators"
+  >
+    <div
+      className="Carousel__Items"
+    >
+      <div
+        className="Carousel__Scroll"
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "height": undefined,
+          }
+        }
+      >
+        <div
+          className="Carousel__Item Carousel__Item--first Carousel__Item--active"
+        >
+          <div
+            className="dg ImgFixed ImgFixed--wide"
+            style={
+              Object {
+                "backgroundColor": "transparent",
+                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/25/74/map.png\\")",
+                "backgroundPosition": "center center",
+                "backgroundSize": "cover",
+              }
+            }
+          >
+            <img
+              height="1"
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAADUlEQVR4AWNwL/ABYwAKHQIHW//QwwAAAABJRU5ErkJggg=="
+              width="2"
+            />
+          </div>
+        </div>
+        <div
+          className="Carousel__Item Carousel__Item--on-right"
+        >
+          <div
+            className="dg ImgFixed ImgFixed--wide"
+            style={
+              Object {
+                "backgroundColor": "transparent",
+                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/26/9/map.png\\")",
+                "backgroundPosition": "center center",
+                "backgroundSize": "cover",
+              }
+            }
+          >
+            <img
+              height="1"
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAADUlEQVR4AWNwL/ABYwAKHQIHW//QwwAAAABJRU5ErkJggg=="
+              width="2"
+            />
+          </div>
+        </div>
+        <div
+          className="Carousel__Item Carousel__Item--on-right"
+        >
+          <div
+            className="dg ImgFixed ImgFixed--wide"
+            style={
+              Object {
+                "backgroundColor": "transparent",
+                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/-143/-125/map.png\\")",
+                "backgroundPosition": "center center",
+                "backgroundSize": "cover",
+              }
+            }
+          >
+            <img
+              height="1"
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAADUlEQVR4AWNwL/ABYwAKHQIHW//QwwAAAABJRU5ErkJggg=="
+              width="2"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="Carousel__List"
+    >
+      <div
+        className="active"
+        onClick={[Function]}
+      >
+        <div />
+      </div>
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        <div />
+      </div>
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        <div />
+      </div>
+    </div>
+    <div
+      className="Carousel__Next"
+      onClick={[Function]}
+    >
+      <svg
+        height="48"
+        viewBox="0 0 48 48"
+        width="48"
+      >
+        <g
+          fill="none"
+          fillRule="evenodd"
+          opacity=".32"
+        >
+          <path
+            d="M0 0H48V48H0z"
+          />
+          <path
+            d="M34 24L21.242 36.457c-.742.724-1.944.724-2.686 0-.741-.724-.741-1.898 0-2.623L28.628 24l-10.072-9.834c-.741-.725-.741-1.899 0-2.623.742-.724 1.944-.724 2.686 0L34 24z"
+            fill="#736E7D"
+          />
+        </g>
+      </svg>
+    </div>
+    <div
+      className="Carousel__Prev"
+      onClick={[Function]}
+    >
+      <svg
+        height="48"
+        viewBox="0 0 48 48"
+        width="48"
+      >
+        <g
+          fill="none"
+          fillRule="evenodd"
+          opacity=".32"
+        >
+          <path
+            d="M0 0H48V48H0z"
+            transform="matrix(-1 0 0 1 48 0)"
+          />
+          <path
+            d="M34 24L21.242 36.457c-.742.724-1.944.724-2.686 0-.741-.724-.741-1.898 0-2.623L28.628 24l-10.072-9.834c-.741-.725-.741-1.899 0-2.623.742-.724 1.944-.724 2.686 0L34 24z"
+            fill="#736E7D"
+            transform="matrix(-1 0 0 1 48 0)"
+          />
+        </g>
+      </svg>
+    </div>
+  </div>
+</div>
+`;
+
 exports[`Storyshots Components/Carousel With different height autosize 1`] = `
 <div
   style={
