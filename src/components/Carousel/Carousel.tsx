@@ -1,26 +1,32 @@
-import React, { useCallback, useEffect, useRef } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
-import usePatchState from '../../hooks/usePatchState'
 import TokenList from '../../utils/dom/TokenList'
+import mod from '../../utils/number/mod'
+import TimeInterval from '../../utils/timer/timeInterval'
 import Next from './Next'
 import Prev from './Prev'
 
 import './Carousel.css'
 
+export enum IndicatorsType {
+  Bullet = 'bullet',
+  Dash = 'dash',
+}
 export type CarouselProps = React.HTMLProps<HTMLDivElement> & {
+  /** @deprecated it may differe with the actual move */
   onMove?: (index: number) => void
   progress?: boolean
   time?: number | false
   autoResize?: boolean
+  indicatorsType?: IndicatorsType
 }
 
 export type CarouselState = {
   current: number
-  running: boolean
-  timer: number | null
   carouselScrollHeight: string | undefined
   touchStart: number
   touchEnd: number
+  timer: TimeInterval | null
 }
 
 export default React.memo(function Carousel({
@@ -30,122 +36,141 @@ export default React.memo(function Carousel({
   onMove,
   time,
   autoResize,
+  indicatorsType,
   ...props
 }: CarouselProps) {
-  const timeout = !progress ? (time ?? 5000) || false : false
   const size = React.Children.count(children)
 
   const childrenRefs = useRef(new Array(size))
 
-  const [state, patchState] = usePatchState<CarouselState>({
+  const [state, setState] = useState<CarouselState>({
     current: 0,
-    timer: null,
-    running: true,
     carouselScrollHeight: undefined,
     touchStart: 0,
     touchEnd: 0,
+    timer: null,
   })
 
   useEffect(() => {
     if (state.current > size) {
       handleMove(0)
     }
-  }, [size])
+  }, [size, state.current])
 
   useEffect(() => {
-    if (timeout && state.running) {
-      patchState({
-        timer: setTimeout(handleNext, timeout) as any,
+    if (Number(time ?? 5000) > 0) {
+      setState((prev) => {
+        const newTimer = new TimeInterval(() => {
+          handleMove(1)
+        }, Number(time ?? 5000)).start()
+
+        return {
+          ...prev,
+          timer: newTimer,
+        }
       })
     }
-
     return () => {
-      if (state.timer) {
-        clearTimeout(state.timer)
-      }
+      setState((prev) => {
+        prev.timer?.stop()
+        return { ...prev, timer: null }
+      })
     }
-  }, [state.running, state.current, timeout])
+  }, [time])
 
-  const handleTimerOn = useCallback(
-    () => patchState({ running: true }),
-    [state]
-  )
+  const handleTimerOn = useCallback(() => {
+    state.timer?.start()
+  }, [state.timer])
   const handleTimerOff = useCallback(() => {
-    if (state.timer) {
-      clearTimeout(state.timer)
-    }
-
-    patchState({ timer: null, running: false })
-  }, [state])
+    state.timer?.stop()
+  }, [state.timer])
 
   const handleMove = useCallback(
-    (to: number) => {
+    (diff: number) => {
       if (autoResize) {
         let height = 0
 
-        height = childrenRefs.current[to]
-
-        patchState({ current: to, carouselScrollHeight: height + 'px' })
+        setState((prev) => {
+          const next = mod(prev.current + diff, childrenRefs.current.length)
+          height = childrenRefs.current[next]
+          return {
+            ...prev,
+            current: next,
+            carouselScrollHeight: height + 'px',
+          }
+        })
       } else {
         let height = 0
         childrenRefs.current.map((element) => {
           height = Math.max(element, height)
         })
-        patchState({ current: to, carouselScrollHeight: height + 'px' })
+        setState((prev) => ({
+          ...prev,
+          current: mod(prev.current + diff, childrenRefs.current.length),
+          carouselScrollHeight: height + 'px',
+        }))
       }
 
       if (onMove) {
-        onMove(to)
+        onMove(mod(state.current + diff, childrenRefs.current.length))
       }
     },
     [state, onMove]
   )
 
-  const handleNext = useCallback(() => {
-    const next = state.current >= size - 1 ? 0 : state.current + 1
-    handleMove(next)
-  }, [state, handleMove])
+  const handleTouchStart = useCallback(
+    (e: React.TouchEvent<HTMLDivElement>) => {
+      setState((prev) => {
+        prev.timer?.stop()
+        return {
+          ...prev,
+          touchStart: e.targetTouches[0].clientX,
+          touchEnd: e.targetTouches[0].clientX,
+        }
+      })
+    },
+    []
+  )
 
-  const handlePrev = useCallback(() => {
-    const prev = state.current <= 0 ? size - 1 : state.current - 1
-    handleMove(prev)
-  }, [state, handleMove])
-
-  const handleTouchStart = (e: React.TouchEvent<HTMLDivElement>) => {
-    handleTimerOff()
-    patchState({
-      touchStart: e.targetTouches[0].clientX,
-    })
-  }
-
-  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>) => {
-    patchState({
+  const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
+    setState((prev) => ({
+      ...prev,
       touchEnd: e.targetTouches[0].clientX,
-    })
-  }
+    }))
+  }, [])
 
-  const handleTouchEnd = () => {
-    handleTimerOn()
-    if (state.touchStart - state.touchEnd > 150) {
-      handleNext()
-    }
+  const handleTouchEnd = useCallback(
+    (e: React.TouchEvent<HTMLDivElement>) => {
+      handleTimerOn()
+      if (state.touchStart - state.touchEnd > 150) {
+        handleMove(1)
+      }
 
-    if (state.touchStart - state.touchEnd < -150) {
-      handlePrev()
-    }
-  }
+      if (state.touchStart - state.touchEnd < -150) {
+        handleMove(-1)
+      }
+    },
+    [state]
+  )
 
   return (
-    <div {...props} className={TokenList.join(['Carousel', className])}>
+    <div
+      {...props}
+      className={TokenList.join([
+        'Carousel',
+        className,
+        indicatorsType === IndicatorsType.Dash && 'dash-indicators',
+      ])}
+    >
       <div className="Carousel__Items">
         <div
           className="Carousel__Scroll"
           onMouseEnter={handleTimerOff}
           onMouseLeave={handleTimerOn}
           style={{ height: state.carouselScrollHeight }}
-          onTouchStart={(touchStartEvent) => handleTouchStart(touchStartEvent)}
-          onTouchMove={(touchMoveEvent) => handleTouchMove(touchMoveEvent)}
-          onTouchEnd={() => handleTouchEnd()}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
         >
           {React.Children.map(children, (child, i) => (
             <div
@@ -184,7 +209,9 @@ export default React.memo(function Carousel({
       )}
       {size > 1 && (
         <div
-          onClick={handleNext}
+          onClick={() => {
+            handleMove(1)
+          }}
           className={TokenList.join([
             'Carousel__Next',
             progress && state.current === size - 1 && 'disabled',
@@ -195,7 +222,9 @@ export default React.memo(function Carousel({
       )}
       {size > 1 && (
         <div
-          onClick={handlePrev}
+          onClick={() => {
+            handleMove(-1)
+          }}
           className={TokenList.join([
             'Carousel__Prev',
             progress && state.current === 0 && 'disabled',
