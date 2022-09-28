@@ -55,6 +55,12 @@
   transition: 0.3s ease background-color, 0.3s ease opacity;
 }
 
+.Carousel.dash-indicators .Carousel__List > div > div {
+  height: 3px;
+  border-radius: 1.5px;
+  width: 32px;
+}
+
 .Carousel .Carousel__List > div.active > div {
   opacity: 1;
   background-color: var(--primary);
@@ -101,6 +107,10 @@
 
   .Carousel .Carousel__List > div {
     padding: 6px 12px;
+  }
+
+  .Carousel.dash-indicators .Carousel__List > div {
+    padding: 6px 4px;
   }
 
   .Carousel .Carousel__List > div > div {

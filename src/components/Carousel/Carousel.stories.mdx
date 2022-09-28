@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from 'react'
 import { Source, ArgsTable } from '@storybook/components'
 import { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs'
-import Carousel from './Carousel'
+import Carousel, { IndicatorsType } from './Carousel'
 import Divider from '../Text/Divider'
 import ImgFixed from '../Image/ImgFixed'
 import Land from '../../utils/api/Land.ts'
@@ -58,6 +58,25 @@ import Land from '../../utils/api/Land.ts'
   <Story name="As progress">
     <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
       <Carousel progress>
+        <ImgFixed src={Land.get().getParcelImage([25, 74])} dimension="wide" />
+        <ImgFixed src={Land.get().getParcelImage([26, 9])} dimension="wide" />
+        <ImgFixed
+          src={Land.get().getParcelImage([-143, -125])}
+          dimension="wide"
+        />
+      </Carousel>
+    </div>
+  </Story>
+</Canvas>
+
+<Divider size="small" />
+
+## With dash indicators instead of bullet
+
+<Canvas isExpanded>
+  <Story name="With dash indicators">
+    <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
+      <Carousel indicatorsType={IndicatorsType.Dash}>
         <ImgFixed src={Land.get().getParcelImage([25, 74])} dimension="wide" />
         <ImgFixed src={Land.get().getParcelImage([26, 9])} dimension="wide" />
         <ImgFixed
