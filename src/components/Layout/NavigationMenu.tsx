@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 
 import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import { Tabs } from 'decentraland-ui/dist/components/Tabs/Tabs'
@@ -26,7 +26,7 @@ export type NavigationMenuItemProps = {
 const NavigationMenu = React.memo(function NavigationMenu(
   props: NavigationMenuProps
 ) {
-  const { isMobile, className, isFullScreen, ...rest } = props
+  const { className, isFullScreen, ...rest } = props
 
   return (
     <div
@@ -36,7 +36,8 @@ const NavigationMenu = React.memo(function NavigationMenu(
         isFullScreen && 'fullscreen',
       ])}
     >
-      {isMobile ? <Mobile {...rest} /> : <Desktop {...rest} />}
+      <Mobile {...rest} />
+      <Desktop {...rest} />
     </div>
   )
 })
@@ -52,10 +53,13 @@ const Item = React.memo(function Item(props: NavigationMenuItemProps) {
 })
 
 const Desktop = React.memo(function NavigationMenuDeskTop(
-  props: Pick<NavigationMenuProps, 'leftMenu' | 'rightMenu'>
+  props: Pick<NavigationMenuProps, 'leftMenu' | 'rightMenu' | 'isMobile'>
 ) {
-  const { leftMenu, rightMenu } = props
+  const { leftMenu, rightMenu, isMobile } = props
 
+  if (isMobile) {
+    return null
+  }
   return (
     <div className="desktop-menu__container">
       <Tabs>
@@ -67,16 +71,26 @@ const Desktop = React.memo(function NavigationMenuDeskTop(
 })
 
 const Mobile = React.memo(function NavigationMenuMobile(
-  props: Pick<NavigationMenuProps, 'leftMenu' | 'rightMenu' | 'mobileLabel'>
+  props: Pick<
+    NavigationMenuProps,
+    'leftMenu' | 'rightMenu' | 'mobileLabel' | 'isMobile'
+  >
 ) {
-  const { leftMenu, rightMenu, mobileLabel } = props
+  const { leftMenu, rightMenu, mobileLabel, isMobile } = props
 
   const [toggle, setToggle] = useState(false)
 
-  const handleToggle = (event: React.MouseEvent): void => {
-    setToggle(!toggle)
-    event.stopPropagation()
-    event.nativeEvent.stopImmediatePropagation()
+  const handleToggle = useCallback(
+    (event: React.MouseEvent): void => {
+      setToggle(!toggle)
+      event.stopPropagation()
+      event.nativeEvent.stopImmediatePropagation()
+    },
+    [toggle]
+  )
+
+  if (!isMobile) {
+    return null
   }
 
   return (
