@@ -47,7 +47,7 @@ export default React.memo(function FilterContainerModal({
           secondary
           onClick={handleOpen}
         >
-          {action || l('@growth.WalletSelector.action')}
+          {action || l('@growth.FilterContainerModal.action')}
         </Button>
       )}
       {asModal && (
@@ -82,7 +82,7 @@ export const FilterContainerMobileModal = React.memo(
     return (
       <Modal {...props} className={TokenList.join(['filter-container__modal'])}>
         <Modal.Header>
-          {!title && <Header>{l('@growth.WalletSelector.title')}</Header>}
+          {!title && <Header>{l('@growth.FilterContainerModal.title')}</Header>}
           {!!title && typeof title === 'string' && <Header>{title}</Header>}
           {!!title && typeof title !== 'string' && title}
           <Button icon onClick={props.onClose}>
@@ -92,10 +92,10 @@ export const FilterContainerMobileModal = React.memo(
         <Modal.Content>{children}</Modal.Content>
         <Modal.Actions>
           <Button secondary onClick={onClear}>
-            {l('@growth.WalletSelector.clear')}
+            {l('@growth.FilterContainerModal.clear')}
           </Button>
           <Button primary onClick={props.onClose}>
-            {l('@growth.WalletSelector.done')}
+            {l('@growth.FilterContainerModal.done')}
           </Button>
         </Modal.Actions>
       </Modal>
