@@ -32,7 +32,7 @@ const NavigationMenu = React.memo(function NavigationMenu(
     <div
       className={TokenList.join([
         'navigation-menu',
-        className && className,
+        className,
         isFullScreen && 'fullscreen',
       ])}
     >
@@ -57,10 +57,12 @@ const Desktop = React.memo(function NavigationMenuDeskTop(
   const { leftMenu, rightMenu } = props
 
   return (
-    <Tabs>
-      <Tabs.Left>{leftMenu}</Tabs.Left>
-      {rightMenu && <Tabs.Right>{rightMenu}</Tabs.Right>}
-    </Tabs>
+    <div className="desktop-menu__container">
+      <Tabs>
+        <Tabs.Left>{leftMenu}</Tabs.Left>
+        {rightMenu && <Tabs.Right>{rightMenu}</Tabs.Right>}
+      </Tabs>
+    </div>
   )
 })
 
