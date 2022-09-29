@@ -12,7 +12,7 @@
   position: relative;
   display: flex !important;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
 }
 
 .ui.modal.filter-container__modal > div.header,
@@ -53,6 +53,7 @@
   overflow: auto;
   -ms-overflow-style: none;
   scrollbar-width: none;
+  flex-grow: 1;
 }
 
 .ui.modal.filter-container__modal > div.content::-webkit-scrollbar {
