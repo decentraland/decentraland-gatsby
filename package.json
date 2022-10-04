@@ -33,7 +33,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/decentraland/decentraland-growth-ui.git"
+    "url": "git+https://github.com/decentraland/decentraland-gatsby.git"
   },
   "jest": {
     "testEnvironment": "node",
@@ -69,9 +69,9 @@
     "ci": false
   },
   "bugs": {
-    "url": "https://github.com/decentraland/decentraland-growth-ui/issues"
+    "url": "https://github.com/decentraland/decentraland-gatsby/issues"
   },
-  "homepage": "https://github.com/decentraland/decentraland-growth-ui#readme",
+  "homepage": "https://github.com/decentraland/decentraland-gatsby#readme",
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@babel/plugin-proposal-class-properties": "^7.16.0",
@@ -126,6 +126,7 @@
     "postcss": "^7.0.39",
     "postcss-assets": "^5.0.0",
     "postcss-cli": "^7.1.2",
+    "postcss-copy": "^7.1.0",
     "postcss-svg": "^3.0.0",
     "prettier": "^2.6.2",
     "react-test-renderer": "^17.0.2",

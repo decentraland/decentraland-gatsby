@@ -1,7 +1,10 @@
 module.exports = {
-  plugins: [
-    require('autoprefixer'),
-    require('cssnano'),
-    require('postcss-svg'),
-  ],
+  plugins: {
+    autoprefixer: true,
+    cssnano: true,
+    'postcss-svg': true,
+    'postcss-copy': {
+      dest: 'dist/assets',
+    },
+  },
 }
