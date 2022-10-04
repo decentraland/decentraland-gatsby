@@ -153,15 +153,17 @@ export const ShareExample = () => {
 
 ```tsx dark=true
 import React from 'react'
-import { ProviderType, ChainId } from 'decentraland-connect/dist/hooks/useShare'
+import useShare from 'decentraland-connect/dist/hooks/useShare'
 
 export function ShareExample() {
   const [share, shareState] = useShare()
 
   const shareData = () =>
     share({
-      title: 'title',
+      title: 'Welcome to the Finnish Metagallery',
+      text: 'The Finnish National Gallery takes its first steps into virtual reality by creating a metagallery with the support of Decentraland, Decentraland Museum District, and the Finnish Innovation Fund Sitra.',
       url: 'https://decentraland.github.io/decentraland-gatsby/?path=/story/hooks-useshare--page',
+      thumbnail: 'https://events.decentraland.org/poster/bb02060a633a8160.jpg',
     })
 
   return (
