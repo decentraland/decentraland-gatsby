@@ -23,11 +23,13 @@ import { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Dropdown'
 
 import useAuthContext from '../../context/Auth/useAuthContext'
 import { getSupportedChainIds } from '../../context/Auth/utils'
+import useShareContext from '../../context/Share/useShareContext'
 import useWindowScroll from '../../hooks/useWindowScroll'
 import { DecentralandIntlContext } from '../../plugins/intl/types'
 import { changeLocale } from '../../plugins/intl/utils'
 import TokenList from '../../utils/dom/TokenList'
 import trackEvent from '../../utils/segment/trackEvent'
+import ShareModal from '../Modal/ShareModal'
 import WalletSelectorModal from '../Modal/WalletSelectorModal'
 import WrongNetworkModal from '../Modal/WrongNetworkModal'
 
@@ -55,6 +57,7 @@ export default function Layout({
   const locale = pageContext?.intl?.locale || 'en'
   const locales = pageContext?.intl?.locales || ['en']
   const [, state] = useAuthContext()
+  const [, shareState] = useShareContext()
   const scroll = useWindowScroll() || null
   const isScrolled = scroll.scrollY.get() > 0
 
@@ -95,6 +98,7 @@ export default function Layout({
       >
         {children}
       </main>
+      <ShareModal data={shareState.data} onClose={shareState.close} />
       <WrongNetworkModal
         currentNetwork={state.chainId}
         expectedNetwork={getSupportedChainIds()}

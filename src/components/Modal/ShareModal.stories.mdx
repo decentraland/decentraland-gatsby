@@ -1,0 +1,46 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs'
+import ModalContainer from '../Storybook/ModalContainer'
+import ShareModal from './ShareModal'
+
+<Meta title="Components/Modal/ShareModal" />
+
+<Canvas isExpanded>
+  <Story name="Share Url">
+    <ModalContainer
+      data={{
+        title: 'Welcome to the Finnish Metagallery',
+        url: 'https://events.decentraland.org/event/?id=1ea59648-89e7-4f4b-9f36-f80c69d1248f',
+      }}
+      Modal={ShareModal}
+    />
+  </Story>
+</Canvas>
+
+<Canvas isExpanded>
+  <Story name="Share With Thumbnail">
+    <ModalContainer
+      data={{
+        title: 'Welcome to the Finnish Metagallery',
+        url: 'https://events.decentraland.org/event/?id=1ea59648-89e7-4f4b-9f36-f80c69d1248f',
+        thumbnail:
+          'https://events.decentraland.org/poster/bb02060a633a8160.jpg',
+      }}
+      Modal={ShareModal}
+    />
+  </Story>
+</Canvas>
+
+<Canvas isExpanded>
+  <Story name="Share text">
+    <ModalContainer
+      data={{
+        title: 'Welcome to the Finnish Metagallery',
+        text: 'The Finnish National Gallery takes its first steps into virtual reality by creating a metagallery with the support of Decentraland, Decentraland Museum District, and the Finnish Innovation Fund Sitra.',
+        url: 'https://events.decentraland.org/event/?id=1ea59648-89e7-4f4b-9f36-f80c69d1248f',
+      }}
+      Modal={ShareModal}
+    />
+  </Story>
+</Canvas>
+
+<Divider size="small" />
