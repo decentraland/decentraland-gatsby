@@ -213,6 +213,6 @@
     "workbox-range-requests": "^6.5.3",
     "workbox-routing": "^6.5.3",
     "workbox-strategies": "^6.5.3",
-    "yaml": "^1.10.0"
+    "yaml": "^2.1.2"
   }
 }
