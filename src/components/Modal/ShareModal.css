@@ -18,6 +18,7 @@
   font-weight: 600;
   font-size: 28px;
   line-height: 34px;
+  max-width: 90%;
 }
 
 .ui.modal.share__modal > div.header .ui.icon.button {
