@@ -32,10 +32,10 @@ After that you can use this hook in your components
 ```tsx dark=true
 // component.jsx
 import React from 'react'
-import useShare from 'decentraland-connect/dist/hooks/useShare'
+import useShareContext from 'decentraland-gatsby/dist/context/Share/useShareContext'
 
 export function ShareExample() {
-  const [share, shareState] = useShare()
+  const [share, shareState] = useShareContext()
 
   const shareData = () =>
     share({
