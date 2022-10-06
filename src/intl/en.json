@@ -17,6 +17,14 @@
       "change_chain": "switch to {expectedChainName}",
       "separator": " or ",
       "unknown_chain": "Unknown"
+    },
+    "ShareModal": {
+      "title": "Share this Place",
+      "share": "Share",
+      "uri": {
+        "facebook": "https://www.facebook.com/sharer/sharer.php?u={url}",
+        "twitter": "https://twitter.com/intent/tweet?text={description} {url}"
+      }
     }
   }
 }

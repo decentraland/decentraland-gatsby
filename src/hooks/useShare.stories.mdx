@@ -1,0 +1,179 @@
+import { useState, useMemo, useEffect } from 'react'
+import { Source, ArgsTable } from '@storybook/components'
+import { Meta, Story, Preview } from '@storybook/addon-docs'
+import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import { Field } from 'decentraland-ui/dist/components/Field/Field'
+import { Args } from '../components/Storybook/utils'
+import Container from '../components/Storybook/Container'
+import ShareModal from '../components/Modal/ShareModal'
+import Textarea from '../components/Form/Textarea'
+import Paragraph from '../components/Text/Paragraph'
+import useShare from './useShare'
+import { IntlProvider } from '../plugins/intl'
+import IntlStorybookProvider from '../components/Storybook/IntlStorybookProvider'
+import ModalContainer from '../components/Storybook/ModalContainer'
+
+<Meta title="Hooks/useShare" />
+
+# Share Hook
+
+> The _share hook_ allows to create a user session using one of the availables providers.
+
+```ts
+const [share, shareState] = useShare()
+```
+
+<ArgsTable
+  rows={[
+    Args.returns('share', 'navigator share', `() => Promise<T>`),
+    Args.returns('shareState.close', 'close modal', `() => {}`),
+    Args.returns('shareState.data', 'data sent to share', `data: {...} }`),
+  ]}
+/>
+
+## Share Example
+
+export const ShareExample = () => {
+  const [share, shareState] = useShare()
+  const [shareData, setShareData] = useState({})
+  const loadExample = () =>
+    setShareData({
+      title: 'Welcome to the Finnish Metagallery',
+      text: 'The Finnish National Gallery takes its first steps into virtual reality by creating a metagallery with the support of Decentraland, Decentraland Museum District, and the Finnish Innovation Fund Sitra.',
+      url: 'https://decentraland.github.io/decentraland-gatsby/?path=/story/hooks-useshare--page',
+      thumbnail: 'https://events.decentraland.org/poster/bb02060a633a8160.jpg',
+    })
+  return (
+    <IntlStorybookProvider>
+      <Container>
+        <Grid>
+          <Grid.Row>
+            <Grid.Column tablet="7">
+              <ArgsTable
+                compact={true}
+                updateArgs={(value) => {
+                  console.log(value)
+                  setShareData((current) => ({ ...current, ...value }))
+                }}
+                rows={{
+                  title: {
+                    name: 'title',
+                    control: { type: 'text', value: shareData.title },
+                  },
+                  text: {
+                    name: 'text',
+                    control: { type: 'text', value: shareData.text },
+                  },
+                  url: {
+                    name: 'url',
+                    control: {
+                      type: 'text',
+                      value: shareData.url,
+                    },
+                  },
+                  thumbnail: {
+                    name: 'thumbnail',
+                    control: {
+                      type: 'text',
+                      value: shareData.thumbnail,
+                    },
+                  },
+                }}
+              />
+            </Grid.Column>
+            <Grid.Column tablet="9">
+              <Source
+                language="ts"
+                code={
+                  '// state \n\n' + JSON.stringify(shareData || null, null, 2)
+                }
+              />
+              <Source
+                language="ts"
+                code={
+                  '// data in Share hook \n\n' +
+                  JSON.stringify(shareState.data || null, null, 2)
+                }
+              />
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+              <Button
+                primary
+                size="small"
+                style={{ margin: '0 .5em .5em 0' }}
+                onClick={loadExample}
+              >
+                Load Example
+              </Button>
+              <Button
+                primary
+                size="small"
+                style={{ margin: '0 .5em .5em 0' }}
+                onClick={() => setShareData({})}
+              >
+                Clear State
+              </Button>
+              <Button
+                primary
+                size="small"
+                style={{ margin: '0 .5em .5em 0' }}
+                onClick={() => share(shareData)}
+              >
+                Share
+              </Button>
+              <Button
+                primary
+                size="small"
+                style={{ margin: '0 .5em .5em 0' }}
+                onClick={() => shareState.close()}
+              >
+                Close
+              </Button>
+            </Grid.Column>
+          </Grid.Row>
+          <Grid.Row>
+            <Grid.Column>
+              <ModalContainer
+                data={shareState.data}
+                close={shareState.close}
+                Modal={ShareModal}
+              />
+            </Grid.Column>
+          </Grid.Row>
+        </Grid>
+      </Container>
+    </IntlStorybookProvider>
+  )
+}
+
+<ShareExample />
+
+```tsx dark=true
+import React from 'react'
+import useShare from 'decentraland-connect/dist/hooks/useShare'
+
+export function ShareExample() {
+  const [share, shareState] = useShare()
+
+  const shareData = () =>
+    share({
+      title: 'Welcome to the Finnish Metagallery',
+      text: 'The Finnish National Gallery takes its first steps into virtual reality by creating a metagallery with the support of Decentraland, Decentraland Museum District, and the Finnish Innovation Fund Sitra.',
+      url: 'https://decentraland.github.io/decentraland-gatsby/?path=/story/hooks-useshare--page',
+      thumbnail: 'https://events.decentraland.org/poster/bb02060a633a8160.jpg',
+    })
+
+  return (
+    <div>
+      <button onClick={shareData}>Share Data</button>
+      <pre>{JSON.stringify(shareState.data, null, 2)}</pre>
+    </div>
+  )
+}
+```
+
+- [`useShareContext`](./?path=/story/context-share-usesharecontext--page): use a single instance of `useShare` injected through a provider
+- [`ShareModa`](./?path=/story/components-modal-sharemodal--share-url): modal to show with share in desktop
