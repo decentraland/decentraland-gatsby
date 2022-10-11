@@ -5,8 +5,10 @@ import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import { Modal, ModalProps } from 'decentraland-ui/dist/components/Modal/Modal'
 import Icon from 'semantic-ui-react/dist/commonjs/elements/Icon/Icon'
 
+import useTrackContext from '../../context/Track/useTrackContext'
 import useFormatMessage from '../../hooks/useFormatMessage'
 import { DCLShareData } from '../../hooks/useShare'
+import { SegmentShare } from '../../modules/segment'
 import TokenList from '../../utils/dom/TokenList'
 
 import './ShareModal.css'
@@ -33,6 +35,7 @@ export default React.memo(function ShareModal({
   ...props
 }: ShareModalProps) {
   const l = useFormatMessage()
+  const track = useTrackContext()
 
   const shareableText = useMemo(() => {
     if (data) {
@@ -42,17 +45,19 @@ export default React.memo(function ShareModal({
   }, [data])
 
   const getFacebookLink = useCallback(() => {
+    track(SegmentShare.Facebook, { data })
     return encodeURI(l('@growth.ShareModal.uri.facebook', { url: data?.url }))
-  }, [data])
+  }, [data, track])
 
   const getTwitterLink = useCallback(() => {
+    track(SegmentShare.Twitter, { data })
     return encodeURI(
       l('@growth.ShareModal.uri.twitter', {
         url: data?.url,
         description: shareableText,
       })
     )
-  }, [data, shareableText])
+  }, [data, shareableText, track])
 
   return (
     <Modal
