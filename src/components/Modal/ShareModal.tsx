@@ -45,12 +45,12 @@ export default React.memo(function ShareModal({
   }, [data])
 
   const getFacebookLink = useCallback(() => {
-    track(SegmentShare.Facebook, { data })
+    track(SegmentShare.ShareFallback, { data, social: 'facebook' })
     return encodeURI(l('@growth.ShareModal.uri.facebook', { url: data?.url }))
   }, [data, track])
 
   const getTwitterLink = useCallback(() => {
-    track(SegmentShare.Twitter, { data })
+    track(SegmentShare.ShareFallback, { data, social: 'twitter' })
     return encodeURI(
       l('@growth.ShareModal.uri.twitter', {
         url: data?.url,

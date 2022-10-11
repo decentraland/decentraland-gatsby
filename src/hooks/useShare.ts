@@ -14,15 +14,15 @@ export default function useShare() {
   const share = useCallback((shareData: DCLShareData) => {
     // eslint-disable-next-line no-extra-boolean-cast
     if (!!navigator.share) {
-      track(SegmentShare.Native, { shareData })
+      track(SegmentShare.Share, { shareData })
       navigator.share(shareData)
     } else {
-      track(SegmentShare.DesktopOpen)
+      track(SegmentShare.SharePopupOpen)
       setData(shareData)
     }
   }, [])
   const close = useCallback(() => {
-    track(SegmentShare.DesktopClose)
+    track(SegmentShare.SharePopupClose)
     setData(null)
   }, [setData])
 

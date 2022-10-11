@@ -1,7 +1,6 @@
 export enum SegmentShare {
-  Native = 'Share Native',
-  DesktopOpen = 'Share Desktop Open',
-  DesktopClose = 'Share Desktop Close',
-  Facebook = 'Share Facebook',
-  Twitter = 'Share Twitter',
+  Share = 'share',
+  SharePopupOpen = 'share_popup_open',
+  SharePopupClose = 'share_popup_close',
+  ShareFallback = 'share_fallback',
 }
