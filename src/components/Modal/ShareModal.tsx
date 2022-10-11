@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { Header } from 'decentraland-ui/dist/components/Header/Header'
@@ -8,7 +8,7 @@ import Icon from 'semantic-ui-react/dist/commonjs/elements/Icon/Icon'
 import useTrackContext from '../../context/Track/useTrackContext'
 import useFormatMessage from '../../hooks/useFormatMessage'
 import { DCLShareData } from '../../hooks/useShare'
-import { SegmentShare } from '../../modules/segment'
+import { ShareEvent } from '../../hooks/useShare.utils'
 import TokenList from '../../utils/dom/TokenList'
 
 import './ShareModal.css'
@@ -36,6 +36,20 @@ export default React.memo(function ShareModal({
 }: ShareModalProps) {
   const l = useFormatMessage()
   const track = useTrackContext()
+  const mounted = useRef(false)
+
+  useEffect(() => {
+    if (!mounted.current) {
+      mounted.current = true
+    } else if (track) {
+      // eslint-disable-next-line no-extra-boolean-cast
+      if (!!data) {
+        track(ShareEvent.SharePopupOpen)
+      } else {
+        track(ShareEvent.SharePopupClose)
+      }
+    }
+  }, [data])
 
   const shareableText = useMemo(() => {
     if (data) {
@@ -45,12 +59,12 @@ export default React.memo(function ShareModal({
   }, [data])
 
   const getFacebookLink = useCallback(() => {
-    track(SegmentShare.ShareFallback, { data, social: 'facebook' })
+    track(ShareEvent.ShareFallback, { data, social: 'facebook' })
     return encodeURI(l('@growth.ShareModal.uri.facebook', { url: data?.url }))
   }, [data, track])
 
   const getTwitterLink = useCallback(() => {
-    track(SegmentShare.ShareFallback, { data, social: 'twitter' })
+    track(ShareEvent.ShareFallback, { data, social: 'twitter' })
     return encodeURI(
       l('@growth.ShareModal.uri.twitter', {
         url: data?.url,
