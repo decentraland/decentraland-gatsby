@@ -46,15 +46,8 @@ export type {
 
 export default class Catalyst extends API {
   static Url =
-    process.env.GATSBY_CATALYST_API ||
-    process.env.REACT_APP_CATALYST_API ||
-    process.env.STORYBOOK_CATALYST_API ||
-    process.env.CATALYST_API ||
-    process.env.GATSBY_PROFILE_URL ||
-    process.env.REACT_APP_PROFILE_URL ||
-    process.env.STORYBOOK_PROFILE_URL ||
-    process.env.PROFILE_URL ||
-    'https://peer.decentraland.org'
+    env('CATALYST_API', '') || // @deprecated
+    env('PROFILE_URL', 'https://peer.decentraland.org')
 
   static Servers: Promise<void> | null = null
   static Cache = new Map<string, Catalyst>()

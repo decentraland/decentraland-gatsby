@@ -1,5 +1,7 @@
 import React from 'react'
 
+import env from '../../utils/env'
+
 export type RollbarProps = React.ScriptHTMLAttributes<HTMLScriptElement> &
   React.HTMLProps<HTMLScriptElement> & {
     accessToken?: string
@@ -19,7 +21,7 @@ export default React.memo(function Rollbar({
   ...props
 }: RollbarProps) {
   version = version || 'v2.24.0'
-  accessToken = accessToken || process.env.GATSBY_ROLLBAR_TOKEN
+  accessToken = accessToken || env('ROLLBAR_TOKEN')
   if (!accessToken) {
     console.warn(
       `skipping rollbar inject: accessToken and GATSBY_ROLLBAR_TOKEN is missing'`
@@ -33,14 +35,12 @@ export default React.memo(function Rollbar({
     captureUnhandledRejections: captureUnhandledRejections !== false,
     rollbarJsUrl: src,
     payload: {
-      environment: process.env.GATSBY_ENVIRONMENT || 'local',
-      COMMIT_SHA:
-        process.env.GATSBY_COMMIT_SHA ||
-        '0000000000000000000000000000000000000000',
-      COMMIT_SHORT_SHA: process.env.GATSBY_COMMIT_SHORT_SHA || '00000000',
-      COMMIT_REF_NAME: process.env.GATSBY_COMMIT_REF_NAME || 'missing',
-      COMMIT_BRANCH: process.env.GATSBY_COMMIT_BRANCH || 'missing',
-      COMMIT_TAG: process.env.GATSBY_COMMIT_TAG || 'missing',
+      environment: env('ENVIRONMENT', 'local'),
+      COMMIT_SHA: env('COMMIT_SHA', '0000000000000000000000000000000000000000'),
+      COMMIT_SHORT_SHA: env('COMMIT_SHORT_SHA', '00000000'),
+      COMMIT_REF_NAME: env('COMMIT_REF_NAME', 'missing'),
+      COMMIT_BRANCH: env('COMMIT_BRANCH', 'missing'),
+      COMMIT_TAG: env('COMMIT_TAG', 'missing'),
       ...(payload || {}),
     },
   }

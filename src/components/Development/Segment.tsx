@@ -1,5 +1,7 @@
 import React from 'react'
 
+import env from '../../utils/env'
+
 export type SegmentProps = React.Props<HTMLScriptElement> &
   React.HTMLProps<HTMLScriptElement> & {
     /** @deprecated use segmentKey instead */
@@ -16,7 +18,7 @@ export default React.memo(function Segment({
   trackPage,
   ...props
 }: SegmentProps) {
-  segmentKey = segmentKey || analyticsKey || process.env.GATSBY_SEGMENT_KEY
+  segmentKey = segmentKey || analyticsKey || env('SEGMENT_KEY', '')
   if (!segmentKey) {
     console.warn(
       `skipping segment inject: segmentKey and GATSBY_SEGMENT_KEY is missing'`
