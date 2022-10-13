@@ -1,10 +1,11 @@
 import { uid } from 'radash/dist/random'
 
+import env, { Env, setupEnv } from '../../../utils/env'
 import { Request } from '../../Route/wkc/request/Request'
 import withPrometheusToken from './withPrometheusToken'
 
 const withMissingAuth = withPrometheusToken()
-process.env.PROMETHEUS_BEARER_TOKEN = uid(24)
+setupEnv({ [Env.PRODUCTION]: { PROMETHEUS_BEARER_TOKEN: uid(24) } })
 
 const withAuth = withPrometheusToken()
 test(`should fails if authorization is invalid`, async () => {
@@ -26,12 +27,12 @@ test(`should fails if authorization is invalid`, async () => {
 test(`shoudl return the PROMETHEUS_BEARER_TOKEN if the token is present in headers`, async () => {
   const validToken = new Request('/', {
     headers: {
-      authorization: 'Bearer ' + process.env.PROMETHEUS_BEARER_TOKEN,
+      authorization: 'Bearer ' + env('PROMETHEUS_BEARER_TOKEN'),
     },
   })
 
   expect(await withAuth({ request: validToken })).toBe(
-    process.env.PROMETHEUS_BEARER_TOKEN
+    env('PROMETHEUS_BEARER_TOKEN')
   )
 })
 
@@ -45,7 +46,7 @@ test(`should return null if PROMETHEUS_BEARER_TOKEN is not present`, async () =>
   })
   const validToken = new Request('/', {
     headers: {
-      authorization: 'Bearer ' + process.env.PROMETHEUS_BEARER_TOKEN,
+      authorization: 'Bearer ' + env('PROMETHEUS_BEARER_TOKEN'),
     },
   })
 

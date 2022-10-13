@@ -1,14 +1,16 @@
+import env from '../../utils/env'
 import { clusterInitializer } from '../Cluster/utils'
 import { ServiceStartHandler, emptyServiceInitializer } from '../Server/types'
 import TaskManager from './TaskManager'
 
 export const taskInitializer = (manager: TaskManager): ServiceStartHandler => {
-  if (process.env.TASKS === 'false') {
+  if (env('TASKS', 'true') === 'false') {
     return emptyServiceInitializer()
   }
 
   return clusterInitializer(
-    process.env.CLUSTER === 'true' || process.env.TASKS_CLUSTER === 'true',
+    env('CLUSTER', 'false') === 'true' ||
+      env('TASKS_CLUSTER', 'false') === 'true',
     {
       CLUSTER: 'false',
       HTTP_CLUSTER: 'false',

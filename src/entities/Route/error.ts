@@ -1,3 +1,5 @@
+import env from '../../utils/env'
+
 export default class RequestError extends Error {
   static BadRequest = 400
   static Unauthorized = 401
@@ -45,7 +47,7 @@ export default class RequestError extends Error {
       result.data = (err as RequestError).data
     }
 
-    if (result.stack && process.env.NODE_ENV !== 'production') {
+    if (result.stack && env('NODE_ENV', 'development') === 'production') {
       result.stack = err.stack
     }
 

@@ -17,6 +17,7 @@ import handle from 'decentraland-gatsby/dist/entities/Route/handle'
 import RequestError from 'decentraland-gatsby/dist/entities/Route/error'
 import { serverInitializer } from 'decentraland-gatsby/dist/entities/Server/utils'
 import { initializeServices } from 'decentraland-gatsby/dist/entities/Server/handler'
+import env from 'decentraland-gatsby/dist/utils/env'
 
 // const jobs = manager()
 // jobs.cron('@eachMinute', () => console.log('Runnign Job...'))
@@ -38,8 +39,8 @@ app.use(metrics)
 app.use(filesystem('public', '404.html'))
 
 initializeServices([
-  // process.env.DATABASE !== 'false' && databaseInitializer(),
-  // process.env.JOBS !== 'false' && jobInitializer(jobs),
-  process.env.HTTP !== 'false' &&
-    serverInitializer(app, process.env.PORT || 4000, process.env.HOST),
+  // env('DATABASE', 'true) !== 'false' && databaseInitializer(),
+  // env('JOBS', 'true) !== 'false' && jobInitializer(jobs),
+  env('HTTP', 'true') !== 'fase' &&
+    serverInitializer(app, Number(env('PORT', '4000')), process.env.HOST),
 ])

@@ -1,3 +1,4 @@
+import env from '../../../utils/env'
 import Context from '../context'
 
 import type { Request, Response } from 'express'
@@ -14,6 +15,6 @@ export const DEFAULT_API_HEADERS: Record<string, string> = {
   'X-Frame-Options': 'DENY',
 }
 
-if (process.env.STRICT_TRANSPORT_SECURITY === 'true') {
+if (env('STRICT_TRANSPORT_SECURITY', 'false') === 'true') {
   DEFAULT_API_HEADERS['Strict-Transport-Security'] = 'max-age=63072000'
 }

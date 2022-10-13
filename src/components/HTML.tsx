@@ -1,3 +1,4 @@
+// TODO(#323): remove on v6
 import React from 'react'
 
 import PropTypes from 'prop-types'

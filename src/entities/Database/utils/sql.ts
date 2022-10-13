@@ -1,5 +1,6 @@
 import { Model, SQL, SQLStatement, raw } from 'decentraland-server'
 
+import env from '../../../utils/env'
 import { ServiceStartHandler } from '../../Server/types'
 import database from '../database'
 import { LimitOptions } from '../types'
@@ -13,7 +14,7 @@ export { raw, SQL, SQLStatement }
 
 export const databaseInitializer = (): ServiceStartHandler => {
   return async () => {
-    if (process.env.DATABASE === 'false') {
+    if (env('DATABASE', 'true') === 'false') {
       return async () => {}
     }
 

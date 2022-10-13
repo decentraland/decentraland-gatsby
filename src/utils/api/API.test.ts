@@ -1,8 +1,9 @@
 import fetch from '../../entities/Development/fetch.test'
+import env from '../env'
 import API from './API'
 import '../../entities/Development/logger.test'
 
-const HTTPBIN_ENDPOINT = process.env.HTTPBIN_ENDPOINT || 'https://httpbin.org'
+const HTTPBIN_ENDPOINT = env('HTTPBIN_ENDPOINT', 'https://httpbin.org')
 
 describe('utils/api/API', () => {
   describe('#catch', () => {
