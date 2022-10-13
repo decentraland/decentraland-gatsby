@@ -1,0 +1,64 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs'
+import Time from '../../utils/date/Time'
+import Input from './Input.tsx'
+
+<Meta title="Components/SemanticForm/Input" />
+
+<Canvas isExpanded>
+  <Story name="text">
+    <Input />
+  </Story>
+</Canvas>
+
+<Canvas isExpanded>
+  <Story name="date">
+    <Input type="date" />
+    <div />
+    <Input type="date" initialValue={new Date()} onChange={console.log} />
+    <div />
+    <Input type="date" initialValue={Date.now()} utc onChange={console.log} />
+    <div />
+    <Input
+      type="date"
+      initialValue={Date.now()}
+      utc={false}
+      onChange={console.log}
+    />
+  </Story>
+</Canvas>
+
+<Canvas isExpanded>
+  <Story name="time">
+    <Input type="time" />
+    <div />
+    <Input type="time" initialValue={0} onChange={console.log} />
+    <div />
+    <Input
+      type="time"
+      value={22 * Time.Hour + 58 * Time.Minute}
+      onChange={console.log}
+    />
+  </Story>
+</Canvas>
+
+<Canvas isExpanded>
+  <Story name="datetime">
+    <Input type="datetime" />
+    <div />
+    <Input type="datetime" initialValue={new Date()} onChange={console.log} />
+    <div />
+    <Input
+      type="datetime"
+      initialValue={Date.now()}
+      utc
+      onChange={console.log}
+    />
+    <div />
+    <Input
+      type="datetime"
+      initialValue={Date.now()}
+      utc={false}
+      onChange={console.log}
+    />
+  </Story>
+</Canvas>
