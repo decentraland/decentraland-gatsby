@@ -16,14 +16,9 @@ import Input from './Input.tsx'
     <div />
     <Input type="date" initialValue={new Date()} onChange={console.log} />
     <div />
-    <Input type="date" initialValue={Date.now()} utc onChange={console.log} />
+    <Input type="date" initialValue={Date.now()} onChange={console.log} />
     <div />
-    <Input
-      type="date"
-      initialValue={Date.now()}
-      utc={false}
-      onChange={console.log}
-    />
+    <Input type="date" initialValue={Date.now()} onChange={console.log} />
   </Story>
 </Canvas>
 

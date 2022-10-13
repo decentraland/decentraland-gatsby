@@ -18,60 +18,40 @@ export type InputDateProps = Omit<InputBaseProps, 'type' | 'defaultValue'> & {
   ) => void
   initialValue?: Date | Time.Dayjs | number
   value?: Date | Time.Dayjs | number
-  utc?: boolean
 }
 
 export default React.memo(function InputDate(props: InputDateProps) {
-  const [utc, setUTC] = useState(props.utc)
   const initialValue = useMemo(
-    () => toInputDateValue(props.initialValue, utc),
-    [props.initialValue, utc]
+    () => toInputDateValue(props.initialValue),
+    [props.initialValue]
   )
-  const value = useMemo(
-    () => toInputDateValue(props.value, utc),
-    [props.value, utc]
-  )
-  const handleChangeUTC = useCallback(() => setUTC((prev) => !prev), [])
+  const value = useMemo(() => toInputDateValue(props.value), [props.value])
   const handleChange = useCallback(
     (
       event: React.ChangeEvent<HTMLInputElement>,
       data: InputBaseOnChangeData
     ) => {
       if (props.onChange) {
-        const value = fromInputDateValue(data.value, utc)
+        const value = fromInputDateValue(data.value)
         props.onChange(event, { ...props, value })
       }
     },
-    [props.onChange, utc]
+    [props.onChange]
   )
 
   return (
     <InputBase
-      {...omit(props, ['utc', 'initialValue'])}
+      {...omit(props, ['initialValue'])}
       value={value}
       defaultValue={initialValue}
       type="date"
       onChange={handleChange}
-      action={props.action || utc !== undefined}
-    >
-      <input />
-      {utc !== undefined && (
-        <Button
-          labelPosition="right"
-          icon={utc ? 'check' : 'time'}
-          positive={utc}
-          content={utc ? 'UTC' : 'Local'}
-          onClick={handleChangeUTC}
-        />
-      )}
-    </InputBase>
+      action={props.action}
+    />
   )
 })
 
-export function toInputDateValue(
-  value?: Date | Time.Dayjs | number,
-  utc?: boolean
-) {
+export function toInputDateValue(value?: Date | Time.Dayjs | number) {
   if (value === undefined || value === null) {
     return undefined
   }
@@ -86,16 +66,15 @@ export function toInputDateValue(
     }
   }
 
-  return Time.from(value, { utc }).format(Time.Formats.InputDate)
+  return Time.from(value).format(Time.Formats.InputDate)
 }
 
-export function fromInputDateValue(value: string | undefined, utc?: boolean) {
+export function fromInputDateValue(value: string | undefined) {
   if (!value) {
     return undefined
   }
 
   const result = Time.from(value, {
-    utc,
     format: Time.Formats.InputDate,
   }).toDate()
 
