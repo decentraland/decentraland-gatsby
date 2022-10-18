@@ -51,6 +51,6 @@ export default function filesystem(
     }
   }
 
-  router.use(file(resolve(cwd, fileSystemOptions.notFoundFile), 404))
+  router.use(file(resolve(cwd, fileSystemOptions.notFoundFile), 404, options))
   return router
 }
