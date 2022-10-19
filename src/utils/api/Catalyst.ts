@@ -248,11 +248,11 @@ export default class Catalyst extends API {
   }
 
   async getRealms() {
-    this.fetch<Realm[]>('/lambdas/explore/realms')
+    return this.fetch<Realm[]>('/lambdas/explore/realms')
   }
 
   async getHostScenes() {
-    this.fetch<HotScene[]>('/lambdas/explore/hot-scenes')
+    return this.fetch<HotScene[]>('/lambdas/explore/hot-scenes')
   }
 
   async getServers() {
