@@ -1,0 +1,98 @@
+.carousel2:not(.fullscreen) .swiper {
+  padding: 0 40px 40px;
+}
+
+.carousel2.fullscreen .swiper {
+  padding: 0;
+}
+
+.carousel2 .swiper-button-prev,
+.carousel2 .swiper-rtl .swiper-button-next {
+  left: 0;
+  top: calc(50% - 20px);
+}
+
+.carousel2 .swiper-button-next,
+.carousel2 .swiper-rtl .swiper-button-prev {
+  right: 0;
+  top: calc(50% - 20px);
+}
+
+.carousel2 .swiper-button-prev::after,
+.carousel2 .swiper-button-next::after {
+  font-size: 28px;
+  color: rgba(115, 110, 125, 0.32);
+  font-weight: 600;
+}
+
+.carousel2.dash-indicators .swiper-pagination.swiper-pagination-horizontal {
+  bottom: 0;
+  width: 120px !important;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.carousel2 .swiper-pagination .swiper-pagination-bullet {
+  opacity: 0.5;
+  background-color: #736e7d;
+}
+
+.carousel2:not(.dash-indicators) .swiper-pagination .swiper-pagination-bullet {
+  height: 10px;
+  width: 10px;
+}
+
+.carousel2.dash-indicators .swiper-pagination .swiper-pagination-bullet {
+  height: 3px;
+  border-radius: 1.5px;
+  transition: width 0.3s, background-color 0.3s;
+}
+
+.carousel2.dash-indicators
+  .swiper-pagination
+  .swiper-pagination-bullet.swiper-pagination-bullet-active-prev-prev,
+.carousel2.dash-indicators
+  .swiper-pagination
+  .swiper-pagination-bullet.swiper-pagination-bullet-active-next-next {
+  width: 8px;
+  opacity: 0.8;
+}
+
+.carousel2.dash-indicators
+  .swiper-pagination
+  .swiper-pagination-bullet.swiper-pagination-bullet-active-prev,
+.carousel2.dash-indicators
+  .swiper-pagination
+  .swiper-pagination-bullet.swiper-pagination-bullet-active-next {
+  width: 16px;
+  opacity: 1;
+}
+
+.carousel2
+  .swiper-pagination
+  .swiper-pagination-bullet.swiper-pagination-bullet-active-main {
+  background-color: var(--primary);
+}
+
+.carousel2.dash-indicators
+  .swiper-pagination
+  .swiper-pagination-bullet.swiper-pagination-bullet-active-main {
+  width: 24px;
+  opacity: 0.5;
+}
+
+.carousel2.dash-indicators
+  .swiper-pagination
+  .swiper-pagination-bullet.swiper-pagination-bullet-active,
+.carousel2
+  .swiper-pagination
+  .swiper-pagination-bullet.swiper-pagination-bullet-active {
+  background-color: var(--primary);
+  opacity: 1;
+}
+
+.carousel2.dash-indicators
+  .swiper-pagination
+  .swiper-pagination-bullet.swiper-pagination-bullet-active {
+  width: 32px;
+}
