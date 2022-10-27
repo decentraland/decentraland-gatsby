@@ -20,7 +20,14 @@ function createEnvs(data: EnvRecord = {}) {
 }
 
 function getEnvs() {
-  const env = getEnv()
+  let env = getEnv()
+  if (
+    typeof process !== 'undefined' &&
+    isEnv(process.env.GATSBY_DCL_DEFAULT_ENV || '')
+  ) {
+    env = process.env.GATSBY_DCL_DEFAULT_ENV! as Env
+  }
+
   if (!ENVS.has(env)) {
     ENVS.set(env, createEnvs())
   }
