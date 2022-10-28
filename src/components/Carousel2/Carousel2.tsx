@@ -15,7 +15,7 @@ export enum IndicatorsType {
   Dash = 'dash',
 }
 export type Carousel2Props = React.HTMLProps<HTMLDivElement> & {
-  items: Record<string, string>[]
+  items: Record<string, any>[]
   component: React.ComponentType<{ item: any }>
   dynamicMainBullets?: number
   time?: number | false

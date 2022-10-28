@@ -12,10 +12,28 @@
   top: calc(50% - 20px);
 }
 
+.carousel2.fullscreen .swiper-button-prev,
+.carousel2.fullscreen .swiper-rtl .swiper-button-next {
+  left: 40px;
+  top: calc(50% - 20px);
+  width: 44px;
+  background-color: #736e7c52;
+  border-radius: 50%;
+}
+
 .carousel2 .swiper-button-next,
 .carousel2 .swiper-rtl .swiper-button-prev {
   right: 0;
   top: calc(50% - 20px);
+}
+
+.carousel2.fullscreen .swiper-button-next,
+.carousel2.fullscreen .swiper-rtl .swiper-button-prev {
+  right: 40px;
+  top: calc(50% - 20px);
+  width: 44px;
+  background-color: #736e7c52;
+  border-radius: 50%;
 }
 
 .carousel2 .swiper-button-prev::after,
@@ -25,11 +43,24 @@
   font-weight: 600;
 }
 
+.carousel2.fullscreen .swiper-button-prev::after,
+.carousel2.fullscreen .swiper-button-next::after {
+  font-size: 28px;
+  color: rgba(255, 255, 255, 1);
+  font-weight: 600;
+  border-radius: 50%;
+}
+
 .carousel2.dash-indicators .swiper-pagination.swiper-pagination-horizontal {
   bottom: 0;
   width: 120px !important;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.carousel2.fullscreen.dash-indicators
+  .swiper-pagination.swiper-pagination-horizontal {
+  bottom: 40px;
 }
 
 .carousel2 .swiper-pagination .swiper-pagination-bullet {
