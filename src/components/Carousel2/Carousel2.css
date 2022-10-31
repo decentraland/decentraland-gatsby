@@ -1,5 +1,9 @@
-.carousel2:not(.fullscreen) .swiper {
+.carousel2:not(.fullscreen):not(.navigation-hide) .swiper {
   padding: 0 40px 40px;
+}
+
+.carousel2.navigation-hide:not(.fullscreen) .swiper {
+  padding: 0 0 40px;
 }
 
 .carousel2.fullscreen .swiper {

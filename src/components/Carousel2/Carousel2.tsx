@@ -21,6 +21,7 @@ export type Carousel2Props = React.HTMLProps<HTMLDivElement> & {
   time?: number | false
   progress?: boolean
   isFullscreen?: boolean
+  isNavigationHide?: boolean
   indicatorsType?: IndicatorsType
 }
 
@@ -33,6 +34,7 @@ export default React.memo(function Carousel2({
   items,
   dynamicMainBullets,
   isFullscreen,
+  isNavigationHide,
   component: Component,
   ...props
 }: Carousel2Props) {
@@ -43,6 +45,7 @@ export default React.memo(function Carousel2({
         'carousel2',
         className,
         isFullscreen && 'fullscreen',
+        isNavigationHide && 'navigation-hide',
         indicatorsType === IndicatorsType.Dash && 'dash-indicators',
       ])}
     >
@@ -61,9 +64,7 @@ export default React.memo(function Carousel2({
         containerModifierClass="carousel2__"
         loop={!progress}
         modules={[Autoplay, Navigation, Pagination]}
-        navigation
-        observer={true}
-        observeParents={true}
+        navigation={!isNavigationHide}
         pagination={{
           clickable: true,
           dynamicBullets: items.length > 5 && true,
