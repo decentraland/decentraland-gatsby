@@ -1,4 +1,5 @@
-import { Env, getEnv, isEnv } from '@dcl/ui-env/dist/env'
+import { Env, isEnv } from '@dcl/ui-env/dist/env'
+import { getEnvFromQueryParam, getEnvFromTLD } from '@dcl/ui-env/dist/location'
 
 export type EnvRecord = Record<string, string | undefined>
 export type EnvMap = Partial<Record<Env, EnvRecord>>
@@ -19,15 +20,32 @@ function createEnvs(data: EnvRecord = {}) {
   return result
 }
 
-function getEnvs() {
-  let env = getEnv()
-  if (
-    typeof process !== 'undefined' &&
-    isEnv(process.env.GATSBY_DCL_DEFAULT_ENV || '')
-  ) {
-    env = process.env.GATSBY_DCL_DEFAULT_ENV! as Env
+function getEnv(): Env {
+  if (typeof window !== 'undefined') {
+    const envFromQueryParam = getEnvFromQueryParam(window.location)
+    if (envFromQueryParam) {
+      return envFromQueryParam
+    }
+
+    const envFromTLD = getEnvFromTLD(window.location)
+    if (envFromTLD) {
+      return envFromTLD
+    }
   }
 
+  if (isEnv(process.env.DCL_DEFAULT_ENV || '')) {
+    return process.env.DCL_DEFAULT_ENV as Env
+  }
+
+  if (isEnv(process.env.GATSBY_DEFAULT_ENV || '')) {
+    return process.env.GATSBY_DCL_DEFAULT_ENV as Env
+  }
+
+  return Env.DEVELOPMENT
+}
+
+function getEnvs() {
+  const env = getEnv()
   if (!ENVS.has(env)) {
     ENVS.set(env, createEnvs())
   }
