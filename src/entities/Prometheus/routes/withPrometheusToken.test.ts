@@ -5,7 +5,7 @@ import { Request } from '../../Route/wkc/request/Request'
 import withPrometheusToken from './withPrometheusToken'
 
 const withMissingAuth = withPrometheusToken()
-setupEnv({ [Env.PRODUCTION]: { PROMETHEUS_BEARER_TOKEN: uid(24) } })
+setupEnv({ [Env.DEVELOPMENT]: { PROMETHEUS_BEARER_TOKEN: uid(24) } })
 
 const withAuth = withPrometheusToken()
 test(`should fails if authorization is invalid`, async () => {

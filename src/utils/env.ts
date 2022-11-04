@@ -41,6 +41,10 @@ function getEnv(): Env {
     return process.env.GATSBY_DCL_DEFAULT_ENV as Env
   }
 
+  if (process.env.NODE_ENV === 'production') {
+    return Env.PRODUCTION
+  }
+
   return Env.DEVELOPMENT
 }
 
