@@ -158,3 +158,16 @@ export const hideNavigation: ComponentStoryObj<typeof Carousel2> = {
     </div>
   ),
 }
+
+export const loading: ComponentStoryObj<typeof Carousel2> = {
+  render: () => (
+    <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
+      <Carousel2
+        loading
+        isNavigationHide
+        items={carouselItems}
+        component={ComponentCarousel}
+      />
+    </div>
+  ),
+}
