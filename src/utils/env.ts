@@ -1,12 +1,19 @@
-import { Env, isEnv } from '@dcl/ui-env/dist/env'
-import { getEnvFromQueryParam, getEnvFromTLD } from '@dcl/ui-env/dist/location'
+// import { Env, isEnv } from '@dcl/ui-env/dist/env'
+// import { getEnvFromQueryParam, getEnvFromTLD } from '@dcl/ui-env/dist/location'
+import * as UIEnv from '@dcl/ui-env/dist/env'
+import * as UILocation from '@dcl/ui-env/dist/location'
+
+const Env = UIEnv.Env
+const isEnv = UIEnv.isEnv
+const getEnvFromTLD = UILocation.getEnvFromTLD
+const getEnvFromQueryParam = UILocation.getEnvFromQueryParam
 
 export type EnvRecord = Record<string, string | undefined>
-export type EnvMap = Partial<Record<Env, EnvRecord>>
+export type EnvMap = Partial<Record<UIEnv.Env, EnvRecord>>
 
 export { Env }
 
-const ENVS: Map<Env, EnvRecord> = new Map()
+const ENVS: Map<UIEnv.Env, EnvRecord> = new Map()
 
 function createEnvs(data: EnvRecord = {}) {
   const result: EnvRecord = {}
@@ -20,7 +27,7 @@ function createEnvs(data: EnvRecord = {}) {
   return result
 }
 
-function getEnv(): Env {
+function getEnv(): UIEnv.Env {
   if (typeof window !== 'undefined') {
     const envFromQueryParam = getEnvFromQueryParam(window.location)
     if (envFromQueryParam) {
@@ -34,11 +41,11 @@ function getEnv(): Env {
   }
 
   if (isEnv(process.env.DCL_DEFAULT_ENV || '')) {
-    return process.env.DCL_DEFAULT_ENV as Env
+    return process.env.DCL_DEFAULT_ENV as UIEnv.Env
   }
 
   if (isEnv(process.env.GATSBY_DEFAULT_ENV || '')) {
-    return process.env.GATSBY_DCL_DEFAULT_ENV as Env
+    return process.env.GATSBY_DCL_DEFAULT_ENV as UIEnv.Env
   }
 
   if (process.env.NODE_ENV === 'production') {
