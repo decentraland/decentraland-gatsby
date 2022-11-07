@@ -44,7 +44,7 @@ function getEnv(): UIEnv.Env {
     return process.env.DCL_DEFAULT_ENV as UIEnv.Env
   }
 
-  if (isEnv(process.env.GATSBY_DEFAULT_ENV || '')) {
+  if (isEnv(process.env.GATSBY_DCL_DEFAULT_ENV || '')) {
     return process.env.GATSBY_DCL_DEFAULT_ENV as UIEnv.Env
   }
 
