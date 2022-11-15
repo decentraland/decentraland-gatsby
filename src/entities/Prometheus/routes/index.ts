@@ -9,6 +9,7 @@ import withPrometheusToken from './withPrometheusToken'
 const PROMETHEUS_REGISTRIES = [gatsbyRegister, register]
 let PROMETHEUS_REGISTRY = Registry.merge(PROMETHEUS_REGISTRIES)
 
+/** deprecated use ./utils */
 export default routes((router) => {
   router.get('/metrics', getMetrics)
 })
