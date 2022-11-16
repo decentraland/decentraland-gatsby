@@ -32,6 +32,7 @@ import trackEvent from '../../utils/segment/trackEvent'
 import ShareModal from '../Modal/ShareModal'
 import WalletSelectorModal from '../Modal/WalletSelectorModal'
 import WrongNetworkModal from '../Modal/WrongNetworkModal'
+import LeftMenu from './LeftMenu'
 
 import './Layout.css'
 
@@ -75,7 +76,9 @@ export default function Layout({
           mana={props.mana}
           address={props.address}
           activePage={props.activePage}
-          leftMenu={props.leftMenu}
+          leftMenu={
+            props.leftMenu || <LeftMenu activePage={props.activePage} />
+          }
           middleMenu={props.middleMenu}
           rightMenu={props.rightMenu}
           i18n={props.i18n}
