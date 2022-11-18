@@ -3,7 +3,7 @@ import React, { useCallback, useState } from 'react'
 import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import { Tabs } from 'decentraland-ui/dist/components/Tabs/Tabs'
 
-import { Link } from '../../plugins/intl'
+import { Link, LinkProps } from '../../plugins/intl'
 import TokenList from '../../utils/dom/TokenList'
 
 import './NavigationMenu.css'
@@ -17,10 +17,8 @@ export type NavigationMenuProps = {
   className?: string
 }
 
-export type NavigationMenuItemProps = {
-  href: string
-  active: boolean
-  children: React.ReactNode
+export type NavigationMenuItemProps = LinkProps & {
+  active?: boolean
 }
 
 const NavigationMenu = React.memo(function NavigationMenu(
@@ -42,11 +40,13 @@ const NavigationMenu = React.memo(function NavigationMenu(
   )
 })
 
-const Item = React.memo(function Item(props: NavigationMenuItemProps) {
-  const { href, active, children } = props
-
+const Item = React.memo(function Item({
+  active,
+  children,
+  ...props
+}: NavigationMenuItemProps) {
   return (
-    <Link href={href}>
+    <Link {...props}>
       <Tabs.Tab active={active}>{children}</Tabs.Tab>
     </Link>
   )
