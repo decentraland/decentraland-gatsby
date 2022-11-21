@@ -65,7 +65,7 @@ export default React.memo(function ShareModal({
 
   const handleFacebookShare = useCallback(
     (e) => {
-      e.preventDefautl()
+      e.preventDefault()
       track(ShareEvent.ShareFallback, { data, social: 'facebook' })
       handleShare(e, facebookLink)
     },
@@ -85,7 +85,7 @@ export default React.memo(function ShareModal({
 
   const handleTwitterShare = useCallback(
     (e) => {
-      e.preventDefautl()
+      e.preventDefault()
       track(ShareEvent.ShareFallback, { data, social: 'twitter' })
       handleShare(e, twitterLink)
     },
