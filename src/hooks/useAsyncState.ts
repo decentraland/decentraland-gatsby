@@ -162,6 +162,7 @@ export default function useAsyncState<T, I = null>(
       error: state.error,
       time: state.time,
       reload: load,
+      firstLoading: state.version === 0,
       set,
     }),
     [state, load, set]
