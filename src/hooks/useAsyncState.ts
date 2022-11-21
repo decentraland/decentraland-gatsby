@@ -27,6 +27,7 @@ export type AsyncStateResultState<T, I = null> = {
   time: number
   error: Error | null
   loading: boolean
+  loaded: boolean
   reload: () => void
   set: (value: ((current: T | I) => T) | T) => void
 }
@@ -45,6 +46,7 @@ export function createAsyncStateState<T, I = null>(): AsyncStateResultState<
     loading: false,
     time: 0,
     error: null,
+    loaded: false,
     reload: () => {},
     set: () => {},
   }
@@ -161,6 +163,7 @@ export default function useAsyncState<T, I = null>(
       loading: state.loading,
       error: state.error,
       time: state.time,
+      loaded: state.version !== 0,
       reload: load,
       set,
     }),
