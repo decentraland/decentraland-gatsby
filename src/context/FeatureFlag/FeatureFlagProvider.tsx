@@ -14,6 +14,7 @@ const defaultTransactionState: ReturnType<typeof useFeatureFlag> = [
     error: null,
     time: 0,
     version: 0,
+    loaded: false,
     set: () => null,
     reload: () => null,
     isEnabled: () => false,
