@@ -14,6 +14,7 @@ import Options, { RequestOptions } from './Options'
 
 import type { Identity } from '../auth/types'
 
+// TODO(#323): remove on v6
 import 'isomorphic-fetch'
 
 export type SearchParamValue = boolean | number | string | Date

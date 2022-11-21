@@ -52,11 +52,27 @@ export default class Catalyst extends API {
   static Servers: Promise<void> | null = null
   static Cache = new Map<string, Catalyst>()
 
+  /**
+   * TODO(#323): remove on v6
+   * @deprecated use getInstance instead
+   */
   static get() {
-    return this.from(env('PROFILE_URL', this.Url))
+    return this.getInstance()
   }
 
+  static getInstance() {
+    return this.getInstanceFrom(env('PROFILE_URL', this.Url))
+  }
+
+  /**
+   * TODO(#323): remove on v6
+   * @deprecated use getAnyInstance instead
+   */
   static async getAny() {
+    return this.getAnyInstance()
+  }
+
+  static async getAnyInstance() {
     if (!this.Servers) {
       this.Servers = this.get()
         .getServers()
@@ -87,10 +103,18 @@ export default class Catalyst extends API {
       }
     }
 
-    return this.get()
+    return this.getInstance()
   }
 
+  /**
+   * TODO(#323): remove on v6
+   * @deprecated use getInstanceFrom instead
+   */
   static from(baseUrl: string) {
+    return this.getInstanceFrom(baseUrl)
+  }
+
+  static getInstanceFrom(baseUrl: string) {
     if (!this.Cache.has(baseUrl)) {
       this.Cache.set(baseUrl, new Catalyst(baseUrl))
     }

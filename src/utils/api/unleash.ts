@@ -34,6 +34,9 @@ export const DEFAULT_FEATURE_FLAG: FeatureFlagsResponse = {
   variants: {},
 }
 
+/**
+ * @deprecated use @dcl/feature-flags instead
+ */
 export default async function unleash(
   endpoint?: string | null,
   options: Partial<UnleashOptions> = {}
