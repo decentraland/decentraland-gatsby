@@ -20,17 +20,19 @@ import './UserMenu.css'
 
 type UserMenuBalances = Partial<Record<Network, number>>
 
-export type UserMenuProps = Pick<
-  BaseUserMenuProps,
-  | 'menuItems'
-  | 'hasActivity'
-  | 'onClickProfile'
-  | 'onClickActivity'
-  | 'onClickSettings'
-> & {
-  i18n?: Partial<UserMenuI18N>
-  hideBalance?: boolean
-}
+export type UserMenuProps = Partial<
+  Pick<
+    BaseUserMenuProps,
+    | 'menuItems'
+    | 'hasActivity'
+    | 'onClickProfile'
+    | 'onClickActivity'
+    | 'onClickSettings'
+  > & {
+    i18n: Partial<UserMenuI18N>
+    hideBalance: boolean
+  }
+>
 
 export default function UserMenu(props: UserMenuProps) {
   const i18n = {
