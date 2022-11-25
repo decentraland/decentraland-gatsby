@@ -1,3 +1,4 @@
+// TODO(#323): remove on v6
 import { resolve } from 'path'
 
 import { Router } from 'express'
@@ -23,6 +24,9 @@ function filesystemOptions(
   }
 }
 
+/**
+ * @deprecated use filesytem2/* instead
+ */
 export default function filesystem(
   path: string,
   notFoundPage: string | Partial<FilesystemHandleOptions>,
