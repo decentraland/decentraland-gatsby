@@ -66,21 +66,29 @@ export async function readGatsbyFile(
  * Add Gatsby cache headers
  */
 export function addGastbyCacheHeaders(file: Response, path: string): Response {
-  if (file.status === 200) {
-    if (
-      minimatch(path, 'static/**/*') ||
-      minimatch(
-        path,
-        '{app,styles,commons,polyfill,framework,webpack-runtime,component---src-pages}-*.{js,css}?(.map)'
-      )
-    ) {
-      return Response.merge(file, {
-        headers: { 'cache-control': 'public, max-age=31536000, immutable' },
-      })
-    }
+  if (file.status === 200 && isGatsbyImmutableFile(path)) {
+    return Response.merge(file, {
+      headers: { 'cache-control': 'public, max-age=31536000, immutable' },
+    })
   }
 
   return Response.merge(file, {
     headers: { 'cache-control': 'public, max-age=0, must-revalidate' },
   })
 }
+
+export function isGatsbyImmutableFile(path: string): boolean {
+  return GATSBY_IMMUTABLE_FILES.some((pattern) => {
+    return new RegExp(pattern).test(path)
+  })
+}
+
+const GATSBY_IMMUTABLE_FILES = [
+  new minimatch.Minimatch('static/*').makeRe(),
+  new minimatch.Minimatch('static/**/*').makeRe(),
+  /^workbox-[a-f0-9]{8}\.js(\.map|\.LICENSE\.txt)?$/gi,
+  /^component---src-pages-.*-[a-f0-9]{20}\.js(\.map|\.LICENSE\.txt)?$/gi,
+  /^(app|commons|polyfill|framework|webpack-runtime)-[a-f0-9]{20}\.js(\.map|\.LICENSE\.txt)?$/gi,
+  /^[a-f0-9]+-[a-f0-9]{20}\.js(\.map|\.LICENSE\.txt)?$/gi,
+  /^styles\.[a-f0-9]{20}\.css$/gi,
+]
