@@ -9,7 +9,6 @@ import React from 'react'
 
 import type { PageProps } from 'gatsby'
 
-import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import {
   Footer,
   FooterProps,
@@ -19,7 +18,6 @@ import {
   Navbar,
   NavbarProps,
 } from 'decentraland-ui/dist/components/Navbar/Navbar'
-import { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Dropdown'
 
 import useAuthContext from '../../context/Auth/useAuthContext'
 import { getSupportedChainIds } from '../../context/Auth/utils'
@@ -33,6 +31,9 @@ import ShareModal from '../Modal/ShareModal'
 import WalletSelectorModal from '../Modal/WalletSelectorModal'
 import WrongNetworkModal from '../Modal/WrongNetworkModal'
 import LeftMenu from './LeftMenu'
+
+import type { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
+import type { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Dropdown'
 
 import './Layout.css'
 

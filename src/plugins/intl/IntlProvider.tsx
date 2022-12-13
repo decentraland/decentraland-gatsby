@@ -4,7 +4,7 @@ import { RawIntlProvider, createIntl, createIntlCache } from 'react-intl'
 
 import { merge } from 'immutable'
 
-import { DecentralandIntlContext } from './types'
+import type { DecentralandIntlContext } from './types'
 
 const intlCache = createIntlCache()
 

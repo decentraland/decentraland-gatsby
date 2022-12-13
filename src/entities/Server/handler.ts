@@ -1,6 +1,6 @@
 import { yellow } from 'colors/safe'
 
-import { ServiceStartHandler, ServiceStopHandler } from './types'
+import type { ServiceStartHandler, ServiceStopHandler } from './types'
 
 export async function initializeServices(
   serviceInitializers: (ServiceStartHandler | false | null | undefined)[]

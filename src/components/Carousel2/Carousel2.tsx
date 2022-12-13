@@ -5,10 +5,9 @@ import { Swiper, SwiperSlide } from 'swiper/react'
 
 import TokenList from '../../utils/dom/TokenList'
 
-import 'swiper/swiper.min.css'
-import 'swiper/swiper-bundle.css'
-
 import './Carousel2.css'
+import 'swiper/swiper.min.css'
+import 'swiper/swiper-bundle.min.css'
 
 export enum IndicatorsType {
   Bullet = 'bullet',
