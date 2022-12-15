@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react'
+import React from 'react'
 
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
@@ -13,6 +13,7 @@ import useProfileInjected from '../../context/Auth/useProfileContext'
 import useAsyncState from '../../hooks/useAsyncState'
 import useChainId from '../../hooks/useChainId'
 import { fetchManaBalance } from '../../utils/loader/manaBalance'
+import Avatar from './Avatar'
 
 import type { Network } from '@dcl/schemas/dist/dapps/network'
 
@@ -81,12 +82,9 @@ export default function UserMenu(props: UserMenuProps) {
   }, [user, chainId, props.hideBalance])
 
   if (loading) {
-    const Avatar = React.lazy(() => import('./Avatar'))
     return (
       <div>
-        <Suspense fallback={<></>}>
-          <Avatar loading width="42" height="42" />
-        </Suspense>
+        <Avatar loading width="42" height="42" />
       </div>
     )
   }
