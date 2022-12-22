@@ -5,6 +5,8 @@ import glob from 'glob'
 
 import RequestError from '../../error'
 import handleExpressError from '../../handle/handleExpressError'
+import { withHttpMetrics } from '../../middleware'
+import withLogs from '../../middleware/withLogs'
 import { Response } from './types'
 
 export function resolvePath(basePath: string, path: string) {
@@ -30,7 +32,11 @@ export function createHandlerFromResponse(
           res.header(key, value)
         }
         res.status(response.status)
-        res.send(response.body)
+        if (response.body instanceof Buffer) {
+          res.send(response.body)
+        } else {
+          response.body.pipe(res)
+        }
       })
       .catch((err: RequestError) => handleExpressError(err, req, res))
   }
@@ -42,6 +48,8 @@ export function createGlobRouter(
   iterator: (router: e.Router, match: string) => void
 ) {
   const router = e.Router()
+  router.use(withLogs())
+  router.use(withHttpMetrics({ handler: 'filesystem' }))
   const files = glob.sync(patter, { cwd: base, nodir: true })
   for (const file of files) {
     iterator(router, file)

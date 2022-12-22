@@ -9,7 +9,7 @@ import { Response } from './types'
 import { createHandlerFromResponse, resolvePath } from './utils'
 
 const POOL = createVoidPool({ min: 0, max: 20 })
-const FILES = new Map<string | null, Promise<Response>>()
+const FILES = new Map<string | null, Promise<Response<Buffer>>>()
 
 /**
  * Creates an express handler that returns a file from memory
@@ -31,7 +31,7 @@ export default function file(base: string, path: string) {
 export async function readFileFromMemory(
   base: string,
   path: string
-): Promise<Response> {
+): Promise<Response<Buffer>> {
   const absolutePath = resolvePath(base, path)
   if (!FILES.has(absolutePath)) {
     FILES.set(absolutePath, readFileFromDisk(base, path))
@@ -49,7 +49,7 @@ export async function readFileFromMemory(
 export async function readFileFromDisk(
   base: string,
   path: string
-): Promise<Response> {
+): Promise<Response<Buffer>> {
   const absolutePath = resolvePath(base, path)
   if (!absolutePath) {
     return createNotFound(path)
@@ -63,7 +63,7 @@ export async function readFileFromDisk(
     return {
       status: 200,
       headers: {
-        'content-type': mime.lookup(path),
+        'content-type': mime.getType(path) || 'application/octet-stream',
         'content-length': String(body.length),
         etag,
       },
@@ -80,7 +80,7 @@ export function createNotFound(path: string) {
   return {
     status: 404,
     headers: {
-      'content-type': mime.lookup(path),
+      'content-type': mime.getType(path) || 'application/octet-stream',
       'content-length': '0',
       etag: '"e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"', // createETag(Buffer.alloc(0))
     },

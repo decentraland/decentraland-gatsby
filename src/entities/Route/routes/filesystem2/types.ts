@@ -1,7 +1,11 @@
-export class Response {
+import type stream from 'stream'
+
+export class Response<
+  B extends Buffer | stream.Readable = Buffer | stream.Readable
+> {
   status: number
   headers: Record<string, string>
-  body: Buffer
+  body: B
 
   static merge(
     origin: Response,

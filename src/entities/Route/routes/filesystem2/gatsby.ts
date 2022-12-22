@@ -47,6 +47,7 @@ export default function createGatsbyRouter(
       readGatsbyFile(dir, GATSBY_NOT_FOUND_FILE, { status: 404 })
     )
   )
+
   return router
 }
 
