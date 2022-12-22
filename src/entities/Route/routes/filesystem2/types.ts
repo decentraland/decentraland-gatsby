@@ -7,10 +7,10 @@ export class Response<
   headers: Record<string, string>
   body: B
 
-  static merge(
-    origin: Response,
+  static merge<R extends Response>(
+    origin: R,
     ...partials: (Partial<Response> | null | false | undefined)[]
-  ): Response {
+  ): R {
     const target = {
       ...origin,
       headers: { ...origin.headers },

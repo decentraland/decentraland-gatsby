@@ -15,7 +15,16 @@ const NOT_FOUND_RESPONSE = {
 }
 
 export type WebsiteFilesOptions = {
-  indexFile?: string
+  /**
+   * If file doesn't exists it will continue with the next router
+   * @default false
+   */
+  continueIfNotFound?: boolean
+
+  /**
+   * Not found file resopnse, if not set a plain/text response will be
+   * provided instead
+   */
   notFoundFile?: string
 }
 
@@ -30,15 +39,17 @@ export default function createWebsiteRouter(
     )
   })
 
-  if (options.notFoundFile) {
-    router.use(
-      createHandlerFromResponse(
-        readWebsiteFile(dir, options.notFoundFile, options)
+  if (options.continueIfNotFound === true) {
+    if (options.notFoundFile) {
+      router.use(
+        createHandlerFromResponse(
+          readWebsiteFile(dir, options.notFoundFile, options)
+        )
       )
-    )
-  } else {
-    const notFound = addWebsiteSecurityHeaders(NOT_FOUND_RESPONSE, options)
-    router.use(createHandlerFromResponse(notFound))
+    } else {
+      const notFound = addWebsiteSecurityHeaders(NOT_FOUND_RESPONSE, options)
+      router.use(createHandlerFromResponse(notFound))
+    }
   }
 
   return router
@@ -62,8 +73,8 @@ export type WebsiteStatusOptions = Partial<{
   status: number
 }>
 
-export function overwriteWebsiteStatus(
-  response: Response,
+export function overwriteWebsiteStatus<R extends Response>(
+  response: R,
   options: WebsiteStatusOptions = {}
 ) {
   if (!options.status) {
@@ -140,24 +151,34 @@ export type WebsiteSecurityOptions = Partial<{
   contentSecurityPolicy:
     | false
     | Partial<{
-        baseUri: false | string
-        childSrc: false | string
-        connectSrc: false | string
-        fontSrc: false | string
-        formAction: false | string
-        frameSrc: false | string
-        imgSrc: false | string
-        manifestSrc: false | string
-        mediaSrc: false | string
-        prefetchSrc: false | string
-        styleSrc: false | string
-        workerSrc: false | string
-        scriptSrc: false | string
+        baseUri: false | string | string[]
+        childSrc: false | string | string[]
+        connectSrc: false | string | string[]
+        fontSrc: false | string | string[]
+        formAction: false | string | string[]
+        frameSrc: false | string | string[]
+        imgSrc: false | string | string[]
+        manifestSrc: false | string | string[]
+        mediaSrc: false | string | string[]
+        prefetchSrc: false | string | string[]
+        styleSrc: false | string | string[]
+        workerSrc: false | string | string[]
+        scriptSrc: false | string | string[]
       }>
+
+  /**
+   * Disabled or extends Permissions-Policy
+   *
+   * The HTTP Permissions-Policy (before know as Feature-Policy) header provides a mechanism to allow and deny
+   * the use of browser features in its own frame, and in content within any <iframe> elements in the document.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy
+   */
+  permissonPolicy: false | {}
 }>
 
-export function addWebsiteSecurityHeaders(
-  response: Response,
+export function addWebsiteSecurityHeaders<R extends Response>(
+  response: R,
   options: WebsiteSecurityOptions = {}
 ) {
   const contentSecurityPolicy =
@@ -198,55 +219,55 @@ export function addWebsiteSecurityHeaders(
           `default-src 'none'`,
           `frame-ancestors 'none'`,
           `object-src 'none'`,
-          applyContentSecurityPolicy(
+          toContentSecurityPolicy(
             `base-uri 'self'`,
             contentSecurityPolicy.baseUri
           ),
-          applyContentSecurityPolicy(
+          toContentSecurityPolicy(
             `child-src 'self' https:`,
             contentSecurityPolicy.childSrc
           ),
-          applyContentSecurityPolicy(
+          toContentSecurityPolicy(
             `connect-src 'self' https: wss:`,
             contentSecurityPolicy.connectSrc
           ),
-          applyContentSecurityPolicy(
+          toContentSecurityPolicy(
             `font-src 'self' https: data:`,
             contentSecurityPolicy.fontSrc
           ),
-          applyContentSecurityPolicy(
+          toContentSecurityPolicy(
             `form-action 'self'`,
             contentSecurityPolicy.formAction
           ),
-          applyContentSecurityPolicy(
+          toContentSecurityPolicy(
             `frame-src 'self' https:`,
             contentSecurityPolicy.frameSrc
           ),
-          applyContentSecurityPolicy(
+          toContentSecurityPolicy(
             `img-src https: 'self' data:`,
             contentSecurityPolicy.imgSrc
           ),
-          applyContentSecurityPolicy(
+          toContentSecurityPolicy(
             `manifest-src 'self'`,
             contentSecurityPolicy.manifestSrc
           ),
-          applyContentSecurityPolicy(
+          toContentSecurityPolicy(
             `media-src 'self'`,
             contentSecurityPolicy.mediaSrc
           ),
-          applyContentSecurityPolicy(
+          toContentSecurityPolicy(
             `prefetch-src 'self' https: data:`,
             contentSecurityPolicy.prefetchSrc
           ),
-          applyContentSecurityPolicy(
+          toContentSecurityPolicy(
             `style-src 'self' 'unsafe-inline' https: data:`,
             contentSecurityPolicy.styleSrc
           ),
-          applyContentSecurityPolicy(
+          toContentSecurityPolicy(
             `worker-src 'self'`,
             contentSecurityPolicy.workerSrc
           ),
-          applyContentSecurityPolicy(
+          toContentSecurityPolicy(
             `script-src 'self' 'unsafe-inline' 'unsafe-eval'`,
             contentSecurityPolicy.scriptSrc
           ),
@@ -258,7 +279,10 @@ export function addWebsiteSecurityHeaders(
   )
 }
 
-function applyContentSecurityPolicy(base: string, value?: false | string) {
+function toContentSecurityPolicy(
+  base: string,
+  value?: false | string | string[]
+) {
   if (value === false) {
     return false
   }
@@ -267,5 +291,33 @@ function applyContentSecurityPolicy(base: string, value?: false | string) {
     return base
   }
 
+  if (Array.isArray(value)) {
+    if (value.length === 0) {
+      return base
+    }
+
+    return base + ' ' + value.join(' ')
+  }
+
   return base + ' ' + value
 }
+
+// function toPermissionPolicy(value?: false | '*' | string[]): string {
+//   if (Array.isArray(value)) {
+//     return `=(${value.map(domain => `"${domain}"`).join(' ')})`
+//   }
+
+// return Object.keys(options).map(key => {
+//   const value = options[key] as boolean | '*' | string[]
+//   switch (value) {
+//     case false:
+//       return key + '=()'
+//     case true:
+//       return key + '=(self)'
+//     case '*':
+//       return key + '=*'
+//     default:
+//       return key + '=(' + value.map(domain => `"${domain}"`).join(' ') + ')'
+//   }
+// }).join(', ')
+// }
