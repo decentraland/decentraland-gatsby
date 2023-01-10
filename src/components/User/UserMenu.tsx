@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
-import { Network } from '@dcl/schemas/dist/dapps/network'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import {
   UserMenu as BaseUserMenu,
@@ -15,6 +14,8 @@ import useAsyncState from '../../hooks/useAsyncState'
 import useChainId from '../../hooks/useChainId'
 import { fetchManaBalance } from '../../utils/loader/manaBalance'
 import Avatar from './Avatar'
+
+import type { Network } from '@dcl/schemas/dist/dapps/network'
 
 import './UserMenu.css'
 

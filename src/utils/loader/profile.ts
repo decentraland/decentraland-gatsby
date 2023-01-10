@@ -1,7 +1,9 @@
-import Catalyst, { Avatar } from '../api/Catalyst'
+import Catalyst from '../api/Catalyst'
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
 import BatchLoader from './BatchLoader'
+
+import type { Avatar } from '../api/Catalyst'
 
 const DEFAULT_AVATAR = 'https://decentraland.org/images/male.png'
 

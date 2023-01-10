@@ -1,11 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import { connection } from 'decentraland-connect/dist/ConnectionManager'
 
 import logger from '../entities/Development/logger'
-import { Identity } from '../utils/auth'
 import { setCurrentIdentity } from '../utils/auth/storage'
 import rollbar from '../utils/development/rollbar'
 import segment from '../utils/development/segment'
@@ -22,6 +20,9 @@ import {
   restoreConnection,
   switchToChainId,
 } from './useAuth.utils'
+
+import type { Identity } from '../utils/auth'
+import type { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 
 export { initialState }
 

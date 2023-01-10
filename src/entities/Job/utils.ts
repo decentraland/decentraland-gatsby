@@ -1,6 +1,7 @@
 import env from '../../utils/env'
-import { ServiceStartHandler } from '../Server/types'
 import JobManager from './manager'
+
+import type { ServiceStartHandler } from '../Server/types'
 
 export const jobInitializer = (manager: JobManager): ServiceStartHandler => {
   return async () => {

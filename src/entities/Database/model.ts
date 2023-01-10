@@ -1,11 +1,7 @@
 import { createHash } from 'crypto'
 
-import {
-  Model as BaseModel,
-  OnConflict,
-  PrimaryKey,
-  QueryPart,
-} from 'decentraland-server'
+import { Model as BaseModel } from 'decentraland-server'
+import type { OnConflict, PrimaryKey, QueryPart } from 'decentraland-server'
 
 import { DatabaseMetricParams, withDatabaseMetrics } from './metrics'
 import {
