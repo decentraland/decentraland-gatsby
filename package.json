@@ -184,7 +184,6 @@
     "html-escaper": "^3.0.3",
     "htmlmin": "0.0.7",
     "http-proxy-middleware": "^2.0.6",
-    "immutable": "^4.0.0",
     "isomorphic-fetch": "^3.0.0",
     "juice": "^8.0.0",
     "lodash": "^4.17.21",
