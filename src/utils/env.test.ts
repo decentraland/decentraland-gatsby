@@ -19,7 +19,7 @@ describe(`env`, () => {
     const RANDOM_ENV3 = uid(24)
     const RANDOM_ENV4 = uid(24)
     setupEnv({
-      [Env.DEVELOPMENT]: {
+      [Env.LOCAL]: {
         RANDOM_ENV1: RANDOM_ENV1,
         GATSBY_RANDOM_ENV2: RANDOM_ENV2,
         REACT_APP_RANDOM_ENV3: RANDOM_ENV3,
@@ -49,7 +49,7 @@ describe(`requiredEnv`, () => {
     const RANDOM_ENV3 = uid(24)
     const RANDOM_ENV4 = uid(24)
     setupEnv({
-      [Env.DEVELOPMENT]: {
+      [Env.LOCAL]: {
         RANDOM_ENV1: RANDOM_ENV1,
         GATSBY_RANDOM_ENV2: RANDOM_ENV2,
         REACT_APP_RANDOM_ENV3: RANDOM_ENV3,
@@ -71,7 +71,7 @@ describe('setupEnv', () => {
     expect(env('MISSING_ENV', 'missing')).toBe('missing')
 
     setupEnv({
-      [Env.DEVELOPMENT]: {
+      [Env.LOCAL]: {
         MISSING_ENV: 'exists',
       },
     })
