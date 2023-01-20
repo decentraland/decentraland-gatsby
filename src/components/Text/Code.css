@@ -43,6 +43,10 @@ pre.dg.Code.Code--block.Code--with-note pre code {
   padding-top: 36px;
 }
 
+pre.dg.Code.Code--block.Code--with-note.Code--with-preview pre code {
+  padding-top: 13px;
+}
+
 pre.dg.Code.Code--block.Code--with-copy pre code {
   padding-bottom: 36px;
 }
@@ -87,6 +91,15 @@ pre.dg.Code.Code--block .Code__Copy.active,
 pre.dg.Code.Code--block .Code__Copy:active {
   color: var(--secondary-text);
   font-weight: normal;
+}
+
+pre.dg.Code.Code--block .Code__Preview {
+  padding: 13px;
+  border-bottom: 1px solid var(--divider);
+}
+
+pre.dg.Code.Code--block.Code--with-note .Code__Preview {
+  padding-top: 36px;
 }
 
 pre.dg.Code.Code--inline {
