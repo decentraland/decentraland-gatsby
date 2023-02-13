@@ -62,7 +62,7 @@ export enum ErrorKind {
 
 const DEFAULT_ACTION = env(
   'SUBSCRIBE_TARGET',
-  'https://decentraland.org/v2/subscribe'
+  'https://subscription.decentraland.org/subscribe'
 )
 
 export default function Subscribe(props: SubscribeProps) {
