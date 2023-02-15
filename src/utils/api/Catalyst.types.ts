@@ -1,3 +1,4 @@
+import type { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import type { EntityType } from '@dcl/schemas/dist/platform/entity'
 
 export type Snapshot = {
@@ -77,6 +78,41 @@ export type CommsStatusWithLayers = CommsStatus & {
 export type CommsStatusWithUsers = CommsStatus & {
   usersCount: number
   usersParcels: [number, number][]
+}
+
+export type CommsAbout = {
+  healthy: boolean
+  content: {
+    healthy: boolean
+    version: string //"6.0.6",
+    commitHash: string //"d2eeccaffe2a9c22ac963348851c7791b63fc517",
+    publicUrl: string //"https://peer.decentraland.org/content/"
+  }
+  lambdas: {
+    healthy: boolean
+    version: string //"6.0.6",
+    commitHash: string //"d2eeccaffe2a9c22ac963348851c7791b63fc517",
+    publicUrl: string //"https://peer.decentraland.org/lambdas/"
+  }
+  configurations: {
+    networkId: ChainId
+    globalScenesUrn: string[]
+    scenesUrn: string[]
+    realmName: string // "hera"
+  }
+  comms: {
+    healthy: boolean
+    protocol: string // "v3",
+    commitHash: string //"b3ec3327ceef53473853068dcdad8ea08d7a0f9c"
+  }
+  bff: {
+    healthy: boolean
+    commitHash: string //"4352737ca24a0c590387fba4b46da297408e899a",
+    userCount: number
+    protocolVersion: string //"1.0_0",
+    publicUrl: string //"/bff"
+  }
+  acceptingUsers: boolean
 }
 
 export type LambdasStatus = {

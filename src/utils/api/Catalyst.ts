@@ -6,6 +6,7 @@ import API from './API'
 
 import type {
   Avatar,
+  CommsAbout,
   CommsStatus,
   CommsStatusOptions,
   CommsStatusWithLayers,
@@ -206,6 +207,7 @@ export default class Catalyst extends API {
     return this.getCommsStatus(options as any)
   }
 
+  /** @deprecated */
   async getCommsStatus(): Promise<CommsStatus>
   async getCommsStatus(includeLayers: {}): Promise<CommsStatus>
   async getCommsStatus(includeLayers: false): Promise<CommsStatus>
@@ -238,6 +240,10 @@ export default class Catalyst extends API {
     }
 
     return this.fetch(target)
+  }
+
+  async getCommsAbout(): Promise<CommsAbout> {
+    return this.fetch('/about')
   }
 
   async getLambdasStatus(): Promise<LambdasStatus> {
