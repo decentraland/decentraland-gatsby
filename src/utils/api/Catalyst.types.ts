@@ -272,14 +272,15 @@ export type ContentDeploymentOptions = {
   sortingOrder: ContentDeploymentSortingOrder
 }
 
-export type ContentDepoyment =
-  | ContentDepoymentScene
-  | ContentDepoymentProfile
-  | ContentDepoymentWearable
-  | ContentDepoymentStore
-  | ContentDepoymentEmote
+export type ContentDeployment =
+  | ContentDeploymentScene
+  | ContentDeploymentProfile
+  | ContentDeploymentWearable
+  | ContentDeploymentStore
+  | ContentDeploymentEmote
+  | ContentDeploymentWorld
 
-export type ContentDepoymentBase = {
+export type ContentDeploymentBase = {
   entityId: string
   entityTimestamp: number
   localTimestamp: number
@@ -333,12 +334,21 @@ export type SceneMetadata = {
   }
 }
 
-export type ContentDepoymentScene = ContentDepoymentBase & {
+export type ContentDeploymentScene = ContentDeploymentBase & {
   entityType: EntityType.SCENE
   metadata: SceneMetadata
 }
 
-export type ContentDepoymentProfile = ContentDepoymentBase & {
+export type ContentDeploymentWorld = ContentDeploymentBase & {
+  entityType: EntityType.SCENE
+  metadata: SceneMetadata
+  worldConfiguration: {
+    fixedAdapter: string
+    name: string
+  }
+}
+
+export type ContentDeploymentProfile = ContentDeploymentBase & {
   entityType: EntityType.PROFILE
   metadata: ProfileMetadata
 }
@@ -360,7 +370,7 @@ export type WearableMetadata = {
   updatedAt: number
 }
 
-export type ContentDepoymentWearable = ContentDepoymentBase & {
+export type ContentDeploymentWearable = ContentDeploymentBase & {
   entityType: EntityType.WEARABLE
   metadata: WearableMetadata
 }
@@ -374,18 +384,18 @@ export type StoreMetadata = {
   version: number
 }
 
-export type ContentDepoymentStore = ContentDepoymentBase & {
+export type ContentDeploymentStore = ContentDeploymentBase & {
   entityType: EntityType.STORE
   metadata: StoreMetadata
 }
 
-export type ContentDepoymentEmote = ContentDepoymentBase & {
+export type ContentDeploymentEmote = ContentDeploymentBase & {
   entityType: EntityType.EMOTE
   metadata: {} // TODO
 }
 
 export type ContentDeploymentResponse = {
-  deployments: ContentDepoyment[]
+  deployments: ContentDeployment[]
   filters: Pick<
     ContentDeploymentOptions,
     'from' | 'to' | 'entityIds' | 'entityTypes'

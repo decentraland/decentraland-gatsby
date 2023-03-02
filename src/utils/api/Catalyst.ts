@@ -11,6 +11,7 @@ import type {
   CommsStatusOptions,
   CommsStatusWithLayers,
   CommsStatusWithUsers,
+  ContentDeployment,
   ContentDeploymentOptions,
   ContentDeploymentResponse,
   ContentStatus,
@@ -256,6 +257,10 @@ export default class Catalyst extends API {
 
   getContentUrl(hash: string) {
     return this.url(`/content/contents/${hash}`)
+  }
+
+  async getContentEntity(hash: string): Promise<ContentDeployment> {
+    return this.fetch(`/content/contents/${hash}`)
   }
 
   async getEntityScenes(
