@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Components/Accordion With content 1`] = `
+exports[`Storyshots components/Accordion With content 1`] = `
 <div
   className="ui container"
 >
@@ -94,7 +94,7 @@ exports[`Storyshots Components/Accordion With content 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Accordion With content and Card 1`] = `
+exports[`Storyshots components/Accordion With content and Card 1`] = `
 <div
   className="ui card"
   onClick={[Function]}
@@ -198,7 +198,7 @@ exports[`Storyshots Components/Accordion With content and Card 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Accordion Without content 1`] = `
+exports[`Storyshots components/Accordion Without content 1`] = `
 <div
   className="ui container"
 >
@@ -251,7 +251,7 @@ exports[`Storyshots Components/Accordion Without content 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Accordion Without content and Card 1`] = `
+exports[`Storyshots components/Accordion Without content and Card 1`] = `
 <div
   className="ui card"
   onClick={[Function]}
@@ -314,7 +314,7 @@ exports[`Storyshots Components/Accordion Without content and Card 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Carousel As progress 1`] = `
+exports[`Storyshots components/Carousel As progress 1`] = `
 <div
   style={
     Object {
@@ -484,7 +484,7 @@ exports[`Storyshots Components/Carousel As progress 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Carousel Carousel 1`] = `
+exports[`Storyshots components/Carousel Carousel 1`] = `
 <div
   style={
     Object {
@@ -654,7 +654,7 @@ exports[`Storyshots Components/Carousel Carousel 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Carousel Carousel time 1`] = `
+exports[`Storyshots components/Carousel Carousel time 1`] = `
 <div
   style={
     Object {
@@ -824,7 +824,7 @@ exports[`Storyshots Components/Carousel Carousel time 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Carousel With dash indicators 1`] = `
+exports[`Storyshots components/Carousel With dash indicators 1`] = `
 <div
   style={
     Object {
@@ -994,7 +994,7 @@ exports[`Storyshots Components/Carousel With dash indicators 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Carousel With different height autosize 1`] = `
+exports[`Storyshots components/Carousel With different height autosize 1`] = `
 <div
   style={
     Object {
@@ -1164,7 +1164,7 @@ exports[`Storyshots Components/Carousel With different height autosize 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Carousel With different height fixed 1`] = `
+exports[`Storyshots components/Carousel With different height fixed 1`] = `
 <div
   style={
     Object {
@@ -1334,7 +1334,7 @@ exports[`Storyshots Components/Carousel With different height fixed 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Image/ImgFixed Dimensions 1`] = `
+exports[`Storyshots components/Image/ImgFixed Dimensions 1`] = `
 <div
   className="ui grid"
 >
@@ -1485,7 +1485,7 @@ exports[`Storyshots Components/Image/ImgFixed Dimensions 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Image/ImgFixed sizes 1`] = `
+exports[`Storyshots components/Image/ImgFixed sizes 1`] = `
 <div
   className="ui grid"
 >
@@ -1668,7 +1668,7 @@ exports[`Storyshots Components/Image/ImgFixed sizes 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Modal/FilterContainerModal Full 1`] = `
+exports[`Storyshots components/Modal/FilterContainerModal Full 1`] = `
 <div>
   <div
     id="modal_container_0"
@@ -1676,7 +1676,7 @@ exports[`Storyshots Components/Modal/FilterContainerModal Full 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Modal/FilterContainerModal Open 1`] = `
+exports[`Storyshots components/Modal/FilterContainerModal Open 1`] = `
 <div>
   <div
     id="modal_container_1"
@@ -1684,7 +1684,7 @@ exports[`Storyshots Components/Modal/FilterContainerModal Open 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Modal/FilterContainerModal Open with filters 1`] = `
+exports[`Storyshots components/Modal/FilterContainerModal Open with filters 1`] = `
 <div>
   <div
     id="modal_container_2"
@@ -1692,7 +1692,7 @@ exports[`Storyshots Components/Modal/FilterContainerModal Open with filters 1`] 
 </div>
 `;
 
-exports[`Storyshots Components/Modal/FilterContainerModal Open with scroll filters 1`] = `
+exports[`Storyshots components/Modal/FilterContainerModal Open with scroll filters 1`] = `
 <div>
   <div
     id="modal_container_3"
@@ -1700,7 +1700,7 @@ exports[`Storyshots Components/Modal/FilterContainerModal Open with scroll filte
 </div>
 `;
 
-exports[`Storyshots Components/Modal/ShareModal Share Url 1`] = `
+exports[`Storyshots components/Modal/ShareModal Share Url 1`] = `
 <div>
   <div
     id="modal_container_5"
@@ -1708,7 +1708,7 @@ exports[`Storyshots Components/Modal/ShareModal Share Url 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Modal/ShareModal Share With Thumbnail 1`] = `
+exports[`Storyshots components/Modal/ShareModal Share With Thumbnail 1`] = `
 <div>
   <div
     id="modal_container_6"
@@ -1716,7 +1716,7 @@ exports[`Storyshots Components/Modal/ShareModal Share With Thumbnail 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Modal/ShareModal Share text 1`] = `
+exports[`Storyshots components/Modal/ShareModal Share text 1`] = `
 <div>
   <div
     id="modal_container_4"
@@ -1724,7 +1724,7 @@ exports[`Storyshots Components/Modal/ShareModal Share text 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WalletSelectorModal All providers 1`] = `
+exports[`Storyshots components/Modal/WalletSelectorModal All providers 1`] = `
 <div>
   <div
     id="modal_container_7"
@@ -1732,7 +1732,7 @@ exports[`Storyshots Components/Modal/WalletSelectorModal All providers 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WalletSelectorModal Detected providers 1`] = `
+exports[`Storyshots components/Modal/WalletSelectorModal Detected providers 1`] = `
 <div>
   <div
     id="modal_container_8"
@@ -1740,7 +1740,7 @@ exports[`Storyshots Components/Modal/WalletSelectorModal Detected providers 1`] 
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WalletSelectorModal Error 1`] = `
+exports[`Storyshots components/Modal/WalletSelectorModal Error 1`] = `
 <div>
   <div
     id="modal_container_9"
@@ -1748,7 +1748,7 @@ exports[`Storyshots Components/Modal/WalletSelectorModal Error 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WalletSelectorModal Loading 1`] = `
+exports[`Storyshots components/Modal/WalletSelectorModal Loading 1`] = `
 <div>
   <div
     id="modal_container_10"
@@ -1756,7 +1756,7 @@ exports[`Storyshots Components/Modal/WalletSelectorModal Loading 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WalletSelectorModal Metamask as link 1`] = `
+exports[`Storyshots components/Modal/WalletSelectorModal Metamask as link 1`] = `
 <div>
   <div
     id="modal_container_11"
@@ -1764,7 +1764,7 @@ exports[`Storyshots Components/Modal/WalletSelectorModal Metamask as link 1`] = 
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WrongNetworkModal Multi Network Support 1`] = `
+exports[`Storyshots components/Modal/WrongNetworkModal Multi Network Support 1`] = `
 <div>
   <div
     id="modal_container_12"
@@ -1772,7 +1772,7 @@ exports[`Storyshots Components/Modal/WrongNetworkModal Multi Network Support 1`]
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WrongNetworkModal Switch Multi Network 1`] = `
+exports[`Storyshots components/Modal/WrongNetworkModal Switch Multi Network 1`] = `
 <div>
   <div
     id="modal_container_13"
@@ -1780,7 +1780,7 @@ exports[`Storyshots Components/Modal/WrongNetworkModal Switch Multi Network 1`] 
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WrongNetworkModal Switch Network 1`] = `
+exports[`Storyshots components/Modal/WrongNetworkModal Switch Network 1`] = `
 <div>
   <div
     id="modal_container_14"
@@ -1788,7 +1788,7 @@ exports[`Storyshots Components/Modal/WrongNetworkModal Switch Network 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WrongNetworkModal Wrong Network 1`] = `
+exports[`Storyshots components/Modal/WrongNetworkModal Wrong Network 1`] = `
 <div>
   <div
     id="modal_container_15"
@@ -1796,7 +1796,7 @@ exports[`Storyshots Components/Modal/WrongNetworkModal Wrong Network 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/User/Avatar Automatic background colors 1`] = `
+exports[`Storyshots components/User/Avatar Automatic background colors 1`] = `
 <div
   style={
     Object {
@@ -1936,7 +1936,7 @@ exports[`Storyshots Components/User/Avatar Automatic background colors 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/User/Avatar Avatar image fallback 1`] = `
+exports[`Storyshots components/User/Avatar Avatar image fallback 1`] = `
 <div
   className="ui center aligned grid"
 >
@@ -1988,7 +1988,7 @@ exports[`Storyshots Components/User/Avatar Avatar image fallback 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/User/Avatar Custom sources 1`] = `
+exports[`Storyshots components/User/Avatar Custom sources 1`] = `
 <div
   style={
     Object {
@@ -2025,7 +2025,7 @@ exports[`Storyshots Components/User/Avatar Custom sources 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/User/Avatar Loading state 1`] = `
+exports[`Storyshots components/User/Avatar Loading state 1`] = `
 <div
   style={
     Object {
@@ -2156,7 +2156,7 @@ exports[`Storyshots Components/User/Avatar Loading state 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/User/Avatar Sizes 1`] = `
+exports[`Storyshots components/User/Avatar Sizes 1`] = `
 <div
   style={
     Object {

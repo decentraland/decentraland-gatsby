@@ -8,7 +8,7 @@ import Prev from './Prev'
 
 import './Carousel.css'
 
-export enum IndicatorsType {
+export enum IndicatorType {
   Bullet = 'bullet',
   Dash = 'dash',
 }
@@ -18,7 +18,7 @@ export type CarouselProps = React.HTMLProps<HTMLDivElement> & {
   progress?: boolean
   time?: number | false
   autoResize?: boolean
-  indicatorsType?: IndicatorsType
+  indicatorType?: IndicatorType
 }
 
 export type CarouselState = {
@@ -36,7 +36,7 @@ export default React.memo(function Carousel({
   onMove,
   time,
   autoResize,
-  indicatorsType,
+  indicatorType: indicatorsType,
   ...props
 }: CarouselProps) {
   const size = React.Children.count(children)
@@ -159,7 +159,7 @@ export default React.memo(function Carousel({
       className={TokenList.join([
         'Carousel',
         className,
-        indicatorsType === IndicatorsType.Dash && 'dash-indicators',
+        indicatorsType === IndicatorType.Dash && 'dash-indicators',
       ])}
     >
       <div className="Carousel__Items">

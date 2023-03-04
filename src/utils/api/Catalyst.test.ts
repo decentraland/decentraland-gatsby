@@ -43,7 +43,7 @@ describe('utils/api/Catalyst', () => {
         signature
       )
 
-      const response = await Catalyst.get().verifySignature(
+      const response = await Catalyst.getInstance().verifySignature(
         authChain,
         finalPayload
       )
@@ -56,7 +56,7 @@ describe('utils/api/Catalyst', () => {
       const authChain = Authenticator.signPayload(TEST_IDENTITY, finalPayload)
       const ownerAddress = Authenticator.ownerAddress(TEST_IDENTITY.authChain)
 
-      const response = await Catalyst.get().verifySignature(
+      const response = await Catalyst.getInstance().verifySignature(
         authChain,
         finalPayload
       )
@@ -67,7 +67,7 @@ describe('utils/api/Catalyst', () => {
 
   describe(`.get()`, () => {
     test(`should return an instance of a Catalyst`, async () => {
-      const catalyst = Catalyst.get()
+      const catalyst = Catalyst.getInstance()
       expect(catalyst).toBeInstanceOf(Catalyst)
     })
   })
@@ -88,7 +88,7 @@ describe('utils/api/Catalyst', () => {
 
   describe(`.getProfile()`, () => {
     test(`should return an instance of a Catalyst`, async () => {
-      const catalyst = Catalyst.get()
+      const catalyst = Catalyst.getInstance()
       const profile = await catalyst.getProfile(
         '0x05d48ee3e815bf376fc79d283301cfdef872e280'
       )
@@ -100,7 +100,7 @@ describe('utils/api/Catalyst', () => {
 
   describe(`.getProfiles()`, () => {
     test(`should return an instance of a Catalyst`, async () => {
-      const catalyst = Catalyst.get()
+      const catalyst = Catalyst.getInstance()
       const profiles = await catalyst.getProfiles([
         '0x05d48ee3e815bf376fc79d283301cfdef872e280',
       ])
@@ -112,9 +112,9 @@ describe('utils/api/Catalyst', () => {
     })
   })
 
-  describe(`.getStatus() / .getCommsStatus()`, () => {
+  describe.skip(`.getStatus() / .getCommsStatus() [deprecated]`, () => {
     test.skip(`should return an instance of a Catalyst`, async () => {
-      const catalyst = Catalyst.get()
+      const catalyst = Catalyst.getInstance()
       const status = await catalyst.getStatus()
       expect(typeof status.name).toEqual('string')
       const commsStatus = await catalyst.getCommsStatus()
@@ -122,9 +122,21 @@ describe('utils/api/Catalyst', () => {
     })
   })
 
+  describe(`.getAbout()`, () => {
+    test.skip(`should return an instance of a Catalyst`, async () => {
+      const catalyst = Catalyst.getInstance()
+      const about = await catalyst.getAbout()
+      expect(typeof about.configurations.realmName).toEqual('string')
+      expect(typeof about.content.commitHash).toEqual('string')
+      expect(typeof about.lambdas.commitHash).toEqual('string')
+      expect(typeof about.comms.commitHash).toEqual('string')
+      expect(typeof about.bff.commitHash).toEqual('string')
+    })
+  })
+
   describe(`.getContentStatus()`, () => {
     test(`should return an instance of a Catalyst`, async () => {
-      const catalyst = Catalyst.get()
+      const catalyst = Catalyst.getInstance()
       const status = await catalyst.getContentStatus()
       expect(typeof status.version).toEqual('string')
     })
@@ -132,7 +144,7 @@ describe('utils/api/Catalyst', () => {
 
   describe(`.getContentStatus()`, () => {
     test(`should return an instance of a Catalyst`, async () => {
-      const catalyst = Catalyst.get()
+      const catalyst = Catalyst.getInstance()
       const status = await catalyst.getLambdasStatus()
       expect(typeof status.version).toEqual('string')
     })
@@ -140,7 +152,7 @@ describe('utils/api/Catalyst', () => {
 
   describe(`.getEntityScenes()`, () => {
     test(`should return an instance of a Catalyst`, async () => {
-      const catalyst = Catalyst.get()
+      const catalyst = Catalyst.getInstance()
       const scenes = await catalyst.getEntityScenes(['0,0'])
       expect(Array.isArray(scenes)).toBe(true)
       expect(scenes.every((scene) => typeof scene.id === 'string')).toBe(true)
@@ -149,7 +161,7 @@ describe('utils/api/Catalyst', () => {
 
   describe(`.getServer()`, () => {
     test(`should return an instance of a Catalyst`, async () => {
-      const catalyst = Catalyst.get()
+      const catalyst = Catalyst.getInstance()
       const servers = await catalyst.getServers()
       expect(Array.isArray(servers)).toBe(true)
       expect(servers.every((server) => typeof server.id === 'string')).toBe(
@@ -160,7 +172,7 @@ describe('utils/api/Catalyst', () => {
 
   describe(`.getPeers()`, () => {
     test.skip(`should return an instance of a Catalyst`, async () => {
-      const catalyst = Catalyst.get()
+      const catalyst = Catalyst.getInstance()
       const peers = await catalyst.getPeers()
       expect(Array.isArray(peers)).toBe(true)
       expect(peers.every((peer) => typeof peer.id === 'string')).toBe(true)
@@ -169,7 +181,7 @@ describe('utils/api/Catalyst', () => {
 
   describe(`.getBanNames()`, () => {
     test(`should return an instance of a Catalyst`, async () => {
-      const catalyst = Catalyst.get()
+      const catalyst = Catalyst.getInstance()
       const names = await catalyst.getBanNames()
       expect(Array.isArray(names)).toBe(true)
       expect(names.every((name) => typeof name === 'string')).toBe(true)
@@ -178,7 +190,7 @@ describe('utils/api/Catalyst', () => {
 
   describe(`.getPOIs()`, () => {
     test(`should return an instance of a Catalyst`, async () => {
-      const catalyst = Catalyst.get()
+      const catalyst = Catalyst.getInstance()
       const pois = await catalyst.getPOIs()
       expect(Array.isArray(pois)).toBe(true)
       expect(

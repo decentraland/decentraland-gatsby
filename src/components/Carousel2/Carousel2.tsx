@@ -9,20 +9,22 @@ import './Carousel2.css'
 import 'swiper/swiper.min.css'
 import 'swiper/swiper-bundle.min.css'
 
-export enum IndicatorsType {
+export enum IndicatorType {
   Bullet = 'bullet',
   Dash = 'dash',
 }
-export type Carousel2Props = React.HTMLProps<HTMLDivElement> & {
-  items: Record<string, any>[]
-  component: React.ComponentType<{ item: any }>
+export type Carousel2Props<T = any> = React.HTMLProps<HTMLDivElement> & {
+  items: T[]
+  component: React.ComponentType<{ item: T }>
+  dynamicBullets?: boolean
   dynamicMainBullets?: number
   time?: number | false
   progress?: boolean
+  // TODO
   isFullscreen?: boolean
   isNavigationHide?: boolean
   loading?: boolean
-  indicatorsType?: IndicatorsType
+  indicatorsType?: IndicatorType
 }
 
 export default React.memo(function Carousel2({
@@ -32,6 +34,7 @@ export default React.memo(function Carousel2({
   progress,
   indicatorsType,
   items,
+  dynamicBullets,
   dynamicMainBullets,
   isFullscreen,
   isNavigationHide,
@@ -47,7 +50,7 @@ export default React.memo(function Carousel2({
         className,
         isFullscreen && 'fullscreen',
         isNavigationHide && 'navigation-hide',
-        indicatorsType === IndicatorsType.Dash && 'dash-indicators',
+        indicatorsType === IndicatorType.Dash && 'dash-indicators',
       ])}
     >
       {loading && <div className="carousel2-loading loading"></div>}
@@ -70,7 +73,7 @@ export default React.memo(function Carousel2({
           navigation={!isNavigationHide}
           pagination={{
             clickable: true,
-            dynamicBullets: items.length > 5 && true,
+            dynamicBullets: dynamicBullets ?? (items.length > 5 && true),
             dynamicMainBullets: dynamicMainBullets || 1,
           }}
           scrollbar={{ draggable: true }}
