@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import env from '../../utils/env'
 
@@ -21,22 +21,21 @@ export enum IntercomApiBase {
 }
 
 export default React.memo(function Intercom(props: IntercomProps) {
-  const appId = props.appId ?? env('INTERCOM_APP_ID')
-  const apiBase = props.apiBase ?? IntercomApiBase.US
-  useEffect(() => {
-    if (appId && (window as any).Intercom) {
-      ;(window as any).Intercom('boot', {
-        app_id: appId,
-        api_base: apiBase,
-      })
-    }
-  }, [appId, apiBase])
+  const intercomSettings = {
+    app_id: props.appId ?? env('INTERCOM_APP_ID'),
+    api_base: props.apiBase ?? IntercomApiBase.US,
+  }
 
-  return appId ? (
+  return intercomSettings.app_id ? (
     <script
       {...props}
       dangerouslySetInnerHTML={{
-        __html: `(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/${appId}';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};if(document.readyState==='complete'){l();}else if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();`,
+        __html: [
+          `(function(){ window.intercomSettings = ${JSON.stringify(
+            intercomSettings
+          )}; })();`,
+          `(function(){var w=window;var ic=w.Intercom;if(typeof ic==="function"){ic('reattach_activator');ic('update',w.intercomSettings);}else{var d=document;var i=function(){i.c(arguments);};i.q=[];i.c=function(args){i.q.push(args);};w.Intercom=i;var l=function(){var s=d.createElement('script');s.type='text/javascript';s.async=true;s.src='https://widget.intercom.io/widget/${intercomSettings.app_id}';var x=d.getElementsByTagName('script')[0];x.parentNode.insertBefore(s,x);};if(document.readyState==='complete'){l();}else if(w.attachEvent){w.attachEvent('onload',l);}else{w.addEventListener('load',l,false);}}})();`,
+        ].join('\n'),
       }}
     />
   ) : null
