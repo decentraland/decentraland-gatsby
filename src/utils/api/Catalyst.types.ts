@@ -80,7 +80,7 @@ export type CommsStatusWithUsers = CommsStatus & {
   usersParcels: [number, number][]
 }
 
-export type CommsAbout = {
+export type CatalystAbout = {
   healthy: boolean
   content: {
     healthy: boolean

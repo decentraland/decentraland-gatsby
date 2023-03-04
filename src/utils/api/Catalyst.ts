@@ -6,7 +6,7 @@ import API from './API'
 
 import type {
   Avatar,
-  CommsAbout,
+  CatalystAbout,
   CommsStatus,
   CommsStatusOptions,
   CommsStatusWithLayers,
@@ -193,6 +193,7 @@ export default class Catalyst extends API {
     return addresses.map((address) => map.get(address.toLowerCase()) || null)
   }
 
+  /** @deprecated */
   async getStatus(): Promise<CommsStatus>
   async getStatus(includeLayers: {}): Promise<CommsStatus>
   async getStatus(includeLayers: false): Promise<CommsStatus>
@@ -218,31 +219,16 @@ export default class Catalyst extends API {
   async getCommsStatus(includeLayers: {
     includeUsersParcels: true
   }): Promise<CommsStatusWithUsers>
-  async getCommsStatus(options?: CommsStatusOptions) {
-    const params = new URLSearchParams()
-    if (options) {
-      if (typeof options === 'boolean') {
-        params.append('includeLayers', 'true')
-      } else if (typeof options === 'object') {
-        if ((options as { includeLayers: boolean }).includeLayers) {
-          params.append('includeLayers', 'true')
-        } else if (
-          (options as { includeUsersParcels: boolean }).includeUsersParcels
-        ) {
-          params.append('includeUsersParcels', 'true')
-        }
-      }
-    }
-
-    let target = '/comms/status'
-    if (params.toString()) {
-      target += '?' + params.toString()
-    }
-
-    return this.fetch(target)
+  async getCommsStatus(_options?: CommsStatusOptions) {
+    return null as any
   }
 
-  async getCommsAbout(): Promise<CommsAbout> {
+  async getAbout(): Promise<CatalystAbout> {
+    return this.fetch('/about')
+  }
+
+  /** @deprecated use `getAbout` instead*/
+  async getCommsAbout(): Promise<CatalystAbout> {
     return this.fetch('/about')
   }
 
