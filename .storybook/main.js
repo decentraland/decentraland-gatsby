@@ -21,7 +21,12 @@ module.exports = {
     '@storybook/addon-actions',
     '@storybook/addon-links',
     '@storybook/addon-postcss',
-    '@storybook/addon-docs',
+    {
+      name: '@storybook/addon-docs',
+      options: {
+        transcludeMarkdown: true,
+      },
+    },
     '@storybook/addon-viewport/register',
     '@storybook/addon-actions/register',
     {

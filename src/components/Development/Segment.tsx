@@ -8,7 +8,7 @@ export type SegmentProps = React.Props<HTMLScriptElement> &
     analyticsKey?: string
     /** Segment key */
     segmentKey?: string
-    /** Alternative source */
+    /** Track the first time the page load */
     trackPage?: boolean
   }
 
