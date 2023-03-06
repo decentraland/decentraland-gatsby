@@ -29,7 +29,6 @@ export type Carousel2Props<T = any> = React.HTMLProps<HTMLDivElement> & {
 
 export default React.memo(function Carousel2({
   className,
-
   time,
   progress,
   indicatorsType,

@@ -78,6 +78,12 @@ export const CarouselItemComponent = (props) => (
 
 # Carousel2
 
+<Canvas withSource="open">
+  <Story name="Base">
+    <Carousel2 items={items} component={CarouselItemComponent} />
+  </Story>
+</Canvas>
+
 <ArgsTable
   rows={[
     Args.Prop('items', 'list of items to show into the carrousel ', {
@@ -115,12 +121,6 @@ export const CarouselItemComponent = (props) => (
     }),
   ]}
 />
-
-<Canvas withSource="open">
-  <Story name="Base">
-    <Carousel2 items={items} component={CarouselItemComponent} />
-  </Story>
-</Canvas>
 
 <Divider size="small" />
 
