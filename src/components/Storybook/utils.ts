@@ -24,6 +24,11 @@ const Types = {
     detail:
       'string contianing only hexadecimal character (example: `0123456789abcdef`)',
   },
+  ReactNode: {
+    summary: 'React.ReactNode',
+    detail:
+      'type ReactNode = ReactChild | ReactFragment | ReactPortal | boolean | null | undefined',
+  },
   Enum: (name: string, value: Record<string, any>) => {
     const values = Object.keys(value)
     return {
@@ -89,7 +94,7 @@ export const Args = {
 
   Row(
     name: string,
-    description: string,
+    description: string | false | undefined,
     props: {
       type?: TableAnnotation['type'] | string | number | boolean | null
       defaultValue?: TableAnnotation['type'] | string | number | boolean | null
@@ -99,7 +104,7 @@ export const Args = {
   ): ArgType {
     return {
       name,
-      description,
+      description: description || undefined,
       type: props.required ? { required: true } : {},
       table: {
         type: this.Type(props.type),
@@ -111,7 +116,7 @@ export const Args = {
 
   Prop(
     name: string,
-    description: string,
+    description: string | false | undefined,
     props: {
       type?: TableAnnotation['type'] | string | number | boolean | null
       defaultValue?: TableAnnotation['type'] | string | number | boolean | null
@@ -121,9 +126,22 @@ export const Args = {
     return this.Row(name, description, { ...props, category: 'props' })
   },
 
+  HTMLProps(name: string) {
+    return this.Prop(
+      '...', //undefined as any, //`React.HTMLProps<${name}>`,
+      `extends every html props from [HTMLProps](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/1349b640d4d07f40aa7c1c6931f18e3fbf667f3a/types/react/index.d.ts#L1339) and [${name}](https://developer.mozilla.org/en-US/docs/Web/API/${name})`,
+      {
+        type: {
+          summary: `React.HTMLProps<${name}>`,
+          detail: `React.AllHTMLAttributes<${name}> & React.ClassAttributes<${name}>`,
+        },
+      }
+    )
+  },
+
   Environment(
     name: string,
-    description: string,
+    description: string | false | undefined,
     props: {
       defaultValue?: TableAnnotation['type'] | string | number | boolean | null
       required?: boolean
