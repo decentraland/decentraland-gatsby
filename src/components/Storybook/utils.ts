@@ -58,6 +58,12 @@ const Types = {
 
     return { summary, detail: details.join(' || \n') }
   },
+  ComponentType: (props: string) => {
+    return {
+      summary: `React.ComponentType<${props}>`,
+      detail: `React.ComponentClass<${props}> | React.FunctionComponent<${props}>`,
+    }
+  },
 }
 
 export const Args = {
@@ -129,7 +135,7 @@ export const Args = {
   HTMLProps(name: string) {
     return this.Prop(
       '...', //undefined as any, //`React.HTMLProps<${name}>`,
-      `extends every html props from [HTMLProps](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/1349b640d4d07f40aa7c1c6931f18e3fbf667f3a/types/react/index.d.ts#L1339) and [${name}](https://developer.mozilla.org/en-US/docs/Web/API/${name})`,
+      `also extends all props from [HTMLProps](https://github.com/DefinitelyTyped/DefinitelyTyped/blob/1349b640d4d07f40aa7c1c6931f18e3fbf667f3a/types/react/index.d.ts#L1339) and [${name}](https://developer.mozilla.org/en-US/docs/Web/API/${name})`,
       {
         type: {
           summary: `React.HTMLProps<${name}>`,

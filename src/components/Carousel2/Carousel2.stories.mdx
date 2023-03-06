@@ -91,7 +91,7 @@ export const CarouselItemComponent = (props) => (
       required: true,
     }),
     Args.Prop('component', 'react component to render from each item ', {
-      type: Args.Types.Raw(`React.ComponentType<{ item: T }>`),
+      type: Args.Types.ComponentType(`{ item: T }`),
       required: true,
     }),
     Args.Prop('time', 'time in milliseconds between item change ', {
@@ -119,6 +119,7 @@ export const CarouselItemComponent = (props) => (
       type: Args.Types.Boolean,
       defaultValue: false,
     }),
+    Args.HTMLProps('HTMLDivElement'),
   ]}
 />
 

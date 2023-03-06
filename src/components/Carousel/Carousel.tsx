@@ -29,6 +29,7 @@ export type CarouselState = {
   timer: TimeInterval | null
 }
 
+/** @deprecated */
 export default React.memo(function Carousel({
   className,
   children,
