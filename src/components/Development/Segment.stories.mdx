@@ -71,3 +71,14 @@ export const onRouteUpdate = () => {
 
 // ...
 ```
+
+## Use with CSP (Content Security Policy)
+
+If you rely on allowlisting you will need to add the following directive:
+
+```txt
+script-src:
+  https://cdn.segment.com
+```
+
+> see the [full documentaion](https://segment.com/docs/connections/sources/catalog/libraries/website/javascript/upgrade-to-ajs2/#using-a-strict-content-security-policy-on-the-page) for more details

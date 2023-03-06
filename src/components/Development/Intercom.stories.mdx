@@ -44,3 +44,16 @@ See [Intercom documentation](https://developers.intercom.com/installing-intercom
 ## Locate your App ID
 
 You can find your app id in the URL of your Intercom `https://app.intercom.com/a/apps/{API_ID}`
+
+## Use with CSP (Content Security Policy)
+
+If you rely on allowlisting you will need to add the following directive:
+
+```txt
+script-src:
+  https://app.intercom.io
+  https://widget.intercom.io
+  https://js.intercomcdn.com
+```
+
+> see the [full documentaion](https://www.intercom.com/help/en/articles/3894-using-intercom-with-content-security-policy) for more details

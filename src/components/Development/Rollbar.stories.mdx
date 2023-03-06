@@ -72,3 +72,12 @@ See [Rollbar documentation](https://docs.rollbar.com/docs/javascript) for more d
 ## Locate your Access Token
 
 The Access Token is the unique identifier for each Source. To find the key follow the instructions detailed in the [documentation](https://docs.rollbar.com/docs/project-configurations#project-access-tokens).
+
+## Use with CSP (Content Security Policy)
+
+If you rely on allowlisting you will need to add the following directive:
+
+```txt
+script-src:
+  https://cdn.rollbar.com
+```
