@@ -5,7 +5,7 @@ import Next from '../Carousel/Next'
 
 import './Accordion.css'
 
-export type AccordionProps = React.HTMLProps<HTMLDivElement> & {
+export type AccordionProps = Omit<React.HTMLProps<HTMLDivElement>, 'title'> & {
   open?: boolean
   title?: React.ReactNode
   description?: React.ReactNode
