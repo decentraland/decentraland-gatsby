@@ -37,7 +37,7 @@ import type { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Drop
 
 import './Layout.css'
 
-export type LayoutProps = PageProps &
+export type LayoutProps = Omit<PageProps, 'children'> &
   NavbarProps &
   FooterProps & {
     hideNavbar?: boolean
@@ -46,6 +46,7 @@ export type LayoutProps = PageProps &
       intl?: DecentralandIntlContext
     }
     availableProviders?: ProviderType[]
+    children?: React.ReactNode
   }
 
 export default function Layout({
