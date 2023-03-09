@@ -3,8 +3,8 @@ import React from 'react'
 import TokenList from '../../utils/dom/TokenList'
 import { StyleNamespace } from '../../variables'
 
-import './Paragraph.css'
 import './List.css'
+import './Paragraph.css'
 
 export type ListProps = (
   | React.HTMLAttributes<HTMLUListElement>
