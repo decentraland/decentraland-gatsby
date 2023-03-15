@@ -9,7 +9,10 @@
     "WalletSelector": {
       "title": "Sign In",
       "subtitle": "Choose a method to connect",
-      "trezor": "Trezor and smart contract wallets (like Dapper or Argent) cannot interact Polygon. Read more about the Trezor support status [here](https://github.com/trezor/trezor-firmware/pull/1568)"
+      "trezor": "Trezor and smart contract wallets (like Dapper or Argent) cannot interact Polygon. Read more about the Trezor support status [here](https://github.com/trezor/trezor-firmware/pull/1568)",
+      "trezor_message": "Trezor and smart contract wallets (like Dapper or Argent) cannot interact Polygon. Read more about the Trezor support status {here}",
+      "trezor_target": "https://github.com/trezor/trezor-firmware/pull/1568",
+      "trezor_cta": "here"
     },
     "WrongNetworkModal": {
       "header": "Wrong Network",

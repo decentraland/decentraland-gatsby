@@ -16,7 +16,9 @@ import useAnchor from '../../hooks/useAnchor'
 import useFormatMessage from '../../hooks/useFormatMessage'
 import { ChainId } from '../../utils/loader/ensBalance'
 import Loader from '../Progress/Loader'
-import Markdown from '../Text/Markdown'
+// import Markdown from '../Text/Markdown'
+import Link from '../Text/Link'
+import Paragraph from '../Text/Paragraph'
 
 import 'decentraland-ui/dist/components/LoginModal/LoginModal.css'
 import './WalletSelectorModal.css'
@@ -118,7 +120,15 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
           />
         )}
         <small className="message">
-          <Markdown children={l('@growth.WalletSelector.trezor')} />
+          <Paragraph>
+            {l('@growth.WalletSelector.trezor_message', {
+              here: (
+                <Link href={l('@growth.WalletSelector.trezor_target')}>
+                  {l('@growth.WalletSelector.trezor_cta')}
+                </Link>
+              ),
+            })}
+          </Paragraph>
         </small>
       </ModalContent>
       {props.error && <p className="error visible">{props.error}</p>}

@@ -1,7 +1,6 @@
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { useState, useMemo, useEffect } from 'react'
-import { Source, ArgsTable } from '@storybook/components'
-import { Meta } from '@storybook/addon-docs'
+import { Source, ArgsTable, Meta } from './components/Storybook'
 import Label from 'semantic-ui-react/dist/commonjs/elements/Label'
 import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
@@ -33,7 +32,15 @@ import {
   AUTH_METADATA_HEADER,
 } from 'decentraland-crypto-middleware/lib/types'
 
-<Meta title="Development/AuthChain" />
+<Meta
+  title="Development Tools/AuthChain"
+  parameters={{
+    viewMode: 'docs',
+    previewTabs: {
+      canvas: { hidden: true },
+    },
+  }}
+/>
 
 export function AuthChainCURL({ chain, timestamp, metadata, options }) {
   const baseUrl = options.baseUrl || ''
