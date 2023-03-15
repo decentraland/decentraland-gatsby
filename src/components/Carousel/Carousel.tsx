@@ -140,19 +140,16 @@ export default React.memo(function Carousel({
     }))
   }, [])
 
-  const handleTouchEnd = useCallback(
-    (e: React.TouchEvent<HTMLDivElement>) => {
-      handleTimerOn()
-      if (state.touchStart - state.touchEnd > 150) {
-        handleMove(1)
-      }
+  const handleTouchEnd = useCallback(() => {
+    handleTimerOn()
+    if (state.touchStart - state.touchEnd > 150) {
+      handleMove(1)
+    }
 
-      if (state.touchStart - state.touchEnd < -150) {
-        handleMove(-1)
-      }
-    },
-    [state]
-  )
+    if (state.touchStart - state.touchEnd < -150) {
+      handleMove(-1)
+    }
+  }, [state])
 
   return (
     <div

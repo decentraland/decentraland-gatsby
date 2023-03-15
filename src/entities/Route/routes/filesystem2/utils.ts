@@ -1,7 +1,7 @@
 import { resolve, sep } from 'path'
 
 import e from 'express'
-import glob from 'glob'
+import { sync } from 'glob'
 
 import RequestError from '../../error'
 import handleExpressError from '../../handle/handleExpressError'
@@ -50,7 +50,7 @@ export function createGlobRouter(
   const router = e.Router()
   router.use(withLogs())
   router.use(withHttpMetrics({ handler: 'filesystem' }))
-  const files = glob.sync(patter, { cwd: base, nodir: true })
+  const files = sync(patter, { cwd: base, nodir: true })
   for (const file of files) {
     iterator(router, file)
   }
