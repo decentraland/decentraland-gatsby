@@ -339,13 +339,32 @@ export type ContentDeploymentScene = ContentDeploymentBase & {
   metadata: SceneMetadata
 }
 
-export type ContentDeploymentWorld = ContentDeploymentBase & {
-  entityType: EntityType.SCENE
-  metadata: SceneMetadata
+export type WorldSceneMetadata = Omit<
+  SceneMetadata,
+  'communications' | 'policy'
+> & {
   worldConfiguration: {
-    fixedAdapter: string
     name: string
+    fixedAdapter?: string
+    minimapVisible?: boolean
+    skybox?: number
   }
+}
+
+export type ContentDeploymentWorld = Omit<
+  ContentDeploymentBase,
+  | 'content'
+  | 'entityId'
+  | 'entityTimestamp'
+  | 'localTimestamp'
+  | 'deployedBy'
+  | 'metadata'
+> & {
+  version: string
+  type: EntityType.SCENE
+  timestamp: number
+  content: { file: string; hash: string }[]
+  metadata: WorldSceneMetadata
 }
 
 export type ContentDeploymentProfile = ContentDeploymentBase & {
