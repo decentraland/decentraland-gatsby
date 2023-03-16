@@ -11,7 +11,6 @@ import type {
   CommsStatusOptions,
   CommsStatusWithLayers,
   CommsStatusWithUsers,
-  ContentDeployment,
   ContentDeploymentOptions,
   ContentDeploymentResponse,
   ContentEntityScene,
