@@ -14,8 +14,8 @@ import type {
   ContentDeployment,
   ContentDeploymentOptions,
   ContentDeploymentResponse,
+  ContentEntityScene,
   ContentStatus,
-  EntityScene,
   HotScene,
   LambdasStatus,
   Layer,
@@ -40,6 +40,7 @@ export type {
   CommsStatusWithLayers,
   LambdasStatus,
   ContentStatus,
+  ContentEntityScene,
   Position,
   Servers,
   LayerUser,
@@ -251,7 +252,7 @@ export default class Catalyst extends API {
 
   async getEntityScenes(
     pointers: (string | [number, number])[]
-  ): Promise<EntityScene[]> {
+  ): Promise<(ContentEntityScene & { id: string })[]> {
     if (!pointers || pointers.length === 0) {
       return []
     }
