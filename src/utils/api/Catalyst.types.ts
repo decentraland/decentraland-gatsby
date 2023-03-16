@@ -309,6 +309,20 @@ export type SceneMetadata = {
     base: string
   }
   requiredPermissions?: string[]
+  spawnPoints?: {
+    name: string
+    default: boolean
+    position: {
+      x: number[]
+      y: number[]
+      z: number[]
+    }
+    cameraTarget: {
+      x: number
+      y: number
+      z: number
+    }
+  }[]
   communications?: {
     type: string // "webrtc",
     signalling: string // "https://signalling-01.decentraland.org"
