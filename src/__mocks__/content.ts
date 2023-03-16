@@ -1,9 +1,9 @@
 import { EntityType } from '@dcl/schemas/dist/platform/entity'
 
-import { ContentDeploymentWorld } from '../utils/api/Catalyst.types'
+import { ContentEntityScene } from '../utils/api/Catalyst.types'
 
 //https://worlds-content-server.decentraland.org/contents/bafkreih62bkfpytlitkkcwle5jjo5doiv2xuifeturmnmmhrnrugjsguee
-export const worldContent: ContentDeploymentWorld = {
+export const worldContent: ContentEntityScene = {
   version: 'v3',
   type: EntityType.SCENE,
   pointers: ['20,24'],

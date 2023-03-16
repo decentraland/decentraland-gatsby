@@ -1,12 +1,12 @@
 import env from '../env'
 import API from './API'
 
-import type { ContentDeploymentWorld } from './Catalyst.types'
+import type { ContentEntityScene, ContentStatus } from './Catalyst.types'
 
 export default class ContentServer extends API {
   static Url = env(
     'WORLDS_CONTENT_SERVER',
-    'https://worlds-content-server.decentraland.org/contents/'
+    'https://worlds-content-server.decentraland.org/'
   )
 
   static Cache = new Map<string, ContentServer>()
@@ -23,11 +23,22 @@ export default class ContentServer extends API {
     return this.Cache.get(baseUrl)!
   }
 
-  getContentUrl(hash: string) {
-    return this.url(hash)
+  static getInstanceFromUrn(baseUrl: string) {
+    if (!baseUrl.endsWith('/contents/')) {
+      throw new Error(`This baseUrl is not a URN: ${baseUrl}`)
+    }
+    baseUrl = baseUrl.slice(-'contents/'.length)
+    return this.getInstanceFrom(baseUrl)
+  }
+  async getContentStatus(): Promise<ContentStatus> {
+    return this.fetch('/status')
   }
 
-  async getContentEntity(hash: string): Promise<ContentDeploymentWorld> {
-    return this.fetch(hash)
+  getContentUrl(hash: string) {
+    return this.url(`/contents/${hash}`)
+  }
+
+  async getContentEntity(hash: string): Promise<ContentEntityScene> {
+    return this.fetch(`/contents/${hash}`)
   }
 }

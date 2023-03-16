@@ -193,6 +193,7 @@ export type LayerUser = {
   address: string
 }
 
+/**@deprecated */
 export type EntityScene = {
   id: string
   type: 'scene'
@@ -307,11 +308,11 @@ export type SceneMetadata = {
     parcels: string[]
     base: string
   }
-  communications: {
+  communications?: {
     type: string // "webrtc",
     signalling: string // "https://signalling-01.decentraland.org"
   }
-  policy: {
+  policy?: {
     contentRating: string
     fly: boolean
     voiceEnabled: boolean
@@ -332,18 +333,7 @@ export type SceneMetadata = {
       cols: number // 1
     }
   }
-}
-
-export type ContentDeploymentScene = ContentDeploymentBase & {
-  entityType: EntityType.SCENE
-  metadata: SceneMetadata
-}
-
-export type WorldSceneMetadata = Omit<
-  SceneMetadata,
-  'communications' | 'policy'
-> & {
-  worldConfiguration: {
+  worldConfiguration?: {
     name: string
     fixedAdapter?: string
     minimapVisible?: boolean
@@ -351,20 +341,23 @@ export type WorldSceneMetadata = Omit<
   }
 }
 
-export type ContentDeploymentWorld = Omit<
-  ContentDeploymentBase,
-  | 'content'
-  | 'entityId'
-  | 'entityTimestamp'
-  | 'localTimestamp'
-  | 'deployedBy'
-  | 'metadata'
-> & {
+export type ContentEntityScene = {
   version: string
   type: EntityType.SCENE
+  pointers: string[]
   timestamp: number
   content: { file: string; hash: string }[]
-  metadata: WorldSceneMetadata
+  metadata: SceneMetadata
+}
+
+export type ContentDeploymentScene = ContentDeploymentBase & {
+  entityType: EntityType.SCENE
+  metadata: SceneMetadata
+}
+
+export type ContentDeploymentWorld = ContentDeploymentBase & {
+  entityType: EntityType.SCENE
+  metadata: SceneMetadata
 }
 
 export type ContentDeploymentProfile = ContentDeploymentBase & {
