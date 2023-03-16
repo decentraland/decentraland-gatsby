@@ -308,6 +308,7 @@ export type SceneMetadata = {
     parcels: string[]
     base: string
   }
+  requiredPermissions?: string[]
   communications?: {
     type: string // "webrtc",
     signalling: string // "https://signalling-01.decentraland.org"
