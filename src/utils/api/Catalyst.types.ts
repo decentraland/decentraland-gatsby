@@ -297,14 +297,14 @@ export type SceneMetadata = {
     favicon?: string // "favicon_asset",
     navmapThumbnail?: string // "scene-thumbnail.png" | "https://decentraland.org/images/thumbnail.png"
   }
-  owner: string
+  owner?: string
   contact?: {
     name?: string
     email?: string
   }
-  main: string // "bin/game.js",
-  tags: string[]
-  scene: {
+  main?: string // "bin/game.js",
+  tags?: string[]
+  scene?: {
     parcels: string[]
     base: string
   }
@@ -334,7 +334,7 @@ export type SceneMetadata = {
     blacklist: string[]
     teleportPosition: string
   }
-  source: {
+  source?: {
     version: number
     origin: string
     projectId: string
