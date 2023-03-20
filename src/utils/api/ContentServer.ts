@@ -23,13 +23,6 @@ export default class ContentServer extends API {
     return this.Cache.get(baseUrl)!
   }
 
-  static getInstanceFromUrn(baseUrl: string) {
-    if (!baseUrl.endsWith('/contents/')) {
-      throw new Error(`This baseUrl is not a URN: ${baseUrl}`)
-    }
-    baseUrl = baseUrl.slice(-'contents/'.length)
-    return this.getInstanceFrom(baseUrl)
-  }
   async getContentStatus(): Promise<ContentStatus> {
     return this.fetch('/status')
   }
