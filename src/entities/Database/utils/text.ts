@@ -20,3 +20,10 @@ export function createSearchableMatches(str: string) {
     })
     .trim()
 }
+
+export function ensureFieldNames<F = string | number | symbol>(fields: F[]) {
+  const invalidFields = fields.filter((field) => /\W/gi.test(field as string))
+  if (invalidFields.length !== 0) {
+    throw new Error(`Invalid fields ${invalidFields.join(', ')}`)
+  }
+}
