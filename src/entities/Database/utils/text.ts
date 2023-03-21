@@ -22,7 +22,12 @@ export function createSearchableMatches(str: string) {
 }
 
 export function ensureFieldNames<F = string | number | symbol>(fields: F[]) {
-  const invalidFields = fields.filter((field) => /\W/gi.test(field as string))
+  const invalidFields = fields.filter((field) => {
+    if (typeof field !== 'string') {
+      throw new Error('Unspected field of type symbol')
+    }
+    return /\W/gi.test(field as string)
+  })
   if (invalidFields.length !== 0) {
     throw new Error(`Invalid fields ${invalidFields.join(', ')}`)
   }
