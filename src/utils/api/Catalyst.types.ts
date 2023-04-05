@@ -32,11 +32,13 @@ export type Avatar = {
     hair: BodyColor
     skin: BodyColor
     wearables: string[]
-    version: number
+    emotes: { slot: number; urn: string }[]
+    version?: number
   }
-  inventory: string[]
-  blocked: string[]
+  inventory?: string[]
+  blocked?: string[]
   tutorialStep: number
+  hasConnectedWeb3: boolean
 }
 
 export type ProfileMetadata = {
