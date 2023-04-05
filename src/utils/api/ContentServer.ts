@@ -1,7 +1,14 @@
 import env from '../env'
 import API from './API'
 
-import type { ContentEntityScene, ContentStatus } from './Catalyst.types'
+import type {
+  ContentEntityEmote,
+  ContentEntityProfile,
+  ContentEntityScene,
+  ContentEntityStore,
+  ContentEntityWearable,
+  ContentStatus,
+} from './Catalyst.types'
 
 export default class ContentServer extends API {
   static Url = env(
@@ -31,7 +38,15 @@ export default class ContentServer extends API {
     return this.url(`/contents/${hash}`)
   }
 
-  async getContentEntity(hash: string): Promise<ContentEntityScene> {
+  async getContentEntity(
+    hash: string
+  ): Promise<
+    | ContentEntityScene
+    | ContentEntityProfile
+    | ContentEntityEmote
+    | ContentEntityWearable
+    | ContentEntityStore
+  > {
     return this.fetch(`/contents/${hash}`)
   }
 }

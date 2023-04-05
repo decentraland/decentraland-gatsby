@@ -13,7 +13,11 @@ import type {
   CommsStatusWithUsers,
   ContentDeploymentOptions,
   ContentDeploymentResponse,
+  ContentEntityEmote,
+  ContentEntityProfile,
   ContentEntityScene,
+  ContentEntityStore,
+  ContentEntityWearable,
   ContentStatus,
   HotScene,
   LambdasStatus,
@@ -40,6 +44,10 @@ export type {
   LambdasStatus,
   ContentStatus,
   ContentEntityScene,
+  ContentEntityProfile,
+  ContentEntityEmote,
+  ContentEntityWearable,
+  ContentEntityStore,
   Position,
   Servers,
   LayerUser,
@@ -245,7 +253,15 @@ export default class Catalyst extends API {
     return this.url(`/content/contents/${hash}`)
   }
 
-  async getContentEntity(hash: string): Promise<ContentEntityScene> {
+  async getContentEntity(
+    hash: string
+  ): Promise<
+    | ContentEntityScene
+    | ContentEntityProfile
+    | ContentEntityEmote
+    | ContentEntityWearable
+    | ContentEntityStore
+  > {
     return this.fetch(`/content/contents/${hash}`)
   }
 
