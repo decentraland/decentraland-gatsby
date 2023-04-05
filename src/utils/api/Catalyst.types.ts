@@ -2,9 +2,9 @@ import type { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import type { EntityType } from '@dcl/schemas/dist/platform/entity'
 
 export type Snapshot = {
-  face: string
-  face128: string
-  face256: string
+  face?: string
+  face128?: string
+  face256?: string
   body: string
 }
 
@@ -356,13 +356,36 @@ export type SceneMetadata = {
   }
 }
 
-export type ContentEntityScene = {
+export type ContentEntity = {
   version: string
-  type: EntityType.SCENE
   pointers: string[]
   timestamp: number
   content: { file: string; hash: string }[]
+}
+
+export type ContentEntityScene = ContentEntity & {
+  type: EntityType.SCENE
   metadata: SceneMetadata
+}
+
+export type ContentEntityProfile = ContentEntity & {
+  type: EntityType.PROFILE
+  metadata: ProfileMetadata
+}
+
+export type ContentEntityWearable = ContentEntity & {
+  type: EntityType.WEARABLE
+  metadata: WearableMetadata
+}
+
+export type ContentEntityStore = ContentEntity & {
+  entityType: EntityType.STORE
+  metadata: StoreMetadata
+}
+
+export type ContentEntityEmote = ContentEntity & {
+  entityType: EntityType.STORE
+  metadata: {} // TODO: emote metadata
 }
 
 export type ContentDeploymentScene = ContentDeploymentBase & {
