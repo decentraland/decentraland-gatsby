@@ -381,12 +381,12 @@ export type ContentEntityWearable = ContentEntity & {
 }
 
 export type ContentEntityStore = ContentEntity & {
-  entityType: EntityType.STORE
+  type: EntityType.STORE
   metadata: StoreMetadata
 }
 
 export type ContentEntityEmote = ContentEntity & {
-  entityType: EntityType.STORE
+  type: EntityType.EMOTE
   metadata: {} // TODO: emote metadata
 }
 
