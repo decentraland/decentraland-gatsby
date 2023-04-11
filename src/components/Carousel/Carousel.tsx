@@ -123,10 +123,15 @@ export default React.memo(function Carousel({
     (e: React.TouchEvent<HTMLDivElement>) => {
       setState((prev) => {
         prev.timer?.stop()
+        const targetTouch = e.targetTouches && e.targetTouches[0]
+        if (!targetTouch) {
+          return prev
+        }
+
         return {
           ...prev,
-          touchStart: e.targetTouches[0].clientX,
-          touchEnd: e.targetTouches[0].clientX,
+          touchStart: targetTouch.clientX,
+          touchEnd: targetTouch.clientX,
         }
       })
     },
@@ -134,10 +139,17 @@ export default React.memo(function Carousel({
   )
 
   const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
-    setState((prev) => ({
-      ...prev,
-      touchEnd: e.targetTouches[0].clientX,
-    }))
+    setState((prev) => {
+      const targetTouch = e.targetTouches && e.targetTouches[0]
+      if (!targetTouch) {
+        return prev
+      }
+
+      return {
+        ...prev,
+        touchEnd: targetTouch.clientX,
+      }
+    })
   }, [])
 
   const handleTouchEnd = useCallback(
