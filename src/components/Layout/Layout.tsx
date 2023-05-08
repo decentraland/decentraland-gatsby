@@ -25,12 +25,12 @@ import useShareContext from '../../context/Share/useShareContext'
 import useWindowScroll from '../../hooks/useWindowScroll'
 import { DecentralandIntlContext } from '../../plugins/intl/types'
 import { changeLocale } from '../../plugins/intl/utils'
+import { track } from '../../utils/development/segment'
 import TokenList from '../../utils/dom/TokenList'
 import trackEvent from '../../utils/segment/trackEvent'
 import ShareModal from '../Modal/ShareModal'
 import WalletSelectorModal from '../Modal/WalletSelectorModal'
 import WrongNetworkModal from '../Modal/WrongNetworkModal'
-import LeftMenu from './LeftMenu'
 
 import type { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import type { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Dropdown'
@@ -71,6 +71,17 @@ export default function Layout({
     changeLocale(data.value as string)
   }
 
+  const handleClickMenuOption = function (
+    _: React.MouseEvent,
+    section: string
+  ) {
+    const [menuSection, subMenuSection = undefined] = section.split('_')
+    track('Click on Navbar', {
+      section: menuSection,
+      submenu: subMenuSection,
+    })
+  }
+
   return (
     <>
       {!hideNavbar && (
@@ -78,9 +89,7 @@ export default function Layout({
           mana={props.mana}
           address={props.address}
           activePage={props.activePage}
-          leftMenu={
-            props.leftMenu || <LeftMenu activePage={props.activePage} />
-          }
+          leftMenu={props.leftMenu}
           middleMenu={props.middleMenu}
           rightMenu={props.rightMenu}
           i18n={props.i18n}
@@ -96,6 +105,7 @@ export default function Layout({
           ])}
           onSignIn={props.onSignIn}
           onClickAccount={props.onClickAccount}
+          onClickMenuOption={props.onClickMenuOption || handleClickMenuOption}
         />
       )}
       <main
