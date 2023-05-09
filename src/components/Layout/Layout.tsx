@@ -5,7 +5,7 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import type { PageProps } from 'gatsby'
 
@@ -71,7 +71,7 @@ export default function Layout({
     changeLocale(data.value as string)
   }
 
-  const handleClickMenuOption = function (
+  const handleClickMenuOption = useCallback(function (
     _: React.MouseEvent,
     section: string
   ) {
@@ -80,7 +80,8 @@ export default function Layout({
       section: menuSection,
       submenu: subMenuSection,
     })
-  }
+  },
+  [])
 
   return (
     <>
