@@ -3,6 +3,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { getTransaction } from 'decentraland-dapps/dist/modules/transaction/txUtils'
+import { AnyTransaction } from 'decentraland-dapps/dist/modules/transaction/types'
 import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
 
 import Time from '../utils/date/Time'
@@ -55,7 +56,7 @@ export default function useTransaction(
 
           if (updatedTransaction) {
             const hasChanges = Object.keys(updatedTransaction).some(
-              (key) =>
+              (key: keyof AnyTransaction) =>
                 tx[key] !== updatedTransaction[key] &&
                 String(tx[key]) !== String(updatedTransaction[key])
             )

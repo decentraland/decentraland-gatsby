@@ -85,11 +85,12 @@ export default function useEditor<P extends {} = {}>(
   return [state, actions] as const
 }
 
-function clear<P>(err: EditorError<P>): EditorError<P> {
-  const keys = Object.keys(err)
-  const emptyKeys = keys.filter(
-    (key) => err[key] === undefined || err[key] === null
-  )
+function clear<P extends {}>(err: EditorError<P>): EditorError<P> {
+  const emptyKeys = Object.keys(err).filter((key) => {
+    const value = (err as Record<string, string>)[key]
+    return value === undefined || value === null
+  })
+
   return omit(err, emptyKeys)
 }
 
