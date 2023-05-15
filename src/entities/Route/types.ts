@@ -68,9 +68,6 @@ export const defaultOrigin = [
   /https:\/\/([a-zA-Z0-9\-_]+\.)*decentraland\.today/,
   /https:\/\/([a-zA-Z0-9\-_]+\.)*decentraland\.zone/,
   /https:\/\/([a-zA-Z0-9\-_]+\.)*decentraland\.org/,
-  /https:\/\/([a-zA-Z0-9\-_]+\.)*decentraland\.net/,
-  /https:\/\/([a-zA-Z0-9\-_]+\.)*decentraland\.co/,
-  /https:\/\/([a-zA-Z0-9\-_]+\.)*decentraland\.io/,
   /https:\/\/decentraland\.github\.io/,
   /https:\/\/([a-zA-Z0-9\-_]+\.)*pages\.dev/,
 ]
