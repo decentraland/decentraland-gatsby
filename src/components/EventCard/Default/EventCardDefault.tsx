@@ -4,7 +4,7 @@ import { Card } from 'decentraland-ui/dist/components/Card/Card'
 
 import TokenList from '../../../utils/dom/TokenList'
 import StartIn from '../../Badge/StartIn'
-import AttendingButtons from '../../Button/AttendingButtons'
+import Attending from '../../Button/Attending'
 import JumpInPosition from '../../Button/JumpInPosition'
 import ImgFixed from '../../Image/ImgFixed'
 import LoadingText from '../../Loading/LoadingText'
@@ -81,7 +81,7 @@ export default React.memo(function EventCardDefault(props: EventCardProps) {
           </>
         )}
         <Card.Description>
-          <AttendingButtons {...props} />
+          <Attending {...props} />
         </Card.Description>
       </Card.Content>
     </Card>

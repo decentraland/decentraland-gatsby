@@ -1,15 +1,15 @@
 import { Meta, Story, Canvas } from '@storybook/addon-docs'
 import Divider from '../Text/Divider'
 import IntlStorybookProvider from '../Storybook/IntlStorybookProvider'
-import AttendingButtons from './AttendingButtons'
+import Attending from './Attending'
 import { event } from '../../__mocks__/event'
 
-<Meta title="components/Button/AttendingButtons" />
+<Meta title="components/Button/Attending" />
 
 <Canvas>
   <Story name="Jump In">
     <IntlStorybookProvider>
-      <AttendingButtons
+      <Attending
         event={event}
         onUpdateAttendee={() => {}}
         onNotify={() => {}}
@@ -24,7 +24,7 @@ import { event } from '../../__mocks__/event'
 <Canvas>
   <Story name="Want To Go">
     <IntlStorybookProvider>
-      <AttendingButtons
+      <Attending
         event={{
           ...event,
           next_start_at: new Date().setDate(new Date().getDate() + 1),
@@ -42,7 +42,7 @@ import { event } from '../../__mocks__/event'
 <Canvas>
   <Story name="Loading">
     <IntlStorybookProvider>
-      <AttendingButtons
+      <Attending
         event={event}
         onUpdateAttendee={() => {}}
         onNotify={() => {}}

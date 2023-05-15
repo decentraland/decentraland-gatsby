@@ -22,9 +22,9 @@ import twitterUrl from '../../utils/share/twitterUrl'
 import { EventAttributes } from '../EventCard/EventCard'
 import { ButtonEvent } from './utils'
 
-import './AttendingButtons.css'
+import './Attending.css'
 
-export type AttendingButtonsProps = {
+export type AttendingProps = {
   event?: EventAttributes
   href?: string
   loading?: boolean
@@ -32,7 +32,7 @@ export type AttendingButtonsProps = {
   onNotify: (id: string, attending: boolean) => void
 }
 
-export default function AttendingButtons(props: AttendingButtonsProps) {
+export default function Attending(props: AttendingProps) {
   const { event, loading, onUpdateAttendee, onNotify } = props
   const href = props.href || 'https://events.decentraland.org'
 
