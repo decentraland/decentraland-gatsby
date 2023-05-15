@@ -24,8 +24,7 @@ const validOriginCases = [
   'https://decentraland.io',
   'https://subdomain.decentraland.io',
   'https://decentraland.github.io',
-  'https://manaland.cn',
-  'https://subdomain.manaland.cn',
+  'https://new-landing-page.landing-9sh.pages.dev/',
 ]
 
 const invalidOriginCases = [
@@ -60,9 +59,12 @@ const invalidOriginCases = [
   'https://now.sh',
   'https://subdomain.now.sh',
   'http://manaland.cn',
+  'https://manaland.cn',
+  'https://subdomain.manaland.cn',
   'http://subdomain.manaland.cn',
   'http://other.domain',
   'https://other.domain',
+  'http://new-landing-page.landing-9sh.pages.dev/',
 ]
 
 describe('defaultOrigin', () => {
