@@ -285,7 +285,7 @@ const restrictionProps = [
   'minContains',
   'maxContains',
   'additionalProperties',
-]
+] as (keyof AjvSchema)[]
 
 const RequestTableDescriptionCell = React.memo(function ({
   required,

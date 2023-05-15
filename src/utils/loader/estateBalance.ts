@@ -5,12 +5,13 @@ import rollbar from '../development/rollbar'
 import segment from '../development/segment'
 import 'isomorphic-fetch'
 
-const DECENTRALAND_MARKETPLACE_SUBGRAPH_URL = {
-  [ChainId.ETHEREUM_MAINNET]:
-    'https://api.thegraph.com/subgraphs/name/decentraland/marketplace',
-  [ChainId.ETHEREUM_ROPSTEN]:
-    'https://api.thegraph.com/subgraphs/name/decentraland/marketplaceropsten',
-}
+const DECENTRALAND_MARKETPLACE_SUBGRAPH_URL: Partial<Record<ChainId, string>> =
+  {
+    [ChainId.ETHEREUM_MAINNET]:
+      'https://api.thegraph.com/subgraphs/name/decentraland/marketplace',
+    [ChainId.ETHEREUM_ROPSTEN]:
+      'https://api.thegraph.com/subgraphs/name/decentraland/marketplaceropsten',
+  }
 
 const QUERY = `
 query ($address: String!, $first: Int!, $skip: Int!) {
@@ -27,7 +28,8 @@ export async function fetchEstateBalance(address: string, chainId: ChainId) {
     return [0, 0] as const
   }
 
-  if (!DECENTRALAND_MARKETPLACE_SUBGRAPH_URL[chainId]) {
+  const target = DECENTRALAND_MARKETPLACE_SUBGRAPH_URL[chainId]
+  if (!target) {
     return [0, 0] as const
   }
 
@@ -38,17 +40,14 @@ export async function fetchEstateBalance(address: string, chainId: ChainId) {
     let hasNext = true
     const first = 1000
     while (hasNext) {
-      const response = await fetch(
-        DECENTRALAND_MARKETPLACE_SUBGRAPH_URL[chainId],
-        {
-          method: 'post',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            query: QUERY,
-            variables: { address: address.toLowerCase(), first, skip },
-          }),
-        }
-      )
+      const response = await fetch(target, {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: QUERY,
+          variables: { address: address.toLowerCase(), first, skip },
+        }),
+      })
 
       const body = await response.json()
       const nfts = (body?.data?.nfts || []) as { searchEstateSize: number }[]

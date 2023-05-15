@@ -1,4 +1,6 @@
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
+import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
+import { getConfiguration } from 'decentraland-connect/dist/configuration'
 
 import { ConnectionOptions, ConnectionType } from './types'
 
@@ -23,4 +25,8 @@ export function onceWithConnectionOptions<T>(
 
     return CACHE[type][chainId]
   }
+}
+
+export function getRPCUrl(chainId: ChainId) {
+  return getConfiguration()[ProviderType.NETWORK].urls[chainId]
 }

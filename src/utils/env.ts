@@ -111,7 +111,7 @@ export function requiredEnv(name: string): string {
 }
 
 export function setupEnv(envs: EnvMap = {}) {
-  for (const env of Object.keys(envs)) {
+  for (const env of Object.keys(envs) as (keyof EnvMap)[]) {
     if (isEnv(env)) {
       ENVS.set(env as Env, createEnvs(envs[env]))
     }

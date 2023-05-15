@@ -12,7 +12,7 @@ export default class RequestError extends Error {
   static NotImplemented = 501
   static ServiceUnavailable = 503
 
-  static Code = {
+  static Code: Record<number, string> = {
     [400]: 'bad_request',
     [401]: 'unauthorized',
     [403]: 'forbidden',
@@ -35,12 +35,11 @@ export default class RequestError extends Error {
       result.code = (err as RequestError).code
     }
 
-    if (
-      !(err as RequestError).code &&
-      (err as RequestError).statusCode &&
-      RequestError[(err as RequestError).statusCode!]
-    ) {
-      result.code = RequestError[(err as RequestError).statusCode!]
+    if (!(err as RequestError).code && (err as RequestError).statusCode) {
+      const statusCode = (err as RequestError).statusCode!
+      if (RequestError.Code[statusCode]) {
+        result.code = RequestError.Code[statusCode]
+      }
     }
 
     if (Object.keys((err as RequestError).data || {}).length > 0) {
