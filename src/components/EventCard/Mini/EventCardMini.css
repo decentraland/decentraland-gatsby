@@ -1,0 +1,108 @@
+.ui.card.event-card--mini.loading {
+  pointer-events: none;
+}
+
+.ui.card.event-card--mini.loading .event-card--mini__cover {
+  background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+  background-size: 200% 100%;
+  animation: 1.5s loading linear infinite;
+  border-radius: 8px 0 0 8px;
+}
+
+.ui.card.event-card--mini .content,
+.ui.card.event-card--mini .event-card--mini__cover .dg.ImgFixed {
+  opacity: 1;
+  transition: opacity ease 0.3s;
+}
+
+.ui.card.event-card--mini.loading .event-card--mini__cover .dg.ImgFixed {
+  opacity: 0;
+}
+
+.ui.card.event-card--mini.pending {
+  opacity: 0.7;
+  background: #eee;
+}
+
+.ui.card.event-card--mini .content {
+  padding: 14px 14px 0;
+  width: 100%;
+}
+
+.ui.card.event-card--mini .header {
+  font-size: 17px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.53;
+  letter-spacing: -0.2px;
+  color: #16141a;
+  max-height: 3em;
+  overflow: hidden;
+}
+
+.ui.card.event-card--mini .event-card--mini__cover {
+  flex: 0 0 96px;
+  position: relative;
+}
+
+.ui.card.event-card--mini .dg.ImgFixed {
+  border-radius: 8px 0 0 8px;
+}
+
+.ui.card.event-card--mini .jump-in-position {
+  position: absolute;
+  background: white !important;
+  border: 1px solid white;
+  margin: 0;
+  border-radius: 100%;
+  top: 15px;
+  right: 15px;
+}
+
+.ui.card.event-card--mini .jump-in-position img {
+  margin: 0;
+}
+
+.ui.card.event-card--mini .event-card--mini__attendees {
+  position: absolute;
+  z-index: 10;
+  top: 6px;
+  right: 6px;
+}
+
+.ui.card.event-card--mini .event-card--mini__attendees .dg.ImgAvatar {
+  margin-right: -10px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.ui.card.event-card--mini
+  .event-card--mini__attendees
+  .event-card--mini__attendees-more {
+  display: inline-block;
+  min-width: 20px;
+  height: 20px;
+  background: white;
+  color: #37333d;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0 0.4em;
+  box-sizing: content-box;
+  line-height: 20px;
+}
+
+.ui.card.event-card--mini:hover
+  .jump-in-position.jump-in-position--compact
+  .jump-in-position__position {
+  display: flex;
+}
+
+.ui.card.event-card--mini > .content > .header:not(.ui),
+.ui.cards > .card.event-card--mini > .content > .header:not(.ui) {
+  margin-top: 0;
+}
+
+.event-card--mini__content-header {
+  display: flex;
+  justify-content: space-between;
+}

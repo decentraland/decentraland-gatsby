@@ -1,0 +1,114 @@
+.ui.card.event-card--big,
+.ui.cards > .card.event-card--big {
+  width: 100%;
+}
+
+.ui.card.event-card--big.loading {
+  pointer-events: none;
+}
+
+.ui.card.event-card--big.loading .event-card--big__cover {
+  background: linear-gradient(110deg, #ececec 8%, #f5f5f5 18%, #ececec 33%);
+  background-size: 200% 100%;
+  animation: 1.5s loading linear infinite;
+  border-radius: 8px 0 0 8px;
+}
+
+.ui.card.event-card--big .content,
+.ui.card.event-card--big .event-card--big__cover .dg.ImgFixed {
+  opacity: 1;
+  transition: opacity ease 0.3s;
+}
+
+.ui.card.event-card--big.loading .content,
+.ui.card.event-card--big.loading .event-card--big__cover .dg.ImgFixed {
+  opacity: 0;
+}
+
+.ui.card.event-card--big.pending {
+  opacity: 0.7;
+  background: #eee;
+}
+
+.ui.card.event-card--big .content {
+  padding: 0;
+  flex: 1;
+  justify-content: space-between;
+  flex-direction: column;
+  display: flex;
+}
+
+.ui.card.event-card--big .header {
+  font-size: 17px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.53;
+  letter-spacing: -0.2px;
+  color: #16141a;
+  max-height: 3em;
+  overflow: hidden;
+}
+
+.ui.card.event-card--big .event-card--big__cover {
+  display: flex;
+  flex-direction: row;
+  flex: 0 0 60%;
+  max-width: 670px;
+}
+
+.ui.card.event-card--big .event-card--big__container {
+  display: flex;
+  flex-direction: row;
+}
+
+.ui.card.event-card--big .dg.ImgFixed {
+  border-radius: 8px 0 0 8px;
+}
+
+/* .ui.card.event-card--big .event-card--big__Attendees {
+  position: absolute;
+  z-index: 10;
+  top: 6px;
+  right: 6px;
+}
+
+.ui.card.event-card--big .event-card--big__Attendees .dg.ImgAvatar {
+  margin-right: -10px;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+.ui.card.event-card--big .event-card--big__Attendees .event-card--big__Attendees__More {
+  display: inline-block;
+  min-width: 20px;
+  height: 20px;
+  background: white;
+  color: #37333d;
+  font-weight: 600;
+  border-radius: 10px;
+  padding: 0 0.4em;
+  box-sizing: content-box;
+  line-height: 20px;
+} */
+
+.ui.card.event-card--big:hover
+  .JumpInButton.JumpInButton--compact
+  .JumpInButton__Position {
+  display: flex;
+}
+
+.ui.card.event-card--big > .content > .header:not(.ui),
+.ui.cards > .card.event-card--big > .content > .header:not(.ui) {
+  margin-top: 0;
+}
+
+@media only screen and (max-width: 767px) {
+  .ui.card.event-card--big .event-card--big__container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ui.card.event-card--big .dg.ImgFixed {
+    border-radius: 8px 8px 0 0;
+  }
+}

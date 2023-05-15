@@ -1,0 +1,58 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs'
+import Divider from '../Text/Divider'
+import IntlStorybookProvider from '../Storybook/IntlStorybookProvider'
+import StartIn from './StartIn'
+
+<Meta title="components/Badge/StartIn" />
+
+<Canvas>
+  <Story name="Live">
+    <IntlStorybookProvider>
+      <StartIn date={new Date()} />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas>
+  <Story name="In Less than a minutes">
+    <IntlStorybookProvider>
+      <StartIn
+        date={new Date(new Date().setMinutes(new Date().getMinutes() + 1))}
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas>
+  <Story name="In minutes">
+    <IntlStorybookProvider>
+      <StartIn
+        date={new Date(new Date().setMinutes(new Date().getMinutes() + 10))}
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas>
+  <Story name="In hours">
+    <IntlStorybookProvider>
+      <StartIn date={new Date(new Date().setDate(new Date().getDate() + 1))} />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas>
+  <Story name="In days">
+    <IntlStorybookProvider>
+      <StartIn date={new Date(new Date().setDate(new Date().getDate() + 10))} />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>

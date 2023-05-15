@@ -1,0 +1,44 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs'
+import Divider from '../Text/Divider'
+import IntlStorybookProvider from '../Storybook/IntlStorybookProvider'
+import LoadingText from './LoadingText'
+
+<Meta title="components/LoadingText" />
+
+<Canvas isExpanded>
+  <Story name="heading 1 small width">
+    <IntlStorybookProvider>
+      <LoadingText type="h1" size="small" lines={1} />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas isExpanded>
+  <Story name="heading 2 medium width">
+    <IntlStorybookProvider>
+      <LoadingText type="h1" size="medium" lines={1} />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas isExpanded>
+  <Story name="span large width">
+    <IntlStorybookProvider>
+      <LoadingText type="span" size="large" lines={1} />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas isExpanded>
+  <Story name="p full width several lines">
+    <IntlStorybookProvider>
+      <LoadingText type="p" size="full" lines={3} />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>

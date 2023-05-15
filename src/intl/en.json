@@ -26,5 +26,34 @@
         "twitter": "https://twitter.com/intent/tweet?text={description} {url}"
       }
     }
+  },
+  "components": {
+    "badge": {
+      "live": "LIVE",
+      "start_in": {
+        "day": "day",
+        "days": "days",
+        "hour": "hour",
+        "hours": "hours",
+        "minute": "minute",
+        "minutes": "minutes",
+        "in_less_than_a_minute": "in less than a minute"
+      }
+    },
+    "button": {
+      "attending_buttons": {
+        "jump_in": "jump in",
+        "going": "going",
+        "want_to_go": "want to go",
+        "share": "share"
+      }
+    },
+    "event_card": {
+      "event_date": {
+        "now": "now",
+        "today": "today",
+        "tomorrow": "tomorrow"
+      }
+    }
   }
 }

@@ -1,0 +1,150 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs'
+import Divider from '../Text/Divider'
+import IntlStorybookProvider from '../Storybook/IntlStorybookProvider'
+import EventCard, { EventCardSize } from './EventCard'
+import { event } from '../../__mocks__/event'
+
+<Meta title="components/EventCard" />
+
+<Canvas isExpanded>
+  <Story name="Default live">
+    <IntlStorybookProvider>
+      <EventCard
+        event={event}
+        onUpdateAttendee={() => {
+          console.log('onUpdateAttendee triggered')
+        }}
+        onNotify={() => {
+          console.log('onNotify triggered')
+        }}
+        href="https://events.decentraland.org"
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas isExpanded>
+  <Story name="Default in 10 minutes">
+    <IntlStorybookProvider>
+      <EventCard
+        event={{
+          ...event,
+          next_start_at: new Date(
+            new Date().setMinutes(new Date().getMinutes() + 10)
+          ),
+        }}
+        onUpdateAttendee={() => {
+          console.log('onUpdateAttendee triggered')
+        }}
+        onNotify={() => {
+          console.log('onNotify triggered')
+        }}
+        href="https://events.decentraland.org"
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas isExpanded>
+  <Story name="Default loading">
+    <IntlStorybookProvider>
+      <EventCard
+        event={undefined}
+        onUpdateAttendee={() => {
+          console.log('onUpdateAttendee triggered')
+        }}
+        onNotify={() => {
+          console.log('onNotify triggered')
+        }}
+        href="https://events.decentraland.org"
+        loading={true}
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas isExpanded>
+  <Story name="Mini">
+    <IntlStorybookProvider>
+      <EventCard
+        event={event}
+        onUpdateAttendee={() => {
+          console.log('onUpdateAttendee triggered')
+        }}
+        onNotify={() => {
+          console.log('onNotify triggered')
+        }}
+        href="https://events.decentraland.org"
+        size={EventCardSize.MINI}
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas isExpanded>
+  <Story name="Mini loading">
+    <IntlStorybookProvider>
+      <EventCard
+        event={undefined}
+        onUpdateAttendee={() => {
+          console.log('onUpdateAttendee triggered')
+        }}
+        onNotify={() => {
+          console.log('onNotify triggered')
+        }}
+        href="https://events.decentraland.org"
+        size={EventCardSize.MINI}
+        loading={true}
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas isExpanded>
+  <Story name="Big">
+    <IntlStorybookProvider>
+      <EventCard
+        event={event}
+        onUpdateAttendee={() => {
+          console.log('onUpdateAttendee triggered')
+        }}
+        onNotify={() => {
+          console.log('onNotify triggered')
+        }}
+        href="https://events.decentraland.org"
+        size={EventCardSize.BIG}
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas isExpanded>
+  <Story name="Big loading">
+    <IntlStorybookProvider>
+      <EventCard
+        event={undefined}
+        onUpdateAttendee={() => {
+          console.log('onUpdateAttendee triggered')
+        }}
+        onNotify={() => {
+          console.log('onNotify triggered')
+        }}
+        href="https://events.decentraland.org"
+        size={EventCardSize.BIG}
+        loading={true}
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>

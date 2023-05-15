@@ -1,0 +1,35 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs'
+import Divider from '../Text/Divider'
+import IntlStorybookProvider from '../Storybook/IntlStorybookProvider'
+import Live from './Live'
+import { event } from '../../__mocks__/event'
+
+<Meta title="components/Badge/Live" />
+
+<Canvas>
+  <Story name="Primary">
+    <IntlStorybookProvider>
+      <Live primary={true} />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas>
+  <Story name="Not Primary">
+    <IntlStorybookProvider>
+      <Live primary={false} />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas>
+  <Story name="Inverted">
+    <IntlStorybookProvider>
+      <Live primary={true} inverted={true} />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>

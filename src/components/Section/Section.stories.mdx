@@ -1,0 +1,29 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs'
+import IntlStorybookProvider from '../Storybook/IntlStorybookProvider'
+import Section from './Section'
+import primaryJumpIn from '../../images/primary-jump-in.svg'
+import iconFacebook from '../../images/icon-facebook.svg'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+
+<Meta title="components/Section" />
+
+<Canvas isExpanded>
+  <Story name="Basic">
+    <IntlStorybookProvider>
+      <Section>
+        <Section.Icon src={iconFacebook} width="16" height="16" />
+        <Section.Detail>Some text as detail</Section.Detail>
+        <Section.Action>
+          <Button>Button</Button>
+        </Section.Action>
+      </Section>
+      <Section>
+        <Section.Icon src={iconFacebook} width="16" height="16" />
+        <Section.Detail>Some text as detail</Section.Detail>
+        <Section.Action>
+          <Button>Button</Button>
+        </Section.Action>
+      </Section>
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>

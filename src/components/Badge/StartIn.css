@@ -1,0 +1,16 @@
+.StartIn {
+  display: inline-block;
+  font-size: 13px;
+  font-weight: bold;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.38;
+  letter-spacing: normal;
+  padding: 2px 7px;
+  border-width: 1px;
+  border-radius: 4px;
+  border-style: solid;
+  color: var(--text);
+  background-color: var(--background);
+  border-color: var(--background);
+}

@@ -1,0 +1,54 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs'
+import Divider from '../Text/Divider'
+import IntlStorybookProvider from '../Storybook/IntlStorybookProvider'
+import AttendingButtons from './AttendingButtons'
+import { event } from '../../__mocks__/event'
+
+<Meta title="components/Button/AttendingButtons" />
+
+<Canvas>
+  <Story name="Jump In">
+    <IntlStorybookProvider>
+      <AttendingButtons
+        event={event}
+        onUpdateAttendee={() => {}}
+        onNotify={() => {}}
+        href="https://events.decentraland.org"
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas>
+  <Story name="Want To Go">
+    <IntlStorybookProvider>
+      <AttendingButtons
+        event={{
+          ...event,
+          next_start_at: new Date().setDate(new Date().getDate() + 1),
+        }}
+        onUpdateAttendee={() => {}}
+        onNotify={() => {}}
+        href="https://events.decentraland.org"
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas>
+  <Story name="Loading">
+    <IntlStorybookProvider>
+      <AttendingButtons
+        event={event}
+        onUpdateAttendee={() => {}}
+        onNotify={() => {}}
+        href="https://events.decentraland.org"
+        loading={true}
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>

@@ -1,0 +1,35 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs'
+import Divider from '../Text/Divider'
+import IntlStorybookProvider from '../Storybook/IntlStorybookProvider'
+import JumpInPosition from './JumpInPosition'
+import { event } from '../../__mocks__/event'
+
+<Meta title="components/Button/JumpInPosition" />
+
+<Canvas>
+  <Story name="Basic">
+    <IntlStorybookProvider>
+      <JumpInPosition event={event} />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas>
+  <Story name="Compact">
+    <IntlStorybookProvider>
+      <JumpInPosition event={event} compact={true} />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas>
+  <Story name="HTTP link">
+    <IntlStorybookProvider>
+      <JumpInPosition event={event} href="https://events.decentraland.org" />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>

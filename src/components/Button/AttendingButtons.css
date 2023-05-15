@@ -1,0 +1,48 @@
+.attending-buttons {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 530px;
+  margin: 0 auto;
+}
+
+.attending-buttons .ui.button.attending-status,
+.ui.modal .attending-buttons .ui.button.attending-status {
+  border-color: rgba(115, 110, 125, 0.32);
+  background: transparent;
+}
+
+.attending-buttons .ui.button.attending-status.attending {
+  color: var(--primary);
+}
+
+.ui.modal .attending-buttons .ui.button.inverted,
+.attending-buttons .ui.button.inverted {
+  background-color: transparent;
+}
+.attending-buttons .ui.button {
+  flex: 0 0 auto;
+}
+
+.attending-buttons .ui.button + .ui.button {
+  margin-left: 8px;
+}
+
+.attending-buttons .ui.button.fluid {
+  flex: 0 1 auto;
+}
+
+.attending-buttons .ui.button.share {
+  min-width: 34px;
+  height: 34px;
+  padding: 5px 3px;
+  border-color: rgba(115, 110, 125, 0.32);
+}
+
+.attending-buttons .ui.button.share img {
+  vertical-align: text-bottom;
+}
+
+.attending-buttons .ui.button.share.mobile img {
+  margin-right: 0.5em;
+}
