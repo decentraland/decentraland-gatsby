@@ -1,0 +1,36 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs'
+import Divider from '../../Text/Divider'
+import IntlStorybookProvider from '../../Storybook/IntlStorybookProvider'
+import Attending from '../../Button/Attending'
+import EventHeader from './EventHeader'
+import { event } from '../../../__mocks__/event'
+
+<Meta title="components/EventHeader" />
+
+<Canvas isExpanded>
+  <Story name="Default">
+    <IntlStorybookProvider>
+      <EventHeader event={event} />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas isExpanded>
+  <Story name="With action">
+    <IntlStorybookProvider>
+      <EventHeader event={event} children={<Attending event={event} />} />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas isExpanded>
+  <Story name="Loading">
+    <IntlStorybookProvider>
+      <EventHeader event={event} loading={true} />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>

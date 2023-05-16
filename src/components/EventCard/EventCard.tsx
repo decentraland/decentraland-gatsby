@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 
 import { navigate } from '../../plugins/intl'
 import EventCardBig from './Big/EventCardBig'
@@ -93,10 +93,11 @@ export type EventCardProps = {
   onNotify: (id: string, attending: boolean) => void
   size?: EventCardSize
   localTimezone?: boolean
+  children?: React.ReactNode
 }
 
 export default React.memo(function EventCard(props: EventCardProps) {
-  const { event, onClick, href, size } = props
+  const { event, onClick, href, size, children } = props
 
   const handleClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -113,12 +114,10 @@ export default React.memo(function EventCard(props: EventCardProps) {
     [event, onClick, href]
   )
 
-  console.log(size)
-
   if (size && size === EventCardSize.MINI) {
     return <EventCardMini {...props} onClick={handleClick} />
   } else if (size && size === EventCardSize.BIG) {
-    return <EventCardBig {...props} onClick={handleClick} children={<></>} />
+    return <EventCardBig {...props} onClick={handleClick} children={children} />
   } else {
     return <EventCardDefault {...props} onClick={handleClick} />
   }

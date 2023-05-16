@@ -2,6 +2,12 @@ import { Meta, Story, Canvas } from '@storybook/addon-docs'
 import Divider from '../Text/Divider'
 import IntlStorybookProvider from '../Storybook/IntlStorybookProvider'
 import EventCard, { EventCardSize } from './EventCard'
+import pinIcon from '../../images/secondary-pin.svg'
+import { Link } from '../../plugins/intl'
+import Attending from '../Button/Attending'
+import Section from '../Section/Section'
+import Paragraph from '../Text/Paragraph'
+import EventHeader from './Header/EventHeader'
 import { event } from '../../__mocks__/event'
 
 <Meta title="components/EventCard" />
@@ -90,6 +96,54 @@ import { event } from '../../__mocks__/event'
 <Divider />
 
 <Canvas isExpanded>
+  <Story name="Mini Now">
+    <IntlStorybookProvider>
+      <EventCard
+        event={{
+          ...event,
+          next_start_at: new Date(),
+        }}
+        onUpdateAttendee={() => {
+          console.log('onUpdateAttendee triggered')
+        }}
+        onNotify={() => {
+          console.log('onNotify triggered')
+        }}
+        href="https://events.decentraland.org"
+        size={EventCardSize.MINI}
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas isExpanded>
+  <Story name="Mini Today">
+    <IntlStorybookProvider>
+      <EventCard
+        event={{
+          ...event,
+          next_start_at: new Date(
+            new Date().setMinutes(new Date().getMinutes() + 10)
+          ),
+        }}
+        onUpdateAttendee={() => {
+          console.log('onUpdateAttendee triggered')
+        }}
+        onNotify={() => {
+          console.log('onNotify triggered')
+        }}
+        href="https://events.decentraland.org"
+        size={EventCardSize.MINI}
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Divider />
+
+<Canvas isExpanded>
   <Story name="Mini loading">
     <IntlStorybookProvider>
       <EventCard
@@ -123,6 +177,24 @@ import { event } from '../../__mocks__/event'
         }}
         href="https://events.decentraland.org"
         size={EventCardSize.BIG}
+        children={
+          <>
+            <>
+              <EventHeader event={event} />
+              <Section>
+                <Attending event={event} />
+              </Section>
+              <Section.Divider />
+              <Section>
+                <Section.Icon src={pinIcon} width="16" height="16" />
+                <Section.Detail>
+                  <Link href="#">{event.scene_name}</Link>
+                </Section.Detail>
+                <Section.Action></Section.Action>
+              </Section>
+            </>
+          </>
+        }
       />
     </IntlStorybookProvider>
   </Story>

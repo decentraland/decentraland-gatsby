@@ -1,0 +1,43 @@
+.event-header {
+  display: flex;
+  padding: 18px 24px 0;
+  flex-direction: column;
+}
+
+.event-header .event-header__wrapper {
+  display: flex;
+}
+
+.event-header .event-header__text-container {
+  padding-left: 16px;
+  flex: 1;
+}
+
+.event-header .event-header__text-container.loading {
+  flex-direction: column;
+}
+
+.event-header .event-header__text-container .dg.SubTitle {
+  font-size: 21px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 30px;
+  letter-spacing: 0.3px;
+  padding-top: 2px;
+  margin: 0;
+}
+
+.event-header .event-header__text-container .event-header__event-by {
+  font-size: 17px;
+  line-height: 26px;
+}
+
+.event-header .event-header__text-container.loading .event-header__event-by {
+  display: flex;
+  justify-content: space-between;
+}
+
+.event-header .event-header__actions {
+  padding-left: 1em;
+}

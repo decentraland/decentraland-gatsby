@@ -54,6 +54,9 @@
         "today": "today",
         "tomorrow": "tomorrow"
       }
+    },
+    "event_header": {
+      "public_organized_by": "Public, Organized by {organizer}"
     }
   }
 }
