@@ -62,7 +62,10 @@ export default class TaskManager {
     return this
   }
 
-  use(task: Task) {
+  use(task: Task | null) {
+    if (!task) {
+      return this
+    }
     if (this._tasks.has(task.name) && this._tasks.get(task.name) !== task) {
       throw new Error(`Duplicated task name "${task.name}"`)
     }

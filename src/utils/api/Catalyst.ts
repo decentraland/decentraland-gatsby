@@ -11,11 +11,14 @@ import type {
   CommsStatusOptions,
   CommsStatusWithLayers,
   CommsStatusWithUsers,
-  ContentDeployment,
   ContentDeploymentOptions,
   ContentDeploymentResponse,
+  ContentEntityEmote,
+  ContentEntityProfile,
+  ContentEntityScene,
+  ContentEntityStore,
+  ContentEntityWearable,
   ContentStatus,
-  EntityScene,
   HotScene,
   LambdasStatus,
   Layer,
@@ -40,6 +43,11 @@ export type {
   CommsStatusWithLayers,
   LambdasStatus,
   ContentStatus,
+  ContentEntityScene,
+  ContentEntityProfile,
+  ContentEntityEmote,
+  ContentEntityWearable,
+  ContentEntityStore,
   Position,
   Servers,
   LayerUser,
@@ -245,13 +253,21 @@ export default class Catalyst extends API {
     return this.url(`/content/contents/${hash}`)
   }
 
-  async getContentEntity(hash: string): Promise<ContentDeployment> {
+  async getContentEntity(
+    hash: string
+  ): Promise<
+    | ContentEntityScene
+    | ContentEntityProfile
+    | ContentEntityEmote
+    | ContentEntityWearable
+    | ContentEntityStore
+  > {
     return this.fetch(`/content/contents/${hash}`)
   }
 
   async getEntityScenes(
     pointers: (string | [number, number])[]
-  ): Promise<EntityScene[]> {
+  ): Promise<(ContentEntityScene & { id: string })[]> {
     if (!pointers || pointers.length === 0) {
       return []
     }

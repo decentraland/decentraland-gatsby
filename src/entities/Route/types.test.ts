@@ -21,11 +21,8 @@ const validOriginCases = [
   'https://subdomain.decentraland.zone',
   'https://decentraland.org',
   'https://subdomain.decentraland.org',
-  'https://decentraland.io',
-  'https://subdomain.decentraland.io',
   'https://decentraland.github.io',
-  'https://manaland.cn',
-  'https://subdomain.manaland.cn',
+  'https://custom-build.custom-page-1a2b.pages.dev',
 ]
 
 const invalidOriginCases = [
@@ -53,16 +50,17 @@ const invalidOriginCases = [
   'http://subdomain.decentraland.zone',
   'http://decentraland.org',
   'http://subdomain.decentraland.org',
-  'http://decentraland.io',
-  'http://subdomain.decentraland.io',
   'http://now.sh',
   'http://subdomain.now.sh',
   'https://now.sh',
   'https://subdomain.now.sh',
   'http://manaland.cn',
+  'https://manaland.cn',
+  'https://subdomain.manaland.cn',
   'http://subdomain.manaland.cn',
   'http://other.domain',
   'https://other.domain',
+  'http://custom-build.custom-page-1a2b.pages.dev',
 ]
 
 describe('defaultOrigin', () => {

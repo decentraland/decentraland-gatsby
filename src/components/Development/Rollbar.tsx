@@ -20,8 +20,9 @@ export default React.memo(function Rollbar({
   src,
   ...props
 }: RollbarProps) {
-  version = version || 'v2.24.0'
-  accessToken = accessToken || env('ROLLBAR_TOKEN')
+  version = version || 'v2.26.1'
+  accessToken =
+    accessToken || env('ROLLBAR_TOKEN', process.env.GATSBY_ROLLBAR_TOKEN || '')
   if (!accessToken) {
     console.warn(
       `skipping rollbar inject: accessToken and GATSBY_ROLLBAR_TOKEN is missing'`

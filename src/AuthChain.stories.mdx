@@ -43,10 +43,9 @@ import {
 />
 
 export function AuthChainCURL({ chain, timestamp, metadata, options }) {
-  const baseUrl = options.baseUrl || ''
   let curl = []
-  if (options.path) {
-    curl.push(`curl '${baseUrl + options.path}'`)
+  if (options.url) {
+    curl.push(`curl '${options.url}'`)
   }
   if (options.method) {
     curl.push(`-X '${options.method}'`)
@@ -154,20 +153,26 @@ export function AuthChainStandar() {
   const [account] = useAuth()
   const [state, setState] = useState({
     method: 'GET',
-    path: '/path/to/resource',
+    url: 'https://events.decentraland.org/api/events',
     metadata: '{}',
-    baseUrl: '',
   })
   const [value, setValue] = useState({})
   const [signing, sign] = useAsyncTask(async () => {
     const identity = getCurrentIdentity()
-    if (identity) {
+    let url
+    try {
+      url = new URL(state.url)
+    } catch (err) {
+      console.error(err)
+      return
+    }
+    if (identity && url) {
       const timestamp = Date.now()
       const chain = await signPayload(
         getCurrentIdentity(),
         [
           state.method,
-          state.path,
+          url.pathname,
           timestamp,
           (state.metadata || '{}').toLowerCase(),
         ]
@@ -204,9 +209,9 @@ export function AuthChainStandar() {
                     options: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
                   },
                 },
-                path: {
-                  name: 'path',
-                  control: { type: 'text', value: state.path },
+                url: {
+                  name: 'url',
+                  control: { type: 'text', value: state.url },
                 },
                 metadata: {
                   name: 'metadata',
@@ -214,14 +219,6 @@ export function AuthChainStandar() {
                     type: 'text',
                     value: state.metadata,
                     placeholder: '{}',
-                  },
-                },
-                baseUrl: {
-                  name: 'base url',
-                  control: {
-                    type: 'text',
-                    value: state.baseUrl,
-                    placeholder: 'https://httpbin.org/anything',
                   },
                 },
               }}

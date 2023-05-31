@@ -22,6 +22,7 @@ import {
 import useAuthContext from '../../context/Auth/useAuthContext'
 import { getSupportedChainIds } from '../../context/Auth/utils'
 import useShareContext from '../../context/Share/useShareContext'
+import useTrackLinkContext from '../../context/Track/useTrackLinkContext'
 import useWindowScroll from '../../hooks/useWindowScroll'
 import { DecentralandIntlContext } from '../../plugins/intl/types'
 import { changeLocale } from '../../plugins/intl/utils'
@@ -30,7 +31,6 @@ import trackEvent from '../../utils/segment/trackEvent'
 import ShareModal from '../Modal/ShareModal'
 import WalletSelectorModal from '../Modal/WalletSelectorModal'
 import WrongNetworkModal from '../Modal/WrongNetworkModal'
-import LeftMenu from './LeftMenu'
 
 import type { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import type { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Dropdown'
@@ -71,6 +71,25 @@ export default function Layout({
     changeLocale(data.value as string)
   }
 
+  const handleClickMenuOption = useTrackLinkContext(
+    function (event: React.MouseEvent, section: string) {
+      if (props.onClickMenuOption) {
+        props.onClickMenuOption(event, section)
+      }
+
+      if (!event.defaultPrevented) {
+        return {
+          place: 'navbar',
+          section,
+          menu: section.split('_'),
+        }
+      }
+
+      return null
+    },
+    [props.onClickMenuOption]
+  )
+
   return (
     <>
       {!hideNavbar && (
@@ -78,9 +97,7 @@ export default function Layout({
           mana={props.mana}
           address={props.address}
           activePage={props.activePage}
-          leftMenu={
-            props.leftMenu || <LeftMenu activePage={props.activePage} />
-          }
+          leftMenu={props.leftMenu}
           middleMenu={props.middleMenu}
           rightMenu={props.rightMenu}
           i18n={props.i18n}
@@ -90,16 +107,24 @@ export default function Layout({
           isFullscreen={props.isFullscreen}
           isOverlay={props.isOverlay}
           className={TokenList.join([
+            // TODO(#323): remove on v6 use bem notation
             'LayoutNavbarContainer',
+            'layout__navbar',
             props.className,
             !isScrolled && 'initial',
           ])}
           onSignIn={props.onSignIn}
           onClickAccount={props.onClickAccount}
+          onClickMenuOption={handleClickMenuOption}
         />
       )}
       <main
-        className={TokenList.join(['LayoutMainContainer', props.className])}
+        className={TokenList.join([
+          // TODO(#323): remove on v6 use bem notation
+          'LayoutMainContainer',
+          'layout__main',
+          props.className,
+        ])}
       >
         {children}
       </main>
@@ -125,7 +150,12 @@ export default function Layout({
           locale={locale as Locale}
           locales={locales as Locale[]}
           isFullscreen={props.isFullscreen}
-          className={TokenList.join(['LayoutFooterContainer', props.className])}
+          className={TokenList.join([
+            // TODO(#323): remove on v6 use bem notation
+            'LayoutFooterContainer',
+            'layout__footer',
+            props.className,
+          ])}
           i18n={props.i18n}
           onChange={trackEvent(handleChangeLocal)}
         />

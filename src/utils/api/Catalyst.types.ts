@@ -2,9 +2,9 @@ import type { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import type { EntityType } from '@dcl/schemas/dist/platform/entity'
 
 export type Snapshot = {
-  face: string
-  face128: string
-  face256: string
+  face?: string
+  face128?: string
+  face256?: string
   body: string
 }
 
@@ -32,11 +32,13 @@ export type Avatar = {
     hair: BodyColor
     skin: BodyColor
     wearables: string[]
-    version: number
+    emotes?: { slot: number; urn: string }[]
+    version?: number
   }
-  inventory: string[]
-  blocked: string[]
+  inventory?: string[]
+  blocked?: string[]
   tutorialStep: number
+  hasConnectedWeb3?: boolean
 }
 
 export type ProfileMetadata = {
@@ -193,6 +195,7 @@ export type LayerUser = {
   address: string
 }
 
+/**@deprecated */
 export type EntityScene = {
   id: string
   type: 'scene'
@@ -296,29 +299,44 @@ export type SceneMetadata = {
     favicon?: string // "favicon_asset",
     navmapThumbnail?: string // "scene-thumbnail.png" | "https://decentraland.org/images/thumbnail.png"
   }
-  owner: string
+  owner?: string
   contact?: {
     name?: string
     email?: string
   }
-  main: string // "bin/game.js",
-  tags: string[]
-  scene: {
+  main?: string // "bin/game.js",
+  tags?: string[]
+  scene?: {
     parcels: string[]
     base: string
   }
-  communications: {
+  requiredPermissions?: string[]
+  spawnPoints?: {
+    name: string
+    default: boolean
+    position: {
+      x: number[]
+      y: number[]
+      z: number[]
+    }
+    cameraTarget: {
+      x: number
+      y: number
+      z: number
+    }
+  }[]
+  communications?: {
     type: string // "webrtc",
     signalling: string // "https://signalling-01.decentraland.org"
   }
-  policy: {
+  policy?: {
     contentRating: string
     fly: boolean
     voiceEnabled: boolean
     blacklist: string[]
     teleportPosition: string
   }
-  source: {
+  source?: {
     version: number
     origin: string
     projectId: string
@@ -332,6 +350,44 @@ export type SceneMetadata = {
       cols: number // 1
     }
   }
+  worldConfiguration?: {
+    name: string
+    fixedAdapter?: string
+    minimapVisible?: boolean
+    skybox?: number
+  }
+}
+
+export type ContentEntity = {
+  version: string
+  pointers: string[]
+  timestamp: number
+  content: { file: string; hash: string }[]
+}
+
+export type ContentEntityScene = ContentEntity & {
+  type: EntityType.SCENE
+  metadata: SceneMetadata
+}
+
+export type ContentEntityProfile = ContentEntity & {
+  type: EntityType.PROFILE
+  metadata: ProfileMetadata
+}
+
+export type ContentEntityWearable = ContentEntity & {
+  type: EntityType.WEARABLE
+  metadata: WearableMetadata
+}
+
+export type ContentEntityStore = ContentEntity & {
+  type: EntityType.STORE
+  metadata: StoreMetadata
+}
+
+export type ContentEntityEmote = ContentEntity & {
+  type: EntityType.EMOTE
+  metadata: {} // TODO: emote metadata
 }
 
 export type ContentDeploymentScene = ContentDeploymentBase & {
@@ -342,10 +398,6 @@ export type ContentDeploymentScene = ContentDeploymentBase & {
 export type ContentDeploymentWorld = ContentDeploymentBase & {
   entityType: EntityType.SCENE
   metadata: SceneMetadata
-  worldConfiguration: {
-    fixedAdapter: string
-    name: string
-  }
 }
 
 export type ContentDeploymentProfile = ContentDeploymentBase & {
