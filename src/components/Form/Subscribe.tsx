@@ -9,8 +9,6 @@ import env from '../../utils/env'
 import { StyleNamespace } from '../../variables'
 import Input from './Input'
 
-import 'isomorphic-fetch'
-
 import './Subscribe.css'
 
 export type SubscribeData = {
