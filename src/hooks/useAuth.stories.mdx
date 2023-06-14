@@ -79,6 +79,8 @@ export const ConnectExample = () => {
   const connectFortmatic = () => state.connect(ProviderType.FORTMATIC, chain)
   const connectWalletConnect = () =>
     state.connect(ProviderType.WALLET_CONNECT, chain)
+  const connectWalletConnect2 = () =>
+    state.connect(ProviderType.WALLET_CONNECT_V2, chain)
   const connectWalletLink = () => state.connect(ProviderType.WALLET_LINK, chain)
   const disconnect = () => state.disconnect()
   return (
@@ -148,6 +150,16 @@ export const ConnectExample = () => {
             onClick={connectFortmatic}
           >
             fortmatic
+          </Button>
+          <Button
+            primary
+            size="small"
+            style={{ margin: '0 .5em .5em 0' }}
+            disabled={!!account}
+            loading={state.loading}
+            onClick={connectWalletConnect2}
+          >
+            wallet connect 2
           </Button>
           <Button
             primary
