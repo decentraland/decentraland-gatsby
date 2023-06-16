@@ -57,7 +57,7 @@ export default function Head(props: HeadProps) {
     'twitter:description': props.description || '',
     'og:image': props.image || '',
     'twitter:image': props.image || '',
-    'twitter:card': 'summary',
+    'twitter:card': 'summary_large_image',
     ...props.meta,
   }
 
