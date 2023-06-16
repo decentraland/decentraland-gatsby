@@ -184,6 +184,16 @@ export type HotScene = {
   realms: Realm[]
 }
 
+export type WorldLivePerWorldProps = {
+  users: number
+  worldName: string
+}
+
+export type WorldLiveDataProps = {
+  perWorld: WorldLivePerWorldProps[]
+  totalUsers: number
+}
+
 export type LayerUser = {
   id: string
   userId: string
