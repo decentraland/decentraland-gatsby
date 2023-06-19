@@ -51,6 +51,3 @@ jobs:
 
       - name: building
         run: npm run build
-
-      - name: building documents
-        run: npm run build-storybook
