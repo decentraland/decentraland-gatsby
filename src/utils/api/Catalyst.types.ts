@@ -355,6 +355,13 @@ export type SceneMetadata = {
     fixedAdapter?: string
     minimapVisible?: boolean
     skybox?: number
+    skyboxConfig?: {
+      fixedHour: number
+      textures: string[]
+    }
+    placesConfig?: {
+      optOut: boolean
+    }
   }
 }
 
