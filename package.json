@@ -178,7 +178,7 @@
     "fetch-mock": "^9.11.0",
     "flat": "^5.0.2",
     "framer-motion": "^6.0.0",
-    "gatsby": "^4.22.1",
+    "gatsby": "4.23.0",
     "generic-pool": "^3.7.1",
     "glob": "^7.1.6",
     "highlight.js": "^11.3.1",
