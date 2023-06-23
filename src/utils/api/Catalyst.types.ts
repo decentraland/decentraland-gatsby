@@ -353,6 +353,7 @@ export type SceneMetadata = {
   worldConfiguration?:
     | {
         name: string
+        dclName: never
         fixedAdapter?: string
         minimapVisible?: boolean
         skybox?: number
@@ -366,6 +367,7 @@ export type SceneMetadata = {
       }
     | {
         dclName: string // old property
+        name: never
       }
 }
 
