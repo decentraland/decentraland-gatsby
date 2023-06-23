@@ -366,8 +366,14 @@ export type SceneMetadata = {
         }
       }
     | {
-        dclName: string // old property
+        // old property
+        dclName: string
         name?: never
+        fixedAdapter?: never
+        minimapVisible?: never
+        skybox?: never
+        skyboxConfig?: never
+        placesConfig?: never
       }
 }
 
