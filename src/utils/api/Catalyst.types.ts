@@ -350,19 +350,23 @@ export type SceneMetadata = {
       cols: number // 1
     }
   }
-  worldConfiguration?: {
-    name: string
-    fixedAdapter?: string
-    minimapVisible?: boolean
-    skybox?: number
-    skyboxConfig?: {
-      fixedHour: number
-      textures: string[]
-    }
-    placesConfig?: {
-      optOut: boolean
-    }
-  }
+  worldConfiguration?:
+    | {
+        name: string
+        fixedAdapter?: string
+        minimapVisible?: boolean
+        skybox?: number
+        skyboxConfig?: {
+          fixedHour: number
+          textures: string[]
+        }
+        placesConfig?: {
+          optOut: boolean
+        }
+      }
+    | {
+        dclName: string // old property
+      }
 }
 
 export type ContentEntity = {
