@@ -86,14 +86,20 @@ export default class TokenList implements DOMTokenList {
     this.#tokens = TokenList.parse(value)
   }
 
+  /**
+   * Returns the item in the list by its index, or `null` if the index is
+   * greater than or equal to the list's `length`.
+   */
   item(index: number): string | null {
     return this.#tokens[index] ?? null
   }
 
+  /** Returns `true` if the list contains the given token, otherwise `false`. */
   contains(token: string) {
     return this.#tokens.includes(token)
   }
 
+  /** Adds the specified tokens to the list. */
   add(...tokens: string[]): void {
     if (tokens.length === 0) {
       return
@@ -108,6 +114,7 @@ export default class TokenList implements DOMTokenList {
     }
   }
 
+  /** Removes the specified tokens from the list. */
   remove(...tokens: string[]): void {
     if (tokens.length === 0) {
       return
@@ -122,6 +129,7 @@ export default class TokenList implements DOMTokenList {
     this.#tokens = this.#tokens.filter((currentToken) => !set.has(currentToken))
   }
 
+  /** Replaces the token with another one. */
   replace(oldToken: string, newToken: string): boolean {
     this.#validate('replace', oldToken)
     this.#validate('replace', newToken)
@@ -141,12 +149,21 @@ export default class TokenList implements DOMTokenList {
     return true
   }
 
+  /**
+   * Returns true if the given token is in the associated attribute's supported
+   * tokens.
+   */
   supports(): boolean {
     throw new TypeError(
       `Failed to execute 'supports' on 'TokenList': TokenList has no supported tokens.`
     )
   }
 
+  /**
+   * Removes the token from the list if it exists, or adds it to the list if it
+   * doesn't. Returns a boolean indicating whether the token is in the list
+   * after the operation.
+   */
   toggle(token: string, force?: boolean): boolean {
     this.#validate('toggle', token)
     switch (force) {
@@ -169,10 +186,15 @@ export default class TokenList implements DOMTokenList {
     }
   }
 
+  /**
+   * Returns an [iterator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols),
+   * allowing you to go through all key/value pairs contained in this object.
+   */
   entries() {
     return this.#tokens.entries()
   }
 
+  /** Executes a provided callback function once for each `TokenList` element. */
   forEach(
     callbackfn: (value: string, key: number, parent: DOMTokenList) => void,
     thisArg?: any
@@ -183,10 +205,20 @@ export default class TokenList implements DOMTokenList {
     )
   }
 
+  /**
+   * Returns an [iterator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols),
+   * allowing you to go through all keys of the key/valuepairs contained in
+   * this object.
+   */
   keys() {
     return this.#tokens.keys()
   }
 
+  /**
+   * Returns an [iterator](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Iteration_protocols),
+   * allowing you to go through all keys of the key/value pairs contained in
+   * this object.
+   */
   values() {
     return this.#tokens.values()
   }
@@ -197,5 +229,13 @@ export default class TokenList implements DOMTokenList {
 
   [Symbol.iterator]() {
     return this.values()
+  }
+
+  [Symbol.toPrimitive](hint: 'default' | 'string' | 'number') {
+    if (hint === 'number') {
+      return null
+    }
+
+    return this.value
   }
 }

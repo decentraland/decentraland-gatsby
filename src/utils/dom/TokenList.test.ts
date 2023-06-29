@@ -200,4 +200,22 @@ describe('TokenList', () => {
     const tokens = TokenList.from('token1 token2')
     expect(Array.from(tokens.values())).toEqual(['token1', 'token2'])
   })
+
+  test('toString', () => {
+    const tokens = TokenList.from('token1 token2 token2')
+    expect(tokens.toString()).toBe('token1 token2')
+  })
+
+  test('Symbol.iterator', () => {
+    const tokens = TokenList.from('token1 token2 token2')
+    expect(Array.from(tokens)).toEqual(['token1', 'token2'])
+    expect([...tokens]).toEqual(['token1', 'token2'])
+    expect(new Set(tokens).size).toEqual(2)
+  })
+
+  test('Symbol.toPrimitive', () => {
+    const tokens = TokenList.from('token1 token2 token2')
+    expect(`${tokens}`).toBe('token1 token2')
+    expect(tokens + '').toBe('token1 token2')
+  })
 })
