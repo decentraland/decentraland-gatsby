@@ -426,6 +426,19 @@ export type ContentDeploymentProfile = ContentDeploymentBase & {
 
 export type WearableMetadata = {
   id: string
+  name: string
+  description: string
+  collectionAddress: string
+  rarity: string
+  image: string
+  metrics: {
+    triangles: number
+    materials: number
+    textures: number
+    meshes: number
+    bodies: number
+    entities: number
+  }
   thumbnail: string
   data: {
     tags: string[]
