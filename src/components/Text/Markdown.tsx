@@ -61,12 +61,18 @@ export const components: Components = {
   )),
 }
 
+/** @deprecated */
 export const allowedTypes = ['root', 'text'].concat(Object.keys(components))
 
-export const plugins = [gfm, emoji] as any
+export const remarkPlugins: Options['remarkPlugins'] = [gfm, emoji]
+export const plugins: any = remarkPlugins
 
 export default React.memo(function Markdown(props: MarkdownProps) {
   return (
-    <ReactMarkdown {...props} components={components} remarkPlugins={plugins} />
+    <ReactMarkdown
+      {...props}
+      components={props.components ?? components}
+      remarkPlugins={props.remarkPlugins ?? plugins}
+    />
   )
 })

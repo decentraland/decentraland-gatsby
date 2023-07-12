@@ -1,7 +1,6 @@
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { useState, useMemo, useEffect } from 'react'
-import { Source, ArgsTable } from '@storybook/components'
-import { Meta } from '@storybook/addon-docs'
+import { Source, ArgsTable, Meta } from './components/Storybook'
 import { Wallet } from '@ethersproject/wallet'
 import { Web3Provider } from '@ethersproject/providers'
 import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
@@ -15,7 +14,15 @@ import useAuth from './hooks/useAuth'
 import useAsyncTask from './hooks/useAsyncTask'
 import { Authenticator } from '@dcl/crypto/dist/Authenticator'
 
-<Meta title="Development/Identity" />
+<Meta
+  title="Development Tools/Identity Generator"
+  parameters={{
+    viewMode: 'docs',
+    previewTabs: {
+      canvas: { hidden: true },
+    },
+  }}
+/>
 
 export function Identity({ address, privateKey, identity }) {
   return (
