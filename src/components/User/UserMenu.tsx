@@ -59,6 +59,7 @@ export default function UserMenu(props: UserMenuProps) {
         return { ETHEREUM, MATIC }
       }
 
+      case ChainId.ETHEREUM_SEPOLIA:
       case ChainId.ETHEREUM_GOERLI:
       case ChainId.ETHEREUM_RINKEBY:
       case ChainId.ETHEREUM_ROPSTEN: {
