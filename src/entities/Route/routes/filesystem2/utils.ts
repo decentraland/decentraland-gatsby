@@ -1,7 +1,7 @@
 import { resolve, sep } from 'path'
 
 import e from 'express'
-import glob from 'glob'
+import { glob } from 'glob'
 
 import RequestError from '../../error'
 import handleExpressError from '../../handle/handleExpressError'
