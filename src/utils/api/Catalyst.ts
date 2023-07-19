@@ -144,7 +144,7 @@ export default class Catalyst extends API {
   /**
    * loads profile data in parallel
    *
-   * @param addresses - profile addresses list
+   * @param ids - profile addresses list
    * @returns array of profiles in the same order used in the addresses param,
    *  if the profile doesn't exists the array will include a `null` in the corresponding
    *  position
@@ -154,18 +154,14 @@ export default class Catalyst extends API {
    * getProfiles([ `0x1234...`, 0x00000 ]) => Promise<[ { user: `0x1234...`, ...profile }, null ]>
    * ```
    */
-  async getProfiles(addresses: string[]): Promise<(Avatar | null)[]> {
-    if (addresses.length === 0) {
+  async getProfiles(ids: string[]): Promise<(Avatar | null)[]> {
+    if (ids.length === 0) {
       return []
     }
 
-    const params = new URLSearchParams()
-    for (const address of addresses) {
-      params.append('id', address.toLowerCase())
-    }
-
     const results: ProfileResponse[] = await this.fetch(
-      `/lambdas/profiles/?` + params.toString()
+      `/lambdas/profile`,
+      this.options().method('POST').json({ ids })
     )
 
     const map = new Map(
@@ -176,7 +172,7 @@ export default class Catalyst extends API {
             rollbar((logger) =>
               logger.error(`Error loading profiles`, {
                 avatar,
-                addresses,
+                addresses: ids,
                 server: this.baseUrl,
               })
             )
@@ -184,7 +180,7 @@ export default class Catalyst extends API {
               analytics.track('error', {
                 message: `Error loading profiles`,
                 server: this.baseUrl,
-                addresses,
+                addresses: ids,
                 avatar,
               })
             )
@@ -199,7 +195,7 @@ export default class Catalyst extends API {
         })
     )
 
-    return addresses.map((address) => map.get(address.toLowerCase()) || null)
+    return ids.map((address) => map.get(address.toLowerCase()) || null)
   }
 
   /** @deprecated */
@@ -292,10 +288,18 @@ export default class Catalyst extends API {
     return this.fetch<HotScene[]>('/lambdas/explore/hot-scenes')
   }
 
+  /**
+   * @deprecated
+   * @see https://adr.decentraland.org/adr/ADR-226#get-lambdas-contracts-servers
+   */
   async getServers() {
     return this.fetch<Servers[]>(`/lambdas/contracts/servers`)
   }
 
+  /**
+   * @deprecated
+   * @see https://adr.decentraland.org/adr/ADR-226#get-lambdas-contracts-pois
+   */
   async getPOIs() {
     const results = await this.fetch<string[]>(`/lambdas/contracts/pois`)
     const pois: Position[] = []
@@ -311,6 +315,10 @@ export default class Catalyst extends API {
     return pois
   }
 
+  /**
+   * @deprecated
+   * @see https://adr.decentraland.org/adr/ADR-226#get-lambdas-contracts-denylisted-names
+   */
   async getBanNames() {
     return this.fetch<string[]>(`/lambdas/contracts/denylisted-names`)
   }
@@ -367,6 +375,10 @@ export default class Catalyst extends API {
     return this.fetch<{ parcels: StatsParcel[] }>('/stats/parcels')
   }
 
+  /**
+   * @deprecated use `@dcl/crypto` instead.
+   * @see https://adr.decentraland.org/adr/ADR-226#post-lambdas-validate-signature
+   */
   async verifySignature(
     authChain: AuthChain,
     message: string

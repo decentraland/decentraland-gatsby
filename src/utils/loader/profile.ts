@@ -67,7 +67,7 @@ export const createDefaultProfile = (address: string): Profile => ({
 export default new BatchLoader<Profile>(
   async (addresses: string[]) => {
     try {
-      const profiles = await Catalyst.get().getProfiles(
+      const profiles = await Catalyst.getInstance().getProfiles(
         addresses.map((address) => address.toLowerCase())
       )
       return profiles.map(
