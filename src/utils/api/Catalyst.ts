@@ -71,7 +71,7 @@ export default class Catalyst extends API {
   }
 
   static getInstance() {
-    return this.getInstanceFrom(env('PROFILE_URL', this.Url))
+    return this.getInstanceFrom(this.Url)
   }
 
   /**
@@ -82,6 +82,7 @@ export default class Catalyst extends API {
     return this.getAnyInstance()
   }
 
+  /** @deprecated use `dcl-catalyst-client/dist/contracts-snapshots/data` instead */
   static async getAnyInstance() {
     if (!this.Servers) {
       this.Servers = this.get()
@@ -160,7 +161,7 @@ export default class Catalyst extends API {
     }
 
     const results: ProfileResponse[] = await this.fetch(
-      `/lambdas/profile`,
+      `/lambdas/profiles`,
       this.options().method('POST').json({ ids })
     )
 
@@ -224,7 +225,7 @@ export default class Catalyst extends API {
   async getCommsStatus(includeLayers: {
     includeUsersParcels: true
   }): Promise<CommsStatusWithUsers>
-  async getCommsStatus(_options?: CommsStatusOptions) {
+  async getCommsStatus() {
     return null as any
   }
 
@@ -289,7 +290,7 @@ export default class Catalyst extends API {
   }
 
   /**
-   * @deprecated
+   * @deprecated use `dcl-catalyst-client/dist/contracts-snapshots/data` instead
    * @see https://adr.decentraland.org/adr/ADR-226#get-lambdas-contracts-servers
    */
   async getServers() {
@@ -297,7 +298,7 @@ export default class Catalyst extends API {
   }
 
   /**
-   * @deprecated
+   * @deprecated use `dcl-catalyst-client/dist/contracts-snapshots/data` instead
    * @see https://adr.decentraland.org/adr/ADR-226#get-lambdas-contracts-pois
    */
   async getPOIs() {
@@ -316,7 +317,7 @@ export default class Catalyst extends API {
   }
 
   /**
-   * @deprecated
+   * @deprecated use `dcl-catalyst-client/dist/contracts-snapshots/data` instead
    * @see https://adr.decentraland.org/adr/ADR-226#get-lambdas-contracts-denylisted-names
    */
   async getBanNames() {
