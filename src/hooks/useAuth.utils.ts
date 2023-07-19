@@ -18,6 +18,7 @@ export const chains = [
   ChainId.ETHEREUM_GOERLI,
   ChainId.ETHEREUM_KOVAN,
   ChainId.ETHEREUM_RINKEBY,
+  ChainId.ETHEREUM_SEPOLIA,
   ChainId.MATIC_MAINNET,
   ChainId.MATIC_MUMBAI,
 ]
@@ -285,6 +286,7 @@ export function getAddEthereumChainParameters(
     case ChainId.ETHEREUM_RINKEBY:
     case ChainId.ETHEREUM_KOVAN:
     case ChainId.ETHEREUM_GOERLI:
+    case ChainId.ETHEREUM_SEPOLIA:
       return {
         chainId: hexChainId,
         chainName,
