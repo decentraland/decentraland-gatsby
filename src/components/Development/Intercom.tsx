@@ -2,13 +2,6 @@ import React from 'react'
 
 import env from '../../utils/env'
 
-declare interface Window {
-  Intercom?: (
-    action: 'boot' | 'update',
-    props?: Record<string, string | number>
-  ) => void
-}
-
 export type IntercomProps = {
   appId?: string
   apiBase?: IntercomApiBase
