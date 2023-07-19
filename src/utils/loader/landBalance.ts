@@ -11,6 +11,8 @@ const DECENTRALAND_MARKETPLACE_SUBGRAPH_URL: Partial<Record<ChainId, string>> =
       'https://api.thegraph.com/subgraphs/name/decentraland/marketplace',
     [ChainId.ETHEREUM_ROPSTEN]:
       'https://api.thegraph.com/subgraphs/name/decentraland/marketplaceropsten',
+    [ChainId.ETHEREUM_SEPOLIA]:
+      'https://api.studio.thegraph.com/query/49472/marketplace-sepolia/version/latest',
   }
 
 const QUERY = `
