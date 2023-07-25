@@ -207,7 +207,7 @@
     "remark-emoji": "3.0.2",
     "remark-gfm": "^3.0.1",
     "rollbar": "^2.24.0",
-    "sharp": "^0.30.3",
+    "sharp": "^0.32.4",
     "swiper": "^8.4.4",
     "three": "^0.137.5",
     "ua-parser-js": "^1.0.2",
