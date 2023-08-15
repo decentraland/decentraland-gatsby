@@ -121,7 +121,7 @@
     "jest": "^26.6.3",
     "jest-transform-stub": "^2.0.0",
     "leasot": "^13.1.0",
-    "lint-staged": "^12.1.2",
+    "lint-staged": "^14.0.0",
     "node-pg-migrate": "^6.0.0",
     "postcss": "^7.0.39",
     "postcss-assets": "^5.0.0",
