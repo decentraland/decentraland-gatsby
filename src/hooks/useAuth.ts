@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import { connection } from 'decentraland-connect/dist/ConnectionManager'
+import * as SSO from '@dcl/single-sign-on-client'
 
 import logger from '../entities/Development/logger'
 import { setCurrentIdentity } from '../utils/auth/storage'
@@ -13,6 +14,7 @@ import {
   AuthEvent,
   AuthState,
   AuthStatus,
+  AuthOptions,
   createConnection,
   getListener,
   initialState,
@@ -28,7 +30,7 @@ export { initialState }
 
 let CONNECTION_PROMISE: Promise<AuthState> | null = null
 
-export default function useAuth() {
+export default function useAuth(options?: AuthOptions) {
   const [state, setState] = useState<AuthState>({ ...initialState })
 
   const select = useCallback(
@@ -123,6 +125,27 @@ export default function useAuth() {
     },
     [state]
   )
+
+  // Initialize SSO
+  useEffect(() => {
+    // Determines if SSO has to be enabled or not.
+    // It will be enabled if not specified.
+    const ssoEnabled = options?.ssoEnabled ?? true
+
+    if (ssoEnabled) {
+      // Use the url defined in the options or uses org iframe src.
+      const url = options?.ssoUrl ?? 'https://id.decentraland.org'
+
+      // If useAuth is used multiple times, SSO.init will fail because it cannot be called more than once.
+      // The hook seems to be intended to be called only once per session so this should not be an issue.
+      // This will prevent execution from breaking in case it happens.
+      try {
+        SSO.init(url)
+      } catch (e) {
+        console.warn(e.message)
+      }
+    }
+  }, [])
 
   // bootstrap
   useEffect(() => {
@@ -250,18 +273,20 @@ export default function useAuth() {
       state.providerType === null &&
       state.chainId === null
     ) {
-      setCurrentIdentity(null)
-      connection.disconnect().catch((err) => {
-        console.error(err)
-        rollbar((rollbar) => rollbar.error(err))
-        segment((analytics) =>
-          analytics.track('error', {
-            ...err,
-            message: err.message,
-            stack: err.stack,
-          })
-        )
-      })
+      connection
+        .disconnect()
+        .then(() => setCurrentIdentity(null))
+        .catch((err) => {
+          console.error(err)
+          rollbar((rollbar) => rollbar.error(err))
+          segment((analytics) =>
+            analytics.track('error', {
+              ...err,
+              message: err.message,
+              stack: err.stack,
+            })
+          )
+        })
       segment((analytics, context) =>
         analytics.track(AuthEvent.Disconnected, context)
       )

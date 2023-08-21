@@ -4,10 +4,11 @@ import { connection } from 'decentraland-connect/dist/ConnectionManager'
 import { Provider } from 'decentraland-connect/dist/types'
 import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import { AddEthereumChainParameters } from 'decentraland-dapps/dist/modules/wallet/types'
+import * as SSO from '@dcl/single-sign-on-client'
 
 import { Identity, identify } from '../utils/auth'
 import { ownerAddress } from '../utils/auth/identify'
-import { getCurrentIdentity, setCurrentIdentity } from '../utils/auth/storage'
+import { setCurrentIdentity } from '../utils/auth/storage'
 import rollbar from '../utils/development/rollbar'
 import segment from '../utils/development/segment'
 import SingletonListener from '../utils/dom/SingletonListener'
@@ -59,6 +60,15 @@ export const initialState: AuthState = Object.freeze({
   status: AuthStatus.Restoring,
 })
 
+export type AuthOptions = {
+  // The url used to initialize the SSO iframe.
+  // Defaults to https://id.decentraland.org
+  ssoUrl?: string
+  // Determines if the SSO iframe should be initialized.
+  // Defaults to true
+  ssoEnabled?: boolean
+}
+
 let WINDOW_LISTENER: SingletonListener<Window> | null = null
 export function getListener(): SingletonListener<Window> {
   if (!WINDOW_LISTENER) {
@@ -88,46 +98,40 @@ export async function fetchChainId(provider: Provider) {
 
 export async function restoreConnection(): Promise<AuthState> {
   try {
-    const identity = getCurrentIdentity()
     const connectionData = connection.getConnectionData()
 
-    // drop identity when connection data is missinig
-    if (identity && !connectionData) {
-      setCurrentIdentity(null)
-    }
-
-    if (identity && connectionData) {
+    if (connectionData) {
       const data = await connection.connect(
         connectionData.providerType,
         connectionData.chainId
       )
 
-      // const previousConnection = await connection.tryPreviousConnection()
       const provider = data.provider
 
       if (!provider) {
         throw new Error(`Error getting provider`)
       }
 
-      const account = await ownerAddress(identity!.authChain)
-      const providerType = connectionData!.providerType
-
       const currentAccounts = await fetchAccounts(data.provider)
-      if (currentAccounts[0] !== account) {
-        throw new Error(`Account changed`)
-      }
+      const account = currentAccounts[0]
+      const identity = await SSO.getIdentity(account)
 
-      const currentChainId = await fetchChainId(data.provider)
+      if (identity) {
+        const providerType = connectionData!.providerType
+        const currentChainId = await fetchChainId(data.provider)
 
-      return {
-        account,
-        provider,
-        chainId: Number(currentChainId),
-        providerType,
-        identity,
-        status: AuthStatus.Connected,
-        selecting: false,
-        error: null,
+        await setCurrentIdentity(identity)
+
+        return {
+          account,
+          provider,
+          chainId: Number(currentChainId),
+          providerType,
+          identity,
+          status: AuthStatus.Connected,
+          selecting: false,
+          error: null,
+        }
       }
     }
   } catch (err) {
@@ -162,10 +166,7 @@ export async function createConnection(
 
     if (identity && identity.authChain) {
       const account = await ownerAddress(identity.authChain)
-      // const previousConnection = await connection.tryPreviousConnection()
-      Promise.resolve().then(() => {
-        setCurrentIdentity(identity)
-      })
+      await setCurrentIdentity(identity)
 
       const currentAccounts = await fetchAccounts(data.provider)
       if (currentAccounts[0] !== account) {
@@ -196,7 +197,7 @@ export async function createConnection(
       })
     )
 
-    setCurrentIdentity(null)
+    await setCurrentIdentity(null)
     return {
       ...initialState,
       status: AuthStatus.Disconnected,
