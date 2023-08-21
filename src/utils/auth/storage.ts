@@ -2,7 +2,6 @@ import { AuthLinkType } from '@dcl/crypto/dist/types'
 import * as SSO from '@dcl/single-sign-on-client'
 
 import Time from '../date/Time'
-import SingletonListener from '../dom/SingletonListener'
 import { PersistedKeys } from '../loader/types'
 import { ownerAddress } from './identify'
 import { Identity } from './types'
@@ -10,26 +9,6 @@ import { Identity } from './types'
 const STORE_LEGACY_KEY = 'auth'
 let CURRENT_IDENTITY: Identity | null = null
 let CURRENT_IDENTITY_RAW: string | null = null
-let STORAGE_LISTENER: SingletonListener<Window> | null = null
-
-function getStorageListener() {
-  if (STORAGE_LISTENER === null) {
-    STORAGE_LISTENER = SingletonListener.from(window)
-    // TODO: fix inter operativity with formatic
-    // STORAGE_LISTENER.addEventListener('storage', (event) => {
-    //   if (event.key !== PersistedKeys.Identity) {
-    //     return
-    //   }
-    //   CURRENT_IDENTITY = restoreIdentity()
-    //   // domain propagation
-    //   Promise.resolve().then(() => {
-    //     getStorateListener().dispatch(PersistedKeys.Identity as any, CURRENT_IDENTITY)
-    //   })
-    // })
-  }
-
-  return STORAGE_LISTENER!
-}
 
 export function isExpired(identity?: Identity) {
   if (!identity) {
@@ -70,7 +49,6 @@ export async function setCurrentIdentity(identity: Identity | null) {
 }
 
 export function getCurrentIdentity() {
-  getStorageListener()
   return CURRENT_IDENTITY
 }
 
@@ -95,10 +73,5 @@ async function storeIdentity(identity: Identity | null) {
 
       CURRENT_IDENTITY_RAW = null
     }
-
-    // local propagation
-    Promise.resolve().then(() => {
-      getStorageListener().dispatch(PersistedKeys.Identity as any, identity)
-    })
   }
 }
