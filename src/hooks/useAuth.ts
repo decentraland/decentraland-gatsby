@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
-import { connection } from 'decentraland-connect/dist/ConnectionManager'
 import * as SSO from '@dcl/single-sign-on-client'
+import { connection } from 'decentraland-connect/dist/ConnectionManager'
 
 import logger from '../entities/Development/logger'
 import { setCurrentIdentity } from '../utils/auth/storage'
@@ -12,9 +12,9 @@ import { PersistedKeys } from '../utils/loader/types'
 import useAsyncTask from './useAsyncTask'
 import {
   AuthEvent,
+  AuthOptions,
   AuthState,
   AuthStatus,
-  AuthOptions,
   createConnection,
   getListener,
   initialState,

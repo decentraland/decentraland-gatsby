@@ -4,8 +4,8 @@ import * as SSO from '@dcl/single-sign-on-client'
 import Time from '../date/Time'
 import SingletonListener from '../dom/SingletonListener'
 import { PersistedKeys } from '../loader/types'
-import { Identity } from './types'
 import { ownerAddress } from './identify'
+import { Identity } from './types'
 
 const STORE_LEGACY_KEY = 'auth'
 let CURRENT_IDENTITY: Identity | null = null

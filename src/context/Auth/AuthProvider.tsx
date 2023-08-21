@@ -1,8 +1,8 @@
 import React, { createContext } from 'react'
 
 import useAuth from '../../hooks/useAuth'
-import useTransaction from '../../hooks/useTransaction'
 import { AuthOptions } from '../../hooks/useAuth.utils'
+import useTransaction from '../../hooks/useTransaction'
 
 const defaultAuthState: ReturnType<typeof useAuth> = [
   null,
