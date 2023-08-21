@@ -7,7 +7,6 @@ import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfigur
 import { AddEthereumChainParameters } from 'decentraland-dapps/dist/modules/wallet/types'
 
 import { Identity, identify } from '../utils/auth'
-import { ownerAddress } from '../utils/auth/identify'
 import { setCurrentIdentity } from '../utils/auth/storage'
 import rollbar from '../utils/development/rollbar'
 import segment from '../utils/development/segment'
@@ -97,25 +96,20 @@ export async function restoreConnection(): Promise<AuthState> {
     const connectionData = connection.getConnectionData()
 
     if (connectionData) {
-      const data = await connection.connect(
-        connectionData.providerType,
-        connectionData.chainId
-      )
-
+      const { providerType, chainId } = connectionData
+      const data = await connection.connect(providerType, chainId)
       const provider = data.provider
 
       if (!provider) {
         throw new Error(`Error getting provider`)
       }
 
-      const currentAccounts = await fetchAccounts(data.provider)
+      const currentAccounts = await fetchAccounts(provider)
       const account = currentAccounts[0]
       const identity = await SSO.getIdentity(account)
 
       if (identity) {
-        const providerType = connectionData!.providerType
-        const currentChainId = await fetchChainId(data.provider)
-
+        const currentChainId = await fetchChainId(provider)
         await setCurrentIdentity(identity)
 
         return {
@@ -156,28 +150,28 @@ export async function createConnection(
   chainId: ChainId
 ) {
   try {
-    connection.getConnectionData()
     const data = await connection.connect(providerType, chainId)
-    const identity = await identify(data)
+    const provider = data.provider
 
-    if (identity && identity.authChain) {
-      const account = await ownerAddress(identity.authChain)
+    if (!provider) {
+      throw new Error(`Error getting provider`)
+    }
+
+    const currentAccounts = await fetchAccounts(provider)
+    const account = currentAccounts[0]
+    const identity = (await SSO.getIdentity(account)) ?? (await identify(data))
+
+    if (identity) {
+      const currentChainId = await fetchChainId(provider)
       await setCurrentIdentity(identity)
-
-      const currentAccounts = await fetchAccounts(data.provider)
-      if (currentAccounts[0] !== account) {
-        throw new Error(`Account changed`)
-      }
-
-      const currentChainId = await fetchChainId(data.provider)
 
       return {
         account,
-        identity,
+        provider,
         chainId: Number(currentChainId),
         providerType,
+        identity,
         status: AuthStatus.Connected,
-        provider: data.provider,
         selecting: false,
         error: null,
       }
