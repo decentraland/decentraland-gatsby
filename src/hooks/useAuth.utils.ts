@@ -61,11 +61,7 @@ export const initialState: AuthState = Object.freeze({
 })
 
 export type AuthOptions = {
-  // The url used to initialize the SSO iframe.
-  // Defaults to https://id.decentraland.org
   ssoUrl?: string
-  // Determines if the SSO iframe should be initialized.
-  // Defaults to true
   ssoEnabled?: boolean
 }
 
