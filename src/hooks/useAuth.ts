@@ -129,16 +129,16 @@ export default function useAuth(options?: AuthOptions) {
   // Initialize SSO
   useEffect(() => {
     // Determines if SSO has to be enabled or not.
-    // It will be enabled if not specified.
-    const ssoEnabled = options?.ssoEnabled ?? true
+    // Defaults to false.
+    const ssoEnabled = !!options?.ssoEnabled
 
     if (ssoEnabled) {
-      // Use the url defined in the options or uses org iframe src.
+      // Use the provided url or defaults to the .org id url.
       const url = options?.ssoUrl ?? 'https://id.decentraland.org'
 
-      // If useAuth is used multiple times, SSO.init will fail because it cannot be called more than once.
-      // The hook seems to be intended to be called only once per session so this should not be an issue.
-      // This will prevent execution from breaking in case it happens.
+      // SSO can only be initialized once.
+      // This catch just prevents the lifecycle to break in case it is called more than once.
+      // Given how this hook is used, it is only called once so it might not be necessary.
       try {
         SSO.init(url)
       } catch (e) {
