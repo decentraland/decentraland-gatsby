@@ -69,6 +69,32 @@ const [account, state] = useAuth()
   ]}
 />
 
+# Single Sign On
+
+Part of the auth flow is generating the identity of the user which is stored in the browser, using the application's local storage.
+
+This hook allows the usage of Single Sign On (SSO), a service that allows users to keep the same identity across multiple decentraland applications without the need of asking the user to generate it multiple times.
+
+SSO can be enabled by passing the `ssoEnabled` option to the `useAuth` hook.
+
+```ts
+const [account, state] = useAuth({ ssoEnabled: true })
+```
+
+By default, SSO uses https://id.decentraland.org, but by providing another url via the `ssoUrl` option, it can use the SSO from another domain.
+
+```ts
+const [account, state] = useAuth({
+  ssoEnabled: true,
+  ssoUrl: 'https://id.decentraland.zone',
+})
+```
+
+You can learn more about SSO in:
+
+- https://github.com/decentraland/single-sign-on-client/blob/main/packages/lib/README.md
+- https://github.com/decentraland/single-sign-on
+
 ## Connect Preview
 
 export const ConnectExample = () => {

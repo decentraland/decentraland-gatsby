@@ -67,6 +67,25 @@ export default function Component() {
 }
 ```
 
+## Props
+
+The AuthProvider component accept some optional props, `ssoEnabled` and `ssoUrl`
+
+```tsx dark=true
+// gatsby-browser.js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import AuthProvider from 'decentraland-gatsby/dist/context/Auth/AuthProvider'
+
+export const wrapRootElement = ({ element }) => (
+  <AuthProvider ssoEnabled ssoUrl="https://id.decentraland.zone">{element}</AuthProvider>
+)
+```
+
+These props are provided to the underlying `useAuth` hook to control the usage of the SSO feature.
+
+You can read more about it on the *Single Sign On* section of the [`useAuth` documentation](./?path=/story/hooks-useauth--page)
+
 Read the [full documentation](./?path=/story/hooks-useauth--page)
 
 ## Related hooks
