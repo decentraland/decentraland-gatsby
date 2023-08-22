@@ -1,28 +1,12 @@
-# decentraland-gatsby
+![Decentraland](https://decentraland.org/og.jpg)
+
+# Decentraland Gatsby
 
 [![Coverage Status](https://coveralls.io/repos/github/decentraland/decentraland-gatsby/badge.svg?branch=master)](https://coveralls.io/github/decentraland/decentraland-gatsby?branch=master)
 
-Common Gatsby project
+## Get started
 
-## Setup new project
-
-Initialize a new project
-
-```bash
-  npm init
-```
-
-Install this library as a dependency:
-
-```bash
-  npm install -s decentraland-gatsby
-```
-
-Run the setup command
-
-```bash
-  ./node_modules/.bin/setup-project
-```
+You can use our [project template](https://github.com/decentraland/decentraland-gatsby-template) if you need to create a new repository.
 
 ## Start project
 

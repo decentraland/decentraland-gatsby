@@ -1,0 +1,47 @@
+[modern]
+last 3 chrome version
+last 3 edge version
+last 3 firefox version
+last 3 safari version
+node 18
+
+[stable]
+and_chr >= 115
+and_ff 89
+and_qq 10.4
+and_uc 12.12
+baidu 7.12
+chrome >= 90
+edge >= 91
+firefox >= 78
+opera >= 76
+ios_saf >= 12.2
+safari >= 14
+samsung >= 13
+kaios >= 2.5
+op_mob >= 73
+node >= 16.0
+
+[showcase]
+and_chr 115
+last 3 and_chr versions
+and_ff 89
+and_qq 10.4
+and_uc 12.12
+baidu 7.12
+chrome 90
+last 3 chrome versions
+edge 91
+last 3 edge versions
+firefox 78
+last 3 firefox versions
+opera 76
+last 3 opera versions
+ios_saf 12.2
+last 3 ios_saf versions
+samsung 13
+last 3 samsung versions
+kaios >= 2.5
+op_mob >= 73
+safari 14
+last 3 safari versions
