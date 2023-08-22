@@ -7,21 +7,18 @@ import logger from '../entities/Development/logger'
 import { setCurrentIdentity } from '../utils/auth/storage'
 import rollbar from '../utils/development/rollbar'
 import segment from '../utils/development/segment'
-import { PersistedKeys } from '../utils/loader/types'
 import useAsyncTask from './useAsyncTask'
 import {
   AuthEvent,
   AuthState,
   AuthStatus,
   createConnection,
-  getListener,
   initialState,
   isLoading,
   restoreConnection,
   switchToChainId,
 } from './useAuth.utils'
 
-import type { Identity } from '../utils/auth'
 import type { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 
 export { initialState }
@@ -124,53 +121,6 @@ export default function useAuth() {
     [state]
   )
 
-  // bootstrap
-  useEffect(() => {
-    let cancelled = false
-    function updateIdetity(newIdentity: Identity | null) {
-      if (!cancelled) {
-        setState((currentState) => {
-          if (currentState.identity === newIdentity) {
-            return currentState
-          }
-
-          if (newIdentity) {
-            return {
-              status: AuthStatus.Restoring,
-              selecting: false,
-              account: null,
-              identity: null,
-              provider: null,
-              providerType: null,
-              chainId: null,
-              error: null,
-            }
-          }
-
-          return {
-            status: AuthStatus.Disconnecting,
-            selecting: false,
-            account: null,
-            identity: null,
-            provider: null,
-            providerType: null,
-            chainId: null,
-            error: null,
-          }
-        })
-      }
-    }
-
-    getListener().addEventListener(PersistedKeys.Identity as any, updateIdetity)
-    return () => {
-      cancelled = true
-      getListener().removeEventListener(
-        PersistedKeys.Identity as any,
-        updateIdetity
-      )
-    }
-  }, [])
-
   // connect or disconnect
   useEffect(() => {
     let cancelled = false
@@ -250,18 +200,20 @@ export default function useAuth() {
       state.providerType === null &&
       state.chainId === null
     ) {
-      setCurrentIdentity(null)
-      connection.disconnect().catch((err) => {
-        console.error(err)
-        rollbar((rollbar) => rollbar.error(err))
-        segment((analytics) =>
-          analytics.track('error', {
-            ...err,
-            message: err.message,
-            stack: err.stack,
-          })
-        )
-      })
+      connection
+        .disconnect()
+        .then(() => setCurrentIdentity(null))
+        .catch((err) => {
+          console.error(err)
+          rollbar((rollbar) => rollbar.error(err))
+          segment((analytics) =>
+            analytics.track('error', {
+              ...err,
+              message: err.message,
+              stack: err.stack,
+            })
+          )
+        })
       segment((analytics, context) =>
         analytics.track(AuthEvent.Disconnected, context)
       )
