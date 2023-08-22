@@ -1,11 +1,5 @@
-[modern]
-last 3 chrome version
-last 3 edge version
-last 3 firefox version
-last 3 safari version
-node 18
 
-[stable]
+[production]
 and_chr >= 115
 and_ff 89
 and_qq 10.4
@@ -20,7 +14,12 @@ safari >= 14
 samsung >= 13
 kaios >= 2.5
 op_mob >= 73
-node >= 16.0
+
+[modern]
+last 3 chrome version
+last 3 edge version
+last 3 firefox version
+last 3 safari version
 
 [showcase]
 and_chr 115
@@ -45,3 +44,6 @@ kaios >= 2.5
 op_mob >= 73
 safari 14
 last 3 safari versions
+
+[ssr]
+node >= 16.17.0

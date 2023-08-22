@@ -6,7 +6,7 @@ Generally, we discourage using any NPM module if there is any native alternative
 
 ## Browser support
 
-We support all browser included into the []`stable` list of `.browserslistrc`](../../.browserslistrc#L8). Any experimental feature may be consider if it's supported by all the browsers on the [`modern` list](../../.browserslistrc#L8), but it will require a fallback for the `stable` list or a graceful handle for browsers that didn't support it.
+We support all browser included into the [`production` list of `.browserslistrc`](../../.browserslistrc#L1). Any experimental feature may be consider if it's supported by all the browsers on the [`modern` list](../../.browserslistrc#L18), but it will require a fallback for the `production` list or a graceful handle for browsers that didn't support it.
 
 ## Node support
 
