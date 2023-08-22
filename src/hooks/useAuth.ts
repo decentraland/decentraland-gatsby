@@ -127,9 +127,7 @@ export default function useAuth(options?: AuthOptions) {
   useEffect(() => {
     // Determines if SSO has to be enabled or not.
     // Defaults to false.
-    const ssoEnabled = !!options?.ssoEnabled
-
-    if (ssoEnabled) {
+    if (!!options?.ssoEnabled) {
       // Use the provided url or defaults to the .org id url.
       const url = options?.ssoUrl ?? 'https://id.decentraland.org'
 
