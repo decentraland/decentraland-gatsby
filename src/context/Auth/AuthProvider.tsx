@@ -1,6 +1,7 @@
 import React, { createContext, useEffect } from 'react'
 
 import * as SSO from '@dcl/single-sign-on-client'
+import isURL from 'validator/lib/isURL'
 
 import useAuth from '../../hooks/useAuth'
 import useTransaction from '../../hooks/useTransaction'
@@ -43,7 +44,7 @@ export default React.memo(function AuthProvider({
   // Will only be initialized if the sso url is provided.
   // If the url is not provided, the identity of the user will be stored in the application's local storage instead of the sso local storage.
   useEffect(() => {
-    if (sso) {
+    if (sso && isURL(sso)) {
       SSO.init(sso)
     }
   }, [])
