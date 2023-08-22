@@ -67,9 +67,13 @@ export default function Component() {
 }
 ```
 
-## Props
+## Single Sign on
 
-The AuthProvider component accept some optional props, `ssoEnabled` and `ssoUrl`
+The AuthProvider receives an additional prop `sso`.
+
+By providing a valid url to this prop, the identity of the user will be stored in the local storage of the Single Sign On application hosted there instead of the current application.
+
+This is useful when you want to share the same identity between multiple applications.
 
 ```tsx dark=true
 // gatsby-browser.js
@@ -78,15 +82,16 @@ import ReactDOM from 'react-dom'
 import AuthProvider from 'decentraland-gatsby/dist/context/Auth/AuthProvider'
 
 export const wrapRootElement = ({ element }) => (
-  <AuthProvider ssoEnabled ssoUrl="https://id.decentraland.zone">
+  <AuthProvider sso="https://id.decentraland.zone">
     {element}
   </AuthProvider>
 )
 ```
 
-These props are provided to the underlying `useAuth` hook to control the usage of the SSO feature.
+You can learn more about SSO in:
 
-You can read more about it on the _Single Sign On_ section of the [`useAuth` documentation](./?path=/story/hooks-useauth--page)
+- https://github.com/decentraland/single-sign-on-client/blob/main/packages/lib/README.md
+- https://github.com/decentraland/single-sign-on
 
 Read the [full documentation](./?path=/story/hooks-useauth--page)
 
