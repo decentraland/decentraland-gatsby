@@ -59,11 +59,6 @@ export const initialState: AuthState = Object.freeze({
   status: AuthStatus.Restoring,
 })
 
-export type AuthOptions = {
-  ssoUrl?: string
-  ssoEnabled?: boolean
-}
-
 let WINDOW_LISTENER: SingletonListener<Window> | null = null
 export function getListener(): SingletonListener<Window> {
   if (!WINDOW_LISTENER) {

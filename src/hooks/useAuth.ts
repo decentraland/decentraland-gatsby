@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
-import * as SSO from '@dcl/single-sign-on-client'
 import { connection } from 'decentraland-connect/dist/ConnectionManager'
 
 import logger from '../entities/Development/logger'
@@ -11,7 +10,6 @@ import segment from '../utils/development/segment'
 import useAsyncTask from './useAsyncTask'
 import {
   AuthEvent,
-  AuthOptions,
   AuthState,
   AuthStatus,
   createConnection,
@@ -27,7 +25,7 @@ export { initialState }
 
 let CONNECTION_PROMISE: Promise<AuthState> | null = null
 
-export default function useAuth(options?: AuthOptions) {
+export default function useAuth() {
   const [state, setState] = useState<AuthState>({ ...initialState })
 
   const select = useCallback(
@@ -122,25 +120,6 @@ export default function useAuth(options?: AuthOptions) {
     },
     [state]
   )
-
-  // Initialize SSO
-  useEffect(() => {
-    // Determines if SSO has to be enabled or not.
-    // Defaults to false.
-    if (options?.ssoEnabled) {
-      // Use the provided url or defaults to the .org id url.
-      const url = options?.ssoUrl ?? 'https://id.decentraland.org'
-
-      // SSO can only be initialized once.
-      // This catch just prevents the lifecycle to break in case it is called more than once.
-      // Given how this hook is used, it is only called once so it might not be necessary.
-      try {
-        SSO.init(url)
-      } catch (e) {
-        console.warn(e.message)
-      }
-    }
-  }, [])
 
   // connect or disconnect
   useEffect(() => {
