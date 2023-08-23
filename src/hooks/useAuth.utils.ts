@@ -8,8 +8,8 @@ import { AddEthereumChainParameters } from 'decentraland-dapps/dist/modules/wall
 
 import { Identity, identify } from '../utils/auth'
 import { setCurrentIdentity } from '../utils/auth/storage'
+import rollbar from '../utils/development/rollbar'
 import segment from '../utils/development/segment'
-import sentry from '../utils/development/sentry'
 import SingletonListener from '../utils/dom/SingletonListener'
 
 export const chains = [
@@ -121,7 +121,7 @@ export async function restoreConnection(): Promise<AuthState> {
     }
   } catch (err) {
     console.error(err)
-    sentry((tracker) => tracker.error(err))
+    rollbar((rollbar) => rollbar.error(err))
     segment((analytics) =>
       analytics.track('error', {
         ...err,
@@ -173,7 +173,7 @@ export async function createConnection(
     }
   } catch (err) {
     console.error(err)
-    sentry((tracker) => tracker.error(err))
+    rollbar((rollbar) => rollbar.error(err))
     segment((analytics) =>
       analytics.track('error', {
         ...err,

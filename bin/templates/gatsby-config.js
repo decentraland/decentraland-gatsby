@@ -60,9 +60,6 @@ module.exports = {
         defaultLocale: `en`,
         // option to redirect to `/ko` when connecting `/`
       },
-    },
-    {
-      resolve: '@sentry/gatsby',
-    },
+    }
   ],
 }

@@ -3,7 +3,7 @@ import { Web3Provider } from '@ethersproject/providers'
 import { Wallet } from '@ethersproject/wallet'
 
 import segment from '../development/segment'
-import sentry from '../development/sentry'
+import rollbar from '../development/rollbar'
 import EmptyAccountsError from '../errors/EmptyAccountsError'
 import once from '../function/once'
 
@@ -40,7 +40,7 @@ export default async function identify(connection: ConnectionResponse) {
     return identity
   } catch (err) {
     console.error(err)
-    sentry((tracker) => tracker.error(err))
+    rollbar((rollbar) => rollbar.error(err))
     segment((analytics) =>
       analytics.track('error', {
         ...err,

@@ -7,8 +7,8 @@ import { AnyTransaction } from 'decentraland-dapps/dist/modules/transaction/type
 import { isPending } from 'decentraland-dapps/dist/modules/transaction/utils'
 
 import Time from '../utils/date/Time'
+import rollbar from '../utils/development/rollbar'
 import segment from '../utils/development/segment'
-import sentry from '../utils/development/sentry'
 import {
   clearTransactions,
   restoreTransactions,
@@ -113,7 +113,7 @@ export default function useTransaction(
           })
           .catch((err) => {
             console.error(err)
-            sentry((tracker) => tracker.error(err))
+            rollbar((rollbar) => rollbar.error(err))
             segment((analytics) =>
               analytics.track('error', {
                 ...err,

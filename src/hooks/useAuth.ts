@@ -5,8 +5,8 @@ import { connection } from 'decentraland-connect/dist/ConnectionManager'
 
 import logger from '../entities/Development/logger'
 import { setCurrentIdentity } from '../utils/auth/storage'
+import rollbar from '../utils/development/rollbar'
 import segment from '../utils/development/segment'
-import sentry from '../utils/development/sentry'
 import useAsyncTask from './useAsyncTask'
 import {
   AuthEvent,
@@ -57,8 +57,8 @@ export default function useAuth() {
       const conn = { providerType: providerType, chainId: chainId }
       if (!providerType || !chainId) {
         console.error(`Invalid connection params: ${JSON.stringify(conn)}`)
-        sentry((tracker) =>
-          tracker.error(`Invalid connection params: ${JSON.stringify(conn)}`)
+        rollbar((rollbar) =>
+          rollbar.error(`Invalid connection params: ${JSON.stringify(conn)}`)
         )
         segment((analytics) =>
           analytics.track('error', {
@@ -170,8 +170,8 @@ export default function useAuth() {
                 analytics.track(AuthEvent.Connected, { ...context, ...conn })
               })
 
-              sentry((tracker) => {
-                tracker.configure({
+              rollbar((rollbar) => {
+                rollbar.configure({
                   payload: {
                     person: {
                       id: conn.account!,
@@ -205,7 +205,7 @@ export default function useAuth() {
         .then(() => setCurrentIdentity(null))
         .catch((err) => {
           console.error(err)
-          sentry((tracker) => tracker.error(err))
+          rollbar((rollbar) => rollbar.error(err))
           segment((analytics) =>
             analytics.track('error', {
               ...err,
@@ -217,8 +217,8 @@ export default function useAuth() {
       segment((analytics, context) =>
         analytics.track(AuthEvent.Disconnected, context)
       )
-      sentry((tracker) =>
-        tracker.configure({ payload: { person: { id: null } } })
+      rollbar((rollbar) =>
+        rollbar.configure({ payload: { person: { id: null } } })
       )
       setState({
         ...initialState,

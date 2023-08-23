@@ -1,5 +1,5 @@
 import segment from '../development/segment'
-import sentry from '../development/sentry'
+import rollbar from '../development/rollbar'
 import env from '../env'
 import random from '../number/random'
 import API from './API'

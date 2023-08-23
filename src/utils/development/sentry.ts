@@ -5,7 +5,7 @@ import {
   onLoad,
   setExtra,
   withScope,
-} from '@sentry/gatsby'
+} from '@sentry/browser'
 
 import type { Extra } from '@sentry/types'
 

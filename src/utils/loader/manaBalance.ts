@@ -2,8 +2,8 @@ import { formatUnits } from '@ethersproject/units'
 import { MANA_GRAPH_BY_CHAIN_ID } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
 
+import rollbar from '../development/rollbar'
 import segment from '../development/segment'
-import sentry from '../development/sentry'
 import Loader from './Loader'
 import 'isomorphic-fetch'
 
@@ -40,7 +40,7 @@ export async function fetchManaBalance(address: string, chainId: ChainId) {
     return parseFloat(formatUnits(mana, 'ether'))
   } catch (err) {
     console.error(err)
-    sentry((tracker) => tracker.error(err))
+    rollbar((rollbar) => rollbar.error(err))
     segment((analytics) =>
       analytics.track('error', {
         ...err,
