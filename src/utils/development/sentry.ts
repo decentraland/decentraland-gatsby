@@ -1,8 +1,8 @@
 import * as Sentry from '@sentry/browser'
 
-export type SentryTracker = (rollbar: typeof Sentry) => void
+export type SentryTracker = (sentry: typeof Sentry) => void
 
-export default function rollbar(tracker: SentryTracker) {
+export default function sentry(tracker: SentryTracker) {
   if (typeof window !== 'undefined') {
     if ((window as any).__SENTRY__) {
       tracker(Sentry)
