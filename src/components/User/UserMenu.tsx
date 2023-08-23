@@ -14,6 +14,7 @@ import { useFeatureFlagContext } from '../../context/FeatureFlag'
 import { DappsFeatureFlags } from '../../context/FeatureFlag/types'
 import useAsyncState from '../../hooks/useAsyncState'
 import useChainId from '../../hooks/useChainId'
+import { clearIdentity } from '../../utils/auth'
 import { fetchManaBalance } from '../../utils/loader/manaBalance'
 import Avatar from './Avatar'
 
@@ -118,7 +119,12 @@ export default function UserMenu(props: UserMenuProps) {
         manaBalances={manaBalances || {}}
         avatar={(profile || undefined) as any}
         newMenu={ff.enabled(DappsFeatureFlags.ProfileSite)}
-        onSignOut={() => userState.disconnect()}
+        onSignOut={async () => {
+          // Removes the identity from the SSO storage.
+          // This is the correct place to do it given that the user is actively signing out from the application.
+          await clearIdentity()
+          userState.disconnect()
+        }}
       />
     </div>
   )
