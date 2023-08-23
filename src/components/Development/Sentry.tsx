@@ -6,7 +6,7 @@ import {
   Replay,
   init,
   setExtra,
-} from '@sentry/gatsby'
+} from '@sentry/browser'
 
 import env from '../../utils/env'
 
@@ -50,7 +50,6 @@ export default React.memo(function Sentry({ dsn, ...props }: BrowserOptions) {
 
     init({
       environment: env('ENVIRONMENT', 'local'),
-      release: `${process.env.REACT_APP_WEBSITE_NAME}@${process.env.REACT_APP_WEBSITE_VERSION}`,
       dsn,
       integrations: [new BrowserTracing(), new Replay()],
       // Performance Monitoring
