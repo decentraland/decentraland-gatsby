@@ -2,8 +2,8 @@ import '../buffer/buffer'
 import { Web3Provider } from '@ethersproject/providers'
 import { Wallet } from '@ethersproject/wallet'
 
-import segment from '../development/segment'
 import rollbar from '../development/rollbar'
+import segment from '../development/segment'
 import EmptyAccountsError from '../errors/EmptyAccountsError'
 import once from '../function/once'
 
