@@ -1,5 +1,6 @@
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
+import sentry from '../development/sentry'
 import env from '../env'
 import random from '../number/random'
 import API from './API'
@@ -175,6 +176,16 @@ export default class Catalyst extends API {
                 avatar,
                 addresses: ids,
                 server: this.baseUrl,
+              })
+            )
+            sentry((sentry) =>
+              sentry.captureMessage(`Error loading profiles`, {
+                extra: {
+                  avatar,
+                  addresses: ids,
+                  server: this.baseUrl,
+                },
+                level: 'error',
               })
             )
             segment((analytics) =>
