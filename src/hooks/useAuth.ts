@@ -7,7 +7,6 @@ import logger from '../entities/Development/logger'
 import { setCurrentIdentity } from '../utils/auth/storage'
 import segment from '../utils/development/segment'
 import sentry from '../utils/development/sentry'
-import { PersistedKeys } from '../utils/loader/types'
 import useAsyncTask from './useAsyncTask'
 import {
   AuthEvent,
