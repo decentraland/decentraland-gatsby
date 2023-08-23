@@ -28,7 +28,6 @@ export default function withSecurityHeaders() {
         'https://ajax.cloudflare.com',
         'https://verify.walletconnect.com',
         // 'https://www.googletagmanager.com', disabled
-        // 'https://cdn.rollbar.com',
         // 'https://a.klaviyo.com', deprecated
         // 'https://widget.intercom.io', disabled
         // 'https://js.intercomcdn.com', disabled

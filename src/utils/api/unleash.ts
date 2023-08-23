@@ -1,7 +1,7 @@
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
 
-import rollbar from '../development/rollbar'
 import segment from '../development/segment'
+import sentry from '../development/sentry'
 import 'isomorphic-fetch'
 
 export type FeatureFlagsResponse = {
@@ -64,7 +64,7 @@ export default async function unleash(
     return body as FeatureFlagsResponse
   } catch (err) {
     console.error(err)
-    rollbar((rollbar) => rollbar.error(err))
+    sentry((tracker) => tracker.error(err))
     segment((analytics) =>
       analytics.track('error', {
         ...err,

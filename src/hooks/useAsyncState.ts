@@ -6,8 +6,8 @@ import {
   useState,
 } from 'react'
 
-import rollbar from '../utils/development/rollbar'
 import segment from '../utils/development/segment'
+import sentry from '../utils/development/sentry'
 
 type AsyncStateState<T, I = null> = {
   version: number
@@ -120,7 +120,7 @@ export default function useAsyncState<T, I = null>(
       })
       .catch((err) => {
         console.error(err)
-        rollbar((rollbar) => rollbar.error(err))
+        sentry((tracker) => tracker.error(err))
         segment((analytics) =>
           analytics.track('error', {
             ...err,

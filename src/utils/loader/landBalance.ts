@@ -1,8 +1,8 @@
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
 
-import rollbar from '../development/rollbar'
 import segment from '../development/segment'
+import sentry from '../development/sentry'
 import 'isomorphic-fetch'
 
 const DECENTRALAND_MARKETPLACE_SUBGRAPH_URL: Partial<Record<ChainId, string>> =
@@ -60,7 +60,7 @@ export async function fetchLandBalance(address: string, chainId: ChainId) {
     return lands
   } catch (err) {
     console.error(err)
-    rollbar((rollbar) => rollbar.error(err))
+    sentry((tracker) => tracker.error(err))
     segment((analytics) =>
       analytics.track('error', {
         ...err,

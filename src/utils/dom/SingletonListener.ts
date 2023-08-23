@@ -1,5 +1,5 @@
-import rollbar from '../development/rollbar'
 import segment from '../development/segment'
+import sentry from '../development/sentry'
 import singleton from '../immutable/singleton'
 
 export type TargetListener = Pick<
@@ -80,8 +80,8 @@ export default class SingletonListener<T extends TargetListener> {
           listener.call(this as any, data)
         } catch (err) {
           console.error(`Error executing listener: ${err.message}`, err)
-          rollbar((rollbar) =>
-            rollbar.error(`Error executing listener: ${err.message}`, err)
+          sentry((tracker) =>
+            tracker.error(`Error executing listener: ${err.message}`, err)
           )
           segment((analytics) =>
             analytics.track('error', {

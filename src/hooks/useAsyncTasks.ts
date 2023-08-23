@@ -1,7 +1,7 @@
 import { DependencyList, useCallback, useMemo, useState } from 'react'
 
-import rollbar from '../utils/development/rollbar'
 import segment from '../utils/development/segment'
+import sentry from '../utils/development/sentry'
 
 export type AsyncTaskIdenfity = (id: string, ...extra: any[]) => Promise<any>
 
@@ -26,7 +26,7 @@ export default function useAsyncTasks<
         })
         .catch((err) => {
           console.error(err)
-          rollbar((rollbar) => rollbar.error(err))
+          sentry((tracker) => tracker.error(err))
           segment((analytics) =>
             analytics.track('error', {
               ...err,
