@@ -14,7 +14,10 @@ export default function useAsyncEffect(
       rollbar((rollbar) =>
         rollbar.error('AsyncEffect error: ' + err.message, err)
       )
-      sentry((sentry) => sentry.captureException(err))
+      sentry((sentry) => {
+        sentry.setExtra('error', err)
+        sentry.captureMessage('AsyncEffect error: ' + err.message)
+      })
       segment((analytics) =>
         analytics.track('error', {
           ...err,
