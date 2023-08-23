@@ -1,5 +1,5 @@
-import segment from '../development/segment'
 import rollbar from '../development/rollbar'
+import segment from '../development/segment'
 import env from '../env'
 import random from '../number/random'
 import API from './API'
@@ -170,7 +170,7 @@ export default class Catalyst extends API {
         .filter((result) => {
           const avatar = result.avatars[0]!
           if (!avatar.ethAddress) {
-            sentry((logger) =>
+            rollbar((logger) =>
               logger.error(`Error loading profiles`, {
                 avatar,
                 addresses: ids,
