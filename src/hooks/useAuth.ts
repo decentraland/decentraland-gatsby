@@ -115,6 +115,8 @@ export default function useAuth() {
     [state]
   )
 
+  const disconnectAndSignOut = useCallback(() => disconnect(true), [disconnect])
+
   const [switching, switchTo] = useAsyncTask(
     async (chainId: ChainId) => {
       if (state.providerType === ProviderType.INJECTED) {
@@ -276,7 +278,7 @@ export default function useAuth() {
   const actions = useMemo(
     () => ({
       connect,
-      disconnect: () => disconnect(true),
+      disconnect: disconnectAndSignOut,
       switchTo,
       select,
       loading,

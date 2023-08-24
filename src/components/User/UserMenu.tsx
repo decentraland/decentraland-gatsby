@@ -118,7 +118,7 @@ export default function UserMenu(props: UserMenuProps) {
         manaBalances={manaBalances || {}}
         avatar={(profile || undefined) as any}
         newMenu={ff.enabled(DappsFeatureFlags.ProfileSite)}
-        onSignOut={() => userState.disconnect()}
+        onSignOut={userState.disconnect}
       />
     </div>
   )
