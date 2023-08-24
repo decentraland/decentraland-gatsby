@@ -10,8 +10,6 @@ import {
 
 import useAuthContext from '../../context/Auth/useAuthContext'
 import useProfileInjected from '../../context/Auth/useProfileContext'
-import { useFeatureFlagContext } from '../../context/FeatureFlag'
-import { DappsFeatureFlags } from '../../context/FeatureFlag/types'
 import useAsyncState from '../../hooks/useAsyncState'
 import useChainId from '../../hooks/useChainId'
 import { fetchManaBalance } from '../../utils/loader/manaBalance'
@@ -45,7 +43,6 @@ export default function UserMenu(props: UserMenuProps) {
   const [user, userState] = useAuthContext()
   const [profile, profileState] = useProfileInjected()
   const chainId = useChainId()
-  const [ff] = useFeatureFlagContext()
   const loading = userState.loading || profileState.loading
   const [manaBalances] = useAsyncState<UserMenuBalances>(async () => {
     if (props.hideBalance || !user) {
@@ -117,7 +114,6 @@ export default function UserMenu(props: UserMenuProps) {
         i18n={i18n}
         manaBalances={manaBalances || {}}
         avatar={(profile || undefined) as any}
-        newMenu={ff.enabled(DappsFeatureFlags.ProfileSite)}
         onSignOut={userState.disconnect}
       />
     </div>
