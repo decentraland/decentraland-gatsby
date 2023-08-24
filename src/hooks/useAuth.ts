@@ -88,7 +88,7 @@ export default function useAuth() {
   )
 
   const disconnect = useCallback(
-    (signOut = false) => {
+    (signOut?: Boolean) => {
       if (isLoading(state.status)) {
         return
       }
@@ -276,7 +276,7 @@ export default function useAuth() {
   const actions = useMemo(
     () => ({
       connect,
-      disconnect,
+      disconnect: () => disconnect(true),
       switchTo,
       select,
       loading,
