@@ -88,7 +88,7 @@ export default function useAuth() {
   )
 
   const disconnect = useCallback(
-    (signOut?: Boolean) => {
+    (signOut?: boolean) => {
       if (isLoading(state.status)) {
         return
       }
