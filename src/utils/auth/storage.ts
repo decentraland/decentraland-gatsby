@@ -64,14 +64,16 @@ async function storeIdentity(identity: Identity | null) {
       await SSO.storeIdentity(account, identity)
       CURRENT_IDENTITY_RAW = JSON.stringify(identity)
     } else {
-      // If no identity is provided, clear the previous one if any.
-      if (CURRENT_IDENTITY_RAW) {
-        const prevIdentity = JSON.parse(CURRENT_IDENTITY_RAW)
-        const account = await ownerAddress(prevIdentity.authChain)
-        await SSO.clearIdentity(account)
-      }
-
       CURRENT_IDENTITY_RAW = null
     }
+  }
+}
+
+// Clears the identity from SSO.
+export async function clearIdentity() {
+  if (CURRENT_IDENTITY_RAW) {
+    const prevIdentity = JSON.parse(CURRENT_IDENTITY_RAW)
+    const account = await ownerAddress(prevIdentity.authChain)
+    await SSO.clearIdentity(account)
   }
 }

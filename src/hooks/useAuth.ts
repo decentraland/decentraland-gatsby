@@ -4,7 +4,7 @@ import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import { connection } from 'decentraland-connect/dist/ConnectionManager'
 
 import logger from '../entities/Development/logger'
-import { setCurrentIdentity } from '../utils/auth/storage'
+import { clearIdentity, setCurrentIdentity } from '../utils/auth/storage'
 import rollbar from '../utils/development/rollbar'
 import segment from '../utils/development/segment'
 import useAsyncTask from './useAsyncTask'
@@ -87,26 +87,35 @@ export default function useAuth() {
     [state]
   )
 
-  const disconnect = useCallback(() => {
-    if (isLoading(state.status)) {
-      return
-    }
+  const disconnect = useCallback(
+    (signOut?: boolean) => {
+      if (isLoading(state.status)) {
+        return
+      }
 
-    if (!state.account) {
-      return
-    }
+      if (!state.account) {
+        return
+      }
 
-    setState({
-      status: AuthStatus.Disconnecting,
-      account: null,
-      identity: null,
-      provider: null,
-      error: null,
-      selecting: false,
-      providerType: null,
-      chainId: null,
-    })
-  }, [state])
+      if (signOut) {
+        clearIdentity()
+      }
+
+      setState({
+        status: AuthStatus.Disconnecting,
+        account: null,
+        identity: null,
+        provider: null,
+        error: null,
+        selecting: false,
+        providerType: null,
+        chainId: null,
+      })
+    },
+    [state]
+  )
+
+  const disconnectAndSignOut = useCallback(() => disconnect(true), [disconnect])
 
   const [switching, switchTo] = useAsyncTask(
     async (chainId: ChainId) => {
@@ -269,7 +278,7 @@ export default function useAuth() {
   const actions = useMemo(
     () => ({
       connect,
-      disconnect,
+      disconnect: disconnectAndSignOut,
       switchTo,
       select,
       loading,
