@@ -194,7 +194,7 @@
     "juice": "^8.0.0",
     "lodash": "^4.17.21",
     "mime": "^3.0.0",
-    "node-html-parser": "^5.1.0",
+    "node-html-parser": "^6.1.6",
     "pbkdf2": "^3.1.2",
     "pg-tsquery": "^8.3.0",
     "prom-client": "^14.0.1",
