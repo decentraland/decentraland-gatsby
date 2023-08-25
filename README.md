@@ -1,6 +1,6 @@
-![Decentraland](https://decentraland.org/og.jpg)
-
 # Decentraland Gatsby
+
+![Decentraland](https://decentraland.org/og.jpg)
 
 [![Coverage Status](https://coveralls.io/repos/github/decentraland/decentraland-gatsby/badge.svg?branch=master)](https://coveralls.io/github/decentraland/decentraland-gatsby?branch=master)
 
