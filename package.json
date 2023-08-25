@@ -213,7 +213,6 @@
     "three": "^0.137.5",
     "ua-parser-js": "^1.0.2",
     "util": "^0.12.4",
-    "uuid": "^8.3.1",
     "validator": "^13.7.0",
     "web-push": "^3.4.5",
     "workbox-core": "^6.5.3",
