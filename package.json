@@ -207,7 +207,6 @@
     "react-markdown": "^7.1.0",
     "remark-emoji": "3.0.2",
     "remark-gfm": "^3.0.1",
-    "rollbar": "^2.24.0",
     "sharp": "^0.30.3",
     "swiper": "^8.4.4",
     "three": "^0.137.5",
@@ -221,5 +220,9 @@
     "workbox-routing": "^6.5.3",
     "workbox-strategies": "^6.5.3",
     "yaml": "^1.10.0"
+  },
+  "peerDependencies": {
+    "rollbar": "^2.26.2",
+    "@sentry/browser": "^7.64.0"
   }
 }

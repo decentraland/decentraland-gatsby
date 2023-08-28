@@ -4,6 +4,7 @@ import isEthereumAddress from 'validator/lib/isEthereumAddress'
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
 import 'isomorphic-fetch'
+import sentry from '../development/sentry'
 
 const DECENTRALAND_MARKETPLACE_SUBGRAPH_URL: Partial<Record<ChainId, string>> =
   {
@@ -61,6 +62,7 @@ export async function fetchEnsBalance(address: string, chainId: ChainId) {
   } catch (err) {
     console.error(err)
     rollbar((rollbar) => rollbar.error(err))
+    sentry((sentry) => sentry.captureException(err))
     segment((analytics) =>
       analytics.track('error', {
         ...err,
