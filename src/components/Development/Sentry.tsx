@@ -1,8 +1,8 @@
 import React from 'react'
 
-import type { BrowserOptions } from '@sentry/browser'
-
 import env from '../../utils/env'
+
+import type { BrowserOptions } from '@sentry/browser'
 
 type SentryProps = {
   src?: string
