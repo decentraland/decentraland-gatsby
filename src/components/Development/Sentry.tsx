@@ -59,11 +59,11 @@ export default React.memo(function Sentry({ src, ...props }: SentryProps) {
     <>
       <script {...props} src={src} crossOrigin="anonymous" />
       <script
+        id="__dgatsby_sentry__"
+        data-settings={JSON.stringify(initialConfig)}
+        data-tags={JSON.stringify(tags)}
         dangerouslySetInnerHTML={{
-          __html: `Sentry.onLoad(function() {
-            Sentry.init(${JSON.stringify(initialConfig)})
-            Sentry.setTags(${JSON.stringify(tags)})
-          })`,
+          __html: `window.Sentry.onLoad(function(){window.Sentry.init(JSON.parse(document.getElementById("__dgatsby_sentry__").dataset.settings)),window.Sentry.setTags(JSON.parse(document.getElementById("__dgatsby_sentry__").dataset.tags))});`,
         }}
       />
     </>
