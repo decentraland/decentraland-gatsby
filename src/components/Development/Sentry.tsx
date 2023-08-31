@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { BrowserOptions } from '@sentry/browser'
+import type { BrowserOptions } from '@sentry/browser'
 
 import env from '../../utils/env'
 
