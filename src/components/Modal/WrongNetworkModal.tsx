@@ -16,6 +16,7 @@ export type WrongNetworkModalProps = ModalProps & {
 }
 
 const anyNetwork = [
+  ChainId.ETHEREUM_SEPOLIA,
   ChainId.ETHEREUM_GOERLI,
   ChainId.ETHEREUM_KOVAN,
   ChainId.ETHEREUM_MAINNET,

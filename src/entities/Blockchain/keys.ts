@@ -22,6 +22,7 @@ export function getInfuraHttp(key: string, chainId: ChainId) {
     case ChainId.ETHEREUM_RINKEBY:
     case ChainId.ETHEREUM_GOERLI:
     case ChainId.ETHEREUM_KOVAN:
+    case ChainId.ETHEREUM_SEPOLIA:
     case ChainId.MATIC_MAINNET:
     case ChainId.MATIC_MUMBAI:
       return `https://${getChainSubdomain(chainId)}.infura.io/v3/${key}`
@@ -42,6 +43,7 @@ export function getInfuraWs(key: string, chainId: ChainId) {
     case ChainId.ETHEREUM_RINKEBY:
     case ChainId.ETHEREUM_GOERLI:
     case ChainId.ETHEREUM_KOVAN:
+    case ChainId.ETHEREUM_SEPOLIA:
       return `wss://${getChainSubdomain(chainId)}.infura.io/ws/v3/${key}`
     case ChainId.MATIC_MAINNET:
     case ChainId.MATIC_MUMBAI:
@@ -67,6 +69,8 @@ function getChainSubdomain(chainId: ChainId) {
       return 'goerli'
     case ChainId.ETHEREUM_KOVAN:
       return 'kovan'
+    case ChainId.ETHEREUM_SEPOLIA:
+      return 'sepolia'
     case ChainId.MATIC_MAINNET:
       return 'polygon-mainnet'
     case ChainId.MATIC_MUMBAI:

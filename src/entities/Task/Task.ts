@@ -1,4 +1,4 @@
-import uuid from 'uuid'
+import { randomUUID } from 'crypto'
 
 import Time from '../../utils/date/Time'
 import globalLogger, { Logger } from '../Development/logger'
@@ -68,7 +68,7 @@ export default class Task<P extends {} = {}> {
   }
 
   async run(options: Partial<TaskRunOptions<P>> = {}) {
-    const id = options.id ?? uuid()
+    const id = options.id ?? randomUUID()
     const payload = options.payload ?? ({} as P)
     const runner = options.runner ?? 'unkown'
     const data = { id, runner, name: this.name }
@@ -83,14 +83,11 @@ export default class Task<P extends {} = {}> {
     }
 
     let error = 0
-    task_manager_pool_size.inc({ task: this.name, runner })
-    const stopTimer = task_manager_duration_seconds.startTimer({
-      task: this.name,
-      runner,
-    })
+    const label = { task: this.name, runner }
+    task_manager_pool_size.inc(label)
+    const stopTimer = task_manager_duration_seconds.startTimer(label)
 
     try {
-      task_manager_duration_seconds
       await this.options.task({ ...data, payload, logger, schedule })
     } catch (err) {
       error = 1
@@ -101,7 +98,7 @@ export default class Task<P extends {} = {}> {
       )
     }
 
-    task_manager_pool_size.inc()
+    task_manager_pool_size.dec(label)
     stopTimer({ error })
 
     return newTasks

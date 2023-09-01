@@ -1,11 +1,10 @@
-import { Request } from 'express'
-
 import { AuthData } from '../../Auth/middleware'
 import logger from '../../Development/logger'
-import middleware from '../handle/middleware'
 
-export default function withLogs() {
-  return middleware(async (req: Request & Partial<AuthData>, res) => {
+import type { Handler, Request } from 'express'
+
+export default function withLogs(): Handler {
+  return (req: Request & AuthData, res, next) => {
     const start = Date.now()
 
     res.on('close', function requestLogger() {
@@ -32,5 +31,7 @@ export default function withLogs() {
         ...data,
       })
     })
-  })
+
+    next()
+  }
 }

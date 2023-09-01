@@ -99,11 +99,27 @@ export default class Land extends API {
 
   static Cache = new Map<string, Land>()
 
+  /**
+   * TODO(#323): remove on v6
+   * @deprecated use getInstance instead
+   */
   static get() {
-    return this.from(env('LAND_URL', this.Url))
+    return this.getInstance()
   }
 
+  static getInstance() {
+    return this.getInstanceFrom(env('LAND_URL', this.Url))
+  }
+
+  /**
+   * TODO(#323): remove on v6
+   * @deprecated use getInstanceFrom instead
+   */
   static from(baseUrl: string) {
+    return this.getInstanceFrom(baseUrl)
+  }
+
+  static getInstanceFrom(baseUrl: string) {
     if (!this.Cache.has(baseUrl)) {
       this.Cache.set(baseUrl, new Land(baseUrl))
     }

@@ -3,12 +3,13 @@ import { Registry, register } from 'prom-client'
 import Context from '../../Route/wkc/context/Context'
 import ContentTypeResponse from '../../Route/wkc/response/ContentTypeResponse'
 import routes from '../../Route/wkc/routes'
-import { registry } from '../metrics'
+import { gatsbyRegister } from '../metrics'
 import withPrometheusToken from './withPrometheusToken'
 
-const PROMETHEUS_REGISTRIES = [registry, register]
+const PROMETHEUS_REGISTRIES = [gatsbyRegister, register]
 let PROMETHEUS_REGISTRY = Registry.merge(PROMETHEUS_REGISTRIES)
 
+/** deprecated use ./utils */
 export default routes((router) => {
   router.get('/metrics', getMetrics)
 })

@@ -79,6 +79,7 @@ export default class Options {
       this._options.headers = {}
     }
 
+    key = key.toLowerCase()
     if (this._options.headers[key]) {
       console.warn(
         `Can not set header "${key}" as "${value}" because is already defined as "${this._options.headers[key]}"`
@@ -91,7 +92,9 @@ export default class Options {
   }
 
   headers(headers: Record<string, string>) {
-    Object.keys(headers).forEach((key) => this.header(key, headers[key]))
+    Object.keys(headers).forEach((key) =>
+      this.header(key.toLowerCase(), headers[key])
+    )
     return this
   }
 
@@ -118,7 +121,7 @@ export default class Options {
   }
 
   json(data: any) {
-    this.header('Content-Type', 'application/json')
+    this.header('content-type', 'application/json')
     this._options.body = JSON.stringify(data)
     return this
   }

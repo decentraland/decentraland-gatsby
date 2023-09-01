@@ -14,6 +14,7 @@ import Options, { RequestOptions } from './Options'
 
 import type { Identity } from '../auth/types'
 
+// TODO(#323): remove on v6
 import 'isomorphic-fetch'
 
 export type SearchParamValue = boolean | number | string | Date
@@ -142,11 +143,11 @@ export default class API {
     }
 
     const params = new URLSearchParams()
-    for (const key of Object.keys(qs)) {
+    for (const key of Object.keys(qs) as (keyof T)[]) {
       if (qs[key] === null) {
-        params.set(key, '')
+        params.set(String(key), '')
       } else if (qs[key] !== undefined) {
-        params.set(key, qs[key])
+        params.set(String(key), String(qs[key]))
       }
     }
 

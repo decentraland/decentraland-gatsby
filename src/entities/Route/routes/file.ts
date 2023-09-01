@@ -1,3 +1,4 @@
+// TODO(#323): remove on v6
 import { createHash } from 'crypto'
 import { readFile } from 'fs'
 import { extname } from 'path'

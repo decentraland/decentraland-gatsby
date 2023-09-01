@@ -1,7 +1,10 @@
-import Catalyst, { Avatar } from '../api/Catalyst'
+import Catalyst from '../api/Catalyst'
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
+import sentry from '../development/sentry'
 import BatchLoader from './BatchLoader'
+
+import type { Avatar } from '../api/Catalyst'
 
 const DEFAULT_AVATAR = 'https://decentraland.org/images/male.png'
 
@@ -65,7 +68,7 @@ export const createDefaultProfile = (address: string): Profile => ({
 export default new BatchLoader<Profile>(
   async (addresses: string[]) => {
     try {
-      const profiles = await Catalyst.get().getProfiles(
+      const profiles = await Catalyst.getInstance().getProfiles(
         addresses.map((address) => address.toLowerCase())
       )
       return profiles.map(
@@ -74,6 +77,7 @@ export default new BatchLoader<Profile>(
     } catch (err) {
       console.error(err)
       rollbar((rollbar) => rollbar.error(err))
+      sentry((sentry) => sentry.captureException(err))
       segment((analytics) =>
         analytics.track('error', {
           ...err,

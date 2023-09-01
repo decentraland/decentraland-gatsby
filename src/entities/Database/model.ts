@@ -1,23 +1,21 @@
 import { createHash } from 'crypto'
 
-import {
-  Model as BaseModel,
-  OnConflict,
-  PrimaryKey,
-  QueryPart,
-} from 'decentraland-server'
+import { Model as BaseModel } from 'decentraland-server'
+import type { OnConflict, PrimaryKey, QueryPart } from 'decentraland-server'
 
 import { DatabaseMetricParams, withDatabaseMetrics } from './metrics'
 import {
   SQL,
   SQLStatement,
   columns,
+  compareTableColumns,
+  conditionValuesCompare,
   conditional,
   join,
   objectValues,
   raw,
+  setColumns,
   table,
-  values,
 } from './utils/sql'
 
 import type { QueryResult } from 'pg'
@@ -37,27 +35,6 @@ function hash(query: SQLStatement) {
 }
 
 export class Model<T extends {}> extends BaseModel<T> {
-  private static ensureFieldNames(fields: string[]) {
-    const invalidFields = fields.filter((field) => /\W/gi.test(field as string))
-    if (invalidFields.length !== 0) {
-      throw new Error(
-        `Invalid fields for "${this.tableName}": ${invalidFields.join(', ')}`
-      )
-    }
-  }
-
-  private static getCompareQuery(field: string, value: any) {
-    if (value === null || value === undefined) {
-      return SQL`"${raw(field)}" IS NULL`
-    }
-
-    if (Array.isArray(value)) {
-      return SQL`"${raw(field)}" IN ${values(value)}`
-    }
-
-    return SQL`"${raw(field)}" = ${value}`
-  }
-
   private static getLabels<U extends {} = any>(
     method: string,
     conditions?: PrimaryKey | Partial<U>,
@@ -124,7 +101,6 @@ export class Model<T extends {}> extends BaseModel<T> {
     )
   }
 
-  /**  */
   static async createOne<U extends QueryPart = any>(row: U): Promise<number> {
     return this.createMany([row])
   }
@@ -137,11 +113,10 @@ export class Model<T extends {}> extends BaseModel<T> {
     }
 
     const keys = Object.keys(rows[0])
-    this.ensureFieldNames(keys)
 
     const sql = SQL`
       INSERT INTO ${table(this)}
-        (${join(keys.map((key) => SQL`"${raw(key)}"`))})
+        ${columns(keys)}
       VALUES
         ${objectValues(keys, rows)}
     `
@@ -169,14 +144,12 @@ export class Model<T extends {}> extends BaseModel<T> {
     )
   }
 
-  /**  */
   static async updateTo<U extends QueryPart = any, P extends QueryPart = any>(
     changes: Partial<U>,
     conditions: Partial<P>
   ): Promise<number> {
     const updateKeys = Object.keys(changes) as string[]
     const conditionKeys = Object.keys(conditions) as string[]
-    this.ensureFieldNames([...updateKeys, ...conditionKeys])
 
     if (conditionKeys.length === 0) {
       throw new Error(
@@ -200,16 +173,9 @@ export class Model<T extends {}> extends BaseModel<T> {
     const sql = SQL`
       UPDATE ${table(this)}
         SET
-          ${join(
-            updateKeys.map((field) => SQL`"${raw(field)}" = ${changes[field]}`)
-          )}
+          ${setColumns(updateKeys, changes)}
         WHERE
-          ${join(
-            conditionKeys.map((field) =>
-              this.getCompareQuery(field, conditions[field])
-            ),
-            SQL` AND `
-          )}
+        ${conditionValuesCompare(conditionKeys, conditions)}
     `
 
     return this.namedRowCount(
@@ -238,7 +204,6 @@ export class Model<T extends {}> extends BaseModel<T> {
     ) as string[]
 
     const allFields = [...keys, ...updateFields] as string[]
-    this.ensureFieldNames(allFields)
 
     const withTimestamps =
       !!this.withTimestamps && !updateFields.includes('updated_at')
@@ -257,13 +222,7 @@ export class Model<T extends {}> extends BaseModel<T> {
       allFields
     )}
         WHERE
-          ${join(
-            keys.map(
-              (field: string) =>
-                SQL`${table(this)}."${raw(field)}" = "_tmp_"."${raw(field)}"`
-            ),
-            SQL` AND `
-          )}
+          ${compareTableColumns(table(this), raw('"_tmp_"'), keys)}
     `
 
     const name = `${this.tableName}_update_many_by_${keys.sort().join('_')}`

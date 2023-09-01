@@ -4,13 +4,17 @@ import isEthereumAddress from 'validator/lib/isEthereumAddress'
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
 import 'isomorphic-fetch'
+import sentry from '../development/sentry'
 
-const DECENTRALAND_MARKETPLACE_SUBGRAPH_URL = {
-  [ChainId.ETHEREUM_MAINNET]:
-    'https://api.thegraph.com/subgraphs/name/decentraland/marketplace',
-  [ChainId.ETHEREUM_ROPSTEN]:
-    'https://api.thegraph.com/subgraphs/name/decentraland/marketplaceropsten',
-}
+const DECENTRALAND_MARKETPLACE_SUBGRAPH_URL: Partial<Record<ChainId, string>> =
+  {
+    [ChainId.ETHEREUM_MAINNET]:
+      'https://api.thegraph.com/subgraphs/name/decentraland/marketplace',
+    [ChainId.ETHEREUM_ROPSTEN]:
+      'https://api.thegraph.com/subgraphs/name/decentraland/marketplaceropsten',
+    [ChainId.ETHEREUM_SEPOLIA]:
+      'https://api.studio.thegraph.com/query/49472/marketplace-sepolia/version/latest',
+  }
 
 const QUERY = `
 query ($address: String!, $first: Int!, $skip: Int!) {
@@ -27,7 +31,8 @@ export async function fetchLandBalance(address: string, chainId: ChainId) {
     return 0
   }
 
-  if (!DECENTRALAND_MARKETPLACE_SUBGRAPH_URL[chainId]) {
+  const target = DECENTRALAND_MARKETPLACE_SUBGRAPH_URL[chainId]
+  if (!target) {
     return 0
   }
 
@@ -37,17 +42,14 @@ export async function fetchLandBalance(address: string, chainId: ChainId) {
     let hasNext = true
     const first = 1000
     while (hasNext) {
-      const response = await fetch(
-        DECENTRALAND_MARKETPLACE_SUBGRAPH_URL[chainId],
-        {
-          method: 'post',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            query: QUERY,
-            variables: { address: address.toLowerCase(), first, skip },
-          }),
-        }
-      )
+      const response = await fetch(target, {
+        method: 'post',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          query: QUERY,
+          variables: { address: address.toLowerCase(), first, skip },
+        }),
+      })
 
       const body = await response.json()
       const nfts = (body?.data?.nfts || []) as {}[]
@@ -60,6 +62,7 @@ export async function fetchLandBalance(address: string, chainId: ChainId) {
   } catch (err) {
     console.error(err)
     rollbar((rollbar) => rollbar.error(err))
+    sentry((sentry) => sentry.captureException(err))
     segment((analytics) =>
       analytics.track('error', {
         ...err,

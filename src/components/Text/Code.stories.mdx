@@ -1,0 +1,48 @@
+import { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs'
+import Code from './Code'
+
+<Meta title="components/Text/Code" />
+
+# Code component
+
+<Canvas>
+  <Code language="typescript">
+    {`<img src="https://picsum.photos/200" width={200} height={200} />`}
+  </Code>
+</Canvas>
+
+<Canvas>
+  <Code note="Note: Lorem Picsum" language="typescript">
+    {`<img src="https://picsum.photos/200" width={200} height={200} />`}
+  </Code>
+</Canvas>
+
+<Canvas>
+  <Code
+    preview={<img src="https://picsum.photos/200" width={200} height={200} />}
+    language="typescript"
+  >
+    {`<img src="https://picsum.photos/200" width={200} height={200} />`}
+  </Code>
+</Canvas>
+
+<Canvas>
+  <Code
+    note="Note: Lorem Picsum with preview"
+    preview={<img src="https://picsum.photos/200" width={200} height={200} />}
+    language="typescript"
+  >
+    {`<img src="https://picsum.photos/200" width={200} height={200} />`}
+  </Code>
+</Canvas>
+
+<Canvas>
+  <Code
+    note="Note: Lorem Picsum with preview and copy"
+    copy
+    preview={<img src="https://picsum.photos/200" width={200} height={200} />}
+    language="typescript"
+  >
+    {`<img src="https://picsum.photos/200" width={200} height={200} />`}
+  </Code>
+</Canvas>

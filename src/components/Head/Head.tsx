@@ -74,12 +74,20 @@ export default function Head(props: HeadProps) {
       {props.image && <meta name="image" content={props.image} />}
 
       {Object.keys(meta)
-        .filter((name) => Boolean(meta[name]))
-        .map((name) => {
+        .filter((name: keyof MetaProperties) => Boolean(meta[name]))
+        .map((name: keyof MetaProperties) => {
           if (name.startsWith('og:')) {
-            return <meta key={name} property={name} content={meta[name]} />
+            return (
+              <meta
+                key={name}
+                property={name}
+                content={meta[name]?.toString()}
+              />
+            )
           }
-          return <meta key={name} name={name} content={meta[name]} />
+          return (
+            <meta key={name} name={name} content={meta[name]?.toString()} />
+          )
         })}
 
       {props.children}
