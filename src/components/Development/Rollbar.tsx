@@ -11,6 +11,7 @@ export type RollbarProps = React.ScriptHTMLAttributes<HTMLScriptElement> &
     version?: string
   }
 
+/** @deprecated */
 export default React.memo(function Rollbar({
   accessToken,
   captureUncaught,

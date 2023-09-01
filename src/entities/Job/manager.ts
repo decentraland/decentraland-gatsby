@@ -1,5 +1,6 @@
+import { randomUUID } from 'crypto'
+
 import { CronJob } from 'cron'
-import { v4 as uuid } from 'uuid'
 
 import logger from '../Development/logger'
 import { Pool, createVoidPool } from '../Pool/utils'
@@ -77,7 +78,7 @@ export default class JobManager {
     if (options.cron) {
       this.crons.push(
         new CronJob(this.time(options.cron), () => {
-          this.runJobs(uuid(), handler, {}, job)
+          this.runJobs(randomUUID(), handler, {}, job)
         })
       )
     }
@@ -121,7 +122,12 @@ export default class JobManager {
   ) => {
     const name =
       typeof handler === 'string' ? handler : handler.jobName || handler.name
-    const job = await this.getModel().schedule(uuid(), name, date, payload)
+    const job = await this.getModel().schedule(
+      randomUUID(),
+      name,
+      date,
+      payload
+    )
 
     if (this.running && job.run_at.getTime() < Date.now()) {
       this.run(job.id, job.name, job.payload)

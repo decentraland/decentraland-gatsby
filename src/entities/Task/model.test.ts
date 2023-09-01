@@ -1,5 +1,6 @@
+import { randomUUID } from 'crypto'
+
 import { format } from 'sql-formatter'
-import { v4 as uuid } from 'uuid'
 import isUUID from 'validator/lib/isUUID'
 
 import { SQLStatement } from 'decentraland-server'
@@ -204,13 +205,17 @@ describe(`src/entities/Task/model`, () => {
   describe(`lock`, () => {
     test(`should not run a query if limit is lower than one`, async () => {
       const initial = rawQuery.mock.calls.length
-      await TaskModel.lock({ id: uuid(), taskNames: ['test_name'], limit: 0 })
+      await TaskModel.lock({
+        id: randomUUID(),
+        taskNames: ['test_name'],
+        limit: 0,
+      })
       expect(rawQuery.mock.calls.length).toEqual(initial)
     })
 
     test(`should not run a query if there is no taskNames`, async () => {
       const initial = rawQuery.mock.calls.length
-      await TaskModel.lock({ id: uuid(), taskNames: [] })
+      await TaskModel.lock({ id: randomUUID(), taskNames: [] })
       expect(rawQuery.mock.calls.length).toEqual(initial)
     })
 
@@ -223,7 +228,7 @@ describe(`src/entities/Task/model`, () => {
         rowCount: 0,
       })
 
-      await TaskModel.lock({ id: uuid(), taskNames: ['test_task'] })
+      await TaskModel.lock({ id: randomUUID(), taskNames: ['test_task'] })
       expect(rawQuery.mock.calls.length).toEqual(initial + 1)
 
       const [sql] = rawQuery.mock.calls[rawQuery.mock.calls.length - 1]
@@ -256,7 +261,7 @@ describe(`src/entities/Task/model`, () => {
     })
 
     test(`should not run a sencond query if there was any loked task`, async () => {
-      const id = uuid()
+      const id = randomUUID()
       const initialQuery = query.mock.calls.length
       const initialLock = rawQuery.mock.calls.length
       query.mockReturnValueOnce([])
@@ -338,9 +343,9 @@ describe(`src/entities/Task/model`, () => {
       })
 
       await TaskModel.complete([
-        { id: uuid() } as any,
-        { id: uuid() } as any,
-        { id: uuid() } as any,
+        { id: randomUUID() } as any,
+        { id: randomUUID() } as any,
+        { id: randomUUID() } as any,
       ])
       expect(rawQuery.mock.calls.length).toEqual(initial + 1)
 
