@@ -18,15 +18,15 @@ See [Sentry documentation](https://docs.sentry.io/platforms/javascript) for more
 
 > Development components are meant to be used on `gatsby-ssr.js`, see [README.md](./?path=/docs/components-development-readme-md--page) for more details
 
-<Source dark language="tsx" code={`<Sentry dsn={SENTRY_DSN} />`} />
+<Source dark language="tsx" code={`<Sentry src={SENTRY_SRC} />`} />
 
 <ArgsTable
   rows={[
-    Args.Prop('dsn', 'Sentry DSN', {
+    Args.Prop('src', 'Sentry DSN', {
       type: Args.Types.String,
-      defaultValue: Args.Types.Environment('SENTRY_DSN'),
+      defaultValue: Args.Types.Environment('SENTRY_SRC'),
     }),
-    Args.Environment('SENTRY_DSN', 'Sentry DSN'),
+    Args.Environment('SENTRY_SRC', 'Sentry DSN'),
     Args.Environment('ENVIRONMENT', 'Running environment', {
       defaultValue: 'local',
     }),
@@ -43,6 +43,6 @@ See [Sentry documentation](https://docs.sentry.io/platforms/javascript) for more
 
 The rest of the available configuration can be found in the [docs](https://docs.sentry.io/platforms/javascript/guides/gatsby/configuration).
 
-## Locate your DSN
+## Locate your Sentry Script
 
-The Data Source Name (DSN) is how Sentry SDK knows where to send events so the events are associated with the correct project. To find the key follow the instructions detailed in the [documentation](https://docs.sentry.io/product/sentry-basics/dsn-explainer/).
+The Loader Script is the easiest way to initialize the Sentry SDK. The Loader Script also automatically keeps your Sentry SDK up to date and offers configuration for different Sentry features. To learn about the Sentry JavaScript Loader Script please follow the instructions in the [documentation](https://docs.sentry.io/platforms/javascript/install/loader/).
