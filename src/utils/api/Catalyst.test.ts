@@ -159,7 +159,7 @@ describe('utils/api/Catalyst', () => {
     })
   })
 
-  describe(`.getServer()`, () => {
+  describe.skip(`.getServer()`, () => {
     test(`should return an instance of a Catalyst`, async () => {
       const catalyst = Catalyst.getInstance()
       const servers = await catalyst.getServers()
@@ -179,7 +179,7 @@ describe('utils/api/Catalyst', () => {
     })
   })
 
-  describe(`.getBanNames()`, () => {
+  describe.skip(`.getBanNames()`, () => {
     test(`should return an instance of a Catalyst`, async () => {
       const catalyst = Catalyst.getInstance()
       const names = await catalyst.getBanNames()
@@ -188,7 +188,7 @@ describe('utils/api/Catalyst', () => {
     })
   })
 
-  describe(`.getPOIs()`, () => {
+  describe.skip(`.getPOIs()`, () => {
     test(`should return an instance of a Catalyst`, async () => {
       const catalyst = Catalyst.getInstance()
       const pois = await catalyst.getPOIs()

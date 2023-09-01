@@ -20,3 +20,8 @@ export function getDefaultChainId(): ChainId {
 export function getChainId(): ChainId {
   return CHAIN_ID[0]
 }
+
+export type AuthProviderProps = {
+  // Url of the sso application (Eg: https://id.decentraland.org)
+  sso?: string
+}
