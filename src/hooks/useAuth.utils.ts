@@ -1,15 +1,16 @@
 import { ChainId, getChainName } from '@dcl/schemas/dist/dapps/chain-id'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
+import * as SSO from '@dcl/single-sign-on-client'
 import { connection } from 'decentraland-connect/dist/ConnectionManager'
 import { Provider } from 'decentraland-connect/dist/types'
 import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import { AddEthereumChainParameters } from 'decentraland-dapps/dist/modules/wallet/types'
 
 import { Identity, identify } from '../utils/auth'
-import { ownerAddress } from '../utils/auth/identify'
-import { getCurrentIdentity, setCurrentIdentity } from '../utils/auth/storage'
+import { setCurrentIdentity } from '../utils/auth/storage'
 import rollbar from '../utils/development/rollbar'
 import segment from '../utils/development/segment'
+import sentry from '../utils/development/sentry'
 import SingletonListener from '../utils/dom/SingletonListener'
 
 export const chains = [
@@ -88,51 +89,41 @@ export async function fetchChainId(provider: Provider) {
 
 export async function restoreConnection(): Promise<AuthState> {
   try {
-    const identity = getCurrentIdentity()
     const connectionData = connection.getConnectionData()
 
-    // drop identity when connection data is missinig
-    if (identity && !connectionData) {
-      setCurrentIdentity(null)
-    }
-
-    if (identity && connectionData) {
-      const data = await connection.connect(
-        connectionData.providerType,
-        connectionData.chainId
-      )
-
-      // const previousConnection = await connection.tryPreviousConnection()
+    if (connectionData) {
+      const { providerType, chainId } = connectionData
+      const data = await connection.connect(providerType, chainId)
       const provider = data.provider
 
       if (!provider) {
         throw new Error(`Error getting provider`)
       }
 
-      const account = await ownerAddress(identity!.authChain)
-      const providerType = connectionData!.providerType
+      const currentAccounts = await fetchAccounts(provider)
+      const account = currentAccounts[0]
+      const identity = await SSO.getIdentity(account)
 
-      const currentAccounts = await fetchAccounts(data.provider)
-      if (currentAccounts[0] !== account) {
-        throw new Error(`Account changed`)
-      }
+      if (identity) {
+        const currentChainId = await fetchChainId(provider)
+        await setCurrentIdentity(identity)
 
-      const currentChainId = await fetchChainId(data.provider)
-
-      return {
-        account,
-        provider,
-        chainId: Number(currentChainId),
-        providerType,
-        identity,
-        status: AuthStatus.Connected,
-        selecting: false,
-        error: null,
+        return {
+          account,
+          provider,
+          chainId: Number(currentChainId),
+          providerType,
+          identity,
+          status: AuthStatus.Connected,
+          selecting: false,
+          error: null,
+        }
       }
     }
   } catch (err) {
     console.error(err)
     rollbar((rollbar) => rollbar.error(err))
+    sentry((sentry) => sentry.captureException(err))
     segment((analytics) =>
       analytics.track('error', {
         ...err,
@@ -156,31 +147,28 @@ export async function createConnection(
   chainId: ChainId
 ) {
   try {
-    connection.getConnectionData()
     const data = await connection.connect(providerType, chainId)
-    const identity = await identify(data)
+    const provider = data.provider
 
-    if (identity && identity.authChain) {
-      const account = await ownerAddress(identity.authChain)
-      // const previousConnection = await connection.tryPreviousConnection()
-      Promise.resolve().then(() => {
-        setCurrentIdentity(identity)
-      })
+    if (!provider) {
+      throw new Error(`Error getting provider`)
+    }
 
-      const currentAccounts = await fetchAccounts(data.provider)
-      if (currentAccounts[0] !== account) {
-        throw new Error(`Account changed`)
-      }
+    const currentAccounts = await fetchAccounts(provider)
+    const account = currentAccounts[0]
+    const identity = (await SSO.getIdentity(account)) ?? (await identify(data))
 
-      const currentChainId = await fetchChainId(data.provider)
+    if (identity) {
+      const currentChainId = await fetchChainId(provider)
+      await setCurrentIdentity(identity)
 
       return {
         account,
-        identity,
+        provider,
         chainId: Number(currentChainId),
         providerType,
+        identity,
         status: AuthStatus.Connected,
-        provider: data.provider,
         selecting: false,
         error: null,
       }
@@ -188,6 +176,7 @@ export async function createConnection(
   } catch (err) {
     console.error(err)
     rollbar((rollbar) => rollbar.error(err))
+    sentry((sentry) => sentry.captureException(err))
     segment((analytics) =>
       analytics.track('error', {
         ...err,
@@ -196,7 +185,7 @@ export async function createConnection(
       })
     )
 
-    setCurrentIdentity(null)
+    await setCurrentIdentity(null)
     return {
       ...initialState,
       status: AuthStatus.Disconnected,

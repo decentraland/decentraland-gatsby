@@ -114,7 +114,7 @@ export default function UserMenu(props: UserMenuProps) {
         i18n={i18n}
         manaBalances={manaBalances || {}}
         avatar={(profile || undefined) as any}
-        onSignOut={() => userState.disconnect()}
+        onSignOut={userState.disconnect}
       />
     </div>
   )

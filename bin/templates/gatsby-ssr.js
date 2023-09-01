@@ -6,8 +6,10 @@
 
 // You can delete this file if you're not using it
 import React from 'react'
-import Segment from 'decentraland-gatsby/dist/components/Development/Segment'
+
 import Rollbar from 'decentraland-gatsby/dist/components/Development/Rollbar'
+import Segment from 'decentraland-gatsby/dist/components/Development/Segment'
+import Sentry from 'decentraland-gatsby/dist/components/Development/Sentry'
 export { wrapPageElement, wrapRootElement } from './gatsby-browser'
 
 /**
@@ -44,6 +46,8 @@ export function onPreRenderHTML(
   postBodyComponents.push(<Segment key="segment" trackPage={false} />)
 
   postBodyComponents.push(<Rollbar key="rollbar" />)
+
+  postBodyComponents.push(<Sentry key="sentry" />)
 
   replaceHeadComponents(headComponents)
   replacePostBodyComponents(postBodyComponents)

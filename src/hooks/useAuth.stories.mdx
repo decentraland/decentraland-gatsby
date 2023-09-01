@@ -10,6 +10,8 @@ import { Args } from '../components/Storybook/utils'
 import Container from '../components/Storybook/Container'
 import Textarea from '../components/Form/Textarea'
 import Paragraph from '../components/Text/Paragraph'
+import AuthProvider from '../context/Auth/AuthProvider'
+import useAuthContext from '../context/Auth/useAuthContext'
 import useAuth from './useAuth'
 import { chains } from './useAuth.utils'
 
@@ -72,7 +74,7 @@ const [account, state] = useAuth()
 ## Connect Preview
 
 export const ConnectExample = () => {
-  const [account, state] = useAuth()
+  const [account, state] = useAuthContext()
   const [chain, setChain] = useState(ChainId.ETHEREUM_MAINNET)
   const selectChain = (_, { value }) => setChain(value)
   const connectInjected = () => state.connect(ProviderType.INJECTED, chain)
@@ -211,7 +213,15 @@ export const ConnectExample = () => {
   )
 }
 
-<ConnectExample />
+export const ConnectExampleWrapper = () => {
+  return (
+    <AuthProvider sso="https://id.decentraland.zone">
+      <ConnectExample />
+    </AuthProvider>
+  )
+}
+
+<ConnectExampleWrapper />
 
 ```tsx dark=true
 import React from 'react'

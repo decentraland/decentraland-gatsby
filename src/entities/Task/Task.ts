@@ -1,4 +1,4 @@
-import uuid from 'uuid'
+import { randomUUID } from 'crypto'
 
 import Time from '../../utils/date/Time'
 import globalLogger, { Logger } from '../Development/logger'
@@ -68,7 +68,7 @@ export default class Task<P extends {} = {}> {
   }
 
   async run(options: Partial<TaskRunOptions<P>> = {}) {
-    const id = options.id ?? uuid()
+    const id = options.id ?? randomUUID()
     const payload = options.payload ?? ({} as P)
     const runner = options.runner ?? 'unkown'
     const data = { id, runner, name: this.name }

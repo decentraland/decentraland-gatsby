@@ -42,14 +42,14 @@ module.exports = {
 
 The next recommended step is to try to run ESLint to identify if there are any errors or warnings prior to installing the following packages, and if this is the case they can be fixed before proceeding. To do this, add the following scripts inside `package.json` and then run `npm run lint:fix`
 
-```
+```txt
   "lint": "eslint --ext .ts,.tsx,.js,.jsx ./src",
   "lint:fix": "npm run lint -- --fix"
 ```
 
 The next step is to install the necessary plugins to order the imports, and the [resolvers](https://github.com/import-js/eslint-plugin-import/wiki/Resolvers) according to each project.
 
-```
+```txt
 eslint-plugin-import
 eslint-plugin-css-import-order
 eslint-plugin-autofix
@@ -150,15 +150,13 @@ module.exports = {
 
 To help us trigger the ESLint auto-fix feature in your current working file. Set the file `./vscode/settings.json` with the next config
 
-```
+```json
 {
   "editor.formatOnSave": false,
-  "eslint.validate": [
-    "typescript"
-  ],
+  "eslint.validate": ["typescript"],
   "editor.codeActionsOnSave": {
     "source.fixAll": true,
-    "source.organizeImports": false,
+    "source.organizeImports": false
   }
 }
 ```

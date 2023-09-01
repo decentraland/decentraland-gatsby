@@ -4,6 +4,7 @@ import { Wallet } from '@ethersproject/wallet'
 
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
+import sentry from '../development/sentry'
 import EmptyAccountsError from '../errors/EmptyAccountsError'
 import once from '../function/once'
 
@@ -41,6 +42,7 @@ export default async function identify(connection: ConnectionResponse) {
   } catch (err) {
     console.error(err)
     rollbar((rollbar) => rollbar.error(err))
+    sentry((sentry) => sentry.captureException(err))
     segment((analytics) =>
       analytics.track('error', {
         ...err,
