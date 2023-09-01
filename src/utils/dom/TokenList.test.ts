@@ -20,6 +20,7 @@ describe('TokenList', () => {
   test('#join', () => {
     expect(TokenList.join([])).toEqual('')
     expect(TokenList.join(['token1'])).toEqual('token1')
+    expect(TokenList.join(['token1', 'token1'])).toEqual('token1')
     expect(
       TokenList.join([
         'token1',

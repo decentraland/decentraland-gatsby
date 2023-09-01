@@ -1,7 +1,7 @@
-import { hash } from 'immutable'
-
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
+import sentry from '../development/sentry'
+import singleton from '../immutable/singleton'
 
 export type TargetListener = Pick<
   HTMLElement,
@@ -34,7 +34,7 @@ export default class SingletonListener<T extends TargetListener> {
    * @param target listener target
    */
   static from<T extends TargetListener>(target: T): SingletonListener<T> {
-    const id = hash(target)
+    const id = singleton(target)
     if (!this.cache.has(id)) {
       this.cache.set(id, new SingletonListener(target))
     }
@@ -42,16 +42,16 @@ export default class SingletonListener<T extends TargetListener> {
     return this.cache.get(id)!
   }
 
-  public readonly target: T | null = null
-  private listeners = new Map<string, Listener[]>()
-  private callbacks = new Map<string, Listener>()
+  readonly target: T | null = null
+  #listeners = new Map<string, Listener[]>()
+  #callbacks = new Map<string, Listener>()
 
   /**
    * return the total of subscription to this listener
    */
   get size() {
     let result = 0
-    for (const listeners of this.listeners.values()) {
+    for (const listeners of this.#listeners.values()) {
       result += listeners.length
     }
     return result
@@ -66,7 +66,7 @@ export default class SingletonListener<T extends TargetListener> {
    * @param event
    */
   private subscribe(event: Event | string) {
-    if (this.callbacks.has(event)) {
+    if (this.#callbacks.has(event)) {
       console.warn(`Already subscribed to "${event}"`)
       return this
     }
@@ -74,7 +74,7 @@ export default class SingletonListener<T extends TargetListener> {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const _this = this
     const callback = function (this: HTMLElement, data: any) {
-      const listeners = _this.listeners.get(event) || []
+      const listeners = _this.#listeners.get(event) || []
 
       for (const listener of listeners) {
         try {
@@ -83,6 +83,14 @@ export default class SingletonListener<T extends TargetListener> {
           console.error(`Error executing listener: ${err.message}`, err)
           rollbar((rollbar) =>
             rollbar.error(`Error executing listener: ${err.message}`, err)
+          )
+          sentry((sentry) =>
+            sentry.captureException(
+              `Error executing listener: ${err.message}`,
+              {
+                extra: err,
+              }
+            )
           )
           segment((analytics) =>
             analytics.track('error', {
@@ -98,7 +106,7 @@ export default class SingletonListener<T extends TargetListener> {
     if (this.target) {
       this.target.addEventListener(event, callback)
     }
-    this.callbacks.set(event, callback)
+    this.#callbacks.set(event, callback)
     return this
   }
 
@@ -110,16 +118,16 @@ export default class SingletonListener<T extends TargetListener> {
    * @param event
    */
   private unsubscribe(event: Event | string) {
-    const listeners = this.listeners.get(event)
+    const listeners = this.#listeners.get(event)
 
     if (listeners && listeners.length) {
-      this.listeners.set(event, [])
+      this.#listeners.set(event, [])
     }
 
-    const callback = this.callbacks.get(event)
+    const callback = this.#callbacks.get(event)
 
     if (callback) {
-      this.callbacks.delete(event)
+      this.#callbacks.delete(event)
       if (this.target) {
         this.target.removeEventListener(event, callback)
       }
@@ -135,7 +143,7 @@ export default class SingletonListener<T extends TargetListener> {
    */
   dispatch<K extends Event>(event: K, data: EventMap[K]): Promise<void> {
     const target = this.target
-    const callback = this.callbacks.get(event as Event)
+    const callback = this.#callbacks.get(event as Event)
     return Promise.resolve().then(() => {
       if (callback) {
         callback.call(target, data)
@@ -150,14 +158,14 @@ export default class SingletonListener<T extends TargetListener> {
    * @param listener
    */
   addEventListener<K extends Event>(event: K, listener: Listener<K>): this {
-    const listeners = this.listeners.get(event) || []
+    const listeners = this.#listeners.get(event) || []
     listeners.push(listener)
 
     if (listeners.length === 1) {
       this.subscribe(event as K)
     }
 
-    this.listeners.set(event as K, listeners)
+    this.#listeners.set(event as K, listeners)
 
     return this
   }
@@ -168,7 +176,7 @@ export default class SingletonListener<T extends TargetListener> {
    * @param listener
    */
   removeEventListener<K extends Event>(event: K, listener: Listener<K>): this {
-    const listeners = this.listeners.get(event)
+    const listeners = this.#listeners.get(event)
 
     if (!listeners || listeners.length === 0) {
       return this.unsubscribe(event)
@@ -180,7 +188,7 @@ export default class SingletonListener<T extends TargetListener> {
       return this.unsubscribe(event)
     }
 
-    this.listeners.set(event, newListeners)
+    this.#listeners.set(event, newListeners)
 
     return this
   }

@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { RouterHandler, RoutesOptions } from '../types'
+import type { RouterHandler, RoutesOptions } from '../types'
 
 export default function routes(
   handle: RouterHandler,

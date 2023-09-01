@@ -63,4 +63,4 @@ export const Type = {
 
   Array: (type: string) => type + '[]',
   ArrayFixed: (num: number, type: string) => type + `[${num}]`,
-}
+} as const

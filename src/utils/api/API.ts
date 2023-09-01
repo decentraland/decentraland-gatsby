@@ -14,12 +14,19 @@ import Options, { RequestOptions } from './Options'
 
 import type { Identity } from '../auth/types'
 
+// TODO(#323): remove on v6
 import 'isomorphic-fetch'
 
 export type SearchParamValue = boolean | number | string | Date
-export type SearchParamOptions = Partial<{
-  dataToTimestamp: boolean
-}>
+export type SearchParamData = Record<
+  string,
+  undefined | null | SearchParamValue | SearchParamValue[]
+>
+export type SearchParamOptions<D extends SearchParamData = SearchParamData> =
+  Partial<{
+    dataToTimestamp: boolean
+    default: Partial<D>
+  }>
 
 export default class API {
   static catch<T>(prom: Promise<T>) {
@@ -40,16 +47,48 @@ export default class API {
     return String(value)
   }
 
-  static searchParams(
-    data: Record<string, undefined | null | SearchParamValue>,
-    options: SearchParamOptions = {}
+  static fromPagination<T extends { page: number }>(
+    { page, ...data }: T,
+    options: { pageSize: number }
+  ): Omit<T, 'page'> & { limit: number; offset: number } {
+    return {
+      ...data,
+      limit: options.pageSize,
+      offset: (page - 1) * options.pageSize,
+    }
+  }
+
+  static searchParams<D extends SearchParamData>(
+    data: D,
+    options: SearchParamOptions<D> = {}
   ): URLSearchParams {
     const params = new URLSearchParams()
     const keys = Object.keys(data)
+
     for (const key of keys) {
-      const value = data[key] as undefined | null | SearchParamValue
-      if (value !== undefined && value !== null) {
+      const value = data[key] as
+        | undefined
+        | null
+        | SearchParamValue
+        | SearchParamValue[]
+      if (value === undefined || value === null) {
+        continue
+      }
+
+      if (Array.isArray(value)) {
+        for (const each of value) {
+          params.append(key, this.#searchParamsValue(each, options))
+        }
+      } else {
         params.append(key, this.#searchParamsValue(value, options))
+      }
+    }
+
+    if (options?.default) {
+      for (const param of Object.keys(options.default)) {
+        if (data[param] === options.default[param]) {
+          params.delete(param)
+        }
       }
     }
 
@@ -97,17 +136,18 @@ export default class API {
     return new Options(options)
   }
 
+  /** @deprecated use API.searchParams instead */
   query<T extends {} = {}>(qs?: T) {
     if (!qs) {
       return ''
     }
 
     const params = new URLSearchParams()
-    for (const key of Object.keys(qs)) {
+    for (const key of Object.keys(qs) as (keyof T)[]) {
       if (qs[key] === null) {
-        params.set(key, '')
+        params.set(String(key), '')
       } else if (qs[key] !== undefined) {
-        params.set(key, qs[key])
+        params.set(String(key), String(qs[key]))
       }
     }
 
@@ -164,7 +204,7 @@ export default class API {
 
       if (identity?.authChain) {
         const timestamp = String(Date.now())
-        const pathname = new URL(this.url(path)).pathname
+        const pathname = new URL(this.url(path), 'https://localhost').pathname
         const method = options.getMethod() || 'GET'
         const metadata = JSON.stringify(options.getMetadata())
         const payload = [method, pathname, timestamp, metadata]

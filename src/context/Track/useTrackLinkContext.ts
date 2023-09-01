@@ -8,7 +8,10 @@ import {
 } from '../../utils/dom/events'
 import { isBlankTarget, isLocalLink } from '../../utils/dom/links'
 
-export type Handler = (event: React.MouseEvent<any>, ...extra: any[]) => void
+export type Handler = (
+  event: React.MouseEvent<any>,
+  ...extra: any[]
+) => void | undefined | null | Record<string, any>
 
 /**
  * Proxy and useCallback and send an event each time it is call,
@@ -63,7 +66,10 @@ export default function useTrackLinkContext<H extends Handler>(
       const data = getMouseEventData(event)
 
       if (callback) {
-        callback(event, ...extra)
+        const aggregated = callback(event, ...extra)
+        if (aggregated && typeof aggregated == 'object') {
+          Object.assign(data, aggregated)
+        }
       }
 
       if (

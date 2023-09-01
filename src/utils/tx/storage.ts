@@ -9,6 +9,7 @@ function getKey(address: string, chainId: ChainId) {
   return [PersistedKeys.Transactions, address, chainId].join('.')
 }
 
+// TODO(#323): remove on v6, use radash replaceOrAppend instead https://radash-docs.vercel.app/docs/array-replace-or-append
 function injectTransaction(
   transaction: Transaction,
   transactions: Transaction[] = []

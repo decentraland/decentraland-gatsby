@@ -1,16 +1,15 @@
 export default class RequestError extends Error {
   code: 'REQUEST_ERROR' | 'SERVER_ERROR'
   method: string
+  url: string
+  options: RequestInit
   headers: Record<string, string | null> = {}
   statusCode: number
   body: any
-  constructor(
-    public url: string,
-    public options: RequestInit,
-    res: Response,
-    body: any
-  ) {
+  constructor(url: string, options: RequestInit, res: Response, body: any) {
     super()
+    this.url = url
+    this.options = options
     this.method = (options.method || 'get').toLowerCase()
     const target = new URL(url)
     target.search = ''

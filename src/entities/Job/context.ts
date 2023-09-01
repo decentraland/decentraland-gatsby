@@ -2,13 +2,25 @@ import logger from '../Development/logger'
 import { ScheduleFunction, UpdatePayloadFunction } from './types'
 
 export default class JobContext<P extends {} = {}> {
+  id: string | null
+  handler: string | null
+  payload: P = {} as P
+  #schedule: ScheduleFunction
+  #update: UpdatePayloadFunction
+
   constructor(
-    public id: string | null,
-    public handler: string | null,
-    public payload: P = {} as P,
-    private _schedule: ScheduleFunction,
-    private _update: UpdatePayloadFunction
-  ) {}
+    id: string | null,
+    handler: string | null,
+    payload: P = {} as P,
+    schedule: ScheduleFunction,
+    update: UpdatePayloadFunction
+  ) {
+    this.id = id
+    this.handler = handler
+    this.payload = payload
+    this.#schedule = schedule
+    this.#update = update
+  }
 
   log(message: string, data?: Record<string, any>) {
     logger.log(`[${this.handler || 'cron'}] ${message}`, {
@@ -40,7 +52,7 @@ export default class JobContext<P extends {} = {}> {
 
   async updatePayload(payload: Record<string, any> = {}) {
     if (this.id) {
-      await this._update(this.id, payload)
+      await this.#update(this.id, payload)
     }
   }
 
@@ -50,7 +62,7 @@ export default class JobContext<P extends {} = {}> {
     payload: Record<string, any> = {}
   ) {
     if (name) {
-      await this._schedule(name, date, payload)
+      await this.#schedule(name, date, payload)
     }
   }
 }

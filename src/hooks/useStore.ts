@@ -1,4 +1,4 @@
-// TODO(2fd): remove on v6
+// TODO(#323): remove on v6
 import React, { useEffect, useMemo, useState } from 'react'
 
 import EntityStore, { EntityStoreState } from '../utils/EntityStore'

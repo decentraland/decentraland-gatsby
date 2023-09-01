@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid'
+import { randomUUID } from 'crypto'
 
 import Time from '../../utils/date/Time'
 import random from '../../utils/number/random'
@@ -21,7 +21,7 @@ export type TaskRunContext<P extends {} = {}> = {
 }
 
 export default class TaskManager {
-  private _id = uuid()
+  private _id = randomUUID()
   private _running = false
   private _concurrency = 5
   private _tasks = new Map<string, Task>()
@@ -62,7 +62,10 @@ export default class TaskManager {
     return this
   }
 
-  use(task: Task) {
+  use(task: Task | null) {
+    if (!task) {
+      return this
+    }
     if (this._tasks.has(task.name) && this._tasks.get(task.name) !== task) {
       throw new Error(`Duplicated task name "${task.name}"`)
     }
@@ -79,6 +82,15 @@ export default class TaskManager {
       setTimeout(async () => {
         if (!this._running) {
           return
+        }
+
+        try {
+          await this.runTaskTimeout()
+        } catch (err) {
+          this._logger.error(`error releasing old tasks: ${err.message}`, {
+            stack: err.stack,
+            ...err,
+          })
         }
 
         const tasks = Array.from(this._tasks.values())
@@ -98,7 +110,7 @@ export default class TaskManager {
       // run task timeout
       setTimeout(async () => {
         this._nextTimeoutRelease = setInterval(async () => {
-          await this.runTackTimeout()
+          await this.runTaskTimeout()
         }, Time.Minute * 10)
       }, random(Time.Minute, Time.Minute * 1000))
     }
@@ -118,7 +130,7 @@ export default class TaskManager {
     }
   }
 
-  async runTackTimeout() {
+  async runTaskTimeout() {
     try {
       await TaskModel.releaseTimeout()
     } catch (err) {

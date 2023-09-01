@@ -24,6 +24,13 @@ export type GetMapImageOptions = GetImageOptions & {
   selected?: [number, number][]
 }
 
+export type Position = string | [number, number]
+
+export type GetMapImageV2Options = Omit<GetImageOptions, 'publications'> & {
+  center?: Position
+  selected?: Position[]
+}
+
 type Token = {
   id: string
   name: string
@@ -87,28 +94,53 @@ const REVERSE_FACTOR = BigNumber.from('0x1000000000000000000000000000000')
 
 export default class Land extends API {
   static Url =
-    process.env.GATSBY_LAND_API ||
-    process.env.REACT_APP_LAND_API ||
-    process.env.STORYBOOK_LAND_API ||
-    process.env.LAND_API ||
-    process.env.GATSBY_LAND_URL ||
-    process.env.REACT_APP_LAND_URL ||
-    process.env.STORYBOOK_LAND_URL ||
-    process.env.LAND_URL ||
-    'https://api.decentraland.org'
+    env('LAND_API', '') || // @deprecated
+    env('LAND_URL', 'https://api.decentraland.org')
 
   static Cache = new Map<string, Land>()
 
+  /**
+   * TODO(#323): remove on v6
+   * @deprecated use getInstance instead
+   */
   static get() {
-    return this.from(env('LAND_URL', this.Url))
+    return this.getInstance()
   }
 
+  static getInstance() {
+    return this.getInstanceFrom(env('LAND_URL', this.Url))
+  }
+
+  /**
+   * TODO(#323): remove on v6
+   * @deprecated use getInstanceFrom instead
+   */
   static from(baseUrl: string) {
+    return this.getInstanceFrom(baseUrl)
+  }
+
+  static getInstanceFrom(baseUrl: string) {
     if (!this.Cache.has(baseUrl)) {
       this.Cache.set(baseUrl, new Land(baseUrl))
     }
 
     return this.Cache.get(baseUrl)!
+  }
+
+  static encodePosition(position: Position): string {
+    if (typeof position === 'string') {
+      return position
+    } else {
+      return position.slice(0, 2).join(',')
+    }
+  }
+
+  static decodePosition(position: Position): [number, number] {
+    if (typeof position === 'string') {
+      return position.split(',').slice(0, 2).map(Number) as [number, number]
+    } else {
+      return position
+    }
   }
 
   static encodeParcelId(coordinates: [number, number]): string {
@@ -261,6 +293,7 @@ export default class Land extends API {
     return Land.decodeParcelId(parcelId)
   }
 
+  /** @deprecated use getMapImage instead */
   getImage(options: GetMapImageOptions = {}) {
     const { selected: rawSelected } = options
     const selected =
@@ -275,5 +308,80 @@ export default class Land extends API {
 
   getEstateImage(id: number | string, options: GetImageOptions = {}) {
     return this.url(`/v1/estates/${id}/map.png` + this.query(options))
+  }
+
+  getMapImage(options: GetMapImageV2Options = {}) {
+    const params = new URLSearchParams()
+
+    let width: number
+    let height: number
+    if (!!options.width && !!options.height) {
+      height = options.height
+      width = options.width
+    } else if (!!options.width && !options.height) {
+      height = options.width
+      width = options.width
+    } else if (!options.width && !!options.height) {
+      height = options.height
+      width = options.height
+    } else {
+      height = 1024
+      width = 1024
+    }
+
+    params.set('height', String(height))
+    params.set('width', String(width))
+
+    if (options.selected && options.selected.length) {
+      params.set(
+        'selected',
+        options.selected
+          .map((position) => Land.encodePosition(position))
+          .join(';')
+      )
+    }
+
+    if (options.center) {
+      params.set('center', Land.encodePosition(options.center))
+    }
+
+    if (options.size) {
+      params.set('center', String(options.size))
+    }
+
+    if (
+      (!options.center || !options.size) &&
+      options.selected &&
+      options.selected.length
+    ) {
+      const Xs = options.selected.map(
+        (position) => Land.decodePosition(position)[0]
+      )
+      const Ys = options.selected.map(
+        (position) => Land.decodePosition(position)[1]
+      )
+      const maxX = Math.max(...Xs)
+      const minX = Math.min(...Xs)
+      const maxY = Math.max(...Ys)
+      const minY = Math.min(...Ys)
+
+      if (!options.center) {
+        const centerX = Math.floor((minX + maxX) / 2)
+        const centerY = Math.floor((minY + maxY) / 2)
+        params.set('center', `${centerX},${centerY}`)
+      }
+
+      if (!options.size) {
+        const sizeX = maxX - minX
+        const sizeY = maxY - minY
+        const size = Math.floor(
+          Math.min(height, width) / Math.max(sizeX, sizeY)
+        )
+        params.set('size', String(Math.min(Math.max(size, 5), 20)))
+      }
+    }
+
+    const qs = params.toString()
+    return this.url('/v2/map.png' + (qs ? '?' : '') + qs)
   }
 }

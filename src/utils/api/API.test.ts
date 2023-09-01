@@ -1,8 +1,9 @@
 import fetch from '../../entities/Development/fetch.test'
+import env from '../env'
 import API from './API'
 import '../../entities/Development/logger.test'
 
-const HTTPBIN_ENDPOINT = process.env.HTTPBIN_ENDPOINT || 'https://httpbin.org'
+const HTTPBIN_ENDPOINT = env('HTTPBIN_ENDPOINT', 'https://httpbin.org')
 
 describe('utils/api/API', () => {
   describe('#catch', () => {
@@ -41,6 +42,49 @@ describe('utils/api/API', () => {
         API.searchParams({ now }, { dataToTimestamp: true }).toString()
       ).toBe(expectedTimestamp.toString())
     })
+
+    test('should add multiple values for arrays', () => {
+      expect(API.searchParams({ id: ['1', '2', '3'] }).toString()).toBe(
+        'id=1&id=2&id=3'
+      )
+    })
+
+    test('should exclude default values', () => {
+      expect(
+        API.searchParams(
+          {
+            string: 'string',
+            number: 123456789,
+            boolean: false,
+            null: null,
+            undefined: undefined,
+          },
+          { default: { boolean: false, string: 'string', number: 123 } }
+        ).toString()
+      ).toBe('number=123456789')
+    })
+  })
+
+  describe('#fromPagination', () => {
+    test(`should convert a page object into an limit/offset one`, () => {
+      expect(API.fromPagination({ page: 1 }, { pageSize: 25 })).toEqual({
+        limit: 25,
+        offset: 0,
+      })
+      expect(API.fromPagination({ page: 2 }, { pageSize: 25 })).toEqual({
+        limit: 25,
+        offset: 25,
+      })
+    })
+
+    test(`should preserv any extra param`, () => {
+      const value = Math.random()
+      expect(API.fromPagination({ page: 1, value }, { pageSize: 25 })).toEqual({
+        value,
+        limit: 25,
+        offset: 0,
+      })
+    })
   })
 
   describe('#url', () => {
@@ -56,6 +100,8 @@ describe('utils/api/API', () => {
     })
 
     test('should attach path', () => {
+      expect(API.url('/api', '')).toBe('/api')
+      expect(API.url('/api', '/path')).toBe('/api/path')
       expect(API.url('https://decentraland.org/path', '')).toBe(
         'https://decentraland.org/path'
       )

@@ -1,19 +1,25 @@
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
+import sentry from '../development/sentry'
 import env from '../env'
 import random from '../number/random'
 import API from './API'
 
 import type {
   Avatar,
+  CatalystAbout,
   CommsStatus,
   CommsStatusOptions,
   CommsStatusWithLayers,
   CommsStatusWithUsers,
   ContentDeploymentOptions,
   ContentDeploymentResponse,
+  ContentEntityEmote,
+  ContentEntityProfile,
+  ContentEntityScene,
+  ContentEntityStore,
+  ContentEntityWearable,
   ContentStatus,
-  EntityScene,
   HotScene,
   LambdasStatus,
   Layer,
@@ -23,6 +29,7 @@ import type {
   ProfileResponse,
   Realm,
   Servers,
+  StatsParcel,
 } from './Catalyst.types'
 import type { AuthChain } from '@dcl/crypto'
 export type {
@@ -37,6 +44,11 @@ export type {
   CommsStatusWithLayers,
   LambdasStatus,
   ContentStatus,
+  ContentEntityScene,
+  ContentEntityProfile,
+  ContentEntityEmote,
+  ContentEntityWearable,
+  ContentEntityStore,
   Position,
   Servers,
   LayerUser,
@@ -45,24 +57,34 @@ export type {
 
 export default class Catalyst extends API {
   static Url =
-    process.env.GATSBY_CATALYST_API ||
-    process.env.REACT_APP_CATALYST_API ||
-    process.env.STORYBOOK_CATALYST_API ||
-    process.env.CATALYST_API ||
-    process.env.GATSBY_PROFILE_URL ||
-    process.env.REACT_APP_PROFILE_URL ||
-    process.env.STORYBOOK_PROFILE_URL ||
-    process.env.PROFILE_URL ||
-    'https://peer.decentraland.org'
+    env('CATALYST_API', '') || // @deprecated
+    env('PROFILE_URL', 'https://peer.decentraland.org')
 
   static Servers: Promise<void> | null = null
   static Cache = new Map<string, Catalyst>()
 
+  /**
+   * TODO(#323): remove on v6
+   * @deprecated use getInstance instead
+   */
   static get() {
-    return this.from(env('PROFILE_URL', this.Url))
+    return this.getInstance()
   }
 
+  static getInstance() {
+    return this.getInstanceFrom(this.Url)
+  }
+
+  /**
+   * TODO(#323): remove on v6
+   * @deprecated use getAnyInstance instead
+   */
   static async getAny() {
+    return this.getAnyInstance()
+  }
+
+  /** @deprecated use `dcl-catalyst-client/dist/contracts-snapshots/data` instead */
+  static async getAnyInstance() {
     if (!this.Servers) {
       this.Servers = this.get()
         .getServers()
@@ -93,10 +115,18 @@ export default class Catalyst extends API {
       }
     }
 
-    return this.get()
+    return this.getInstance()
   }
 
+  /**
+   * TODO(#323): remove on v6
+   * @deprecated use getInstanceFrom instead
+   */
   static from(baseUrl: string) {
+    return this.getInstanceFrom(baseUrl)
+  }
+
+  static getInstanceFrom(baseUrl: string) {
     if (!this.Cache.has(baseUrl)) {
       this.Cache.set(baseUrl, new Catalyst(baseUrl))
     }
@@ -116,7 +146,7 @@ export default class Catalyst extends API {
   /**
    * loads profile data in parallel
    *
-   * @param addresses - profile addresses list
+   * @param ids - profile addresses list
    * @returns array of profiles in the same order used in the addresses param,
    *  if the profile doesn't exists the array will include a `null` in the corresponding
    *  position
@@ -126,18 +156,14 @@ export default class Catalyst extends API {
    * getProfiles([ `0x1234...`, 0x00000 ]) => Promise<[ { user: `0x1234...`, ...profile }, null ]>
    * ```
    */
-  async getProfiles(addresses: string[]): Promise<(Avatar | null)[]> {
-    if (addresses.length === 0) {
+  async getProfiles(ids: string[]): Promise<(Avatar | null)[]> {
+    if (ids.length === 0) {
       return []
     }
 
-    const params = new URLSearchParams()
-    for (const address of addresses) {
-      params.append('id', address.toLowerCase())
-    }
-
     const results: ProfileResponse[] = await this.fetch(
-      `/lambdas/profiles/?` + params.toString()
+      `/lambdas/profiles`,
+      this.options().method('POST').json({ ids })
     )
 
     const map = new Map(
@@ -148,15 +174,25 @@ export default class Catalyst extends API {
             rollbar((logger) =>
               logger.error(`Error loading profiles`, {
                 avatar,
-                addresses,
+                addresses: ids,
                 server: this.baseUrl,
+              })
+            )
+            sentry((sentry) =>
+              sentry.captureMessage(`Error loading profiles`, {
+                extra: {
+                  avatar,
+                  addresses: ids,
+                  server: this.baseUrl,
+                },
+                level: 'error',
               })
             )
             segment((analytics) =>
               analytics.track('error', {
                 message: `Error loading profiles`,
                 server: this.baseUrl,
-                addresses,
+                addresses: ids,
                 avatar,
               })
             )
@@ -171,9 +207,10 @@ export default class Catalyst extends API {
         })
     )
 
-    return addresses.map((address) => map.get(address.toLowerCase()) || null)
+    return ids.map((address) => map.get(address.toLowerCase()) || null)
   }
 
+  /** @deprecated */
   async getStatus(): Promise<CommsStatus>
   async getStatus(includeLayers: {}): Promise<CommsStatus>
   async getStatus(includeLayers: false): Promise<CommsStatus>
@@ -188,6 +225,7 @@ export default class Catalyst extends API {
     return this.getCommsStatus(options as any)
   }
 
+  /** @deprecated */
   async getCommsStatus(): Promise<CommsStatus>
   async getCommsStatus(includeLayers: {}): Promise<CommsStatus>
   async getCommsStatus(includeLayers: false): Promise<CommsStatus>
@@ -198,28 +236,17 @@ export default class Catalyst extends API {
   async getCommsStatus(includeLayers: {
     includeUsersParcels: true
   }): Promise<CommsStatusWithUsers>
-  async getCommsStatus(options?: CommsStatusOptions) {
-    const params = new URLSearchParams()
-    if (options) {
-      if (typeof options === 'boolean') {
-        params.append('includeLayers', 'true')
-      } else if (typeof options === 'object') {
-        if ((options as { includeLayers: boolean }).includeLayers) {
-          params.append('includeLayers', 'true')
-        } else if (
-          (options as { includeUsersParcels: boolean }).includeUsersParcels
-        ) {
-          params.append('includeUsersParcels', 'true')
-        }
-      }
-    }
+  async getCommsStatus() {
+    return null as any
+  }
 
-    let target = '/comms/status'
-    if (params.toString()) {
-      target += '?' + params.toString()
-    }
+  async getAbout(): Promise<CatalystAbout> {
+    return this.fetch('/about')
+  }
 
-    return this.fetch(target)
+  /** @deprecated use `getAbout` instead*/
+  async getCommsAbout(): Promise<CatalystAbout> {
+    return this.fetch('/about')
   }
 
   async getLambdasStatus(): Promise<LambdasStatus> {
@@ -234,9 +261,21 @@ export default class Catalyst extends API {
     return this.url(`/content/contents/${hash}`)
   }
 
+  async getContentEntity(
+    hash: string
+  ): Promise<
+    | ContentEntityScene
+    | ContentEntityProfile
+    | ContentEntityEmote
+    | ContentEntityWearable
+    | ContentEntityStore
+  > {
+    return this.fetch(`/content/contents/${hash}`)
+  }
+
   async getEntityScenes(
     pointers: (string | [number, number])[]
-  ): Promise<EntityScene[]> {
+  ): Promise<(ContentEntityScene & { id: string })[]> {
     if (!pointers || pointers.length === 0) {
       return []
     }
@@ -254,17 +293,25 @@ export default class Catalyst extends API {
   }
 
   async getRealms() {
-    this.fetch<Realm[]>('/lambdas/explore/realms')
+    return this.fetch<Realm[]>('/lambdas/explore/realms')
   }
 
   async getHostScenes() {
-    this.fetch<HotScene[]>('/lambdas/explore/hot-scenes')
+    return this.fetch<HotScene[]>('/lambdas/explore/hot-scenes')
   }
 
+  /**
+   * @deprecated use `dcl-catalyst-client/dist/contracts-snapshots/data` instead
+   * @see https://adr.decentraland.org/adr/ADR-226#get-lambdas-contracts-servers
+   */
   async getServers() {
     return this.fetch<Servers[]>(`/lambdas/contracts/servers`)
   }
 
+  /**
+   * @deprecated use `dcl-catalyst-client/dist/contracts-snapshots/data` instead
+   * @see https://adr.decentraland.org/adr/ADR-226#get-lambdas-contracts-pois
+   */
   async getPOIs() {
     const results = await this.fetch<string[]>(`/lambdas/contracts/pois`)
     const pois: Position[] = []
@@ -280,6 +327,10 @@ export default class Catalyst extends API {
     return pois
   }
 
+  /**
+   * @deprecated use `dcl-catalyst-client/dist/contracts-snapshots/data` instead
+   * @see https://adr.decentraland.org/adr/ADR-226#get-lambdas-contracts-denylisted-names
+   */
   async getBanNames() {
     return this.fetch<string[]>(`/lambdas/contracts/denylisted-names`)
   }
@@ -310,7 +361,7 @@ export default class Catalyst extends API {
   }
 
   async getContentDeployments(
-    options: ContentDeploymentOptions
+    options: Partial<ContentDeploymentOptions>
   ): Promise<ContentDeploymentResponse> {
     const { entityIds, entityTypes, ...data } = options
     const params = API.searchParams(data as any, { dataToTimestamp: true })
@@ -329,9 +380,17 @@ export default class Catalyst extends API {
 
     const query = params.toString()
 
-    return this.fetch('/content/deployments' + query ? '?' : '' + query)
+    return this.fetch('/content/deployments' + (query ? '?' : '') + query)
   }
 
+  async getStatsParcels() {
+    return this.fetch<{ parcels: StatsParcel[] }>('/stats/parcels')
+  }
+
+  /**
+   * @deprecated use `@dcl/crypto` instead.
+   * @see https://adr.decentraland.org/adr/ADR-226#post-lambdas-validate-signature
+   */
   async verifySignature(
     authChain: AuthChain,
     message: string

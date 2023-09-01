@@ -3,6 +3,7 @@ import isEthereumAddress from 'validator/lib/isEthereumAddress'
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
 import 'isomorphic-fetch'
+import sentry from '../development/sentry'
 
 export type FeatureFlagsResponse = {
   // whether a feature flag is active.
@@ -34,6 +35,9 @@ export const DEFAULT_FEATURE_FLAG: FeatureFlagsResponse = {
   variants: {},
 }
 
+/**
+ * @deprecated use @dcl/feature-flags instead
+ */
 export default async function unleash(
   endpoint?: string | null,
   options: Partial<UnleashOptions> = {}
@@ -62,6 +66,7 @@ export default async function unleash(
   } catch (err) {
     console.error(err)
     rollbar((rollbar) => rollbar.error(err))
+    sentry((sentry) => sentry.captureException(err))
     segment((analytics) =>
       analytics.track('error', {
         ...err,

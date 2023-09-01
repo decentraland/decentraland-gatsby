@@ -1,16 +1,26 @@
-import { useState, useMemo, useEffect } from 'react'
 import { Source, ArgsTable } from '@storybook/components'
 import { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs'
-import Carousel from './Carousel'
+import { useState, useMemo, useEffect } from 'react'
+import Carousel, { IndicatorType } from './Carousel'
 import Divider from '../Text/Divider'
 import ImgFixed from '../Image/ImgFixed'
 import Land from '../../utils/api/Land.ts'
 
-<Meta title="Components/Carousel" />
+<Meta
+  title="components/Carousel"
+  parameters={{
+    viewMode: 'docs',
+    previewTabs: {
+      canvas: { hidden: true },
+    },
+  }}
+/>
 
 ## Carousel
 
-<Canvas isExpanded>
+> This component is **deprecated** you should use [Carousel2](./?path=/docs/components-carousel2--carousel-2) instead
+
+<Canvas withSource="open">
   <Story name="Carousel">
     <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
       <Carousel>
@@ -32,7 +42,7 @@ import Land from '../../utils/api/Land.ts'
 
 ## Carousel time
 
-<Canvas isExpanded>
+<Canvas withSource="open">
   <Story name="Carousel time">
     <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
       <Carousel time={1000}>
@@ -54,7 +64,7 @@ import Land from '../../utils/api/Land.ts'
 
 ## As progress
 
-<Canvas isExpanded>
+<Canvas withSource="open">
   <Story name="As progress">
     <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
       <Carousel progress>
@@ -71,9 +81,28 @@ import Land from '../../utils/api/Land.ts'
 
 <Divider size="small" />
 
+## With dash indicators instead of bullet
+
+<Canvas withSource="open">
+  <Story name="With dash indicators">
+    <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
+      <Carousel indicatorType={IndicatorType.Dash}>
+        <ImgFixed src={Land.get().getParcelImage([25, 74])} dimension="wide" />
+        <ImgFixed src={Land.get().getParcelImage([26, 9])} dimension="wide" />
+        <ImgFixed
+          src={Land.get().getParcelImage([-143, -125])}
+          dimension="wide"
+        />
+      </Carousel>
+    </div>
+  </Story>
+</Canvas>
+
+<Divider size="small" />
+
 ## With different height fixed
 
-<Canvas isExpanded>
+<Canvas withSource="open">
   <Story name="With different height fixed">
     <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
       <Carousel>
@@ -92,7 +121,7 @@ import Land from '../../utils/api/Land.ts'
 
 ## With different height autosize
 
-<Canvas isExpanded>
+<Canvas withSource="open">
   <Story name="With different height autosize">
     <div style={{ width: '90%', maxWidth: '600px', margin: '0 auto' }}>
       <Carousel autoResize>

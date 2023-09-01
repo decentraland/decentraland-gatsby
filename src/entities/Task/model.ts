@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid'
+import { randomUUID } from 'crypto'
 
 import Time from '../../utils/date/Time'
 import { Model } from '../Database/model'
@@ -33,7 +33,7 @@ export default class TaskModel extends Model<TaskAttributes> {
     const newTasks = join(
       tasks.map(
         (task) => SQL`(SELECT
-            ${uuid()} as "id",
+            ${randomUUID()} as "id",
             ${task.name} as "name",
             ${TaskStatus.pending}::type_task_status as "status",
             ${JSON.stringify({})} as "payload",
@@ -143,7 +143,7 @@ export default class TaskModel extends Model<TaskAttributes> {
       SQL`VALUES ${join(
         tasks.map(
           (task) =>
-            SQL`(${uuid()}, ${task.name}, ${
+            SQL`(${randomUUID()}, ${task.name}, ${
               TaskStatus.pending
             }::type_task_status, ${JSON.stringify(task.payload)}, ${null}, ${
               task.run_at
@@ -160,7 +160,7 @@ export default class TaskModel extends Model<TaskAttributes> {
     return this.rowCount(SQL`
       UPDATE ${table(this)}
       SET
-        "runner" IS NULL,
+        "runner" = NULL,
         "status" = ${TaskStatus.pending}::type_task_status,
         "updated_at" = ${now}
       WHERE

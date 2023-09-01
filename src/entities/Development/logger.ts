@@ -1,16 +1,26 @@
+import env from '../../utils/env'
+
 export type LoggerLevel = 'info' | 'warning' | 'error'
 export type LoggerData = Record<string, any> & { level: LoggerLevel }
 export type LoggerSubscription = (message: string, data: LoggerData) => any
+export type LoggerOptions = { disabled?: boolean }
 
 export class Logger {
   static readonly subscriptions: Map<LoggerLevel, LoggerSubscription[]> =
     new Map()
 
   static write(message: string, data: LoggerData) {
-    if (process.env.NODE_ENV === 'production') {
-      console.log(JSON.stringify({ log: message, data }))
+    const method =
+      data.level === 'error'
+        ? 'error'
+        : data.level === 'warning'
+        ? 'warn'
+        : 'log'
+
+    if (env('NODE_ENV', 'development') === 'production') {
+      console[method](JSON.stringify({ log: message, data }))
     } else {
-      console.log(
+      console[method](
         message,
         JSON.stringify(data, null, data.level === 'error' ? 2 : 0)
       )
@@ -39,7 +49,7 @@ export class Logger {
             try {
               return Promise.resolve(subscription(message, data))
             } catch (err) {
-              Logger.write('Error broadcasting logs', {
+              Logger.write('error broadcasting logs: ' + err.message, {
                 level: 'error',
                 message,
                 data,
@@ -51,10 +61,19 @@ export class Logger {
     })
   }
 
-  constructor(private data: Record<string, any> = {}) {}
+  #data: Record<string, any>
+  #options: LoggerOptions
 
-  extend(data: Record<string, any> = {}) {
-    return new Logger({ ...this.data, ...data })
+  constructor(data: Record<string, any> = {}, options: LoggerOptions = {}) {
+    this.#data = data
+    this.#options = options
+  }
+
+  extend(data: Record<string, any> = {}, options: LoggerOptions = {}) {
+    return new Logger(
+      { ...this.#data, ...data },
+      { ...this.#options, ...options }
+    )
   }
 
   subscribe(level: LoggerLevel, callback: LoggerSubscription) {
@@ -68,9 +87,11 @@ export class Logger {
   }
 
   private write(message: string, data: LoggerData) {
-    const extended = { ...data, ...this.data }
-    Logger.write(message, extended)
-    Logger.broadcast(message, extended)
+    if (!this.#options.disabled) {
+      const extended = { ...data, ...this.#data }
+      Logger.write(message, extended)
+      Logger.broadcast(message, extended)
+    }
   }
 
   log(message: string, data: Record<string, any> = {}): void {

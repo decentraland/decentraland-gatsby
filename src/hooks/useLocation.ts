@@ -1,4 +1,4 @@
-// TODO(2fd): remove on v6
+// TODO(#323): remove on v6
 import { useEffect, useState } from 'react'
 
 import SingletonListener from '../utils/dom/SingletonListener'

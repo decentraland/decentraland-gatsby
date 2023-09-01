@@ -1,5 +1,5 @@
 import env from '../../../utils/env'
-import handle from '../handle'
+import handle from '../handle/handleAPI'
 import routes from './routes'
 
 const IMAGE = env('IMAGE', `events:${Date.now()}`)

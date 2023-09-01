@@ -1,7 +1,7 @@
-// TODO(2fd): remove on v6
+// TODO(#323): remove on v6
 import { DependencyList, useMemo } from 'react'
 
-import { hash } from 'immutable'
+import singleton from '../utils/immutable/singleton'
 
 const globalMemo = new Map<string, any>()
 /**
@@ -12,7 +12,7 @@ export default function useGlobalMemo<T>(
   deps: DependencyList
 ) {
   return useMemo<T>(() => {
-    const id = deps.map((dep) => hash(dep)).join('::')
+    const id = deps.map((dep) => singleton(dep)).join('::')
     if (!globalMemo.has(id)) {
       globalMemo.set(id, callback())
     }

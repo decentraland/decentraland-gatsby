@@ -4,7 +4,7 @@ export function isBlankTarget(target?: string | null) {
 
 export function isLocalLink(href?: string | null) {
   return (
-    !!href &&
+    typeof href === 'string' &&
     !href.startsWith('https://') &&
     !href.startsWith('http://') &&
     !href.startsWith('//')

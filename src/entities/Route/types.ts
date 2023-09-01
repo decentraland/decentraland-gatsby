@@ -1,5 +1,4 @@
-import { Router, RouterOptions } from 'express'
-
+import type { Router, RouterOptions } from 'express'
 export type RouterHandler = (router: Router) => void
 export type RoutesOptions = RouterOptions
 
@@ -69,11 +68,8 @@ export const defaultOrigin = [
   /https:\/\/([a-zA-Z0-9\-_]+\.)*decentraland\.today/,
   /https:\/\/([a-zA-Z0-9\-_]+\.)*decentraland\.zone/,
   /https:\/\/([a-zA-Z0-9\-_]+\.)*decentraland\.org/,
-  /https:\/\/([a-zA-Z0-9\-_]+\.)*decentraland\.net/,
-  /https:\/\/([a-zA-Z0-9\-_]+\.)*decentraland\.co/,
-  /https:\/\/([a-zA-Z0-9\-_]+\.)*decentraland\.io/,
-  /https:\/\/([a-zA-Z0-9\-_]+\.)*manaland\.cn/,
   /https:\/\/decentraland\.github\.io/,
+  /https:\/\/([a-zA-Z0-9\-_]+\.)*pages\.dev/,
 ]
 
 export const defaultAllowedHeaders = [

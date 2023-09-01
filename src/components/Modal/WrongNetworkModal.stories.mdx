@@ -3,36 +3,17 @@ import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { Source, ArgsTable } from '@storybook/components'
 import { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
-import IntlStorybookProvider from '../Storybook/IntlStorybookProvider'
-import Base from './WrongNetworkModal.tsx'
-import './Modal.stories.css'
+import ModalContainer from '../Storybook/ModalContainer'
+import WrongNetworkModal from './WrongNetworkModal'
 
-<Meta title="Components/Modal/WrongNetworkModal" />
+console.log(ModalContainer)
 
-export let ID = 0
-export function getID() {
-  return ID++
-}
-
-export function WrongNetworkModal(props) {
-  const [id] = useState(() => 'ID' + getID())
-  const [mountNode, setMountNode] = useState()
-  useEffect(() => {
-    setMountNode(document.getElementById(id))
-  }, [id])
-  return (
-    <IntlStorybookProvider>
-      <div>
-        <div id={id} />
-        {mountNode && <Base {...props} mountNode={mountNode} />}
-      </div>
-    </IntlStorybookProvider>
-  )
-}
+<Meta title="components/Modal/WrongNetworkModal" />
 
 <Canvas isExpanded>
   <Story name="Wrong Network">
-    <WrongNetworkModal
+    <ModalContainer
+      Modal={WrongNetworkModal}
       open
       currentNetwork={ChainId.MATIC_MUMBAI}
       expectedNetwork={ChainId.ETHEREUM_MAINNET}
@@ -42,7 +23,8 @@ export function WrongNetworkModal(props) {
 
 <Canvas isExpanded>
   <Story name="Multi Network Support">
-    <WrongNetworkModal
+    <ModalContainer
+      Modal={WrongNetworkModal}
       open
       currentNetwork={ChainId.MATIC_MUMBAI}
       expectedNetwork={[ChainId.ETHEREUM_MAINNET, ChainId.MATIC_MAINNET]}
@@ -52,7 +34,8 @@ export function WrongNetworkModal(props) {
 
 <Canvas isExpanded>
   <Story name="Switch Network">
-    <WrongNetworkModal
+    <ModalContainer
+      Modal={WrongNetworkModal}
       open
       providerType={ProviderType.INJECTED}
       currentNetwork={ChainId.MATIC_MUMBAI}
@@ -63,7 +46,8 @@ export function WrongNetworkModal(props) {
 
 <Canvas isExpanded>
   <Story name="Switch Multi Network">
-    <WrongNetworkModal
+    <ModalContainer
+      Modal={WrongNetworkModal}
       open
       providerType={ProviderType.INJECTED}
       currentNetwork={ChainId.MATIC_MUMBAI}

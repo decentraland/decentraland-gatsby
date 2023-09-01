@@ -1,6 +1,158 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Storyshots Components/Accordion With content 1`] = `
+exports[`Storyshots components/Accordion Accordion 1`] = `
+<div
+  className="ui container"
+>
+  <div
+    className="Accordion Accordion--close"
+  >
+    <div
+      className="Accordion__Title"
+      onClick={[Function]}
+    >
+      <div
+        className="Accordion__Title__Content"
+      >
+        <div
+          className="ui header"
+        >
+          Accordion title
+        </div>
+      </div>
+      <div
+        className="Accordion__Title__Action"
+      >
+        <svg
+          height="48"
+          viewBox="0 0 48 48"
+          width="48"
+        >
+          <g
+            fill="none"
+            fillRule="evenodd"
+            opacity=".32"
+          >
+            <path
+              d="M0 0H48V48H0z"
+            />
+            <path
+              d="M34 24L21.242 36.457c-.742.724-1.944.724-2.686 0-.741-.724-.741-1.898 0-2.623L28.628 24l-10.072-9.834c-.741-.725-.741-1.899 0-2.623.742-.724 1.944-.724 2.686 0L34 24z"
+              fill="#736E7D"
+            />
+          </g>
+        </svg>
+      </div>
+    </div>
+    <div
+      className="Accordion__Content"
+      style={
+        Object {
+          "height": 0,
+        }
+      }
+    >
+      <div>
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots components/Accordion With Card 1`] = `
+<div
+  className="ui container"
+>
+  <div
+    className="ui card"
+    onClick={[Function]}
+    style={
+      Object {
+        "width": "100%",
+      }
+    }
+  >
+    <div
+      className="content"
+    >
+      <div
+        className="Accordion Accordion--close"
+      >
+        <div
+          className="Accordion__Title"
+          onClick={[Function]}
+        >
+          <div
+            className="Accordion__Title__Content"
+          >
+            <span
+              className="dcl stats"
+            >
+              <div
+                className="ui sub header"
+              >
+                Accordion sub title
+              </div>
+              <div
+                className="ui header"
+              >
+                Accordion title
+              </div>
+            </span>
+          </div>
+          <div
+            className="Accordion__Title__Description"
+          >
+            <p
+              className="dg Paragraph Paragraph--secondary Paragraph--small"
+            >
+              Accordion description
+            </p>
+          </div>
+          <div
+            className="Accordion__Title__Action"
+          >
+            <svg
+              height="48"
+              viewBox="0 0 48 48"
+              width="48"
+            >
+              <g
+                fill="none"
+                fillRule="evenodd"
+                opacity=".32"
+              >
+                <path
+                  d="M0 0H48V48H0z"
+                />
+                <path
+                  d="M34 24L21.242 36.457c-.742.724-1.944.724-2.686 0-.741-.724-.741-1.898 0-2.623L28.628 24l-10.072-9.834c-.741-.725-.741-1.899 0-2.623.742-.724 1.944-.724 2.686 0L34 24z"
+                  fill="#736E7D"
+                />
+              </g>
+            </svg>
+          </div>
+        </div>
+        <div
+          className="Accordion__Content"
+          style={
+            Object {
+              "height": 0,
+            }
+          }
+        >
+          <div>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots components/Accordion With content 1`] = `
 <div
   className="ui container"
 >
@@ -71,134 +223,14 @@ exports[`Storyshots Components/Accordion With content 1`] = `
       }
     >
       <div>
-        <div
-          className="dg ImgFixed ImgFixed--wide"
-          style={
-            Object {
-              "backgroundColor": "transparent",
-              "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/-29/55/map.png\\")",
-              "backgroundPosition": "center center",
-              "backgroundSize": "cover",
-            }
-          }
-        >
-          <img
-            height="1"
-            src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAADUlEQVR4AWNwL/ABYwAKHQIHW//QwwAAAABJRU5ErkJggg=="
-            width="2"
-          />
-        </div>
+        Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum
       </div>
     </div>
   </div>
 </div>
 `;
 
-exports[`Storyshots Components/Accordion With content and Card 1`] = `
-<div
-  className="ui card"
-  onClick={[Function]}
-  style={
-    Object {
-      "width": "100%",
-    }
-  }
->
-  <div
-    className="content"
-  >
-    <div
-      className="Accordion Accordion--close"
-    >
-      <div
-        className="Accordion__Title"
-        onClick={[Function]}
-      >
-        <div
-          className="Accordion__Title__Content"
-        >
-          <span
-            className="dcl stats"
-          >
-            <div
-              className="ui sub header"
-            >
-              Accordion sub title
-            </div>
-            <div
-              className="ui header"
-            >
-              Accordion title
-            </div>
-          </span>
-        </div>
-        <div
-          className="Accordion__Title__Description"
-        >
-          <p
-            className="dg Paragraph Paragraph--secondary Paragraph--small"
-          >
-            Accordion description
-          </p>
-        </div>
-        <div
-          className="Accordion__Title__Action"
-        >
-          <svg
-            height="48"
-            viewBox="0 0 48 48"
-            width="48"
-          >
-            <g
-              fill="none"
-              fillRule="evenodd"
-              opacity=".32"
-            >
-              <path
-                d="M0 0H48V48H0z"
-              />
-              <path
-                d="M34 24L21.242 36.457c-.742.724-1.944.724-2.686 0-.741-.724-.741-1.898 0-2.623L28.628 24l-10.072-9.834c-.741-.725-.741-1.899 0-2.623.742-.724 1.944-.724 2.686 0L34 24z"
-                fill="#736E7D"
-              />
-            </g>
-          </svg>
-        </div>
-      </div>
-      <div
-        className="Accordion__Content"
-        style={
-          Object {
-            "height": 0,
-          }
-        }
-      >
-        <div>
-          <div
-            className="dg ImgFixed ImgFixed--wide"
-            style={
-              Object {
-                "backgroundColor": "transparent",
-                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/-108/-30/map.png\\")",
-                "backgroundPosition": "center center",
-                "backgroundSize": "cover",
-              }
-            }
-          >
-            <img
-              height="1"
-              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAADUlEQVR4AWNwL/ABYwAKHQIHW//QwwAAAABJRU5ErkJggg=="
-              width="2"
-            />
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-`;
-
-exports[`Storyshots Components/Accordion Without content 1`] = `
+exports[`Storyshots components/Accordion With description 1`] = `
 <div
   className="ui container"
 >
@@ -251,70 +283,51 @@ exports[`Storyshots Components/Accordion Without content 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Accordion Without content and Card 1`] = `
+exports[`Storyshots components/Accordion With stats title 1`] = `
 <div
-  className="ui card"
-  onClick={[Function]}
-  style={
-    Object {
-      "width": "100%",
-    }
-  }
+  className="ui container"
 >
   <div
-    className="content"
+    className="Accordion Accordion--close"
   >
     <div
-      className="Accordion Accordion--close"
+      className="Accordion__Title"
+      onClick={[Function]}
     >
       <div
-        className="Accordion__Title"
-        onClick={[Function]}
+        className="Accordion__Title__Content"
       >
-        <div
-          className="Accordion__Title__Content"
+        <span
+          className="dcl stats"
         >
-          <span
-            className="dcl stats"
+          <div
+            className="ui sub header"
           >
-            <div
-              className="ui sub header"
-            >
-              Accordion sub title
-            </div>
-            <div
-              className="ui header"
-            >
-              Accordion title
-            </div>
-          </span>
-        </div>
-        <div
-          className="Accordion__Title__Description"
-        >
-          <p
-            className="dg Paragraph Paragraph--secondary Paragraph--small"
+            Accordion sub title
+          </div>
+          <div
+            className="ui header"
           >
-            Accordion description
-          </p>
-        </div>
+            Accordion title
+          </div>
+        </span>
       </div>
-      <div
-        className="Accordion__Content"
-        style={
-          Object {
-            "height": 0,
-          }
+    </div>
+    <div
+      className="Accordion__Content"
+      style={
+        Object {
+          "height": 0,
         }
-      >
-        <div />
-      </div>
+      }
+    >
+      <div />
     </div>
   </div>
 </div>
 `;
 
-exports[`Storyshots Components/Carousel As progress 1`] = `
+exports[`Storyshots components/Carousel As progress 1`] = `
 <div
   style={
     Object {
@@ -484,7 +497,7 @@ exports[`Storyshots Components/Carousel As progress 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Carousel Carousel 1`] = `
+exports[`Storyshots components/Carousel Carousel 1`] = `
 <div
   style={
     Object {
@@ -654,7 +667,7 @@ exports[`Storyshots Components/Carousel Carousel 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Carousel Carousel time 1`] = `
+exports[`Storyshots components/Carousel Carousel time 1`] = `
 <div
   style={
     Object {
@@ -824,7 +837,177 @@ exports[`Storyshots Components/Carousel Carousel time 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Carousel With different height autosize 1`] = `
+exports[`Storyshots components/Carousel With dash indicators 1`] = `
+<div
+  style={
+    Object {
+      "margin": "0 auto",
+      "maxWidth": "600px",
+      "width": "90%",
+    }
+  }
+>
+  <div
+    className="Carousel dash-indicators"
+  >
+    <div
+      className="Carousel__Items"
+    >
+      <div
+        className="Carousel__Scroll"
+        onMouseEnter={[Function]}
+        onMouseLeave={[Function]}
+        onTouchEnd={[Function]}
+        onTouchMove={[Function]}
+        onTouchStart={[Function]}
+        style={
+          Object {
+            "height": undefined,
+          }
+        }
+      >
+        <div
+          className="Carousel__Item Carousel__Item--first Carousel__Item--active"
+        >
+          <div
+            className="dg ImgFixed ImgFixed--wide"
+            style={
+              Object {
+                "backgroundColor": "transparent",
+                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/25/74/map.png\\")",
+                "backgroundPosition": "center center",
+                "backgroundSize": "cover",
+              }
+            }
+          >
+            <img
+              height="1"
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAADUlEQVR4AWNwL/ABYwAKHQIHW//QwwAAAABJRU5ErkJggg=="
+              width="2"
+            />
+          </div>
+        </div>
+        <div
+          className="Carousel__Item Carousel__Item--on-right"
+        >
+          <div
+            className="dg ImgFixed ImgFixed--wide"
+            style={
+              Object {
+                "backgroundColor": "transparent",
+                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/26/9/map.png\\")",
+                "backgroundPosition": "center center",
+                "backgroundSize": "cover",
+              }
+            }
+          >
+            <img
+              height="1"
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAADUlEQVR4AWNwL/ABYwAKHQIHW//QwwAAAABJRU5ErkJggg=="
+              width="2"
+            />
+          </div>
+        </div>
+        <div
+          className="Carousel__Item Carousel__Item--on-right"
+        >
+          <div
+            className="dg ImgFixed ImgFixed--wide"
+            style={
+              Object {
+                "backgroundColor": "transparent",
+                "backgroundImage": "url(\\"https://api.decentraland.org/v1/parcels/-143/-125/map.png\\")",
+                "backgroundPosition": "center center",
+                "backgroundSize": "cover",
+              }
+            }
+          >
+            <img
+              height="1"
+              src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAIAAAABCAYAAAD0In+KAAAADUlEQVR4AWNwL/ABYwAKHQIHW//QwwAAAABJRU5ErkJggg=="
+              width="2"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      className="Carousel__List"
+    >
+      <div
+        className="active"
+        onClick={[Function]}
+      >
+        <div />
+      </div>
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        <div />
+      </div>
+      <div
+        className=""
+        onClick={[Function]}
+      >
+        <div />
+      </div>
+    </div>
+    <div
+      className="Carousel__Next"
+      onClick={[Function]}
+    >
+      <svg
+        height="48"
+        viewBox="0 0 48 48"
+        width="48"
+      >
+        <g
+          fill="none"
+          fillRule="evenodd"
+          opacity=".32"
+        >
+          <path
+            d="M0 0H48V48H0z"
+          />
+          <path
+            d="M34 24L21.242 36.457c-.742.724-1.944.724-2.686 0-.741-.724-.741-1.898 0-2.623L28.628 24l-10.072-9.834c-.741-.725-.741-1.899 0-2.623.742-.724 1.944-.724 2.686 0L34 24z"
+            fill="#736E7D"
+          />
+        </g>
+      </svg>
+    </div>
+    <div
+      className="Carousel__Prev"
+      onClick={[Function]}
+    >
+      <svg
+        height="48"
+        viewBox="0 0 48 48"
+        width="48"
+      >
+        <g
+          fill="none"
+          fillRule="evenodd"
+          opacity=".32"
+        >
+          <path
+            d="M0 0H48V48H0z"
+            transform="matrix(-1 0 0 1 48 0)"
+          />
+          <path
+            d="M34 24L21.242 36.457c-.742.724-1.944.724-2.686 0-.741-.724-.741-1.898 0-2.623L28.628 24l-10.072-9.834c-.741-.725-.741-1.899 0-2.623.742-.724 1.944-.724 2.686 0L34 24z"
+            fill="#736E7D"
+            transform="matrix(-1 0 0 1 48 0)"
+          />
+        </g>
+      </svg>
+    </div>
+  </div>
+</div>
+`;
+
+exports[`Storyshots components/Carousel With different height autosize 1`] = `
 <div
   style={
     Object {
@@ -994,7 +1177,7 @@ exports[`Storyshots Components/Carousel With different height autosize 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Carousel With different height fixed 1`] = `
+exports[`Storyshots components/Carousel With different height fixed 1`] = `
 <div
   style={
     Object {
@@ -1164,7 +1347,7 @@ exports[`Storyshots Components/Carousel With different height fixed 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Image/ImgFixed Dimensions 1`] = `
+exports[`Storyshots components/Image/ImgFixed Dimensions 1`] = `
 <div
   className="ui grid"
 >
@@ -1315,7 +1498,7 @@ exports[`Storyshots Components/Image/ImgFixed Dimensions 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Image/ImgFixed sizes 1`] = `
+exports[`Storyshots components/Image/ImgFixed sizes 1`] = `
 <div
   className="ui grid"
 >
@@ -1498,79 +1681,135 @@ exports[`Storyshots Components/Image/ImgFixed sizes 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WalletSelectorModal All providers 1`] = `
+exports[`Storyshots components/Modal/FilterContainerModal Full 1`] = `
 <div>
   <div
-    id="ID0"
+    id="modal_container_0"
   />
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WalletSelectorModal Detected providers 1`] = `
+exports[`Storyshots components/Modal/FilterContainerModal Open 1`] = `
 <div>
   <div
-    id="ID1"
+    id="modal_container_1"
   />
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WalletSelectorModal Error 1`] = `
+exports[`Storyshots components/Modal/FilterContainerModal Open with filters 1`] = `
 <div>
   <div
-    id="ID2"
+    id="modal_container_2"
   />
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WalletSelectorModal Loading 1`] = `
+exports[`Storyshots components/Modal/FilterContainerModal Open with scroll filters 1`] = `
 <div>
   <div
-    id="ID3"
+    id="modal_container_3"
   />
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WalletSelectorModal Metamask as link 1`] = `
+exports[`Storyshots components/Modal/ShareModal Share Url 1`] = `
 <div>
   <div
-    id="ID4"
+    id="modal_container_5"
   />
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WrongNetworkModal Multi Network Support 1`] = `
+exports[`Storyshots components/Modal/ShareModal Share With Thumbnail 1`] = `
 <div>
   <div
-    id="ID0"
+    id="modal_container_6"
   />
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WrongNetworkModal Switch Multi Network 1`] = `
+exports[`Storyshots components/Modal/ShareModal Share text 1`] = `
 <div>
   <div
-    id="ID1"
+    id="modal_container_4"
   />
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WrongNetworkModal Switch Network 1`] = `
+exports[`Storyshots components/Modal/WalletSelectorModal All providers 1`] = `
 <div>
   <div
-    id="ID2"
+    id="modal_container_7"
   />
 </div>
 `;
 
-exports[`Storyshots Components/Modal/WrongNetworkModal Wrong Network 1`] = `
+exports[`Storyshots components/Modal/WalletSelectorModal Detected providers 1`] = `
 <div>
   <div
-    id="ID3"
+    id="modal_container_8"
   />
 </div>
 `;
 
-exports[`Storyshots Components/User/Avatar Automatic background colors 1`] = `
+exports[`Storyshots components/Modal/WalletSelectorModal Error 1`] = `
+<div>
+  <div
+    id="modal_container_9"
+  />
+</div>
+`;
+
+exports[`Storyshots components/Modal/WalletSelectorModal Loading 1`] = `
+<div>
+  <div
+    id="modal_container_10"
+  />
+</div>
+`;
+
+exports[`Storyshots components/Modal/WalletSelectorModal Metamask as link 1`] = `
+<div>
+  <div
+    id="modal_container_11"
+  />
+</div>
+`;
+
+exports[`Storyshots components/Modal/WrongNetworkModal Multi Network Support 1`] = `
+<div>
+  <div
+    id="modal_container_12"
+  />
+</div>
+`;
+
+exports[`Storyshots components/Modal/WrongNetworkModal Switch Multi Network 1`] = `
+<div>
+  <div
+    id="modal_container_13"
+  />
+</div>
+`;
+
+exports[`Storyshots components/Modal/WrongNetworkModal Switch Network 1`] = `
+<div>
+  <div
+    id="modal_container_14"
+  />
+</div>
+`;
+
+exports[`Storyshots components/Modal/WrongNetworkModal Wrong Network 1`] = `
+<div>
+  <div
+    id="modal_container_15"
+  />
+</div>
+`;
+
+exports[`Storyshots components/User/Avatar Automatic background colors 1`] = `
 <div
   style={
     Object {
@@ -1710,7 +1949,7 @@ exports[`Storyshots Components/User/Avatar Automatic background colors 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/User/Avatar Avatar image fallback 1`] = `
+exports[`Storyshots components/User/Avatar Avatar image fallback 1`] = `
 <div
   className="ui center aligned grid"
 >
@@ -1762,7 +2001,7 @@ exports[`Storyshots Components/User/Avatar Avatar image fallback 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/User/Avatar Custom sources 1`] = `
+exports[`Storyshots components/User/Avatar Custom sources 1`] = `
 <div
   style={
     Object {
@@ -1799,7 +2038,7 @@ exports[`Storyshots Components/User/Avatar Custom sources 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/User/Avatar Loading state 1`] = `
+exports[`Storyshots components/User/Avatar Loading state 1`] = `
 <div
   style={
     Object {
@@ -1930,7 +2169,7 @@ exports[`Storyshots Components/User/Avatar Loading state 1`] = `
 </div>
 `;
 
-exports[`Storyshots Components/User/Avatar Sizes 1`] = `
+exports[`Storyshots components/User/Avatar Sizes 1`] = `
 <div
   style={
     Object {

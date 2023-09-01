@@ -42,26 +42,15 @@ jobs:
         run: npm test -- --coverage
 
       - name: coveralls
-        uses: coverallsapp/github-action@v1.1.2
+        uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: building
         run: npm run build
 
-      - name: building documents
-        run: npm run build-storybook
-
       - name: releasing
         run: npm run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
-
-      # publish to gh pages
-      - name: publishing documents
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          DEPLOY_KEY: ${{ secrets.ACTIONS_DEPLOY_KEY }}
-          PUBLISH_BRANCH: gh-pages
-          PUBLISH_DIR: ./public
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

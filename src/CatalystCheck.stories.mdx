@@ -27,20 +27,24 @@ import Catalyst from './utils/api/Catalyst'
 <Divider size="small" />
 
 export const CatalystLoader = React.memo((props) => {
-  const [comms, commsState] = useAsyncState(
-    () => Catalyst.from(props.baseUrl).getCommsStatus(),
+  const [about, aboutState] = useAsyncState(
+    () => Catalyst.getInstanceFrom(props.baseUrl).getAbout(),
+    [props.baseUrl]
+  )
+  const [stats, statsState] = useAsyncState(
+    () => Catalyst.getInstanceFrom(props.baseUrl).getStatsParcels(),
     [props.baseUrl]
   )
   const [lambdas, lambdasState] = useAsyncState(
-    () => Catalyst.from(props.baseUrl).getLambdasStatus(),
+    () => Catalyst.getInstanceFrom(props.baseUrl).getLambdasStatus(),
     [props.baseUrl]
   )
   const [content, contentState] = useAsyncState(
-    () => Catalyst.from(props.baseUrl).getContentStatus(),
+    () => Catalyst.getInstanceFrom(props.baseUrl).getContentStatus(),
     [props.baseUrl]
   )
   const [profile, profileState] = useAsyncState(
-    () => Catalyst.from(props.baseUrl).getProfile(props.user),
+    () => Catalyst.getInstanceFrom(props.baseUrl).getProfile(props.user),
     [props.user],
     { callWithTruthyDeps: true }
   )
@@ -51,15 +55,22 @@ export const CatalystLoader = React.memo((props) => {
           <div
             style={{ position: 'relative', flex: '0 0 20%', minHeight: '5rem' }}
           >
-            {commsState.loading && <Loader active />}
-            {!commsState.loading && (
+            {aboutState.loading && <Loader active />}
+            {!aboutState.loading && (
               <div style={{ paddingBottom: '16px' }}>
-                <Stats title="Catalyst">{comms?.name || 'Unknown'}</Stats>
+                <Stats title="Catalyst">
+                  {about?.configurations.realmName || 'Unknown'}
+                </Stats>
               </div>
             )}
-            {comms && (
+            {stats && stats.parcels && (
               <div style={{ paddingBottom: '16px' }}>
-                <Stats title="Users">{comms.usersCount || '0'}</Stats>
+                <Stats title="Users">
+                  {stats.parcels.reduce(
+                    (total, stat) => total + stat.peersCount,
+                    0
+                  )}
+                </Stats>
               </div>
             )}
           </div>
@@ -133,14 +144,14 @@ export const CatalystLoader = React.memo((props) => {
             <pre>{props.baseUrl}</pre>
             <div style={{ flex: 1 }} />
             <a href={props.baseUrl + `/comms/status`} target="_blank">
-              {commsState.loading && <Label>comms</Label>}
-              {commsState.error && <Label color="red">comms</Label>}
-              {comms && (
-                <Label color={commsState.time > 1000 ? 'orange' : 'green'}>
+              {aboutState.loading && <Label>comms</Label>}
+              {aboutState.error && <Label color="red">comms</Label>}
+              {about && (
+                <Label color={aboutState.time > 1000 ? 'orange' : 'green'}>
                   comms (
-                  {commsState.time > 1000
-                    ? commsState.time / 1000 + `s`
-                    : commsState.time + `ms`}
+                  {aboutState.time > 1000
+                    ? aboutState.time / 1000 + `s`
+                    : aboutState.time + `ms`}
                   )
                 </Label>
               )}

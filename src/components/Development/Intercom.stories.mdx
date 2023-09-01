@@ -1,0 +1,59 @@
+import { Meta, Canvas, Args, ArgsTable, Source } from '../Storybook'
+import { IntercomApiBase } from './Intercom'
+
+<Meta
+  title="components/Development/Intercom"
+  parameters={{
+    viewMode: 'docs',
+    previewTabs: {
+      canvas: { hidden: true },
+    },
+  }}
+/>
+
+# Intercom
+
+Automatically injects intercom (`window.Intercom`) into the global environment.
+
+See [Intercom documentation](https://developers.intercom.com/installing-intercom/docs/intercom-javascript) for more details.
+
+<Source dark language="tsx" code={`<Intercom appId={INTERCOM_APP_ID} />`} />
+
+<ArgsTable
+  rows={[
+    Args.Prop(
+      'appId',
+      'ID of your Intercom app which will indicate where to store any data',
+      {
+        type: Args.Types.String,
+        defaultValue: Args.Types.Environment('INTERCOM_APP_ID'),
+      }
+    ),
+    Args.Prop(
+      'appId',
+      'ID of your Intercom app which will indicate where to store any data',
+      {
+        type: IntercomApiBase.US,
+        defaultValue: Args.Types.Enum('IntercomApiBase', IntercomApiBase),
+      }
+    ),
+    Args.Environment('INTERCOM_APP_ID', 'Intercom app id'),
+  ]}
+/>
+
+## Locate your App ID
+
+You can find your app id in the URL of your Intercom `https://app.intercom.com/a/apps/{API_ID}`
+
+## Use with CSP (Content Security Policy)
+
+If you rely on allowlisting you will need to add the following directive:
+
+```txt
+script-src:
+  https://app.intercom.io
+  https://widget.intercom.io
+  https://js.intercomcdn.com
+```
+
+> see the [full documentaion](https://www.intercom.com/help/en/articles/3894-using-intercom-with-content-security-policy) for more details

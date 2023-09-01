@@ -1,7 +1,6 @@
 import React from 'react'
 
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
-import { Network } from '@dcl/schemas/dist/dapps/network'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import {
   UserMenu as BaseUserMenu,
@@ -16,21 +15,25 @@ import useChainId from '../../hooks/useChainId'
 import { fetchManaBalance } from '../../utils/loader/manaBalance'
 import Avatar from './Avatar'
 
+import type { Network } from '@dcl/schemas/dist/dapps/network'
+
 import './UserMenu.css'
 
 type UserMenuBalances = Partial<Record<Network, number>>
 
-export type UserMenuProps = Pick<
-  BaseUserMenuProps,
-  | 'menuItems'
-  | 'hasActivity'
-  | 'onClickProfile'
-  | 'onClickActivity'
-  | 'onClickSettings'
-> & {
-  i18n?: Partial<UserMenuI18N>
-  hideBalance?: boolean
-}
+export type UserMenuProps = Partial<
+  Pick<
+    BaseUserMenuProps,
+    | 'menuItems'
+    | 'hasActivity'
+    | 'onClickProfile'
+    | 'onClickActivity'
+    | 'onClickSettings'
+  > & {
+    i18n: Partial<UserMenuI18N>
+    hideBalance: boolean
+  }
+>
 
 export default function UserMenu(props: UserMenuProps) {
   const i18n = {
@@ -56,6 +59,7 @@ export default function UserMenu(props: UserMenuProps) {
         return { ETHEREUM, MATIC }
       }
 
+      case ChainId.ETHEREUM_SEPOLIA:
       case ChainId.ETHEREUM_GOERLI:
       case ChainId.ETHEREUM_RINKEBY:
       case ChainId.ETHEREUM_ROPSTEN: {
@@ -110,7 +114,7 @@ export default function UserMenu(props: UserMenuProps) {
         i18n={i18n}
         manaBalances={manaBalances || {}}
         avatar={(profile || undefined) as any}
-        onSignOut={() => userState.disconnect()}
+        onSignOut={userState.disconnect}
       />
     </div>
   )

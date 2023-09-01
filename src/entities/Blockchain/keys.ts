@@ -1,3 +1,4 @@
+// TODO(#323): remove on v6
 import { ChainId, getChainName } from '@dcl/schemas/dist/dapps/chain-id'
 
 import env from '../../utils/env'
@@ -7,10 +8,13 @@ import { ConnectionOptions } from './types'
 import { onceWithConnectionOptions } from './utils'
 
 const INFURA_KEYS = env('INFURA_KEYS', '')
+
+/** @deprecated */
 export const getEnvironmentKeys = once(() => {
   return INFURA_KEYS.split(',').filter(Boolean)
 })
 
+/** @deprecated */
 export function getInfuraHttp(key: string, chainId: ChainId) {
   switch (chainId) {
     case ChainId.ETHEREUM_MAINNET:
@@ -18,6 +22,7 @@ export function getInfuraHttp(key: string, chainId: ChainId) {
     case ChainId.ETHEREUM_RINKEBY:
     case ChainId.ETHEREUM_GOERLI:
     case ChainId.ETHEREUM_KOVAN:
+    case ChainId.ETHEREUM_SEPOLIA:
     case ChainId.MATIC_MAINNET:
     case ChainId.MATIC_MUMBAI:
       return `https://${getChainSubdomain(chainId)}.infura.io/v3/${key}`
@@ -30,6 +35,7 @@ export function getInfuraHttp(key: string, chainId: ChainId) {
   }
 }
 
+/** @deprecated */
 export function getInfuraWs(key: string, chainId: ChainId) {
   switch (chainId) {
     case ChainId.ETHEREUM_MAINNET:
@@ -37,6 +43,7 @@ export function getInfuraWs(key: string, chainId: ChainId) {
     case ChainId.ETHEREUM_RINKEBY:
     case ChainId.ETHEREUM_GOERLI:
     case ChainId.ETHEREUM_KOVAN:
+    case ChainId.ETHEREUM_SEPOLIA:
       return `wss://${getChainSubdomain(chainId)}.infura.io/ws/v3/${key}`
     case ChainId.MATIC_MAINNET:
     case ChainId.MATIC_MUMBAI:
@@ -49,6 +56,7 @@ export function getInfuraWs(key: string, chainId: ChainId) {
   }
 }
 
+/** @deprecated */
 function getChainSubdomain(chainId: ChainId) {
   switch (chainId) {
     case ChainId.ETHEREUM_MAINNET:
@@ -61,6 +69,8 @@ function getChainSubdomain(chainId: ChainId) {
       return 'goerli'
     case ChainId.ETHEREUM_KOVAN:
       return 'kovan'
+    case ChainId.ETHEREUM_SEPOLIA:
+      return 'sepolia'
     case ChainId.MATIC_MAINNET:
       return 'polygon-mainnet'
     case ChainId.MATIC_MUMBAI:
@@ -70,6 +80,7 @@ function getChainSubdomain(chainId: ChainId) {
   }
 }
 
+/** @deprecated */
 const getEnvironmentKeyRoundRoby = onceWithConnectionOptions(
   ({ chainId, type }: ConnectionOptions) => {
     return roundRobin(
@@ -85,5 +96,6 @@ const getEnvironmentKeyRoundRoby = onceWithConnectionOptions(
   }
 )
 
+/** @deprecated */
 export const getEnvironmentKey = (options: ConnectionOptions) =>
   getEnvironmentKeyRoundRoby(options)()

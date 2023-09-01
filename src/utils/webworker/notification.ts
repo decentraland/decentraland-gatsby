@@ -29,7 +29,7 @@ export function registerNotification(
       options.body = data.details
     }
 
-    const props = ['image', 'tag', 'icon', 'badge']
+    const props = ['image', 'tag', 'icon', 'badge'] as const
 
     for (const prop of props) {
       if (data[prop]) {

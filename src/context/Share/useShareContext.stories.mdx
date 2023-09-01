@@ -1,0 +1,60 @@
+import { useState, useMemo, useEffect } from 'react'
+import { Source, ArgsTable } from '@storybook/components'
+import { Meta, Story, Preview } from '@storybook/addon-docs'
+import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import ShareProvider from './ShareProvider'
+import { Args } from '../../components/Storybook/utils'
+import Container from '../../components/Storybook/Container'
+import useShareContext from './useShareContext'
+
+<Meta title="Context/Share/useShareContext" />
+
+# Share Hook (Context)
+
+> The _share hook context_ use the ShareProvider to provider a single instance of [`useShare`](./?path=/story/hooks-useauth--page)
+
+In order to use this hook you must include an `ShareProvider` in your `gatsby-browser.js`
+
+```tsx dark=true
+// gatsby-browser.js
+import React from 'react'
+import ReactDOM from 'react-dom'
+import ShareProvider from 'decentraland-gatsby/dist/context/Share/ShareProvider'
+
+export const wrapRootElement = ({ element }) => (
+  <ShareProvider>{element}</ShareProvider>
+)
+```
+
+After that you can use this hook in your components
+
+```tsx dark=true
+// component.jsx
+import React from 'react'
+import useShareContext from 'decentraland-gatsby/dist/context/Share/useShareContext'
+
+export function ShareExample() {
+  const [share, shareState] = useShareContext()
+
+  const shareData = () =>
+    share({
+      title: 'title',
+      url: 'https://decentraland.github.io/decentraland-gatsby/?path=/story/hooks-useshare--page',
+    })
+
+  return (
+    <div>
+      <button onClick={shareData}>Share Data</button>
+      <pre>{JSON.stringify(shareState.data, null, 2)}</pre>
+    </div>
+  )
+}
+```
+
+Read the [full documentation](./?path=/story/hooks-useshare--page)
+
+## Related hooks
+
+- [`useShare`](./?path=/story/hooks-useshare--page): allows user to share in desktop and mobile
+- [`ShareModa`](./?path=/story/components-modal-sharemodal--share-url): modal to show with share in desktop

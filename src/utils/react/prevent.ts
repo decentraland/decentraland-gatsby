@@ -1,3 +1,4 @@
+// TODO(#323): remove on v6, move it into a hook: usePreventedCallback((e: React.MouseEvent<any>) => any)
 import React from 'react'
 
 export type Handle = (e: React.MouseEvent<any>, ...extra: any[]) => void

@@ -14,6 +14,7 @@ export type CodeProps = React.HTMLProps<HTMLPreElement> &
   React.HTMLProps<HTMLSpanElement> & {
     inline?: boolean
     note?: React.ReactNode
+    preview?: React.ReactNode
     copy?: boolean
     language?: 'json' | 'typescript' | 'javascript' | string
   }
@@ -24,6 +25,7 @@ export default React.memo(function Code({
   note,
   copy,
   value,
+  preview,
   language,
   ...props
 }: CodeProps) {
@@ -39,12 +41,14 @@ export default React.memo(function Code({
         'Code',
         !!note && 'Code--with-note',
         !!copy && 'Code--with-copy',
+        !!preview && 'Code--with-preview',
         !inline && 'Code--block',
         inline && 'Code--inline',
         props.className,
       ])}
     >
       {!inline && note && <div className={'Code__Note'}>{note}</div>}
+      {!inline && preview && <div className="Code__Preview">{preview}</div>}
       {!language && <pre>{children ?? value}</pre>}
       {language && (
         <Highlight className={language}>{children ?? value}</Highlight>

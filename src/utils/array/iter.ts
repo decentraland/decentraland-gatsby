@@ -1,3 +1,5 @@
+// TODO(#323): remove on v6, use radash iterate instead https://radash-docs.vercel.app/docs/array-iterate
+/** @deprecated use radash iterate instead https://radash-docs.vercel.app/docs/array-iterate  */
 export default function iter<T>(
   amount: number,
   map: (currentIndex: number, maxIndex: number) => T

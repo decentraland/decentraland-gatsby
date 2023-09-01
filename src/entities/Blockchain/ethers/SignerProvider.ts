@@ -1,7 +1,7 @@
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { signTypedData_v4 } from 'eth-sig-util'
 
-import { getEnvironmentKey } from '../keys'
+import { getRPCUrl } from '../utils'
 
 import type { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import type { Wallet } from '@ethersproject/wallet'
@@ -12,7 +12,7 @@ export default class SignerProvider extends JsonRpcProvider {
   constructor(wallet: Wallet, chainId: ChainId) {
     super(
       {
-        url: getEnvironmentKey({ chainId, type: 'https' }),
+        url: getRPCUrl(chainId),
         headers: { Referer: 'https://decentraland.org' },
       },
       chainId

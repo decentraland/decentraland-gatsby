@@ -1,6 +1,6 @@
-import { Request } from 'express'
-
 import RequestError from './error'
+
+import type { Request } from 'express'
 
 export type ParamOptions = {
   validator: (value: any) => boolean
@@ -47,6 +47,7 @@ export function num(value: any): number | null {
   return null
 }
 
+/** @deprecated */
 export function bool(value: any): boolean | null {
   switch (value) {
     case 1:
@@ -70,6 +71,7 @@ export function bool(value: any): boolean | null {
   }
 }
 
+/** @deprecated */
 export function number(value: any): number | null {
   if (value === '' || value === undefined || value === null) {
     return null
@@ -84,6 +86,7 @@ export function number(value: any): number | null {
   return parsed
 }
 
+/** @deprecated */
 export function integer(value: any): number | null {
   const parsed = number(value)
 

@@ -1,10 +1,12 @@
 name: Pull Request
 
-
 on:
   pull_request:
-    # The branches below must be a subset of the branches above
-    branches: [ master ]
+    branches:
+      - master
+    types:
+      - opened
+      - synchronize
 
 jobs:
 
@@ -42,8 +44,10 @@ jobs:
       - name: testing
         run: npm test -- --coverage
 
+      - name: coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: building
         run: npm run build
-
-      - name: building documents
-        run: npm run build-storybook

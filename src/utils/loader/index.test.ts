@@ -27,7 +27,7 @@ describe('fetchEnsBalance', () => {
 describe('fetchLandBalance', () => {
   test('should load ens balance', async () => {
     const balance = await fetchLandBalance(
-      '0x4eac6325e1dbf1ac90434d39766e164dca71139e',
+      '0x5188e308fee25ac49c10f9fd9270d953c4822ce5',
       ChainId.ETHEREUM_MAINNET
     )
     expect(balance).toBeGreaterThan(0)
@@ -37,7 +37,7 @@ describe('fetchLandBalance', () => {
 describe('fetchEstateBalance', () => {
   test('should load ens balance', async () => {
     const [estateBalance, landBalance] = await fetchEstateBalance(
-      '0x4eac6325e1dbf1ac90434d39766e164dca71139e',
+      '0x5188e308fee25ac49c10f9fd9270d953c4822ce5',
       ChainId.ETHEREUM_MAINNET
     )
     expect(estateBalance).toBeGreaterThan(0)

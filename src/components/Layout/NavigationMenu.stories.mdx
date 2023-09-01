@@ -1,0 +1,153 @@
+import { Meta, Story, Canvas } from '@storybook/addon-docs'
+import { Tabs } from 'decentraland-ui/dist/components/Tabs/Tabs'
+import NavigationMenu from './NavigationMenu'
+import SearchInput from '../Form/SearchInput'
+import Divider from '../Text/Divider'
+import IntlStorybookProvider from '../Storybook/IntlStorybookProvider'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+
+<Meta title="components/Layout/Menu" />
+
+<Canvas isExpanded>
+  <Story name="Basic">
+    <IntlStorybookProvider>
+      <NavigationMenu
+        leftMenu={
+          <>
+            <NavigationMenu.Item
+              active={true}
+              href="https://events.decentraland.org/"
+            >
+              Events
+            </NavigationMenu.Item>
+            <NavigationMenu.Item
+              active={false}
+              href="https://market.decentraland.org/"
+            >
+              Market
+            </NavigationMenu.Item>
+            <NavigationMenu.Item
+              active={false}
+              href="https://docs.decentraland.org/"
+            >
+              Docs
+            </NavigationMenu.Item>
+          </>
+        }
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Canvas isExpanded>
+  <Story name="Navigation with actions">
+    <IntlStorybookProvider>
+      <NavigationMenu
+        isMobile={false}
+        isFullScreen={true}
+        leftMenu={
+          <>
+            <NavigationMenu.Item
+              active={true}
+              href="https://events.decentraland.org/"
+            >
+              Events
+            </NavigationMenu.Item>
+            <NavigationMenu.Item
+              active={false}
+              href="https://market.decentraland.org/"
+            >
+              Market
+            </NavigationMenu.Item>
+            <NavigationMenu.Item
+              active={false}
+              href="https://docs.decentraland.org/"
+            >
+              Docs
+            </NavigationMenu.Item>
+          </>
+        }
+        rightMenu={
+          <>
+            <SearchInput />
+            <Button primary size="small" onClick={console.log}>
+              Action
+            </Button>
+          </>
+        }
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story name="NavigationMenu Mobile">
+    <IntlStorybookProvider>
+      <NavigationMenu
+        isMobile={true}
+        leftMenu={
+          <>
+            <NavigationMenu.Item
+              active={true}
+              href="https://events.decentraland.org/"
+            >
+              Events
+            </NavigationMenu.Item>
+            <NavigationMenu.Item
+              active={false}
+              href="https://market.decentraland.org/"
+            >
+              Market
+            </NavigationMenu.Item>
+            <NavigationMenu.Item
+              active={false}
+              href="https://docs.decentraland.org/"
+            >
+              Docs
+            </NavigationMenu.Item>
+          </>
+        }
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story name="NavigationMenu Mobile With Actions">
+    <IntlStorybookProvider>
+      <NavigationMenu
+        isMobile={true}
+        leftMenu={
+          <>
+            <NavigationMenu.Item
+              active={true}
+              href="https://events.decentraland.org/"
+            >
+              Events
+            </NavigationMenu.Item>
+            <NavigationMenu.Item
+              active={false}
+              href="https://market.decentraland.org/"
+            >
+              Market
+            </NavigationMenu.Item>
+            <NavigationMenu.Item
+              active={false}
+              href="https://docs.decentraland.org/"
+            >
+              Docs
+            </NavigationMenu.Item>
+          </>
+        }
+        rightMenu={
+          <>
+            <SearchInput />
+            <Button primary size="small" onClick={console.log}>
+              Action
+            </Button>
+          </>
+        }
+      />
+    </IntlStorybookProvider>
+  </Story>
+</Canvas>

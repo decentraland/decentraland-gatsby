@@ -1,3 +1,4 @@
+// TODO(#323): remove on v6
 import { resolve } from 'path'
 
 import { Router } from 'express'
@@ -23,13 +24,20 @@ function filesystemOptions(
   }
 }
 
+/**
+ * @deprecated use filesytem2/* instead
+ */
 export default function filesystem(
   path: string,
-  notFoundPage: string | Partial<FilesystemHandleOptions>
+  notFoundPage: string | Partial<FilesystemHandleOptions>,
+  options?: {
+    defaultHeaders?: Record<string, string>
+    api?: boolean
+  }
 ) {
   const router = Router()
-  const options = filesystemOptions(notFoundPage)
-  const indexFile = '/' + options.indexFile
+  const fileSystemOptions = filesystemOptions(notFoundPage)
+  const indexFile = '/' + fileSystemOptions.indexFile
   const cwd = resolve(process.cwd(), path)
   const files = Array.from(
     new Set(glob.sync('**/*', { cwd, nodir: true })).values()
@@ -41,12 +49,12 @@ export default function filesystem(
     if (webPath.endsWith(indexFile)) {
       const basePath = webPath.slice(0, -10)
       router.get(webPath, redirect(basePath)) // redirect /en/index.html => /en/
-      router.get(basePath, file(resolve(cwd, filePath))) // load /en/index.html on /en/
+      router.get(basePath, file(resolve(cwd, filePath), 200, options)) // load /en/index.html on /en/
     } else {
-      router.get(webPath, file(resolve(cwd, filePath))) // load /en/other.html
+      router.get(webPath, file(resolve(cwd, filePath), 200, options)) // load /en/other.html
     }
   }
 
-  router.use(file(resolve(cwd, options.notFoundFile), 404))
+  router.use(file(resolve(cwd, fileSystemOptions.notFoundFile), 404, options))
   return router
 }

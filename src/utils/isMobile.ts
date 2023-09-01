@@ -1,7 +1,9 @@
+// TODO(#323): remove on v6, use hook useUserAgentData
 import getUserAgent from './dom/getUserAgent'
 
 /**
  * Detect mobile browser
+ * @deprecated use useUserAgentData instead
  * @see http://detectmobilebrowsers.com/
  */
 export default function isMobile(userAgent: string = getUserAgent()) {
