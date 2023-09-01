@@ -27,6 +27,7 @@ export type WalletSelectorProps = {
   providerType?: ProviderType
   error?: string | null
   availableProviders?: ProviderType[]
+  disabledWalletConnect2?: boolean
   mountNode?: any
   onConnect?: (providerType: ProviderType, chainId: ChainId) => void
   onClose?: () => void
@@ -78,8 +79,14 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
     [handleConnect]
   )
   const handleConnectWalletConnect = useCallback(
-    () => handleConnect(ProviderType.WALLET_CONNECT, getChainId()),
-    [handleConnect]
+    () =>
+      handleConnect(
+        props.disabledWalletConnect2
+          ? ProviderType.WALLET_CONNECT
+          : ProviderType.WALLET_CONNECT_V2,
+        getChainId()
+      ),
+    [handleConnect, props.disabledWalletConnect2]
   )
   const handleConnectWalletLink = useCallback(
     () => handleConnect(ProviderType.WALLET_LINK, getChainId()),

@@ -350,12 +350,31 @@ export type SceneMetadata = {
       cols: number // 1
     }
   }
-  worldConfiguration?: {
-    name: string
-    fixedAdapter?: string
-    minimapVisible?: boolean
-    skybox?: number
-  }
+  worldConfiguration?:
+    | {
+        name: string
+        dclName?: never
+        fixedAdapter?: string
+        minimapVisible?: boolean
+        skybox?: number
+        skyboxConfig?: {
+          fixedHour: number
+          textures: string[]
+        }
+        placesConfig?: {
+          optOut: boolean
+        }
+      }
+    | {
+        // old property
+        dclName: string
+        name?: never
+        fixedAdapter?: never
+        minimapVisible?: never
+        skybox?: never
+        skyboxConfig?: never
+        placesConfig?: never
+      }
 }
 
 export type ContentEntity = {
@@ -407,6 +426,19 @@ export type ContentDeploymentProfile = ContentDeploymentBase & {
 
 export type WearableMetadata = {
   id: string
+  name: string
+  description: string
+  collectionAddress: string
+  rarity: string
+  image: string
+  metrics: {
+    triangles: number
+    materials: number
+    textures: number
+    meshes: number
+    bodies: number
+    entities: number
+  }
   thumbnail: string
   data: {
     tags: string[]

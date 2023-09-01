@@ -5,7 +5,7 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import type { PageProps } from 'gatsby'
 
@@ -21,6 +21,8 @@ import {
 
 import useAuthContext from '../../context/Auth/useAuthContext'
 import { getSupportedChainIds } from '../../context/Auth/utils'
+import { useFeatureFlagContext } from '../../context/FeatureFlag'
+import { DappsFeatureFlags } from '../../context/FeatureFlag/types'
 import useShareContext from '../../context/Share/useShareContext'
 import useTrackLinkContext from '../../context/Track/useTrackLinkContext'
 import useWindowScroll from '../../hooks/useWindowScroll'
@@ -32,6 +34,7 @@ import ShareModal from '../Modal/ShareModal'
 import WalletSelectorModal from '../Modal/WalletSelectorModal'
 import WrongNetworkModal from '../Modal/WrongNetworkModal'
 
+import type { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import type { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import type { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Dropdown'
 
@@ -61,6 +64,7 @@ export default function Layout({
   const locales = pageContext?.intl?.locales || ['en']
   const [, state] = useAuthContext()
   const [, shareState] = useShareContext()
+  const [ff] = useFeatureFlagContext()
   const scroll = useWindowScroll() || null
   const isScrolled = scroll.scrollY.get() > 0
 
@@ -89,6 +93,17 @@ export default function Layout({
     },
     [props.onClickMenuOption]
   )
+
+  const handleSwitchNetwork = useCallback(
+    (chainId: ChainId) => state.switchTo(chainId),
+    [state]
+  )
+  const handleConnect = useCallback(
+    (providerType: ProviderType, chainId: ChainId) =>
+      state.connect(providerType, chainId),
+    [state]
+  )
+  const handleCancelConnect = useCallback(() => state.select(false), [state])
 
   return (
     <>
@@ -132,18 +147,17 @@ export default function Layout({
       <WrongNetworkModal
         currentNetwork={state.chainId}
         expectedNetwork={getSupportedChainIds()}
-        onSwitchNetwork={(chainId) => state.switchTo(chainId)}
+        onSwitchNetwork={handleSwitchNetwork}
         providerType={state.providerType}
       />
       <WalletSelectorModal
         open={state.selecting}
         loading={state.loading}
         error={state.error}
-        onConnect={(providerType, chainId) =>
-          state.connect(providerType, chainId)
-        }
+        onConnect={handleConnect}
         availableProviders={availableProviders}
-        onClose={() => state.select(false)}
+        disabledWalletConnect2={!ff.enabled(DappsFeatureFlags.WalletConnectV2)}
+        onClose={handleCancelConnect}
       />
       {!hideFooter && (
         <Footer

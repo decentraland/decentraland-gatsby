@@ -10,6 +10,8 @@ import { Args } from '../components/Storybook/utils'
 import Container from '../components/Storybook/Container'
 import Textarea from '../components/Form/Textarea'
 import Paragraph from '../components/Text/Paragraph'
+import AuthProvider from '../context/Auth/AuthProvider'
+import useAuthContext from '../context/Auth/useAuthContext'
 import useAuth from './useAuth'
 import { chains } from './useAuth.utils'
 
@@ -72,13 +74,15 @@ const [account, state] = useAuth()
 ## Connect Preview
 
 export const ConnectExample = () => {
-  const [account, state] = useAuth()
+  const [account, state] = useAuthContext()
   const [chain, setChain] = useState(ChainId.ETHEREUM_MAINNET)
   const selectChain = (_, { value }) => setChain(value)
   const connectInjected = () => state.connect(ProviderType.INJECTED, chain)
   const connectFortmatic = () => state.connect(ProviderType.FORTMATIC, chain)
   const connectWalletConnect = () =>
     state.connect(ProviderType.WALLET_CONNECT, chain)
+  const connectWalletConnect2 = () =>
+    state.connect(ProviderType.WALLET_CONNECT_V2, chain)
   const connectWalletLink = () => state.connect(ProviderType.WALLET_LINK, chain)
   const disconnect = () => state.disconnect()
   return (
@@ -155,6 +159,16 @@ export const ConnectExample = () => {
             style={{ margin: '0 .5em .5em 0' }}
             disabled={!!account}
             loading={state.loading}
+            onClick={connectWalletConnect2}
+          >
+            wallet connect 2
+          </Button>
+          <Button
+            primary
+            size="small"
+            style={{ margin: '0 .5em .5em 0' }}
+            disabled={!!account}
+            loading={state.loading}
             onClick={connectWalletConnect}
           >
             wallet connect
@@ -199,7 +213,15 @@ export const ConnectExample = () => {
   )
 }
 
-<ConnectExample />
+export const ConnectExampleWrapper = () => {
+  return (
+    <AuthProvider sso="https://id.decentraland.zone">
+      <ConnectExample />
+    </AuthProvider>
+  )
+}
+
+<ConnectExampleWrapper />
 
 ```tsx dark=true
 import React from 'react'

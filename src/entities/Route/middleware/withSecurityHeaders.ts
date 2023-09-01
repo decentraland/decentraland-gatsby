@@ -26,6 +26,7 @@ export default function withSecurityHeaders() {
         'https://*.decentraland.org',
         'https://www.google-analytics.com',
         'https://ajax.cloudflare.com',
+        'https://verify.walletconnect.com',
         // 'https://www.googletagmanager.com', disabled
         // 'https://cdn.rollbar.com',
         // 'https://a.klaviyo.com', deprecated
@@ -46,7 +47,6 @@ export default function withSecurityHeaders() {
         `worker-src 'self'`,
         `script-src ${scriptPolicies}`,
         `font-src https: data:`,
-        `prefetch-src https: data:`,
         `style-src 'unsafe-inline' https: data:`,
         `img-src https: data:`,
         `connect-src https:`,
