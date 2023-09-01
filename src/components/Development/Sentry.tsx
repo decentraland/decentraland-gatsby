@@ -1,65 +1,72 @@
-import React, { useEffect } from 'react'
-
-import {
-  BrowserOptions,
-  BrowserTracing,
-  Replay,
-  init,
-  setExtra,
-} from '@sentry/browser'
+import React from 'react'
 
 import env from '../../utils/env'
 
-export default React.memo(function Sentry({ dsn, ...props }: BrowserOptions) {
-  dsn = dsn || env('SENTRY_DSN', process.env.GATSBY_SENTRY_DSN || '')
+import type { BrowserOptions } from '@sentry/browser'
 
-  if (!dsn) {
+type SentryProps = {
+  src?: string
+} & React.ScriptHTMLAttributes<HTMLScriptElement> &
+  React.HTMLProps<HTMLScriptElement>
+
+export default React.memo(function Sentry({ src, ...props }: SentryProps) {
+  src = src || env('SENTRY_SRC', process.env.GATSBY_SENTRY_SRC || '')
+
+  if (!src) {
     console.warn(
-      `skipping Sentry init inject: dsn and GATSBY_SENTRY_DSN is missing'`
+      `skipping Sentry init inject: src and GATSBY_SENTRY_SRC is missing'`
     )
     return null
   }
 
+  const commitInfo: Record<string, string | number> = {}
+
   const COMMIT_SHA = env('COMMIT_SHA')
   if (COMMIT_SHA !== undefined) {
-    setExtra('COMMIT_SHA', COMMIT_SHA)
+    commitInfo['commit.sha'] = COMMIT_SHA
   }
 
   const COMMIT_SHORT_SHA = env('COMMIT_SHORT_SHA')
   if (COMMIT_SHORT_SHA !== undefined) {
-    setExtra('COMMIT_SHORT_SHA', COMMIT_SHORT_SHA)
+    commitInfo['commit.short_sha'] = COMMIT_SHORT_SHA
   }
 
   const COMMIT_REF_NAME = env('COMMIT_REF_NAME')
   if (COMMIT_REF_NAME !== undefined) {
-    setExtra('COMMIT_REF_NAME', COMMIT_REF_NAME)
+    commitInfo['commit.ref_name'] = COMMIT_REF_NAME
   }
 
   const COMMIT_BRANCH = env('COMMIT_BRANCH')
   if (COMMIT_BRANCH !== undefined) {
-    setExtra('COMMIT_BRANCH', COMMIT_BRANCH)
+    commitInfo['commit.branch'] = COMMIT_BRANCH
   }
 
   const COMMIT_TAG = env('COMMIT_TAG')
   if (COMMIT_TAG !== undefined) {
-    setExtra('COMMIT_TAG', COMMIT_TAG)
+    commitInfo['commit.tag'] = COMMIT_TAG
   }
 
-  useEffect(() => {
-    if (!dsn) return
+  const sentrySettings: BrowserOptions = {
+    environment: env('ENVIRONMENT', 'local'),
+    // Performance Monitoring
+    tracesSampleRate: 0.001,
+    // Session Replay
+    replaysSessionSampleRate: 0.1,
+    replaysOnErrorSampleRate: 1.0,
+  }
 
-    init({
-      environment: env('ENVIRONMENT', 'local'),
-      dsn,
-      integrations: [new BrowserTracing(), new Replay()],
-      // Performance Monitoring
-      tracesSampleRate: 0.001, // Capture 1% of the transactions
-      // Session Replay
-      replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
-      replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
-      ...props,
-    })
-  }, [dsn])
-
-  return <></>
+  return (
+    <>
+      <script
+        {...props}
+        id="__dgatsby_sentry__"
+        data-src={src}
+        data-settings={JSON.stringify(sentrySettings)}
+        data-commit={JSON.stringify(commitInfo)}
+        dangerouslySetInnerHTML={{
+          __html: `!function(){var e=window,t=document,r=t.getElementById("__dgatsby_sentry__"),a=JSON.parse(r.dataset.settings),n=JSON.parse(r.dataset.commit),s=e.Sentry;if("object"==typeof s)console.log("Sentry is already initialized");else{var s=t.createElement("script");s.type="text/javascript",s.defer=!0,s.src=r.dataset.src,s.onload=function(){e.Sentry.onLoad(function(){e.Sentry.init(a),e.Sentry.setTags(n),e.Sentry.setExtras(n)})},s.onerror=function(){console.error("Failed to load Sentry script")};var i=t.getElementsByTagName("script")[0];i.parentNode.insertBefore(s,i)}}();`,
+        }}
+      />
+    </>
+  )
 })

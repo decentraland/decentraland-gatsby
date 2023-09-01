@@ -60,7 +60,7 @@ export default function useAuth() {
         const message = `Invalid connection params: ${JSON.stringify(conn)}`
         console.error(message)
         rollbar((rollbar) => rollbar.error(message))
-        sentry((sentry) => sentry.captureMessage(message))
+        sentry((sentry) => sentry.captureMessage(message, 'error'))
         segment((analytics) =>
           analytics.track('error', {
             message,
