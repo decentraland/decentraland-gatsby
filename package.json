@@ -222,7 +222,7 @@
     "yaml": "^1.10.0"
   },
   "peerDependencies": {
-    "rollbar": "^2.26.2",
-    "@sentry/browser": "^7.64.0"
+    "@sentry/browser": "^7.64.0",
+    "rollbar": "^2.26.2"
   }
 }
