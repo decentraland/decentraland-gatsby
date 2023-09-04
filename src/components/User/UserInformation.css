@@ -38,10 +38,11 @@
   background-color: #ff9da7;
 }
 
-.dcl.new-account-wrapper{
-    font-weight: 700;
+.dcl.new-account-wrapper {
+  font-weight: 700;
 }
 
-.dcl.new-user-menu .actions .item, .dcl.new-user-menu .actions li{
-    padding: 0px 16px;
+.dcl.new-user-menu .actions .item,
+.dcl.new-user-menu .actions li {
+  padding: 0px 16px;
 }
