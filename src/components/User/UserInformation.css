@@ -1,0 +1,47 @@
+.dcl-avatar--0 .dcl.user-menu .dcl.avatar-face,
+.dcl-avatar--1 .dcl.user-menu .dcl.avatar-face {
+  background-color: #4e79a7;
+}
+
+.dcl-avatar--2 .dcl.user-menu .dcl.avatar-face,
+.dcl-avatar--3 .dcl.user-menu .dcl.avatar-face {
+  background-color: #f28e2c;
+}
+
+.dcl-avatar--4 .dcl.user-menu .dcl.avatar-face,
+.dcl-avatar--5 .dcl.user-menu .dcl.avatar-face {
+  background-color: #e15759;
+}
+
+.dcl-avatar--6 .dcl.user-menu .dcl.avatar-face,
+.dcl-avatar--7 .dcl.user-menu .dcl.avatar-face {
+  background-color: #76b7b2;
+}
+
+.dcl-avatar--8 .dcl.user-menu .dcl.avatar-face,
+.dcl-avatar--9 .dcl.user-menu .dcl.avatar-face {
+  background-color: #59a14f;
+}
+
+.dcl-avatar--a .dcl.user-menu .dcl.avatar-face,
+.dcl-avatar--b .dcl.user-menu .dcl.avatar-face {
+  background-color: #edc949;
+}
+
+.dcl-avatar--c .dcl.user-menu .dcl.avatar-face,
+.dcl-avatar--d .dcl.user-menu .dcl.avatar-face {
+  background-color: #af7aa1;
+}
+
+.dcl-avatar--e .dcl.user-menu .dcl.avatar-face,
+.dcl-avatar--f .dcl.user-menu .dcl.avatar-face {
+  background-color: #ff9da7;
+}
+
+.dcl.new-account-wrapper{
+    font-weight: 700;
+}
+
+.dcl.new-user-menu .actions .item, .dcl.new-user-menu .actions li{
+    padding: 0px 16px;
+}

@@ -17,11 +17,11 @@ import Avatar from './Avatar'
 
 import type { Network } from '@dcl/schemas/dist/dapps/network'
 
-import './UserMenu.css'
+import './UserInformation.css'
 
 type UserMenuBalances = Partial<Record<Network, number>>
 
-export type UserMenuProps = Partial<
+export type UserInformationProps = Partial<
   Pick<
     BaseUserMenuProps,
     'hasActivity' | 'onClickProfile' | 'onClickActivity' | 'onClickSettings'
@@ -31,7 +31,7 @@ export type UserMenuProps = Partial<
   }
 >
 
-export default function UserInformation(props: UserMenuProps) {
+export default function UserInformation(props: UserInformationProps) {
   const i18n = {
     ...(BaseUserMenu.defaultProps.i18n as UserInformationComponentI18N),
     ...props.i18n,
@@ -90,6 +90,7 @@ export default function UserInformation(props: UserMenuProps) {
     return (
       <div>
         <Button
+          primary
           size="small"
           loading={loading}
           disabled={loading}
