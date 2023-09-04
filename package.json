@@ -1,6 +1,6 @@
 {
   "name": "decentraland-gatsby",
-  "version": "0.0.0-development",
+  "version": "0.0.1-development",
   "description": "Common Gastby components",
   "main": "dist/index.js",
   "engines": {
@@ -176,7 +176,7 @@
     "ddos": "^0.2.1",
     "decentraland-commons": "^5.1.0",
     "decentraland-crypto-middleware": "^1.0.2",
-    "decentraland-dapps": "^16.1.0",
+    "decentraland-dapps": "^16.3.0",
     "decentraland-server": "^3.0.0",
     "eth-sig-util": "^3.0.1",
     "express": "^4.17.1",
@@ -222,7 +222,7 @@
     "yaml": "^1.10.0"
   },
   "peerDependencies": {
-    "rollbar": "^2.26.2",
-    "@sentry/browser": "^7.64.0"
+    "@sentry/browser": "^7.64.0",
+    "rollbar": "^2.26.2"
   }
 }
