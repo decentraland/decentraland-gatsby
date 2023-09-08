@@ -20,7 +20,7 @@ If you are using node 16 you may need to install `isomorphic-fetch` in order to 
 and imported in your `src/server.ts`
 
 ```typescript
-  import 'isomorphic-fetch'
+import 'isomorphic-fetch'
 ```
 
 ## Start project

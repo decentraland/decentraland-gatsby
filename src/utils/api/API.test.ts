@@ -191,15 +191,11 @@ describe('utils/api/API', () => {
 
     test('.fetch(): http get as default method', async () => {
       const mock = jest.fn(fetch)
-      const api = new API(HTTPBIN_ENDPOINT)
-        .setFetcher(mock)
+      const api = new API(HTTPBIN_ENDPOINT).setFetcher(mock)
       mock.mockResolvedValue(new Response('{}', { status: 200 }))
       await api.fetch('/anything')
       expect(mock.mock.calls.length).toBe(1)
-      expect(mock.mock.calls[0]).toEqual([
-        'https://httpbin.org/anything',
-        {}
-      ])
+      expect(mock.mock.calls[0]).toEqual(['https://httpbin.org/anything', {}])
     })
 
     for (const method of [
@@ -213,15 +209,13 @@ describe('utils/api/API', () => {
     ]) {
       test(`.fetch(): http ${method} method`, async () => {
         const mock = jest.fn(fetch)
-        const api = new API(HTTPBIN_ENDPOINT)
-          .setFetcher(mock)
-        mock.mockResolvedValue(new Response('{}', { status: 200 })
-        )
+        const api = new API(HTTPBIN_ENDPOINT).setFetcher(mock)
+        mock.mockResolvedValue(new Response('{}', { status: 200 }))
         await api.fetch('/anything', api.options().method(method))
         expect(mock.mock.calls.length).toBe(1)
         expect(mock.mock.calls[0]).toEqual([
           'https://httpbin.org/anything',
-          { method }
+          { method },
         ])
       })
     }

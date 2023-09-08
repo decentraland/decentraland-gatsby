@@ -1,13 +1,14 @@
-module.exports = {
+/** @type {import('jest').Config} */
+const config = {
   globals: {
     fetch: global.fetch,
     Response: global.Response,
     Request: global.Request,
     Headers: global.Headers,
   },
+
   testEnvironment: 'node',
   setupFilesAfterEnv: ['./jest.setup.js'],
-  setupFiles: ['<rootDir>/src/storyshots.setup.ts'],
   roots: ['<rootDir>/src/'],
   transform: {
     '^.+\\.[tj]sx?$': 'ts-jest',
@@ -26,3 +27,5 @@ module.exports = {
     'storybook-static',
   ],
 }
+
+module.exports = config
