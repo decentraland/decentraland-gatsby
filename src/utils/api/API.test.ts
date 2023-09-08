@@ -1,4 +1,3 @@
-import fetch from '../../entities/Development/fetch.test'
 import env from '../env'
 import API from './API'
 import '../../entities/Development/logger.test'
@@ -191,36 +190,16 @@ describe('utils/api/API', () => {
     })
 
     test('.fetch(): http get as default method', async () => {
+      const mock = jest.fn(fetch)
       const api = new API(HTTPBIN_ENDPOINT)
-      fetch.once(
-        'https://httpbin.org/anything',
-        new Response('{}', { status: 200 })
-      )
+        .setFetcher(mock)
+      mock.mockResolvedValue(new Response('{}', { status: 200 }))
       await api.fetch('/anything')
-      expect(fetch.lastUrl()).toBe('https://httpbin.org/anything')
-      expect(fetch.lastOptions()).toEqual({})
-    })
-
-    test('.fetch(): http get method', async () => {
-      const api = new API(HTTPBIN_ENDPOINT)
-      fetch.once(
+      expect(mock.mock.calls.length).toBe(1)
+      expect(mock.mock.calls[0]).toEqual([
         'https://httpbin.org/anything',
-        new Response('{}', { status: 200 })
-      )
-      await api.fetch('/anything', api.options().method('get'))
-      expect(fetch.lastUrl()).toBe('https://httpbin.org/anything')
-      expect(fetch.lastOptions()).toEqual({ method: 'get' })
-    })
-
-    test('.fetch(): http delete method', async () => {
-      const api = new API(HTTPBIN_ENDPOINT)
-      fetch.once(
-        'https://httpbin.org/anything',
-        new Response('{}', { status: 200 })
-      )
-      await api.fetch('/anything', api.options().method('delete'))
-      expect(fetch.lastUrl()).toBe('https://httpbin.org/anything')
-      expect(fetch.lastOptions()).toEqual({ method: 'delete' })
+        {}
+      ])
     })
 
     for (const method of [
@@ -233,14 +212,17 @@ describe('utils/api/API', () => {
       'options',
     ]) {
       test(`.fetch(): http ${method} method`, async () => {
+        const mock = jest.fn(fetch)
         const api = new API(HTTPBIN_ENDPOINT)
-        fetch.once(
-          'https://httpbin.org/anything',
-          new Response('{}', { status: 200 })
+          .setFetcher(mock)
+        mock.mockResolvedValue(new Response('{}', { status: 200 })
         )
         await api.fetch('/anything', api.options().method(method))
-        expect(fetch.lastUrl()).toBe('https://httpbin.org/anything')
-        expect(fetch.lastOptions()).toEqual({ method })
+        expect(mock.mock.calls.length).toBe(1)
+        expect(mock.mock.calls[0]).toEqual([
+          'https://httpbin.org/anything',
+          { method }
+        ])
       })
     }
   })

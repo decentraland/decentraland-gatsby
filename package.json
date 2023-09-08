@@ -35,34 +35,6 @@
     "type": "git",
     "url": "git+https://github.com/decentraland/decentraland-growth-ui.git"
   },
-  "jest": {
-    "testEnvironment": "node",
-    "setupFilesAfterEnv": [
-      "./jest.setup.js"
-    ],
-    "setupFiles": [
-      "<rootDir>/src/storyshots.setup.ts"
-    ],
-    "roots": [
-      "<rootDir>/src/"
-    ],
-    "transform": {
-      "^.+\\.[tj]sx?$": "./jest.transform.js",
-      "^.+\\.mdx?$": "@storybook/addon-docs/jest-transform-mdx"
-    },
-    "moduleNameMapper": {
-      "\\.(css|less|sass|scss|gif|ttf|eot|svg)$": "jest-transform-stub"
-    },
-    "coveragePathIgnorePatterns": [
-      "/node_modules/",
-      ".github",
-      ".husky",
-      ".storybook",
-      "docs",
-      "static",
-      "storybook-static"
-    ]
-  },
   "author": "",
   "license": "MIT",
   "release": {
@@ -94,7 +66,6 @@
     "@types/analytics-node": "^3.1.9",
     "@types/flat": "^5.0.2",
     "@types/html-escaper": "^3.0.0",
-    "@types/isomorphic-fetch": "0.0.35",
     "@types/jest": "^26.0.24",
     "@types/node": "^16.11.6",
     "@types/react-dom": "^17.0.11",
@@ -180,7 +151,6 @@
     "decentraland-server": "^3.0.0",
     "eth-sig-util": "^3.0.1",
     "express": "^4.17.1",
-    "fetch-mock": "^9.11.0",
     "flat": "^5.0.2",
     "framer-motion": "^6.0.0",
     "gatsby": "4.23.0",
@@ -190,7 +160,6 @@
     "html-escaper": "^3.0.3",
     "htmlmin": "0.0.7",
     "http-proxy-middleware": "^2.0.6",
-    "isomorphic-fetch": "^3.0.0",
     "juice": "^8.0.0",
     "lodash": "^4.17.21",
     "mime": "^3.0.0",
@@ -222,7 +191,7 @@
     "yaml": "^1.10.0"
   },
   "peerDependencies": {
-    "rollbar": "^2.26.2",
-    "@sentry/browser": "^7.64.0"
+    "@sentry/browser": "^7.64.0",
+    "rollbar": "^2.26.2"
   }
 }
