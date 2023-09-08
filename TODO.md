@@ -57,4 +57,4 @@
 | [src/utils/tx/storage.ts](src/utils/tx/storage.ts#L12) | [#323](https://github.com/decentraland/decentraland-gatsby/issues/323) | remove on v6, use radash replaceOrAppend instead https://radash-docs.vercel.app/docs/array-replace-or-append |
 | [src/entities/Route/routes/file.ts](src/entities/Route/routes/file.ts#L1) | [#323](https://github.com/decentraland/decentraland-gatsby/issues/323) | remove on v6 |
 | [src/entities/Route/routes/filesystem.ts](src/entities/Route/routes/filesystem.ts#L1) | [#323](https://github.com/decentraland/decentraland-gatsby/issues/323) | remove on v6 |
-
+  

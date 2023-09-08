@@ -20,7 +20,7 @@ module.exports = {
   addons: [
     '@storybook/addon-actions',
     '@storybook/addon-links',
-    '@storybook/addon-postcss',
+    // '@storybook/addon-postcss',
     {
       name: '@storybook/addon-docs',
       options: {
