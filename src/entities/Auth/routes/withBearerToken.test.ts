@@ -11,7 +11,7 @@ const withEmptyAuthOptional = withBearerToken({ tokens: [], optional: true })
 
 test(`should fail if the request doesn't have an Authorization header`, async () => {
   const request = new Request('/')
-  expect(async () => withAuth({ request })).rejects.toThrowError()
+  expect(async () => withAuth({ request })).rejects.toThrow()
 })
 
 test(`should fail if the request doesn't use and Bearer autorization`, async () => {
@@ -19,7 +19,7 @@ test(`should fail if the request doesn't use and Bearer autorization`, async () 
     headers: { authorization: 'Basic user:12345' },
   })
 
-  expect(async () => withAuth({ request })).rejects.toThrowError()
+  expect(async () => withAuth({ request })).rejects.toThrow()
 })
 
 test(`should fail if the request doesn't use one of the token in params`, async () => {
@@ -27,7 +27,7 @@ test(`should fail if the request doesn't use one of the token in params`, async 
     headers: { authorization: 'Bearer ' + uid(24) },
   })
 
-  expect(async () => withAuth({ request })).rejects.toThrowError()
+  expect(async () => withAuth({ request })).rejects.toThrow()
 })
 
 test(`should returns the token used on the authorization`, async () => {
@@ -65,15 +65,11 @@ test(`should always fails if tokens is empty`, async () => {
     headers: { authorization: 'Bearer ' + uid(24) },
   })
 
-  expect(async () =>
-    withEmptyAuth({ request: unauthorized })
-  ).rejects.toThrowError()
+  expect(async () => withEmptyAuth({ request: unauthorized })).rejects.toThrow()
   expect(async () =>
     withEmptyAuth({ request: invalidAutorization })
-  ).rejects.toThrowError()
-  expect(async () =>
-    withEmptyAuth({ request: invalidToken })
-  ).rejects.toThrowError()
+  ).rejects.toThrow()
+  expect(async () => withEmptyAuth({ request: invalidToken })).rejects.toThrow()
 })
 
 test(`should always returns null if tokens is empty but is optional`, async () => {

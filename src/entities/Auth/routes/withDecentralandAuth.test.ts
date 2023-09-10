@@ -24,8 +24,8 @@ describe(`withAuth`, () => {
   test(`should fail for unauthenticated requests`, async () => {
     const request = new Request('/')
     const logger = new Logger({}, { disabled: true })
-    await expect(() => withAuth({ request, logger })).rejects.toThrowError(
-      new Error('Invalid Auth Chain')
+    await expect(() => withAuth({ request, logger })).rejects.toThrow(
+      'Invalid Auth Chain'
     )
   })
 

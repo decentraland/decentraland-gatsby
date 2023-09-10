@@ -40,7 +40,7 @@ describe(`Model.createMany`, () => {
   test(`should fail if receive a non word character as key`, async () => {
     await expect(() =>
       Model.createMany<any>([{ 'invalid field': 123 }])
-    ).rejects.toThrowError()
+    ).rejects.toThrow()
     expect(namedRowCount.mock.calls.length).toBe(0)
     expect(namedQuery.mock.calls.length).toBe(0)
   })
@@ -75,16 +75,16 @@ describe(`Model.updateTo`, () => {
   test(`should fail if receive a non word character as key`, async () => {
     await expect(() =>
       Model.updateTo<any>({ 'invalid field': 123 }, { valid_key: 123 })
-    ).rejects.toThrowError()
+    ).rejects.toThrow()
     await expect(() =>
       Model.updateTo<any>({ valid_key: 123 }, { 'invalid field': 123 })
-    ).rejects.toThrowError()
+    ).rejects.toThrow()
     expect(namedRowCount.mock.calls.length).toBe(0)
     expect(namedQuery.mock.calls.length).toBe(0)
   })
 
   test(`should fail if receive an empty condition`, async () => {
-    await expect(() => Model.updateTo<any>({}, {})).rejects.toThrowError()
+    await expect(() => Model.updateTo<any>({}, {})).rejects.toThrow()
     expect(namedRowCount.mock.calls.length).toBe(0)
     expect(namedQuery.mock.calls.length).toBe(0)
   })
@@ -135,16 +135,16 @@ describe(`Model.updateMany`, () => {
   test(`should fail if receive a non word character as key`, async () => {
     await expect(() =>
       Model.updateMany<any>([{ 'invalid field': 123 }], ['valid_key'])
-    ).rejects.toThrowError()
+    ).rejects.toThrow()
     await expect(() =>
       Model.updateMany<any>([{ valid_key: 123 }], ['invalid field'])
-    ).rejects.toThrowError()
+    ).rejects.toThrow()
     expect(namedRowCount.mock.calls.length).toBe(0)
     expect(namedQuery.mock.calls.length).toBe(0)
   })
 
   test(`should fails if doesn't receive any key`, async () => {
-    await expect(() => Model.updateMany<any>([{}], [])).rejects.toThrowError()
+    await expect(() => Model.updateMany<any>([{}], [])).rejects.toThrow()
     expect(namedRowCount.mock.calls.length).toBe(0)
     expect(namedQuery.mock.calls.length).toBe(0)
   })
