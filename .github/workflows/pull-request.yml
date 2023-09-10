@@ -10,6 +10,15 @@ on:
 
 jobs:
 
+  bun:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - uses: actions/checkout@v3
+      - uses: oven-sh/setup-bun@v1
+      - run: bun install
+      - run: bun test
+
   node:
     runs-on: ubuntu-20.04
 
