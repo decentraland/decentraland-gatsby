@@ -102,11 +102,7 @@ update/create `postcss.config.js`
 
 ```js
 module.exports = {
-  plugins: [
-    require('autoprefixer'),
-    require('cssnano'),
-    require('postcss-svg'),
-  ],
+  plugins: [require('autoprefixer')],
 }
 ```
 
