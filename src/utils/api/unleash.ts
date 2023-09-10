@@ -2,7 +2,6 @@ import isEthereumAddress from 'validator/lib/isEthereumAddress'
 
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
-import 'isomorphic-fetch'
 import sentry from '../development/sentry'
 
 export type FeatureFlagsResponse = {

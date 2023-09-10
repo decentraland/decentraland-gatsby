@@ -20,7 +20,7 @@ jobs:
         run: >
           git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
 
-      - name: node.js 12
+      - name: node.js 18.8.0
         uses: actions/setup-node@v2
         with:
           node-version: 12

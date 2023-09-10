@@ -14,9 +14,6 @@ import Options, { RequestOptions } from './Options'
 
 import type { Identity } from '../auth/types'
 
-// TODO(#323): remove on v6
-import 'isomorphic-fetch'
-
 export type SearchParamValue = boolean | number | string | Date
 export type SearchParamData = Record<
   string,
@@ -29,6 +26,9 @@ export type SearchParamOptions<D extends SearchParamData = SearchParamData> =
   }>
 
 export default class API {
+  static #defaultFetcher: typeof fetch | null =
+    (typeof fetch !== 'undefined' && fetch) || null
+
   static catch<T>(prom: Promise<T>) {
     return prom.catch((err) => {
       logger.error(err)
@@ -122,10 +122,28 @@ export default class API {
 
   readonly baseUrl: string = ''
   readonly defaultOptions: Options = new Options({})
+  #fetcher = API.#defaultFetcher
+  #fetch: typeof fetch = (
+    input: RequestInfo | URL,
+    init?: RequestInit | undefined
+  ) => {
+    if (!this.#fetcher) {
+      throw new ReferenceError(
+        `fecher is not defined on API, use .setFetcher() to set it`
+      )
+    }
+
+    return this.#fetcher(input, init)
+  }
 
   constructor(baseUrl = '', defaultOptions: Options = new Options({})) {
     this.baseUrl = baseUrl || ''
     this.defaultOptions = defaultOptions
+  }
+
+  setFetcher(fetcher: typeof fetch) {
+    this.#fetch = fetcher
+    return this
   }
 
   url(path: string, query: Record<string, string> | URLSearchParams = {}) {
@@ -238,7 +256,7 @@ export default class API {
     opt = await this.signOptions(path, opt)
 
     try {
-      res = await fetch(url, opt.toObject())
+      res = await this.#fetch(url, opt.toObject())
     } catch (error) {
       throw new FetchError(url, opt.toObject(), error.message)
     }
