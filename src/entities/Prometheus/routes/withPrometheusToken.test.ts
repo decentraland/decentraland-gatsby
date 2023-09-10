@@ -17,9 +17,9 @@ test(`should fails if authorization is invalid`, async () => {
     headers: { authorization: 'Bearer ' + uid(24) },
   })
 
-  expect(withAuth({ request: unauthorized })).rejects.toThrow()
-  expect(withAuth({ request: invalidAutorization })).rejects.toThrow()
-  expect(withAuth({ request: invalidToken })).rejects.toThrow()
+  await expect(withAuth({ request: unauthorized })).rejects.toThrow()
+  await expect(withAuth({ request: invalidAutorization })).rejects.toThrow()
+  await expect(withAuth({ request: invalidToken })).rejects.toThrow()
 })
 
 test(`shoudl return the PROMETHEUS_BEARER_TOKEN if the token is present in headers`, async () => {
