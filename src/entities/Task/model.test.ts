@@ -329,7 +329,7 @@ describe(`src/entities/Task/model`, () => {
         rowCount: 0,
       })
 
-      await TaskModel.complete([])
+      await TaskModel.completeTasks([])
       expect(rawQuery.mock.calls.length).toEqual(initial)
     })
 
@@ -342,7 +342,7 @@ describe(`src/entities/Task/model`, () => {
         rowCount: 0,
       })
 
-      await TaskModel.complete([
+      await TaskModel.completeTasks([
         { id: randomUUID() } as any,
         { id: randomUUID() } as any,
         { id: randomUUID() } as any,
