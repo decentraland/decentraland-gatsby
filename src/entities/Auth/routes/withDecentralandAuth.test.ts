@@ -38,8 +38,8 @@ describe(`withAuth`, () => {
       timestamp: Time.utc().subtract(100, 'years').getTime(),
     })
 
-    await expect(() => withAuth({ request, logger })).rejects.toThrowError(
-      new Error('Expired signature')
+    await expect(() => withAuth({ request, logger })).rejects.toThrow(
+      'Expired signature'
     )
   })
 
