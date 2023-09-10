@@ -38,7 +38,7 @@ describe(`Model.createOne`, () => {
 
 describe(`Model.createMany`, () => {
   test(`should fail if receive a non word character as key`, async () => {
-    await expect(() =>
+    await expect(
       Model.createMany<any>([{ 'invalid field': 123 }])
     ).rejects.toThrow()
     expect(namedRowCount.mock.calls.length).toBe(0)
@@ -73,10 +73,10 @@ describe(`Model.createMany`, () => {
 
 describe(`Model.updateTo`, () => {
   test(`should fail if receive a non word character as key`, async () => {
-    await expect(() =>
+    await expect(
       Model.updateTo<any>({ 'invalid field': 123 }, { valid_key: 123 })
     ).rejects.toThrow()
-    await expect(() =>
+    await expect(
       Model.updateTo<any>({ valid_key: 123 }, { 'invalid field': 123 })
     ).rejects.toThrow()
     expect(namedRowCount.mock.calls.length).toBe(0)
@@ -133,10 +133,10 @@ describe(`Model.updateTo`, () => {
 
 describe(`Model.updateMany`, () => {
   test(`should fail if receive a non word character as key`, async () => {
-    await expect(() =>
+    await expect(
       Model.updateMany<any>([{ 'invalid field': 123 }], ['valid_key'])
     ).rejects.toThrow()
-    await expect(() =>
+    await expect(
       Model.updateMany<any>([{ valid_key: 123 }], ['invalid field'])
     ).rejects.toThrow()
     expect(namedRowCount.mock.calls.length).toBe(0)
