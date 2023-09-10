@@ -10,18 +10,18 @@ on:
 
 jobs:
 
-  release:
+  node:
     runs-on: ubuntu-20.04
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
 
       - name: Reconfigure git to use HTTP authentication
         run: >
           git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
 
       - name: node.js 18
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: 18.8.0
           registry-url: https://registry.npmjs.org/
