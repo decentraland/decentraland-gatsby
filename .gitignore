@@ -109,5 +109,6 @@ dist
 # Compile
 dist/
 build/
+storybook-static/
 public/
 .DS_Store

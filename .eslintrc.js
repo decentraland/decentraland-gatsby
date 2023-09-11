@@ -3,5 +3,5 @@
  * in formatting sections in here: file://./docs/pages/typescript.md
  */
 module.exports = {
-  extends: ['@dcl/eslint-config/gatsby'],
+  extends: ['@dcl/eslint-config/gatsby', 'plugin:storybook/recommended'],
 }

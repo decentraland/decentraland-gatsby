@@ -1,6 +1,11 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Source, ArgsTable } from '@storybook/components'
-import { Meta, Story, Preview } from '@storybook/addon-docs'
+import {
+  Meta,
+  Story,
+  Preview,
+  Source,
+  PureArgsTable as ArgsTable,
+} from '@storybook/addon-docs'
 import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { Field } from 'decentraland-ui/dist/components/Field/Field'
@@ -41,7 +46,7 @@ export const ShareExample = () => {
     setShareData({
       title: 'Welcome to the Finnish Metagallery',
       text: 'The Finnish National Gallery takes its first steps into virtual reality by creating a metagallery with the support of Decentraland, Decentraland Museum District, and the Finnish Innovation Fund Sitra.',
-      url: 'https://decentraland.github.io/decentraland-gatsby/?path=/story/hooks-useshare--page',
+      url: 'https://decentraland.github.io/decentraland-gatsby/?path=/docs/hooks-useshare--docs',
       thumbnail: 'https://events.decentraland.org/poster/bb02060a633a8160.jpg',
     })
   return (
@@ -162,7 +167,7 @@ export function ShareExample() {
     share({
       title: 'Welcome to the Finnish Metagallery',
       text: 'The Finnish National Gallery takes its first steps into virtual reality by creating a metagallery with the support of Decentraland, Decentraland Museum District, and the Finnish Innovation Fund Sitra.',
-      url: 'https://decentraland.github.io/decentraland-gatsby/?path=/story/hooks-useshare--page',
+      url: 'https://decentraland.github.io/decentraland-gatsby/?path=/docs/hooks-useshare--docs',
       thumbnail: 'https://events.decentraland.org/poster/bb02060a633a8160.jpg',
     })
 
@@ -175,5 +180,5 @@ export function ShareExample() {
 }
 ```
 
-- [`useShareContext`](./?path=/story/context-share-usesharecontext--page): use a single instance of `useShare` injected through a provider
-- [`ShareModa`](./?path=/story/components-modal-sharemodal--share-url): modal to show with share in desktop
+- [`useShareContext`](./?path=/docs/context-share-usesharecontext--docs): use a single instance of `useShare` injected through a provider
+- [`ShareModa`](./?path=/docs/components-modal-sharemodal--share-url): modal to show with share in desktop
