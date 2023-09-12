@@ -28,11 +28,9 @@ describe(`Router.validator`, () => {
   const validate = Router.validator<string>({ type: 'string', minLength: 3 })
 
   test(`should fails if the object doesn't validates the input`, async () => {
-    expect(async () => validate(123)).rejects.toThrowError(
-      new Error(
-        ['Error validating input:', '- must be string {"type":"string"}'].join(
-          '\n'
-        )
+    await expect(validate(123)).rejects.toThrow(
+      ['Error validating input:', '- must be string {"type":"string"}'].join(
+        '\n'
       )
     )
   })
