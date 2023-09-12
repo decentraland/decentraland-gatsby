@@ -1,22 +1,18 @@
-const { resolve } = require('path')
-const { readFileSync } = require('fs')
+import { resolve } from 'path'
+import { readFileSync } from 'fs'
+import type { StorybookConfig } from '@storybook/react-webpack5'
 const prettierConfig = JSON.parse(
   readFileSync(resolve(__dirname, '../.prettierrc'), 'utf8')
 )
 
-module.exports = {
+const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(ts|tsx|js|jsx|mdx)'],
-  core: {
-    builder: 'webpack5',
-  },
+  staticDirs: ['../static'],
   webpackFinal: async (config) => {
-    config.resolve.fallback.https = false
-    config.resolve.fallback.http = false
-    config.resolve.fallback.stream = false
-    config.resolve.fallback.os = false
-    // config.resolve.fallback.url = false
+    config.target = 'web'
     return config
   },
+
   addons: [
     '@storybook/addon-actions',
     '@storybook/addon-links',
@@ -28,7 +24,6 @@ module.exports = {
       },
     },
     '@storybook/addon-viewport/register',
-    '@storybook/addon-actions/register',
     {
       name: '@storybook/addon-storysource',
       options: {
@@ -42,4 +37,15 @@ module.exports = {
       },
     },
   ],
+
+  framework: {
+    name: '@storybook/react-webpack5',
+    options: {},
+  },
+
+  docs: {
+    autodocs: true,
+  },
 }
+
+export default config

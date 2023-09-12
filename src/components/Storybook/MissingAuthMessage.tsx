@@ -9,7 +9,7 @@ export default React.memo(function MissingAuthMessage() {
     <Blockquote>
       <Paragraph small secondary>
         This feature requires to login, try to connect using the{' '}
-        <Link href="./?path=/story/hooks-useauth--page#connect-preview">
+        <Link href="./?path=/docs/hooks-useauth--docs#connect-preview">
           `useAuth`
         </Link>{' '}
         hook.

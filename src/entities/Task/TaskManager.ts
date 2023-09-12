@@ -194,7 +194,7 @@ export default class TaskManager {
     }
 
     await TaskModel.schedule(newTasks)
-    await TaskModel.complete(tasks)
+    await TaskModel.completeTasks(tasks)
   }
 
   async runTask(task: TaskAttributes) {

@@ -1,4 +1,4 @@
-import { yellow } from 'colors/safe'
+import chalk from 'chalk'
 
 import { db } from 'decentraland-server'
 
@@ -28,7 +28,7 @@ database.connect = async () => {
       url.password = ''
     }
 
-    console.log(`connecting to database:`, yellow(url.toString()))
+    console.log(`connecting to database:`, chalk.yellow(url.toString()))
   } catch (err) {
     console.error(err)
   }

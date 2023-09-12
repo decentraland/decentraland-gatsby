@@ -2,7 +2,7 @@
 import { resolve } from 'path'
 
 import { Router } from 'express'
-import { default as glob } from 'glob'
+import glob from 'glob'
 
 import file from './file'
 import redirect from './redirect'

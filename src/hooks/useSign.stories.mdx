@@ -1,6 +1,11 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Source, ArgsTable } from '@storybook/components'
-import { Meta, Story, Preview } from '@storybook/addon-docs'
+import {
+  Meta,
+  Story,
+  Preview,
+  Source,
+  PureArgsTable as ArgsTable,
+} from '@storybook/addon-docs'
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
@@ -67,7 +72,7 @@ export const Sign = () => {
               <Blockquote>
                 <Paragraph small secondary>
                   This feature requires to login, try to connect using the{' '}
-                  <Link href="./?path=/story/hooks-useauth--page#connect-preview">
+                  <Link href="./?path=/docs/hooks-useauth--docs#connect-preview">
                     `useAuth`
                   </Link>{' '}
                   hook.
@@ -130,9 +135,9 @@ export function Sign() {
 
 ## Related hooks
 
-- [`useAuth`](./?path=/story/hooks-useauth--page): allows to create a user session using one of the availables providers
-- [`useSign`](./?path=/story/hooks-usesign--page): allow to sign a message using a pair address and provider
-- [`useTransaction`](./?path=/story/hooks-usetransaction--page): allow to track transactions
-- [`useAuthContext`](./?path=/story/context-auth-useauthcontext--page): use a single instance of `useAuth` injected through a provider
-- [`useSignContext`](./?path=/story/context-auth-usesigncontext--page): same as `useSign` but detects params automatically usgin the `useAuthContext` hook
-- [`useTransactionContext`](./?path=/story/context-auth-usetransactioncontext--page): same as `useTransaction` but detects params automatically usign the `useAuthContext` hook
+- [`useAuth`](./?path=/docs/hooks-useauth--docs): allows to create a user session using one of the availables providers
+- [`useSign`](./?path=/docs/hooks-usesign--docs): allow to sign a message using a pair address and provider
+- [`useTransaction`](./?path=/docs/hooks-usetransaction--docs): allow to track transactions
+- [`useAuthContext`](./?path=/docs/context-auth-useauthcontext--docs): use a single instance of `useAuth` injected through a provider
+- [`useSignContext`](./?path=/docs/context-auth-usesigncontext--docs): same as `useSign` but detects params automatically usgin the `useAuthContext` hook
+- [`useTransactionContext`](./?path=/docs/context-auth-usetransactioncontext--docs): same as `useTransaction` but detects params automatically usign the `useAuthContext` hook
