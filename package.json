@@ -90,7 +90,7 @@
     "jest-environment-jsdom": "^29.6.4",
     "jest-transform-stub": "^2.0.0",
     "leasot": "^13.1.0",
-    "lint-staged": "^12.1.2",
+    "lint-staged": "^14.0.1",
     "node-pg-migrate": "^6.0.0",
     "postcss": "^8.4.29",
     "postcss-cli": "^10.1.0",
