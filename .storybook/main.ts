@@ -13,30 +13,7 @@ const config: StorybookConfig = {
     return config
   },
 
-  addons: [
-    '@storybook/addon-actions',
-    '@storybook/addon-links',
-    // '@storybook/addon-postcss',
-    {
-      name: '@storybook/addon-docs',
-      options: {
-        transcludeMarkdown: true,
-      },
-    },
-    '@storybook/addon-viewport/register',
-    {
-      name: '@storybook/addon-storysource',
-      options: {
-        rule: {
-          // test: [/\.stories\.jsx?$/], This is default
-          include: [resolve(__dirname, '../src')], // You can specify directories
-        },
-        loaderOptions: {
-          prettierConfig,
-        },
-      },
-    },
-  ],
+  addons: ['@storybook/addon-essentials'],
 
   framework: {
     name: '@storybook/react-webpack5',
