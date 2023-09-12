@@ -90,7 +90,8 @@ export default function UserInformation(props: UserInformationProps) {
     return (
       <div>
         <Button
-          primary
+          primary={!i18n.signIn}
+          inverted={!!i18n.signIn}
           size="small"
           loading={loading}
           disabled={loading}
