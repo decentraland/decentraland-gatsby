@@ -19,7 +19,7 @@
     "build:style": "postcss --base src --dir dist 'src/**/*.css'",
     "start": "npm run storybook",
     "format": "prettier --write '**/*.{ts,tsx,js,jsx,json,md,mdx,css}'",
-    "storybook": "npx storybook@7 dev",
+    "storybook": "npx storybook@7 dev -p 6006",
     "semantic-release": "semantic-release",
     "build-storybook": "npx storybook@7 build && cp ./static/* ./storybook-static && mv ./storybook-static ./public",
     "husky-setup": "husky install",
