@@ -21,7 +21,7 @@
     "format": "prettier --write '**/*.{ts,tsx,js,jsx,json,md,mdx,css}'",
     "storybook": "npx storybook@7 dev -p 6006",
     "semantic-release": "semantic-release",
-    "build-storybook": "npx storybook@7 build && cp ./static/* ./storybook-static && mv ./storybook-static ./public",
+    "build-storybook": "npx storybook@7 build && cp -r ./static/* ./storybook-static && mv ./storybook-static ./public",
     "husky-setup": "husky install",
     "migrate": "DOTENV_CONFIG_PATH=.env.development ts-node -r dotenv/config ./node_modules/node-pg-migrate/bin/node-pg-migrate -j ts -m src/migrations -d CONNECTION_STRING",
     "precommit": "npm run todo:up && git add TODO.md && lint-staged --config .husky/pre-commit.js",
