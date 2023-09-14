@@ -28,6 +28,7 @@ export type UserInformationProps = Partial<
   > & {
     i18n: Partial<UserInformationComponentI18N>
     hideBalance: boolean
+    isSecondary?: boolean
   }
 >
 
@@ -90,8 +91,8 @@ export default function UserInformation(props: UserInformationProps) {
     return (
       <div>
         <Button
-          primary={!i18n.signIn}
-          inverted={!!i18n.signIn}
+          primary={!props.isSecondary}
+          inverted={props.isSecondary}
           size="small"
           loading={loading}
           disabled={loading}
