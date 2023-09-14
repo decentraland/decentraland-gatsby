@@ -6,7 +6,6 @@ const config = {
     Request: global.Request,
     Headers: global.Headers,
   },
-
   testEnvironment: 'node',
   setupFilesAfterEnv: ['./jest.setup.js'],
   roots: ['<rootDir>/src/'],
