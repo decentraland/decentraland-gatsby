@@ -26,9 +26,6 @@ export type SearchParamOptions<D extends SearchParamData = SearchParamData> =
   }>
 
 export default class API {
-  static #defaultFetcher: typeof fetch | null =
-    (typeof fetch !== 'undefined' && fetch) || null
-
   static catch<T>(prom: Promise<T>) {
     return prom.catch((err) => {
       logger.error(err)
@@ -122,18 +119,22 @@ export default class API {
 
   readonly baseUrl: string = ''
   readonly defaultOptions: Options = new Options({})
-  #fetcher = API.#defaultFetcher
+  #fetcher: typeof fetch | null = null
   #fetch: typeof fetch = (
     input: RequestInfo | URL,
     init?: RequestInit | undefined
   ) => {
-    if (!this.#fetcher) {
-      throw new ReferenceError(
-        `fecher is not defined on API, use .setFetcher() to set it`
-      )
+    if (this.#fetcher) {
+      return this.#fetcher(input, init)
     }
 
-    return this.#fetcher(input, init)
+    if (typeof fetch !== 'undefined') {
+      return fetch(input, init)
+    }
+
+    throw new ReferenceError(
+      `fecher is not defined on API, use .setFetcher() to set it`
+    )
   }
 
   constructor(baseUrl = '', defaultOptions: Options = new Options({})) {
