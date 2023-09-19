@@ -68,8 +68,9 @@ return null
 }
 
 return (<Grid.Row>
+
 <Grid.Column mobile="16">
-<Source language="bash" code={curl.join(' \\\n ')} />
+  <Source language="bash" code={curl.join(' \\\n ')} />
 </Grid.Column>
 
   </Grid.Row>)
@@ -108,33 +109,55 @@ export function AuthChainTable({ chain, timestamp, metadata }) {
 const [value, clipboard] = useClipboardCopy()
 
 return (<Grid.Row>
+
 <Grid.Column mobile="16">
-<Grid stackable className="AuthChainTable">
-<Grid.Row>
-<Grid.Column mobile="4">
-<Button
-primary
-size="small"
-onClick={() => clipboard.copy(BulkText({ chain, timestamp, metadata }))} >
-{value === null ? "Copy All" : "Copied!"}
-</Button>
-</Grid.Column>
-<Grid.Column mobile="12"></Grid.Column>
-</Grid.Row>
-{chain &&
-chain.map((item, i) => (<Grid.Row key={AUTH_CHAIN_HEADER_PREFIX + i}>
-<Grid.Column mobile="4"><Source code={AUTH_CHAIN_HEADER_PREFIX + i}/></Grid.Column>
-<Grid.Column mobile="12"><Source language="json" code={JSON.stringify(item)}/></Grid.Column>
-</Grid.Row>))}
-{timestamp && <Grid.Row>
-<Grid.Column mobile="4"><Source code={AUTH_TIMESTAMP_HEADER}/></Grid.Column>
-<Grid.Column mobile="12"><Source language="json" code={JSON.stringify(timestamp)}/></Grid.Column>
-</Grid.Row>}
-{metadata && <Grid.Row>
-<Grid.Column mobile="4"><Source code={AUTH_METADATA_HEADER}/></Grid.Column>
-<Grid.Column mobile="12"><Source language="json" code={JSON.stringify(metadata)}/></Grid.Column>
-</Grid.Row>}
-</Grid>
+  <Grid stackable className="AuthChainTable">
+    <Grid.Row>
+      <Grid.Column mobile="4">
+        <Button
+          primary
+          size="small"
+          onClick={() =>
+            clipboard.copy(BulkText({ chain, timestamp, metadata }))
+          }
+        >
+          {value === null ? 'Copy All' : 'Copied!'}
+        </Button>
+      </Grid.Column>
+      <Grid.Column mobile="12"></Grid.Column>
+    </Grid.Row>
+    {chain &&
+      chain.map((item, i) => (
+        <Grid.Row key={AUTH_CHAIN_HEADER_PREFIX + i}>
+          <Grid.Column mobile="4">
+            <Source code={AUTH_CHAIN_HEADER_PREFIX + i} />
+          </Grid.Column>
+          <Grid.Column mobile="12">
+            <Source language="json" code={JSON.stringify(item)} />
+          </Grid.Column>
+        </Grid.Row>
+      ))}
+    {timestamp && (
+      <Grid.Row>
+        <Grid.Column mobile="4">
+          <Source code={AUTH_TIMESTAMP_HEADER} />
+        </Grid.Column>
+        <Grid.Column mobile="12">
+          <Source language="json" code={JSON.stringify(timestamp)} />
+        </Grid.Column>
+      </Grid.Row>
+    )}
+    {metadata && (
+      <Grid.Row>
+        <Grid.Column mobile="4">
+          <Source code={AUTH_METADATA_HEADER} />
+        </Grid.Column>
+        <Grid.Column mobile="12">
+          <Source language="json" code={JSON.stringify(metadata)} />
+        </Grid.Column>
+      </Grid.Row>
+    )}
+  </Grid>
 </Grid.Column>
 
   </Grid.Row>)
@@ -154,27 +177,44 @@ return null
 }
 
 return (<Card style={{ width: '100%'}}>
+
 <Card.Content>
-<Tabs>
-<Tabs.Tab active={activeTab === TabOptions.HEADERS} onClick={() => setActiveTab(TabOptions.HEADERS)}>HEADERS</Tabs.Tab>
-{options && <Tabs.Tab active={activeTab === TabOptions.CURL} onClick={() => setActiveTab(TabOptions.CURL)}>CURL</Tabs.Tab>}
-<Tabs.Tab active={activeTab === TabOptions.JSON} onClick={() => setActiveTab(TabOptions.JSON)}>JSON</Tabs.Tab>
-</Tabs>
-{activeTab === TabOptions.JSON && <Source
-language="ts"
-code={JSON.stringify(chain || null, null, 2)}
-/>}
-{options && activeTab === TabOptions.CURL && <AuthChainCURL
-        options={options}
-        chain={chain}
-        timestamp={timestamp}
-        metadata={metadata}
-      />}
-{activeTab === TabOptions.HEADERS && <AuthChainTable
-        chain={chain}
-        timestamp={timestamp}
-        metadata={metadata}
-      />}
+  <Tabs>
+    <Tabs.Tab
+      active={activeTab === TabOptions.HEADERS}
+      onClick={() => setActiveTab(TabOptions.HEADERS)}
+    >
+      HEADERS
+    </Tabs.Tab>
+    {options && (
+      <Tabs.Tab
+        active={activeTab === TabOptions.CURL}
+        onClick={() => setActiveTab(TabOptions.CURL)}
+      >
+        CURL
+      </Tabs.Tab>
+    )}
+    <Tabs.Tab
+      active={activeTab === TabOptions.JSON}
+      onClick={() => setActiveTab(TabOptions.JSON)}
+    >
+      JSON
+    </Tabs.Tab>
+  </Tabs>
+  {activeTab === TabOptions.JSON && (
+    <Source language="ts" code={JSON.stringify(chain || null, null, 2)} />
+  )}
+  {options && activeTab === TabOptions.CURL && (
+    <AuthChainCURL
+      options={options}
+      chain={chain}
+      timestamp={timestamp}
+      metadata={metadata}
+    />
+  )}
+  {activeTab === TabOptions.HEADERS && (
+    <AuthChainTable chain={chain} timestamp={timestamp} metadata={metadata} />
+  )}
 </Card.Content>
 
   </Card>)
