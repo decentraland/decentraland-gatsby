@@ -43,21 +43,22 @@ export function AuthChainCURL({ chain, timestamp, metadata, options }) {
   if (options.url) {
     curl.push(`curl '${options.url}'`)
   }
-  if (options.method) {
-    curl.push(`-X '${options.method}'`)
-  }
+
+if (options.method) {
+curl.push(`-X '${options.method}'`)
+}
 
 if (chain) {
-curl.push(
-...chain.map(
+curl.push(...chain.map(
 (item, i) =>
 `-H '${AUTH_CHAIN_HEADER_PREFIX + i}: ${JSON.stringify(item)}'`
-)
-)
+))
 }
+
 if (timestamp) {
 curl.push(`-H '${AUTH_TIMESTAMP_HEADER}: ${JSON.stringify(timestamp)}'`)
 }
+
 if (timestamp) {
 curl.push(`-H '${AUTH_METADATA_HEADER}: ${JSON.stringify(metadata)}'`)
 }
@@ -66,14 +67,13 @@ if (curl.length === 0) {
 return null
 }
 
-return (
+return (<Grid.Row>
+<Grid.Column mobile="16">
+<Source language="bash" code={curl.join(' \\\n ')} />
+</Grid.Column>
 
-<Grid.Row>
-  <Grid.Column mobile="16">
-    <Source language="bash" code={curl.join(' \\\n ')} />
-  </Grid.Column>
-</Grid.Row>
-) }
+  </Grid.Row>)
+}
 
 export function BulkText({ chain, timestamp, metadata }) {
   let bulk = []
@@ -88,9 +88,10 @@ export function BulkText({ chain, timestamp, metadata }) {
   if (timestamp) {
     bulk.push(`${AUTH_TIMESTAMP_HEADER}: ${JSON.stringify(timestamp)}`)
   }
-  if (timestamp) {
-    bulk.push(`${AUTH_METADATA_HEADER}: ${JSON.stringify(metadata)}`)
-  }
+
+if (timestamp) {
+bulk.push(`${AUTH_METADATA_HEADER}: ${JSON.stringify(metadata)}`)
+}
 
 if (bulk.length === 0) {
 return null
@@ -104,30 +105,20 @@ export function AuthChainTable({ chain, timestamp, metadata }) {
     return null
   }
 
-const [copyAllText, setCopyAllText] = useState("Copy All")
-
 const [value, clipboard] = useClipboardCopy()
 
-const copyAllHandler = useCallback(() => {
-setCopyAllText("Copied!")
-clipboard.copy(BulkText({ chain, timestamp, metadata }))
-setTimeout(() => {
-setCopyAllText("Copy All")
-}, 1000)
-}, [chain, timestamp, metadata, setCopyAllText, clipboard])
-
-return <Grid.Row>
-
+return (<Grid.Row>
 <Grid.Column mobile="16">
 <Grid stackable className="AuthChainTable">
 <Grid.Row>
-<Grid.Column mobile="4"><Button
-  primary
-  size="small"
-  onClick={copyAllHandler}
->
-  {copyAllText}
-</Button></Grid.Column>
+<Grid.Column mobile="4">
+<Button
+primary
+size="small"
+onClick={() => clipboard.copy(BulkText({ chain, timestamp, metadata }))} >
+{value === null ? "Copy All" : "Copied!"}
+</Button>
+</Grid.Column>
 <Grid.Column mobile="12"></Grid.Column>
 </Grid.Row>
 {chain &&
@@ -145,7 +136,8 @@ chain.map((item, i) => (<Grid.Row key={AUTH_CHAIN_HEADER_PREFIX + i}>
 </Grid.Row>}
 </Grid>
 </Grid.Column>
-</Grid.Row>
+
+  </Grid.Row>)
 }
 
 export const TabOptions = {
@@ -161,38 +153,31 @@ if (!chain) {
 return null
 }
 
-return (
-
-<Card style={{ width: '100%'}}>
+return (<Card style={{ width: '100%'}}>
 <Card.Content>
 <Tabs>
 <Tabs.Tab active={activeTab === TabOptions.HEADERS} onClick={() => setActiveTab(TabOptions.HEADERS)}>HEADERS</Tabs.Tab>
 {options && <Tabs.Tab active={activeTab === TabOptions.CURL} onClick={() => setActiveTab(TabOptions.CURL)}>CURL</Tabs.Tab>}
 <Tabs.Tab active={activeTab === TabOptions.JSON} onClick={() => setActiveTab(TabOptions.JSON)}>JSON</Tabs.Tab>
 </Tabs>
+{activeTab === TabOptions.JSON && <Source
+language="ts"
+code={JSON.stringify(chain || null, null, 2)}
+/>}
+{options && activeTab === TabOptions.CURL && <AuthChainCURL
+        options={options}
+        chain={chain}
+        timestamp={timestamp}
+        metadata={metadata}
+      />}
+{activeTab === TabOptions.HEADERS && <AuthChainTable
+        chain={chain}
+        timestamp={timestamp}
+        metadata={metadata}
+      />}
+</Card.Content>
 
-        {activeTab === TabOptions.JSON && <Source
-          language="ts"
-          code={JSON.stringify(chain || null, null, 2)}
-        />}
-
-        {options && activeTab === TabOptions.CURL && <AuthChainCURL
-          options={options}
-          chain={chain}
-          timestamp={timestamp}
-          metadata={metadata}
-        />}
-
-        {activeTab === TabOptions.HEADERS && <AuthChainTable
-          chain={chain}
-          timestamp={timestamp}
-          metadata={metadata}
-        />}
-          </Card.Content>
-          </Card>
-
-)
-
+  </Card>)
 }
 
 ## Auth Chain Generator
