@@ -96,13 +96,13 @@ return null
 }
 
 return (
+
 <Grid.Row>
-<Grid.Column mobile="16">
-<Source language="bash" code={bulk.join('\n')} />
-</Grid.Column>
+  <Grid.Column mobile="16">
+    <Source language="bash" code={bulk.join('\n')} />
+  </Grid.Column>
 </Grid.Row>
-)
-}
+) }
 
 export function AuthChainTable({ chain, timestamp, metadata }) {
   if (!chain) {
