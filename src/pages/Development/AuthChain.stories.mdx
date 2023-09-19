@@ -74,6 +74,36 @@ return (
 </Grid.Row>
 ) }
 
+export function AuthChainBulk({ chain, timestamp, metadata, options }) {
+  let bulk = []
+  if (chain) {
+    bulk.push(
+      ...chain.map(
+        (item, i) =>
+        `${AUTH_CHAIN_HEADER_PREFIX + i}: ${JSON.stringify(item)}`
+      )
+    )
+  }
+  if (timestamp) {
+    bulk.push(`${AUTH_TIMESTAMP_HEADER}: ${JSON.stringify(timestamp)}`)
+  }
+  if (timestamp) {
+    bulk.push(`${AUTH_METADATA_HEADER}: ${JSON.stringify(metadata)}`)
+  }
+
+if (bulk.length === 0) {
+return null
+}
+
+return (
+<Grid.Row>
+<Grid.Column mobile="16">
+<Source language="bash" code={bulk.join('\n')} />
+</Grid.Column>
+</Grid.Row>
+)
+}
+
 export function AuthChainTable({ chain, timestamp, metadata }) {
   if (!chain) {
     return null
@@ -105,6 +135,7 @@ export const TabOptions = {
   HEADERS: 'headers',
   JSON: 'json',
   CURL: 'curl',
+  BULK: 'bulk',
 }
 
 export function Chain({ chain, timestamp, metadata, options }) {
@@ -122,6 +153,7 @@ return (
 <Tabs.Tab active={activeTab === TabOptions.HEADERS} onClick={() => setActiveTab(TabOptions.HEADERS)}>HEADERS</Tabs.Tab>
 {options && <Tabs.Tab active={activeTab === TabOptions.CURL} onClick={() => setActiveTab(TabOptions.CURL)}>CURL</Tabs.Tab>}
 <Tabs.Tab active={activeTab === TabOptions.JSON} onClick={() => setActiveTab(TabOptions.JSON)}>JSON</Tabs.Tab>
+<Tabs.Tab active={activeTab === TabOptions.BULK} onClick={() => setActiveTab(TabOptions.BULK)}>BULK</Tabs.Tab>
 </Tabs>
 
         {activeTab === TabOptions.JSON && <Source
@@ -137,6 +169,12 @@ return (
         />}
 
         {activeTab === TabOptions.HEADERS && <AuthChainTable
+          chain={chain}
+          timestamp={timestamp}
+          metadata={metadata}
+        />}
+
+        {activeTab === TabOptions.BULK && <AuthChainBulk
           chain={chain}
           timestamp={timestamp}
           metadata={metadata}
