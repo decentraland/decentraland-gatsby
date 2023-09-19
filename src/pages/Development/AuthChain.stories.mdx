@@ -25,6 +25,7 @@ import Avatar from '../../components/User/Avatar'
 import useAsyncState from '../../hooks/useAsyncState'
 import useAsyncTask from '../../hooks/useAsyncTask'
 import useAuth from '../../hooks/useAuth'
+import useClipboardCopy from '../../hooks/useClipboardCopy'
 import { signPayload } from '../../utils/auth/identify'
 import { getCurrentIdentity } from '../../utils/auth/storage'
 import {
@@ -74,7 +75,7 @@ return (
 </Grid.Row>
 ) }
 
-export function CopyBulk({ chain, timestamp, metadata }) {
+export function BulkText({ chain, timestamp, metadata }) {
   let bulk = []
   if (chain) {
     bulk.push(
@@ -95,7 +96,7 @@ if (bulk.length === 0) {
 return null
 }
 
-return navigator.clipboard.writeText(bulk.join('\n'))
+return bulk.join('\n')
 }
 
 export function AuthChainTable({ chain, timestamp, metadata }) {
@@ -105,13 +106,15 @@ export function AuthChainTable({ chain, timestamp, metadata }) {
 
 const [copyAllText, setCopyAllText] = useState("Copy All")
 
+const [value, clipboard] = useClipboardCopy()
+
 const copyAllHandler = useCallback(() => {
-CopyBulk({ chain, timestamp, metadata })
 setCopyAllText("Copied!")
+clipboard.copy(BulkText({ chain, timestamp, metadata }))
 setTimeout(() => {
 setCopyAllText("Copy All")
 }, 1000)
-}, [chain, timestamp, metadata, setCopyAllText])
+}, [chain, timestamp, metadata, setCopyAllText, clipboard])
 
 return <Grid.Row>
 
