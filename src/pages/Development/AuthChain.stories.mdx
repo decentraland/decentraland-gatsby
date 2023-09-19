@@ -1,5 +1,5 @@
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, useCallback } from 'react'
 import { Meta, Source, PureArgsTable as ArgsTable } from '@storybook/addon-docs'
 import Label from 'semantic-ui-react/dist/commonjs/elements/Label'
 import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
@@ -74,7 +74,7 @@ return (
 </Grid.Row>
 ) }
 
-export function AuthChainBulk({ chain, timestamp, metadata, options }) {
+export function CopyBulk({ chain, timestamp, metadata }) {
   let bulk = []
   if (chain) {
     bulk.push(
@@ -95,24 +95,38 @@ if (bulk.length === 0) {
 return null
 }
 
-return (
-
-<Grid.Row>
-  <Grid.Column mobile="16">
-    <Source language="bash" code={bulk.join('\n')} />
-  </Grid.Column>
-</Grid.Row>
-) }
+return navigator.clipboard.writeText(bulk.join('\n'))
+}
 
 export function AuthChainTable({ chain, timestamp, metadata }) {
   if (!chain) {
     return null
   }
 
+const [copyAllText, setCopyAllText] = useState("Copy All")
+
+const copyAllHandler = useCallback(() => {
+CopyBulk({ chain, timestamp, metadata })
+setCopyAllText("Copied!")
+setTimeout(() => {
+setCopyAllText("Copy All")
+}, 1000)
+}, [chain, timestamp, metadata, setCopyAllText])
+
 return <Grid.Row>
 
 <Grid.Column mobile="16">
 <Grid stackable className="AuthChainTable">
+<Grid.Row>
+<Grid.Column mobile="4"><Button
+  primary
+  size="small"
+  onClick={copyAllHandler}
+>
+  {copyAllText}
+</Button></Grid.Column>
+<Grid.Column mobile="12"></Grid.Column>
+</Grid.Row>
 {chain &&
 chain.map((item, i) => (<Grid.Row key={AUTH_CHAIN_HEADER_PREFIX + i}>
 <Grid.Column mobile="4"><Source code={AUTH_CHAIN_HEADER_PREFIX + i}/></Grid.Column>
@@ -135,7 +149,6 @@ export const TabOptions = {
   HEADERS: 'headers',
   JSON: 'json',
   CURL: 'curl',
-  BULK: 'bulk',
 }
 
 export function Chain({ chain, timestamp, metadata, options }) {
@@ -153,7 +166,6 @@ return (
 <Tabs.Tab active={activeTab === TabOptions.HEADERS} onClick={() => setActiveTab(TabOptions.HEADERS)}>HEADERS</Tabs.Tab>
 {options && <Tabs.Tab active={activeTab === TabOptions.CURL} onClick={() => setActiveTab(TabOptions.CURL)}>CURL</Tabs.Tab>}
 <Tabs.Tab active={activeTab === TabOptions.JSON} onClick={() => setActiveTab(TabOptions.JSON)}>JSON</Tabs.Tab>
-<Tabs.Tab active={activeTab === TabOptions.BULK} onClick={() => setActiveTab(TabOptions.BULK)}>BULK</Tabs.Tab>
 </Tabs>
 
         {activeTab === TabOptions.JSON && <Source
@@ -169,12 +181,6 @@ return (
         />}
 
         {activeTab === TabOptions.HEADERS && <AuthChainTable
-          chain={chain}
-          timestamp={timestamp}
-          metadata={metadata}
-        />}
-
-        {activeTab === TabOptions.BULK && <AuthChainBulk
           chain={chain}
           timestamp={timestamp}
           metadata={metadata}
