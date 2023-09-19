@@ -133,7 +133,6 @@
     "buffer": "^6.0.3",
     "chalk": "^4.1.2",
     "cherio": "^1.0.0-rc.2",
-    "clipboard-copy": "^4.0.1",
     "cors": "^2.8.5",
     "cron": "^1.8.2",
     "dataloader": "^2.0.0",
