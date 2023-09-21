@@ -42,7 +42,7 @@ jobs:
           cache: 'npm'
 
       - name: installing npm
-        run: npm i -g npm@10
+        run: npm i -g npm@9
 
       - name: installing
         run: npm ci
