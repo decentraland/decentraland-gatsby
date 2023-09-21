@@ -186,5 +186,8 @@
   "peerDependencies": {
     "@sentry/browser": "^7.64.0",
     "rollbar": "^2.26.2"
+  },
+  "publishConfig": {
+    "provenance": true
   }
 }
