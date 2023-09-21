@@ -176,11 +176,11 @@
     "util": "^0.12.4",
     "validator": "^13.7.0",
     "web-push": "^3.4.5",
-    "workbox-core": "^6.5.3",
-    "workbox-expiration": "^6.5.3",
-    "workbox-range-requests": "^6.5.3",
-    "workbox-routing": "^6.5.3",
-    "workbox-strategies": "^6.5.3",
+    "workbox-core": "^7.0.0",
+    "workbox-expiration": "^7.0.0",
+    "workbox-range-requests": "^7.0.0",
+    "workbox-routing": "^7.0.0",
+    "workbox-strategies": "^7.0.0",
     "yaml": "^1.10.0"
   },
   "peerDependencies": {
