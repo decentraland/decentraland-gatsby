@@ -7,9 +7,6 @@
     "node": ">=16.0.0",
     "npm": ">=7.0.0"
   },
-  "bin": {
-    "setup-project": "./bin/setup-project.sh"
-  },
   "scripts": {
     "test": "jest",
     "build": "npm run build:clear && npm run build:code && npm run build:plugin:intl && npm run build:style",
@@ -33,7 +30,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/decentraland/decentraland-growth-ui.git"
+    "url": "https://github.com/decentraland/decentraland-gatsby"
   },
   "author": "",
   "license": "MIT",
@@ -41,9 +38,9 @@
     "ci": false
   },
   "bugs": {
-    "url": "https://github.com/decentraland/decentraland-growth-ui/issues"
+    "url": "https://github.com/decentraland/decentraland-gatsby/issues"
   },
-  "homepage": "https://github.com/decentraland/decentraland-growth-ui#readme",
+  "homepage": "https://github.com/decentraland/decentraland-gatsby#readme",
   "devDependencies": {
     "@babel/core": "^7.16.0",
     "@babel/plugin-proposal-class-properties": "^7.16.0",
