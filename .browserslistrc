@@ -46,4 +46,4 @@ safari 14
 last 3 safari versions
 
 [ssr]
-node >= 18.8.0
+node >= 18.17.0
