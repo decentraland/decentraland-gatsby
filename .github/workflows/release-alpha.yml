@@ -20,12 +20,12 @@ jobs:
       - name: node.js 18
         uses: actions/setup-node@v3
         with:
-          node-version: 18.18.0
+          node-version: 18.8.0
           registry-url: https://registry.npmjs.org/
           cache: 'npm'
 
       - name: installing npm
-        run: npm i -g npm@10
+        run: npm i -g npm@9
 
       - name: installing
         run: npm ci
