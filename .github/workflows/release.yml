@@ -45,10 +45,10 @@ jobs:
           cache: 'npm'
 
       - name: installing npm
-        run: npm i -g npm@9
+        run: npm i -g npm@10
 
       - name: installing
-        run: npm ci
+        run: npm ci --audit false --fund false
 
       - name: linters
         uses: wearerequired/lint-action@v1

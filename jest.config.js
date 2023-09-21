@@ -10,11 +10,7 @@ const config = {
   setupFilesAfterEnv: ['./jest.setup.js'],
   roots: ['<rootDir>/src/'],
   transform: {
-    '^.+\\.[tj]sx?$': 'ts-jest',
-    '^.+\\.mdx?$': '@storybook/addon-docs/jest-transform-mdx',
-  },
-  moduleNameMapper: {
-    '\\.(css|less|sass|scss|gif|ttf|eot|svg)$': 'jest-transform-stub',
+    '^.+\\.[tj]sx?$': 'esbuild-jest',
   },
   coveragePathIgnorePatterns: [
     '/node_modules/',
