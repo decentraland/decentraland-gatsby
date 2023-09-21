@@ -8,7 +8,7 @@ on:
 jobs:
 
   bun:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -22,7 +22,13 @@ jobs:
         continue-on-error: true
 
   node:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write # to be able to publish a GitHub release
+      issues: write # to be able to comment on released issues
+      pull-requests: write # to be able to comment on released pull requests
+      id-token: write # to enable use of OIDC for npm provenance
 
     steps:
       - uses: actions/checkout@v3
@@ -37,6 +43,9 @@ jobs:
           node-version: 18.8.0
           registry-url: https://registry.npmjs.org/
           cache: 'npm'
+
+      - name: installing npm
+        run: npm i -g npm@10
 
       - name: installing
         run: npm ci
