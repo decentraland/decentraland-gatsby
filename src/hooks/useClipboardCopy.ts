@@ -1,13 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import clipboardCopy from 'clipboard-copy'
-
 export default function useClipboardCopy(timeout?: number) {
   const [state, setState] = useState<string | number | boolean | null>(null)
 
   const copy = useCallback(
     (value: string | number | boolean | null) => {
-      clipboardCopy(String(value ?? ''))
+      navigator.clipboard.writeText(String(value ?? ''))
       setState(value)
     },
     [state]

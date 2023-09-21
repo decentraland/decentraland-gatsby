@@ -9,7 +9,7 @@ chrome >= 90
 edge >= 91
 firefox >= 78
 opera >= 76
-ios_saf >= 12.2
+ios_saf >= 14
 safari >= 14
 samsung >= 13
 kaios >= 2.5
@@ -36,7 +36,7 @@ firefox 78
 last 3 firefox versions
 opera 76
 last 3 opera versions
-ios_saf 12.2
+ios_saf 14
 last 3 ios_saf versions
 samsung 13
 last 3 samsung versions
@@ -46,4 +46,4 @@ safari 14
 last 3 safari versions
 
 [ssr]
-node >= 16.17.0
+node >= 18.8.0
