@@ -28,8 +28,8 @@ export function numeric(value: any, options?: { min?: number; max?: number }) {
   if (typeof value !== 'string' && typeof value !== 'number') {
     return null
   }
-  value = Number(value)
-  if (!Number.isFinite(value)) {
+  const num = Number(value)
+  if (!Number.isFinite(num)) {
     return null
   }
   if (
@@ -43,13 +43,13 @@ export function numeric(value: any, options?: { min?: number; max?: number }) {
       )}`
     )
   }
-  if (options?.min !== undefined && value < options.min) {
+  if (options?.min !== undefined && num < options.min) {
     return options.min
   }
-  if (options?.max !== undefined && value > options.max) {
+  if (options?.max !== undefined && num > options.max) {
     return options.max
   }
-  return value
+  return num
 }
 
 export function oneOf<T>(value: any, list: readonly T[]): T | null {
