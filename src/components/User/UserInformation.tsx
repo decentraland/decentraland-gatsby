@@ -116,26 +116,20 @@ export default function UserInformation(props: UserInformationProps) {
         })
       })
     },
-    [analytics]
+    []
   )
 
-  const handleOpen = useCallback(
-    (track_uuid: string) => {
-      segment((analytics) => {
-        analytics.track('Unified Dropdown Menu Display', { track_uuid })
-      })
-    },
-    [analytics]
-  )
+  const handleOpen = useCallback((track_uuid: string) => {
+    segment((analytics) => {
+      analytics.track('Unified Dropdown Menu Display', { track_uuid })
+    })
+  }, [])
 
-  const handleClickBalance = useCallback(
-    (network) => {
-      segment((analytics) => {
-        analytics.track('Unified Dropdown Menu Balance Click', { network })
-      })
-    },
-    [analytics]
-  )
+  const handleClickBalance = useCallback((network) => {
+    segment((analytics) => {
+      analytics.track('Unified Dropdown Menu Balance Click', { network })
+    })
+  }, [])
 
   const handleSignOut = useCallback(
     (track_uuid: string) => {
@@ -146,7 +140,7 @@ export default function UserInformation(props: UserInformationProps) {
         userState.disconnect()
       }, 300)
     },
-    [analytics]
+    [userState.disconnect]
   )
 
   return (
