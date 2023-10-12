@@ -1,6 +1,12 @@
 import React, { useCallback } from 'react'
 
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
+import {
+  DROPDOWN_MENU_BALANCE_CLICK_EVENT,
+  DROPDOWN_MENU_DISPLAY_EVENT,
+  DROPDOWN_MENU_ITEM_CLICK_EVENT,
+  DROPDOWN_MENU_SIGN_OUT_EVENT,
+} from 'decentraland-dapps/dist/containers/UserInformation/constants'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import {
   UserInformationContainer as BaseUserMenu,
@@ -85,7 +91,7 @@ export default function UserInformation(props: UserInformationProps) {
   const trackMenuItemClick = useCallback(
     (type: MenuItemType, track_uuid: string) => {
       segment((analytics) => {
-        analytics.track('Unified Dropdown Menu Item Click', {
+        analytics.track(DROPDOWN_MENU_ITEM_CLICK_EVENT, {
           type,
           track_uuid,
         })
@@ -96,20 +102,20 @@ export default function UserInformation(props: UserInformationProps) {
 
   const handleOpen = useCallback((track_uuid: string) => {
     segment((analytics) => {
-      analytics.track('Unified Dropdown Menu Display', { track_uuid })
+      analytics.track(DROPDOWN_MENU_DISPLAY_EVENT, { track_uuid })
     })
   }, [])
 
   const handleClickBalance = useCallback((network) => {
     segment((analytics) => {
-      analytics.track('Unified Dropdown Menu Balance Click', { network })
+      analytics.track(DROPDOWN_MENU_BALANCE_CLICK_EVENT, { network })
     })
   }, [])
 
   const handleSignOut = useCallback(
     (track_uuid: string) => {
       segment((analytics) => {
-        analytics.track('Unified Dropdown Menu Sign Out', { track_uuid })
+        analytics.track(DROPDOWN_MENU_SIGN_OUT_EVENT, { track_uuid })
       })
       setTimeout(() => {
         userState.disconnect()
