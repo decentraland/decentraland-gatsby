@@ -135,7 +135,7 @@
     "ddos": "^0.2.1",
     "decentraland-commons": "^5.1.0",
     "decentraland-crypto-middleware": "^1.2.0",
-    "decentraland-dapps": "^16.10.0",
+    "decentraland-dapps": "^16.17.1",
     "decentraland-server": "^3.0.0",
     "eth-sig-util": "^3.0.1",
     "express": "^4.17.1",

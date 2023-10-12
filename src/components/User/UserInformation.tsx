@@ -1,10 +1,17 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
+import {
+  DROPDOWN_MENU_BALANCE_CLICK_EVENT,
+  DROPDOWN_MENU_DISPLAY_EVENT,
+  DROPDOWN_MENU_ITEM_CLICK_EVENT,
+  DROPDOWN_MENU_SIGN_OUT_EVENT,
+} from 'decentraland-dapps/dist/containers/UserInformation/constants'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import {
   UserInformationContainer as BaseUserMenu,
   UserInformationComponentProps as BaseUserMenuProps,
+  MenuItemType,
   UserInformationComponentI18N,
 } from 'decentraland-ui/dist/components/UserInformationContainer/UserInformationContainer'
 
@@ -12,6 +19,7 @@ import useAuthContext from '../../context/Auth/useAuthContext'
 import useProfileInjected from '../../context/Auth/useProfileContext'
 import useAsyncState from '../../hooks/useAsyncState'
 import useChainId from '../../hooks/useChainId'
+import segment from '../../utils/development/segment'
 import { fetchManaBalance } from '../../utils/loader/manaBalance'
 import Avatar from './Avatar'
 
@@ -33,6 +41,7 @@ export type UserInformationProps = Partial<
 >
 
 export default function UserInformation(props: UserInformationProps) {
+  const { hideBalance } = props
   const i18n = {
     ...(BaseUserMenu.defaultProps.i18n as UserInformationComponentI18N),
     ...props.i18n,
@@ -42,7 +51,7 @@ export default function UserInformation(props: UserInformationProps) {
   const chainId = useChainId()
   const loading = userState.loading || profileState.loading
   const [manaBalances] = useAsyncState<UserMenuBalances>(async () => {
-    if (props.hideBalance || !user) {
+    if (hideBalance || !user) {
       return {}
     }
 
@@ -77,7 +86,43 @@ export default function UserInformation(props: UserInformationProps) {
       default:
         return {}
     }
-  }, [user, chainId, props.hideBalance])
+  }, [user, chainId, hideBalance])
+
+  const trackMenuItemClick = useCallback(
+    (type: MenuItemType, track_uuid: string) => {
+      segment((analytics) => {
+        analytics.track(DROPDOWN_MENU_ITEM_CLICK_EVENT, {
+          type,
+          track_uuid,
+        })
+      })
+    },
+    []
+  )
+
+  const handleOpen = useCallback((track_uuid: string) => {
+    segment((analytics) => {
+      analytics.track(DROPDOWN_MENU_DISPLAY_EVENT, { track_uuid })
+    })
+  }, [])
+
+  const handleClickBalance = useCallback((network) => {
+    segment((analytics) => {
+      analytics.track(DROPDOWN_MENU_BALANCE_CLICK_EVENT, { network })
+    })
+  }, [])
+
+  const handleSignOut = useCallback(
+    (track_uuid: string) => {
+      segment((analytics) => {
+        analytics.track(DROPDOWN_MENU_SIGN_OUT_EVENT, { track_uuid })
+      })
+      setTimeout(() => {
+        userState.disconnect()
+      }, 300)
+    },
+    [userState.disconnect]
+  )
 
   if (loading) {
     return (
@@ -108,11 +153,14 @@ export default function UserInformation(props: UserInformationProps) {
     <div className={`dcl-avatar--${user[2]}`}>
       <BaseUserMenu
         {...props}
+        onOpen={handleOpen}
+        onClickBalance={handleClickBalance}
+        onMenuItemClick={trackMenuItemClick}
         isSignedIn
         i18n={i18n}
         manaBalances={manaBalances || {}}
         avatar={(profile || undefined) as any}
-        onSignOut={userState.disconnect}
+        onSignOut={handleSignOut}
       />
     </div>
   )
