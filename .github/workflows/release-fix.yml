@@ -19,6 +19,7 @@ jobs:
 
       - name: Installing
         run: bun install
+        continue-on-error: true
 
       - name: Testing
         run: bun test
