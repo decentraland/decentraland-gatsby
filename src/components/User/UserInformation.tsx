@@ -82,31 +82,6 @@ export default function UserInformation(props: UserInformationProps) {
     }
   }, [user, chainId, hideBalance])
 
-  if (loading) {
-    return (
-      <div>
-        <Avatar loading width="42" height="42" />
-      </div>
-    )
-  }
-
-  if (!user) {
-    return (
-      <div>
-        <Button
-          primary={!props.isSecondary}
-          inverted={props.isSecondary}
-          size="small"
-          loading={loading}
-          disabled={loading}
-          onClick={() => userState.select()}
-        >
-          {i18n.signIn}
-        </Button>
-      </div>
-    )
-  }
-
   const trackMenuItemClick = useCallback(
     (type: MenuItemType, track_uuid: string) => {
       segment((analytics) => {
@@ -142,6 +117,31 @@ export default function UserInformation(props: UserInformationProps) {
     },
     [userState.disconnect]
   )
+
+  if (loading) {
+    return (
+      <div>
+        <Avatar loading width="42" height="42" />
+      </div>
+    )
+  }
+
+  if (!user) {
+    return (
+      <div>
+        <Button
+          primary={!props.isSecondary}
+          inverted={props.isSecondary}
+          size="small"
+          loading={loading}
+          disabled={loading}
+          onClick={() => userState.select()}
+        >
+          {i18n.signIn}
+        </Button>
+      </div>
+    )
+  }
 
   return (
     <div className={`dcl-avatar--${user[2]}`}>
