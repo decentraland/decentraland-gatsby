@@ -29,6 +29,10 @@ export function numeric(
 export function numeric(
   value: any,
   options?: { min?: number; max?: number }
+): number | null
+export function numeric(
+  value: any,
+  options?: { min?: number; max?: number }
 ): number | null {
   if (value === '') {
     return null
