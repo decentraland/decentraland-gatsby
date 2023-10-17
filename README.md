@@ -130,11 +130,11 @@ GATSBY_CHAIN_ID=
 # production (ethereum, polygon)
 # GATSBY_CHAIN_ID=1,137
 
-# test (ropsten, mumbai)
-# GATSBY_CHAIN_ID=3,80001
+# test (sepolia, mumbai)
+# GATSBY_CHAIN_ID=11155111,80001
 
 # any
-# GATSBY_CHAIN_ID=1,3,4,5,42,137,80001
+# GATSBY_CHAIN_ID=1,3,4,5,42,137,80001,11155111
 ```
 
 ## Project commands
