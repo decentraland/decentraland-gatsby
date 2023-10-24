@@ -1,4 +1,4 @@
-import { uid } from 'radash/dist/random'
+import { uid } from 'radash'
 
 import env, { Env, requiredEnv, setupEnv } from './env'
 

@@ -1,4 +1,4 @@
-import { uid } from 'radash/dist/random'
+import { uid } from 'radash'
 
 import { Request } from '../../Route/wkc/request/Request'
 import withBearerToken from './withBearerToken'
