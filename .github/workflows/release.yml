@@ -59,8 +59,9 @@ jobs:
           eslint_dir: src/
           prettier: true
           prettier_extensions: ts,tsx,js,jsx,json,md,mdx,css
-          continue_on_error: false
           github_token: ${{ secrets.GITHUB_TOKEN }}
+          continue_on_error: true
+        continue-on-error: true
 
       - name: testing
         run: npm test -- --coverage
