@@ -155,7 +155,7 @@
     "pbkdf2": "^3.1.2",
     "pg-tsquery": "^8.3.0",
     "prom-client": "^14.0.1",
-    "radash": "^7.1.0",
+    "radash": "^10.9.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
