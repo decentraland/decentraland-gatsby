@@ -1,6 +1,12 @@
-export type RequestOptions = Omit<RequestInit, 'headers'> & {
-  headers?: Record<string, string>
-}
+export type RequestOptions = Omit<RequestInit, 'headers'> &
+  Partial<{
+    headers: Record<string, string>
+  }>
+
+export type RequestTimeoutOptions = Partial<{
+  timeout: number
+  timeoutFallback: any
+}>
 
 export type RequestAuthorizationOptions = Partial<{
   identity: boolean
@@ -9,83 +15,116 @@ export type RequestAuthorizationOptions = Partial<{
 }>
 
 export default class Options {
-  private _options: RequestOptions = {}
-
-  private _authorization: RequestAuthorizationOptions = {}
-
-  private _metadata: Record<string, string | number> = {}
+  #options: RequestOptions = {}
+  #authorization: RequestAuthorizationOptions = {}
+  #timeout: RequestTimeoutOptions = {}
+  #metadata: Record<string, string | number> = {}
 
   constructor(options: RequestOptions = {}) {
-    this._options = options
+    this.#options = options
   }
 
   merge(options: Options) {
     const raw = options.toObject()
     const newOptions = {
-      ...this._options,
+      ...this.#options,
       ...raw,
     }
 
-    if (this._options.headers || raw.headers) {
+    if (this.#options.headers || raw.headers) {
       newOptions.headers = {
-        ...this._options.headers,
+        ...this.#options.headers,
         ...raw.headers,
       }
     }
 
     const result = new Options(newOptions)
+    result.#authorization = {
+      ...this.#authorization,
+      ...options.#authorization,
+    }
 
-    result.authorization({
-      ...this._authorization,
-      ...options.getAuthorization(),
-    })
+    result.#metadata = {
+      ...this.#metadata,
+      ...options.#metadata,
+    }
 
-    result.metadata({
-      ...this._metadata,
-      ...options.getMetadata(),
-    })
+    result.#timeout = {
+      ...this.#timeout,
+      ...options.#timeout,
+    }
 
     return result
   }
 
   set(options: Omit<RequestOptions, 'headers' | 'body'> = {}) {
     const newOptions = {
-      ...this._options,
+      ...this.#options,
       ...options,
     }
 
-    if (this._options.headers) {
-      newOptions.headers = this._options.headers
+    if (this.#options.headers) {
+      newOptions.headers = this.#options.headers
     }
 
-    if (this._options.body) {
-      newOptions.headers = this._options.headers
+    if (this.#options.body) {
+      newOptions.body = this.#options.body
     }
 
-    this._options = newOptions
+    this.#options = newOptions
 
+    return this
+  }
+
+  /**
+   * Timeout a request using an [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) object.
+   *
+   * If the remote servers doesn't repond in the timeframe the request Request
+   * will fail with a 408 http error and will internally abort the request to
+   * prevent memory leaks.
+   *
+   * If you want to return a fallback value instead of failing, use the `timeoutWithFallback`
+   * method instead.
+   */
+  timeout(timeout: number) {
+    this.#timeout.timeout = Math.max(0, timeout)
+    return this
+  }
+
+  /**
+   * Timeout a request using an [AbortController](https://developer.mozilla.org/en-US/docs/Web/API/AbortController) object.
+   *
+   * If the remote servers doesn't repond in the timeframe the request Request
+   * will return the fallback parameter instead of failing and will internally
+   * abort the request to prevent memory leaks.
+   */
+  timeoutWithFallback(timeout: number, fallback: any) {
+    this.timeout(timeout)
+    this.#timeout.timeoutFallback = fallback
     return this
   }
 
   authorization(
     options: RequestAuthorizationOptions = { identity: true, optional: true }
   ) {
-    this._authorization = options
+    this.#authorization = options
     return this
   }
 
   header(key: string, value: string) {
-    if (!this._options.headers) {
-      this._options.headers = {}
+    if (!this.#options.headers) {
+      this.#options.headers = {}
     }
 
     key = key.toLowerCase()
-    if (this._options.headers[key]) {
+    if (this.#options.headers[key]) {
       console.warn(
-        `Can not set header "${key}" as "${value}" because is already defined as "${this._options.headers[key]}"`
+        `Can not set header "${key}" as "${value}" because is already defined as "${
+          this.#options.headers[key]
+        }"`
       )
     } else {
-      this._options.headers[key] = value
+      this.#options.headers[key] = value
     }
 
     return this
@@ -99,17 +138,17 @@ export default class Options {
   }
 
   method(method: string) {
-    this._options.method = method
+    this.#options.method = method
     return this
   }
 
   getMethod() {
-    return this._options.method || 'GET'
+    return this.#options.method || 'GET'
   }
 
   metadata(data: Record<string, string | number>) {
-    this._metadata = {
-      ...this._metadata,
+    this.#metadata = {
+      ...this.#metadata,
       ...data,
     }
 
@@ -117,20 +156,24 @@ export default class Options {
   }
 
   getMetadata(): Record<string, string | number> {
-    return this._metadata
+    return this.#metadata
   }
 
   json(data: any) {
     this.header('content-type', 'application/json')
-    this._options.body = JSON.stringify(data)
+    this.#options.body = JSON.stringify(data)
     return this
   }
 
   getAuthorization() {
-    return this._authorization
+    return this.#authorization
   }
 
-  toObject() {
-    return this._options
+  getTimeout() {
+    return this.#timeout
+  }
+
+  toObject(extend: RequestOptions = {}) {
+    return { ...this.#options, ...extend }
   }
 }

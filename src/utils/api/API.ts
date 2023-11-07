@@ -3,6 +3,7 @@ import {
   AUTH_METADATA_HEADER,
   AUTH_TIMESTAMP_HEADER,
 } from 'decentraland-crypto-middleware/lib/types'
+import { sleep } from 'radash'
 
 import logger from '../../entities/Development/logger'
 import { signPayload } from '../auth/identify'
@@ -243,6 +244,8 @@ export default class API {
     return options
   }
 
+  timeoutOption() {}
+
   async fetch<T extends {}>(
     path: string,
     options: Options = new Options({})
@@ -255,9 +258,56 @@ export default class API {
     let opt = this.defaultOptions.merge(options)
     opt = await this.authorizeOptions(path, opt)
     opt = await this.signOptions(path, opt)
+    const timeout = opt.getTimeout()
 
     try {
-      res = await this.#fetch(url, opt.toObject())
+      // timeout 0 automatically returns a Request Timeout
+      if ((timeout.timeout && timeout.timeout <= 0) || timeout.timeout === 0) {
+        // if timeoutFallback exists, return it
+        if ('timeoutFallback' in timeout) {
+          res = new Response(JSON.stringify(timeout.timeoutFallback), {
+            status: 200,
+          })
+        } else {
+          res = new Response('Request Timeout', { status: 408 })
+        }
+
+        // if timeout exceeds 0, then perform the fetch with a timeout
+      } else if (timeout.timeout) {
+        let completed = false
+        const controller = new AbortController()
+
+        // race against fetch and timeout
+        res = await Promise.race([
+          this.#fetch(url, opt.toObject({ signal: controller.signal })).then(
+            (res) => {
+              completed = true
+              return res
+            }
+          ),
+
+          sleep(timeout.timeout).then(() => {
+            // abort fetch in background
+            if (!completed) {
+              controller.abort()
+            }
+
+            // if timeoutFallback exists, return it
+            if ('timeoutFallback' in timeout) {
+              return new Response(JSON.stringify(timeout.timeoutFallback), {
+                status: 200,
+              })
+            }
+
+            // if there is no timeoutFallback, return a Request Timeout
+            return new Response('Request Timeout', { status: 408 })
+          }),
+        ])
+
+        // If not timeout was set then just perform the fetch
+      } else {
+        res = await this.#fetch(url, opt.toObject())
+      }
     } catch (error) {
       throw new FetchError(url, opt.toObject(), error.message)
     }
@@ -271,6 +321,7 @@ export default class API {
     try {
       json = JSON.parse(body || '{}') as T
     } catch (error) {
+      console.log('parse error', timeout, error)
       throw new RequestError(
         url,
         opt.toObject(),

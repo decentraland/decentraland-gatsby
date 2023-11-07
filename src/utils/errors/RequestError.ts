@@ -15,6 +15,7 @@ export default class RequestError extends Error {
       url
     )}"${bodyToDetails(body)}`
     res.headers.forEach((value, key) => {
+      console.log(key, value)
       this.headers[key] = value
     })
     this.code = res.status >= 500 ? 'SERVER_ERROR' : 'REQUEST_ERROR'
@@ -47,5 +48,6 @@ function bodyToDetails(body: any): string {
     return ': ' + body.error
   }
 
+  console.log(body)
   return ': ' + JSON.stringify(body)
 }
