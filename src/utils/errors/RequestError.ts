@@ -11,20 +11,9 @@ export default class RequestError extends Error {
     this.url = url
     this.options = options
     this.method = (options.method || 'get').toLowerCase()
-    const target = new URL(url)
-    target.search = ''
-    target.hash = ''
-    const details =
-      body && body.message
-        ? ': ' + body.message
-        : body && body.error
-        ? ': ' + body.error
-        : body
-        ? ': ' + JSON.stringify(body)
-        : ''
-    this.message = `Error fetching data from "${
-      this.method
-    } ${target.toString()}"${details}`
+    this.message = `Error fetching data from "${this.method} ${clearURL(
+      url
+    )}"${bodyToDetails(body)}`
     res.headers.forEach((value, key) => {
       this.headers[key] = value
     })
@@ -32,4 +21,31 @@ export default class RequestError extends Error {
     this.statusCode = res.status
     this.body = body
   }
+}
+
+function clearURL(url: string): string {
+  try {
+    const target = new URL(url)
+    target.search = ''
+    target.hash = ''
+    return target.toString()
+  } catch {
+    return url
+  }
+}
+
+function bodyToDetails(body: any): string {
+  if (!body) {
+    return ''
+  }
+
+  if (body.message) {
+    return ': ' + body.message
+  }
+
+  if (body.error) {
+    return ': ' + body.error
+  }
+
+  return ': ' + JSON.stringify(body)
 }
