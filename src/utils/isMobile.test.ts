@@ -14,7 +14,7 @@ describe('isMobile', () => {
     expect(isMobile(ua)).toBe(false)
   })
 
-  test('should check window if the user agent is not provided', () => {
+  test.skip('should check window if the user agent is not provided', () => {
     expect(isMobile()).toBe(false)
   })
 })

@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid'
+import { randomUUID } from 'crypto'
 
 import Time from '../../utils/date/Time'
 import random from '../../utils/number/random'
@@ -21,7 +21,7 @@ export type TaskRunContext<P extends {} = {}> = {
 }
 
 export default class TaskManager {
-  private _id = uuid()
+  private _id = randomUUID()
   private _running = false
   private _concurrency = 5
   private _tasks = new Map<string, Task>()
@@ -194,7 +194,7 @@ export default class TaskManager {
     }
 
     await TaskModel.schedule(newTasks)
-    await TaskModel.complete(tasks)
+    await TaskModel.completeTasks(tasks)
   }
 
   async runTask(task: TaskAttributes) {

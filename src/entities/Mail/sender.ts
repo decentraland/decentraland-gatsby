@@ -1,11 +1,17 @@
-import { SES } from 'aws-sdk'
+import {
+  SES,
+  SESClientConfig,
+  SendBulkTemplatedEmailResponse,
+  SendEmailResponse,
+} from '@aws-sdk/client-ses'
 
 import chuck from '../../utils/array/chunk'
 import { aws_ses_sent_total } from './metrics'
 import TemplateManager from './template'
 import { Destination, TemplateAttributes, TemplateContent } from './types'
 
-export type Options = SES.Types.ClientConfiguration & {
+export type Options = Omit<SESClientConfig, 'region'> & {
+  region?: string
   source?: string
   path?: string
   bulk?: boolean
@@ -47,7 +53,7 @@ export default class Sender {
   }
 
   private async sendAll(destinations: Destination[], data: TemplateAttributes) {
-    const results: SES.SendEmailResponse[] = []
+    const results: SendEmailResponse[] = []
     for (const destination of destinations) {
       const { email, replacement } = destination
       const Message = await this.template.getRawTemplate(data.template, {
@@ -62,13 +68,7 @@ export default class Sender {
         Source: this.source,
       }
 
-      const result = await new Promise<SES.SendEmailResponse>(
-        (resolve, reject) => {
-          this.ses.sendEmail(params, (err, result) =>
-            err ? reject(err) : resolve(result)
-          )
-        }
-      )
+      const result = await this.ses.sendEmail(params)
 
       aws_ses_sent_total.inc(
         {
@@ -88,7 +88,7 @@ export default class Sender {
     destinations: Destination[],
     data: TemplateAttributes
   ) {
-    const results: SES.SendBulkTemplatedEmailResponse[] = []
+    const results: SendBulkTemplatedEmailResponse[] = []
     const DefaultTemplateData = JSON.stringify(data.defaultReplacement || {})
     const Template = await this.template.getRemoteTemplate(data.template)
 
@@ -106,13 +106,7 @@ export default class Sender {
         DefaultTemplateData,
       }
 
-      const result = await new Promise<SES.SendBulkTemplatedEmailResponse>(
-        (resolve, reject) => {
-          this.ses.sendBulkTemplatedEmail(params, (err, data) =>
-            err ? reject(err) : resolve(data)
-          )
-        }
-      )
+      const result = await this.ses.sendBulkTemplatedEmail(params)
 
       aws_ses_sent_total.inc(
         {

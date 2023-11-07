@@ -14,9 +14,6 @@ import Options, { RequestOptions } from './Options'
 
 import type { Identity } from '../auth/types'
 
-// TODO(#323): remove on v6
-import 'isomorphic-fetch'
-
 export type SearchParamValue = boolean | number | string | Date
 export type SearchParamData = Record<
   string,
@@ -122,10 +119,32 @@ export default class API {
 
   readonly baseUrl: string = ''
   readonly defaultOptions: Options = new Options({})
+  #fetcher: typeof fetch | null = null
+  #fetch: typeof fetch = (
+    input: RequestInfo | URL,
+    init?: RequestInit | undefined
+  ) => {
+    if (this.#fetcher) {
+      return this.#fetcher(input, init)
+    }
+
+    if (typeof fetch !== 'undefined') {
+      return fetch(input, init)
+    }
+
+    throw new ReferenceError(
+      `fecher is not defined on API, use .setFetcher() to set it`
+    )
+  }
 
   constructor(baseUrl = '', defaultOptions: Options = new Options({})) {
     this.baseUrl = baseUrl || ''
     this.defaultOptions = defaultOptions
+  }
+
+  setFetcher(fetcher: typeof fetch) {
+    this.#fetch = fetcher
+    return this
   }
 
   url(path: string, query: Record<string, string> | URLSearchParams = {}) {
@@ -238,7 +257,7 @@ export default class API {
     opt = await this.signOptions(path, opt)
 
     try {
-      res = await fetch(url, opt.toObject())
+      res = await this.#fetch(url, opt.toObject())
     } catch (error) {
       throw new FetchError(url, opt.toObject(), error.message)
     }

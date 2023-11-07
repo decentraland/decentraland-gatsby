@@ -1,5 +1,5 @@
 import * as express from 'express'
-import { memo } from 'radash/dist/curry'
+import { memo } from 'radash'
 
 import defaultAjv from '../../../Schema/index'
 import Context from '../context/Context'

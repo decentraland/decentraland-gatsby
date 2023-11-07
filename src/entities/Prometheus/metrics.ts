@@ -1,4 +1,7 @@
 import client, { Registry, collectDefaultMetrics } from 'prom-client'
+
+declare const Bun: {}
+
 const defaultLabels: Record<string, string> = {}
 
 if (process.env.SERVICE_NAME) {
@@ -16,7 +19,10 @@ if (process.env.SERVICE_URL) {
 export default client
 export const gatsbyRegister = new Registry()
 gatsbyRegister.setDefaultLabels(defaultLabels)
-collectDefaultMetrics({ register: gatsbyRegister })
+
+if (typeof Bun === undefined) {
+  collectDefaultMetrics({ register: gatsbyRegister })
+}
 
 const alreadyRegisted = new Set<client.Metric<string>>()
 export function registerMetric(metric: client.Metric<string>) {

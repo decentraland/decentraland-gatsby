@@ -1,5 +1,11 @@
-export { Source, ArgsTable } from '@storybook/components'
-export { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs'
+export {
+  Meta,
+  Story,
+  Canvas,
+  Subtitle,
+  Source,
+  PureArgsTable as ArgsTable,
+} from '@storybook/addon-docs'
 export { default as IntlStorybookProvider } from './IntlStorybookProvider'
 export { default as MissingAuthMessage } from './MissingAuthMessage'
 export {

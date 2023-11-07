@@ -1,5 +1,5 @@
 import { Authenticator } from '@dcl/crypto/dist/Authenticator'
-import { AuthIdentity, AuthLinkType } from 'dcl-crypto/dist/types'
+import { AuthIdentity, AuthLinkType } from '@dcl/crypto/dist/types'
 import {
   AUTH_CHAIN_HEADER_PREFIX,
   AUTH_METADATA_HEADER,

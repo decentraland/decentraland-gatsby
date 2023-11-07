@@ -17,6 +17,14 @@ export type BodyColor = {
   }
 }
 
+export enum SceneContentRating {
+  RATING_PENDING = 'RP',
+  EVERYONE = 'E',
+  TEEN = 'T',
+  ADULT = 'A',
+  RESTRICTED = 'R',
+}
+
 export type Avatar = {
   userId: string
   email: string | null | undefined
@@ -236,7 +244,7 @@ export type EntityScene = {
       signalling: string
     }
     policy: {
-      contentRating: 'E' | 'T' | 'M'
+      contentRating: SceneContentRating
       fly: boolean
       voiceEnabled: boolean
       blacklist: []
@@ -340,7 +348,7 @@ export type SceneMetadata = {
     signalling: string // "https://signalling-01.decentraland.org"
   }
   policy?: {
-    contentRating: string
+    contentRating: SceneContentRating
     fly: boolean
     voiceEnabled: boolean
     blacklist: string[]
@@ -360,12 +368,31 @@ export type SceneMetadata = {
       cols: number // 1
     }
   }
-  worldConfiguration?: {
-    name: string
-    fixedAdapter?: string
-    minimapVisible?: boolean
-    skybox?: number
-  }
+  worldConfiguration?:
+    | {
+        name: string
+        dclName?: never
+        fixedAdapter?: string
+        minimapVisible?: boolean
+        skybox?: number
+        skyboxConfig?: {
+          fixedHour: number
+          textures: string[]
+        }
+        placesConfig?: {
+          optOut: boolean
+        }
+      }
+    | {
+        // old property
+        dclName: string
+        name?: never
+        fixedAdapter?: never
+        minimapVisible?: never
+        skybox?: never
+        skyboxConfig?: never
+        placesConfig?: never
+      }
 }
 
 export type ContentEntity = {
@@ -417,6 +444,19 @@ export type ContentDeploymentProfile = ContentDeploymentBase & {
 
 export type WearableMetadata = {
   id: string
+  name: string
+  description: string
+  collectionAddress: string
+  rarity: string
+  image: string
+  metrics: {
+    triangles: number
+    materials: number
+    textures: number
+    meshes: number
+    bodies: number
+    entities: number
+  }
   thumbnail: string
   data: {
     tags: string[]

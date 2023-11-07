@@ -85,11 +85,11 @@ export function isGatsbyImmutableFile(path: string): boolean {
 }
 
 const GATSBY_IMMUTABLE_FILES = [
-  new minimatch.Minimatch('static/*').makeRe(),
-  new minimatch.Minimatch('static/**/*').makeRe(),
+  new minimatch.Minimatch('static/*').makeRe() as RegExp,
+  new minimatch.Minimatch('static/**/*').makeRe() as RegExp,
   /^workbox-[a-f0-9]{8}\.js(\.map|\.LICENSE\.txt)?$/gi,
   /^component---src-pages-.*-[a-f0-9]{20}\.js(\.map|\.LICENSE\.txt)?$/gi,
   /^(app|commons|polyfill|framework|webpack-runtime)-[a-f0-9]{20}\.js(\.map|\.LICENSE\.txt)?$/gi,
   /^[a-f0-9]+-[a-f0-9]{20}\.js(\.map|\.LICENSE\.txt)?$/gi,
   /^styles\.[a-f0-9]{20}\.css$/gi,
-]
+].filter(Boolean)

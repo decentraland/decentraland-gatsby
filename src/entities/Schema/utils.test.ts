@@ -29,7 +29,7 @@ test('numeric', () => {
   expect(numeric(NaN)).toBe(null)
   expect(numeric(5, { max: 2 })).toBe(2)
   expect(numeric(1, { min: 2 })).toBe(2)
-  expect(async () => numeric(2, { min: 3, max: 1 })).rejects.toThrowError(
+  expect(() => numeric(2, { min: 3, max: 1 })).toThrow(
     'Invalid numeric options'
   )
 })

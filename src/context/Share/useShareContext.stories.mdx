@@ -1,6 +1,11 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Source, ArgsTable } from '@storybook/components'
-import { Meta, Story, Preview } from '@storybook/addon-docs'
+import {
+  Meta,
+  Story,
+  Preview,
+  Source,
+  PureArgsTable as ArgsTable,
+} from '@storybook/addon-docs'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import ShareProvider from './ShareProvider'
@@ -12,7 +17,7 @@ import useShareContext from './useShareContext'
 
 # Share Hook (Context)
 
-> The _share hook context_ use the ShareProvider to provider a single instance of [`useShare`](./?path=/story/hooks-useauth--page)
+> The _share hook context_ use the ShareProvider to provider a single instance of [`useShare`](./?path=/docs/hooks-useauth--docs)
 
 In order to use this hook you must include an `ShareProvider` in your `gatsby-browser.js`
 
@@ -40,7 +45,7 @@ export function ShareExample() {
   const shareData = () =>
     share({
       title: 'title',
-      url: 'https://decentraland.github.io/decentraland-gatsby/?path=/story/hooks-useshare--page',
+      url: 'https://decentraland.github.io/decentraland-gatsby/?path=/docs/hooks-useshare--docs',
     })
 
   return (
@@ -52,9 +57,9 @@ export function ShareExample() {
 }
 ```
 
-Read the [full documentation](./?path=/story/hooks-useshare--page)
+Read the [full documentation](./?path=/docs/hooks-useshare--docs)
 
 ## Related hooks
 
-- [`useShare`](./?path=/story/hooks-useshare--page): allows user to share in desktop and mobile
-- [`ShareModa`](./?path=/story/components-modal-sharemodal--share-url): modal to show with share in desktop
+- [`useShare`](./?path=/docs/hooks-useshare--docs): allows user to share in desktop and mobile
+- [`ShareModa`](./?path=/docs/components-modal-sharemodal--share-url): modal to show with share in desktop

@@ -1,7 +1,7 @@
 import { TemplateContent } from './types'
 import { readTemplate } from './utils'
 
-import type { SES } from 'aws-sdk'
+import type { SES } from '@aws-sdk/client-ses'
 
 export default class TemplateManager {
   loaded: Set<string> = new Set()
@@ -27,11 +27,7 @@ export default class TemplateManager {
 
   async deploy(name: string) {
     const Template = await readTemplate(this.path, name)
-    await new Promise<SES.CreateTemplateResponse>((resolve, reject) => {
-      this.ses.createTemplate({ Template }, (err, data) => {
-        return err ? reject(err) : resolve(data)
-      })
-    })
+    await this.ses.createTemplate({ Template })
   }
 
   async isDeployed(name: string) {
