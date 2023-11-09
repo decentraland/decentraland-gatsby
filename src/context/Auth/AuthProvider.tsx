@@ -1,6 +1,6 @@
-import React, { createContext, useEffect } from 'react'
+import React, { createContext, useEffect, useRef } from 'react'
 
-import * as SSO from '@dcl/single-sign-on-client'
+import { SingleSignOn } from '@dcl/single-sign-on-client'
 import isURL from 'validator/lib/isURL'
 
 import useAuth from '../../hooks/useAuth'
@@ -39,13 +39,15 @@ export default React.memo(function AuthProvider({
 }: React.PropsWithChildren<AuthProviderProps>) {
   const auth = useAuth()
   const transactions = useTransaction(auth[0], auth[1].chainId)
+  const SSO = useRef<SingleSignOn | null>(null)
 
   // Initialize SSO
   // Will only be initialized if the sso url is provided.
   // If the url is not provided, the identity of the user will be stored in the application's local storage instead of the sso local storage.
   useEffect(() => {
-    if (sso && isURL(sso)) {
-      SSO.init(sso)
+    if (sso && isURL(sso) && !SSO.current) {
+      SSO.current = new SingleSignOn()
+      SSO.current.init({ src: sso })
     }
   }, [])
 

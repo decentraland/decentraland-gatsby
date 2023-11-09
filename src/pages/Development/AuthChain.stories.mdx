@@ -113,50 +113,10 @@ return (<Grid.Row>
 <Grid.Column mobile="16">
   <Grid stackable className="AuthChainTable">
     <Grid.Row>
-      <Grid.Column mobile="4">
-        <Button
-          primary
-          size="small"
-          onClick={() =>
-            clipboard.copy(BulkText({ chain, timestamp, metadata }))
-          }
-        >
-          {value === null ? 'Copy All' : 'Copied!'}
-        </Button>
+      <Grid.Column mobile="16">
+        <Source code={BulkText({ chain, timestamp, metadata })} />
       </Grid.Column>
-      <Grid.Column mobile="12"></Grid.Column>
     </Grid.Row>
-    {chain &&
-      chain.map((item, i) => (
-        <Grid.Row key={AUTH_CHAIN_HEADER_PREFIX + i}>
-          <Grid.Column mobile="4">
-            <Source code={AUTH_CHAIN_HEADER_PREFIX + i} />
-          </Grid.Column>
-          <Grid.Column mobile="12">
-            <Source language="json" code={JSON.stringify(item)} />
-          </Grid.Column>
-        </Grid.Row>
-      ))}
-    {timestamp && (
-      <Grid.Row>
-        <Grid.Column mobile="4">
-          <Source code={AUTH_TIMESTAMP_HEADER} />
-        </Grid.Column>
-        <Grid.Column mobile="12">
-          <Source language="json" code={JSON.stringify(timestamp)} />
-        </Grid.Column>
-      </Grid.Row>
-    )}
-    {metadata && (
-      <Grid.Row>
-        <Grid.Column mobile="4">
-          <Source code={AUTH_METADATA_HEADER} />
-        </Grid.Column>
-        <Grid.Column mobile="12">
-          <Source language="json" code={JSON.stringify(metadata)} />
-        </Grid.Column>
-      </Grid.Row>
-    )}
   </Grid>
 </Grid.Column>
 
