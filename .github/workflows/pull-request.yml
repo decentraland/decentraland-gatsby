@@ -9,8 +9,6 @@ on:
       - synchronize
 
 jobs:
-
-  bun:
     runs-on: ubuntu-20.04
 
     steps:
