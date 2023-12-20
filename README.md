@@ -85,7 +85,7 @@ import 'isomorphic-fetch'
   .prettierrc
 
   Dockerfile     ......... Docker files
-  entrypoint.sh
+  entrypoint.sh  ......... Bash script executed when the container starts
 
   gatsby-browser.js  ..... gatsby configuration
   gatsby-config.js
