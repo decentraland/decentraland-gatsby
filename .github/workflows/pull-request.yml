@@ -9,22 +9,6 @@ on:
       - synchronize
 
 jobs:
-
-  bun:
-    runs-on: ubuntu-20.04
-
-    steps:
-      - uses: actions/checkout@v3
-      - uses: oven-sh/setup-bun@v1
-
-      - name: Installing
-        run: bun install
-        continue-on-error: true
-
-      - name: Testing
-        run: bun test
-        continue-on-error: true
-
   node:
     runs-on: ubuntu-20.04
 
