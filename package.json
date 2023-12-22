@@ -165,7 +165,7 @@
     "react-markdown": "^7.1.0",
     "remark-emoji": "3.0.2",
     "remark-gfm": "^3.0.1",
-    "sharp": "^0.32.5",
+    "sharp": "^0.33.1",
     "swiper": "^8.4.4",
     "three": "^0.137.5",
     "ua-parser-js": "^1.0.2",
