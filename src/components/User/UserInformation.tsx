@@ -17,6 +17,8 @@ import {
 
 import useAuthContext from '../../context/Auth/useAuthContext'
 import useProfileInjected from '../../context/Auth/useProfileContext'
+import { useFeatureFlagContext } from '../../context/FeatureFlag'
+import { DappsFeatureFlags } from '../../context/FeatureFlag/types'
 import useAsyncState from '../../hooks/useAsyncState'
 import useChainId from '../../hooks/useChainId'
 import segment from '../../utils/development/segment'
@@ -37,19 +39,20 @@ export type UserInformationProps = Partial<
     i18n: Partial<UserInformationComponentI18N>
     hideBalance: boolean
     isSecondary?: boolean
-    isAuthDappEnabled?: boolean
   }
 >
 
 export default function UserInformation(props: UserInformationProps) {
-  const { hideBalance, isAuthDappEnabled } = props
+  const { hideBalance } = props
   const i18n = {
     ...(BaseUserMenu.defaultProps.i18n as UserInformationComponentI18N),
     ...props.i18n,
   }
   const [user, userState] = useAuthContext()
+  const [ff] = useFeatureFlagContext()
   const [profile, profileState] = useProfileInjected()
   const chainId = useChainId()
+  const isAuthDappEnabled = ff.enabled(DappsFeatureFlags.AuthDappEnabled)
   const loading = userState.loading || profileState.loading
   const [manaBalances] = useAsyncState<UserMenuBalances>(async () => {
     if (hideBalance || !user) {

@@ -33,7 +33,6 @@ import trackEvent from '../../utils/segment/trackEvent'
 import ShareModal from '../Modal/ShareModal'
 import WalletSelectorModal from '../Modal/WalletSelectorModal'
 import WrongNetworkModal from '../Modal/WrongNetworkModal'
-import UserInformation from '../User/UserInformation'
 
 import type { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import type { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
@@ -115,15 +114,7 @@ export default function Layout({
           activePage={props.activePage}
           leftMenu={props.leftMenu}
           middleMenu={props.middleMenu}
-          rightMenu={
-            props.rightMenu ?? (
-              <UserInformation
-                isAuthDappEnabled={ff.enabled(
-                  DappsFeatureFlags.AuthDappEnabled
-                )}
-              />
-            )
-          }
+          rightMenu={props.rightMenu}
           i18n={props.i18n}
           isConnected={props.isConnected}
           isConnecting={props.isConnecting}
