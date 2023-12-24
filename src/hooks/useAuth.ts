@@ -26,8 +26,19 @@ export { initialState }
 
 let CONNECTION_PROMISE: Promise<AuthState> | null = null
 
-export default function useAuth() {
+export default function useAuth(
+  {
+    authPath,
+  }: {
+    authPath: string
+  } = { authPath: '/auth' }
+) {
   const [state, setState] = useState<AuthState>({ ...initialState })
+
+  const authorize = useCallback(() => {
+    window.location.replace(`${authPath}?redirectTo=${window.location.href}`)
+    return
+  }, [])
 
   const select = useCallback(
     (selecting = true) => {
@@ -49,12 +60,10 @@ export default function useAuth() {
       if (isLoading(state.status)) {
         return
       }
-
       if (state.account) {
         console.warn(`Already connected as "${state.account}"`)
         return
       }
-
       const conn = { providerType: providerType, chainId: chainId }
       if (!providerType || !chainId) {
         const message = `Invalid connection params: ${JSON.stringify(conn)}`
@@ -69,11 +78,9 @@ export default function useAuth() {
         )
         return
       }
-
       segment((analytics, context) =>
         analytics.track(AuthEvent.Connect, { ...context, ...conn })
       )
-
       setState({
         account: null,
         identity: null,
@@ -289,6 +296,7 @@ export default function useAuth() {
       disconnect: disconnectAndSignOut,
       switchTo,
       select,
+      authorize,
       loading,
       error: state.error,
       selecting: state.selecting,
@@ -296,7 +304,7 @@ export default function useAuth() {
       providerType: !loading ? state.providerType : null,
       chainId: !loading ? state.chainId : null,
     }),
-    [connect, disconnect, switchTo, select, loading, state]
+    [connect, disconnect, switchTo, select, authorize, loading, state]
   )
 
   return [state.account, actions] as const

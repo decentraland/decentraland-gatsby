@@ -32,6 +32,7 @@ export type UserMenuProps = Partial<
   > & {
     i18n: Partial<UserMenuI18N>
     hideBalance: boolean
+    isAuthDappEnabled?: boolean
   }
 >
 
@@ -40,6 +41,7 @@ export default function UserMenu(props: UserMenuProps) {
     ...(BaseUserMenu.defaultProps.i18n as UserMenuI18N),
     ...props.i18n,
   }
+
   const [user, userState] = useAuthContext()
   const [profile, profileState] = useProfileInjected()
   const chainId = useChainId()
@@ -98,7 +100,9 @@ export default function UserMenu(props: UserMenuProps) {
           basic
           loading={loading}
           disabled={loading}
-          onClick={() => userState.select()}
+          onClick={
+            props.isAuthDappEnabled ? userState.authorize : userState.select
+          }
         >
           {i18n.signIn}
         </Button>

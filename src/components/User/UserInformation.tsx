@@ -37,11 +37,12 @@ export type UserInformationProps = Partial<
     i18n: Partial<UserInformationComponentI18N>
     hideBalance: boolean
     isSecondary?: boolean
+    isAuthDappEnabled?: boolean
   }
 >
 
 export default function UserInformation(props: UserInformationProps) {
-  const { hideBalance } = props
+  const { hideBalance, isAuthDappEnabled } = props
   const i18n = {
     ...(BaseUserMenu.defaultProps.i18n as UserInformationComponentI18N),
     ...props.i18n,
@@ -141,7 +142,7 @@ export default function UserInformation(props: UserInformationProps) {
           size="small"
           loading={loading}
           disabled={loading}
-          onClick={() => userState.select()}
+          onClick={isAuthDappEnabled ? userState.authorize : userState.select}
         >
           {i18n.signIn}
         </Button>
@@ -153,6 +154,7 @@ export default function UserInformation(props: UserInformationProps) {
     <div className={`dcl-avatar--${user[2]}`}>
       <BaseUserMenu
         {...props}
+        address={user}
         onOpen={handleOpen}
         onClickBalance={handleClickBalance}
         onMenuItemClick={trackMenuItemClick}
@@ -161,6 +163,7 @@ export default function UserInformation(props: UserInformationProps) {
         manaBalances={manaBalances || {}}
         avatar={(profile || undefined) as any}
         onSignOut={handleSignOut}
+        onSignIn={isAuthDappEnabled ? userState.authorize : userState.select}
       />
     </div>
   )
