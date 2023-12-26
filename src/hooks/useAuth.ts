@@ -36,7 +36,9 @@ export default function useAuth(
   const [state, setState] = useState<AuthState>({ ...initialState })
 
   const authorize = useCallback(() => {
-    window.location.replace(`${authPath}?redirectTo=${window.location.href}`)
+    window.location.replace(
+      `${authPath}/login?redirectTo=${window.location.href}`
+    )
     return
   }, [])
 
