@@ -19,6 +19,7 @@ const defaultAuthState: ReturnType<typeof useAuth> = [
     switchTo: () => {},
     select: () => {},
     connect: () => {},
+    authorize: () => {},
     disconnect: () => {},
   },
 ]
@@ -40,6 +41,7 @@ export default React.memo(function AuthProvider({
   const auth = useAuth()
   const transactions = useTransaction(auth[0], auth[1].chainId)
 
+  // TODO: Remove after all dApps get the user identity from localhost
   // Initialize SSO
   // Will only be initialized if the sso url is provided.
   // If the url is not provided, the identity of the user will be stored in the application's local storage instead of the sso local storage.

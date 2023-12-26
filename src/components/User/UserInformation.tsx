@@ -17,6 +17,8 @@ import {
 
 import useAuthContext from '../../context/Auth/useAuthContext'
 import useProfileInjected from '../../context/Auth/useProfileContext'
+import { useFeatureFlagContext } from '../../context/FeatureFlag'
+import { DappsFeatureFlags } from '../../context/FeatureFlag/types'
 import useAsyncState from '../../hooks/useAsyncState'
 import useChainId from '../../hooks/useChainId'
 import segment from '../../utils/development/segment'
@@ -47,8 +49,10 @@ export default function UserInformation(props: UserInformationProps) {
     ...props.i18n,
   }
   const [user, userState] = useAuthContext()
+  const [ff] = useFeatureFlagContext()
   const [profile, profileState] = useProfileInjected()
   const chainId = useChainId()
+  const isAuthDappEnabled = ff.enabled(DappsFeatureFlags.AuthDappEnabled)
   const loading = userState.loading || profileState.loading
   const [manaBalances] = useAsyncState<UserMenuBalances>(async () => {
     if (hideBalance || !user) {
@@ -141,7 +145,7 @@ export default function UserInformation(props: UserInformationProps) {
           size="small"
           loading={loading}
           disabled={loading}
-          onClick={() => userState.select()}
+          onClick={isAuthDappEnabled ? userState.authorize : userState.select}
         >
           {i18n.signIn}
         </Button>
@@ -153,6 +157,7 @@ export default function UserInformation(props: UserInformationProps) {
     <div className={`dcl-avatar--${user[2]}`}>
       <BaseUserMenu
         {...props}
+        address={user}
         onOpen={handleOpen}
         onClickBalance={handleClickBalance}
         onMenuItemClick={trackMenuItemClick}
@@ -161,6 +166,7 @@ export default function UserInformation(props: UserInformationProps) {
         manaBalances={manaBalances || {}}
         avatar={(profile || undefined) as any}
         onSignOut={handleSignOut}
+        onSignIn={isAuthDappEnabled ? userState.authorize : userState.select}
       />
     </div>
   )

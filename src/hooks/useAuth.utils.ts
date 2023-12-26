@@ -102,7 +102,9 @@ export async function restoreConnection(): Promise<AuthState> {
 
       const currentAccounts = await fetchAccounts(provider)
       const account = currentAccounts[0]
-      const identity = await SSO.getIdentity(account)
+      // Get the identity first from the local storage. If it doesn't exist, get it from the iframe.
+      const identity =
+        SSO.localStorageGetIdentity(account) ?? (await SSO.getIdentity(account))
 
       if (identity) {
         const currentChainId = await fetchChainId(provider)

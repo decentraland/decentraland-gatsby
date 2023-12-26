@@ -62,9 +62,9 @@ export default function Layout({
 }: LayoutProps) {
   const locale = pageContext?.intl?.locale || 'en'
   const locales = pageContext?.intl?.locales || ['en']
+  const [ff] = useFeatureFlagContext()
   const [, state] = useAuthContext()
   const [, shareState] = useShareContext()
-  const [ff] = useFeatureFlagContext()
   const scroll = useWindowScroll() || null
   const isScrolled = scroll.scrollY.get() > 0
 
@@ -128,7 +128,11 @@ export default function Layout({
             props.className,
             !isScrolled && 'initial',
           ])}
-          onSignIn={props.onSignIn}
+          onSignIn={
+            ff.enabled(DappsFeatureFlags.AuthDappEnabled)
+              ? state.authorize
+              : props.onSignIn
+          }
           onClickAccount={props.onClickAccount}
           onClickMenuOption={handleClickMenuOption}
         />
