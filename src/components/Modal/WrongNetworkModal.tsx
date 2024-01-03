@@ -87,7 +87,10 @@ export default React.memo(function WrongNetworkModal({
   )
 
   const allowNetworkSwitch = useMemo(
-    () => providerType === ProviderType.INJECTED,
+    () =>
+      providerType === ProviderType.INJECTED ||
+      providerType === ProviderType.MAGIC ||
+      providerType === ProviderType.WALLET_CONNECT_V2,
     [providerType]
   )
 
