@@ -259,6 +259,7 @@ export default function Layout2({
       <ShareModal data={shareState.data} onClose={shareState.close} />
       <WrongNetworkModal
         currentNetwork={state.chainId}
+        isSwitching={state.loading}
         expectedNetwork={getSupportedChainIds()}
         onSwitchNetwork={handleSwitchNetwork}
         providerType={state.providerType}
