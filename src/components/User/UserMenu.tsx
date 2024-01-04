@@ -1,12 +1,9 @@
 import React from 'react'
 
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
-import { Button } from 'decentraland-ui/dist/components/Button/Button'
-import {
-  UserMenu as BaseUserMenu,
-  UserMenuProps as BaseUserMenuProps,
-  UserMenuI18N,
-} from 'decentraland-ui/dist/components/UserMenu/UserMenu'
+import { UserMenu as BaseUserMenu } from 'decentraland-ui/dist/components/UserMenu/UserMenu'
+import { i18n as i18nUserMenu } from 'decentraland-ui/dist/components/UserMenu/UserMenu.i18n'
+import { UserMenuProps as BaseUserMenuProps } from 'decentraland-ui/dist/components/UserMenu/UserMenu.types'
 
 import useAuthContext from '../../context/Auth/useAuthContext'
 import useProfileInjected from '../../context/Auth/useProfileContext'
@@ -22,23 +19,14 @@ import './UserMenu.css'
 type UserMenuBalances = Partial<Record<Network, number>>
 
 export type UserMenuProps = Partial<
-  Pick<
-    BaseUserMenuProps,
-    | 'menuItems'
-    | 'hasActivity'
-    | 'onClickProfile'
-    | 'onClickActivity'
-    | 'onClickSettings'
-  > & {
-    i18n: Partial<UserMenuI18N>
-    hideBalance: boolean
+  BaseUserMenuProps & {
     isAuthDappEnabled?: boolean
   }
 >
 
 export default function UserMenu(props: UserMenuProps) {
   const i18n = {
-    ...(BaseUserMenu.defaultProps.i18n as UserMenuI18N),
+    ...i18nUserMenu,
     ...props.i18n,
   }
 
@@ -47,7 +35,7 @@ export default function UserMenu(props: UserMenuProps) {
   const chainId = useChainId()
   const loading = userState.loading || profileState.loading
   const [manaBalances] = useAsyncState<UserMenuBalances>(async () => {
-    if (props.hideBalance || !user) {
+    if (!user) {
       return {}
     }
 
@@ -82,7 +70,7 @@ export default function UserMenu(props: UserMenuProps) {
       default:
         return {}
     }
-  }, [user, chainId, props.hideBalance])
+  }, [user, chainId])
 
   if (loading) {
     return (
@@ -92,34 +80,17 @@ export default function UserMenu(props: UserMenuProps) {
     )
   }
 
-  if (!user) {
-    return (
-      <div>
-        <Button
-          size="small"
-          basic
-          loading={loading}
-          disabled={loading}
-          onClick={
-            props.isAuthDappEnabled ? userState.authorize : userState.select
-          }
-        >
-          {i18n.signIn}
-        </Button>
-      </div>
-    )
-  }
-
   return (
-    <div className={`dcl-avatar--${user[2]}`}>
-      <BaseUserMenu
-        {...props}
-        isSignedIn
-        i18n={i18n}
-        manaBalances={manaBalances || {}}
-        avatar={(profile || undefined) as any}
-        onSignOut={userState.disconnect}
-      />
-    </div>
+    <BaseUserMenu
+      {...props}
+      isSignedIn
+      i18n={i18n}
+      manaBalances={manaBalances || {}}
+      avatar={(profile || undefined) as any}
+      onClickSignOut={userState.disconnect}
+      onClickSignIn={
+        props.isAuthDappEnabled ? userState.authorize : userState.select
+      }
+    />
   )
 }
