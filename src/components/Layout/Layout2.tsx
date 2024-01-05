@@ -75,7 +75,7 @@ export default function Layout2({
   const locale = pageContext?.intl?.locale || 'en'
   const locales = pageContext?.intl?.locales || ['en']
   const [ff] = useFeatureFlagContext()
-  const [, state] = useAuthContext()
+  const [user, userState] = useAuthContext()
   const [, shareState] = useShareContext()
 
   const handleChangeLocal = function (
@@ -130,19 +130,21 @@ export default function Layout2({
   )
 
   const handleSwitchNetwork = useCallback(
-    (chainId: ChainId) => state.switchTo(chainId),
-    [state]
+    (chainId: ChainId) => userState.switchTo(chainId),
+    [userState]
   )
 
   const handleConnect = useCallback(
     (providerType: ProviderType, chainId: ChainId) =>
-      state.connect(providerType, chainId),
-    [state]
+      userState.connect(providerType, chainId),
+    [userState]
   )
 
-  const handleCancelConnect = useCallback(() => state.select(false), [state])
+  const handleCancelConnect = useCallback(
+    () => userState.select(false),
+    [userState]
+  )
 
-  const [user, userState] = useAuthContext()
   const [profile, profileState] = useProfileInjected()
   const chainId = useChainId()
   const isAuthDappEnabled = ff.enabled(DappsFeatureFlags.AuthDappEnabled)
@@ -258,16 +260,16 @@ export default function Layout2({
       </main>
       <ShareModal data={shareState.data} onClose={shareState.close} />
       <WrongNetworkModal
-        currentNetwork={state.chainId}
-        isSwitching={state.loading}
+        currentNetwork={userState.chainId}
+        isSwitching={userState.loading}
         expectedNetwork={getSupportedChainIds()}
         onSwitchNetwork={handleSwitchNetwork}
-        providerType={state.providerType}
+        providerType={userState.providerType}
       />
       <WalletSelectorModal
-        open={state.selecting}
-        loading={state.loading}
-        error={state.error}
+        open={userState.selecting}
+        loading={userState.loading}
+        error={userState.error}
         onConnect={handleConnect}
         availableProviders={availableProviders}
         disabledWalletConnect2={!ff.enabled(DappsFeatureFlags.WalletConnectV2)}
