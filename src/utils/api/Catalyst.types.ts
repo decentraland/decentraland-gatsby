@@ -25,6 +25,8 @@ export enum SceneContentRating {
   RESTRICTED = 'R',
 }
 
+/** @TODO remove */
+/** @deprecated use @dcl/schemas/dist/platform/profile/avatar */
 export type Avatar = {
   userId: string
   email: string | null | undefined
