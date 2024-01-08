@@ -137,6 +137,7 @@ export default function useAuth(
       ) {
         try {
           await switchToChainId(state.provider, chainId)
+          setState({ ...state, chainId: Number(chainId) })
         } catch (err) {
           setState({ ...state, error: err.message })
         }
