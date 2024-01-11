@@ -27,7 +27,6 @@ dcryptomidw --> dcrypto
 dcryptofetch --> dcrypto
 
 click dgatsby href "https://github.com/decentraland/decentraland-gatsby" _blank
-%% decentraland-commons could be removed, not used, no update since 4 years ago
 click dcommons href "https://github.com/decentraland/decentraland-commons" _blank
 click dcryptomidw href "https://github.com/decentraland/decentraland-crypto-middleware" _blank
 click dserver href "https://github.com/decentraland/decentraland-server" _blank
