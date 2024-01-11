@@ -1,6 +1,7 @@
 # Deps decentraland-gatsbt<>decentraland-dapps
 ```mermaid
 graph LR
+
 dgatsby[decentraland-gatsby] --> dcommons[decentraland-commons]
 dgatsby --> dcryptomidw[decentraland-crypto-middleware]
 dgatsby --> dserver[decentraland-server]
@@ -25,7 +26,6 @@ dcrypto --> dschemas
 dcryptomidw --> dcrypto
 dcryptofetch --> dcrypto
 
-
 click dgatsby href "https://github.com/decentraland/decentraland-gatsby" _blank
 %% decentraland-commons could be removed, not used, no update since 4 years ago
 click dcommons href "https://github.com/decentraland/decentraland-commons" _blank
@@ -41,5 +41,4 @@ click dconnect href "https://github.com/decentraland/decentraland-connect" _blan
 click dcryptofetch href "https://github.com/decentraland/decentraland-crypto-fetch" _blank
 click dtx href "https://github.com/decentraland/decentraland-transactions" _blank
 click dcclient href "https://github.com/decentraland/catalyst-client" _blank
-
 ```
