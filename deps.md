@@ -1,28 +1,44 @@
 # Deps decentraland-gatsbt<>decentraland-dapps
 
 ```mermaid
-graph LR;
-    dgatsby[decentraland-gatsby] --> dcommons[decentraland-commons];
-    dgatsby --> dcryptomidw[decentraland-crypto-middleware];
-    dgatsby --> dserver[decentraland-server];
-    dgatsby --> duienv[@dcl/ui-env];
-    dgatsby --> dsso[@dcl/single-sign-on-client];
-    dgatsby --> dschemas[@dcl/schemas];
-    dgatsby --> dcrypto[@dcl/crypto];
-    dgatsby --> ddapps[decentraland-dapps];
-    ddapps --> ui[decentraland-ui];
-    ddapps --> dconnect[decentraland-connect];
-    ddapps --> dcryptofetch[decentraland-crypto-fetch];
-    ddapps --> dtx[decentraland-transactions];
-    ddapps --> dcclient[dcl-catalyst-client];
-    ddapps --> dcrypto;
-    ddapps --> duienv;
-    ddapps --> dschemas;
-    ui --> dschemas;
-    ui --> duienv;
-    dconnect --> dschemas;
-    dconnect --> dsso;
-    dcrypto --> dschemas;
-    dcryptomidw --> dcrypto;
-    dcryptofetch --> dcrypto;
+graph LR
+
+contentserver[Content Server] --> catalystapispecs[catalyst-api-specs]
+contentserver --> catalystclient["dcl-catalyst-client"]
+contentserver --> catalystcontracts["@dcl/catalyst-contracts"]
+contentserver --> contentvalidator["@dcl/content-validator"]
+contentserver --> crypto["@dcl/crypto"]
+contentserver --> hashing["@dcl/hashing"]
+contentserver --> schemas["@dcl/schemas"]
+contentserver --> blockindexer["@dcl/block-indexer"]
+contentserver --> snapshotsfetcher["@dcl/snapshots-fetcher"]
+contentserver --> urnresolver["@dcl/urn-resolver"]
+catalystclient --> catalystcommons["dcl-catalyst-commons"]
+catalystclient --> catalystcontracts
+catalystcontracts --> ethconnect["eth-connect"]
+contentvalidator --> contenthashtree["@dcl/content-hash-tree"]
+contentvalidator --> hashing
+contentvalidator --> schemas
+contentvalidator --> urnresolver
+crypto --> schemas
+crypto --> ethconnect
+snapshotsfetcher --> catalyststorage["@dcl/catalyst-storage"]
+snapshotsfetcher --> hashing
+snapshotsfetcher --> schemas
+catalystcommons --> schemas["@dcl/schemas"]
+
+click catalystapispecs href "https://github.com/decentraland/catalyst-api-specs" _blank
+click catalystclient href "https://github.com/decentraland/catalyst-client" _blank
+click catalystcommons href "https://github.com/decentraland/catalyst-commons" _blank
+click catalystcontracts href "https://github.com/decentraland/catalyst-contracts" _blank
+click catalyststorage href "https://github.com/decentraland/catalyst-storage" _blank
+click contenthashtree href "https://github.com/decentraland/content-hash-tree" _blank
+click contentvalidator href "https://github.com/decentraland/content-validator" _blank
+click crypto href "https://github.com/decentraland/decentraland-crypto" _blank
+click ethconnect href "https://github.com/decentraland/eth-connect" _blank
+click hashing href "https://github.com/decentraland/hashing" _blank
+click schemas href "https://github.com/decentraland/common-schemas" _blank
+click snapshotsfetcher href "https://github.com/decentraland/snapshots-fetcher" _blank
+click urnresolver href "https://github.com/decentraland/urn-resolver" _blank
+click catalystcommons href "https://github.com/decentraland/catalyst-commons" _blank
 ```
