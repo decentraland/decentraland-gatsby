@@ -17,14 +17,14 @@ import {
   DROPDOWN_MENU_DISPLAY_EVENT,
   DROPDOWN_MENU_ITEM_CLICK_EVENT,
   DROPDOWN_MENU_SIGN_OUT_EVENT,
-} from 'decentraland-dapps/dist/containers/UserInformation/constants'
+} from 'decentraland-dapps/dist/containers/Navbar/constants'
 import {
   Footer,
   FooterProps,
 } from 'decentraland-ui/dist/components/Footer/Footer'
 import { Locale } from 'decentraland-ui/dist/components/LanguageIcon/LanguageIcon'
-import { Navbar2 } from 'decentraland-ui/dist/components/Navbar2/Navbar2'
-import { Navbar2Props } from 'decentraland-ui/dist/components/Navbar2/Navbar2.types'
+import { Navbar } from 'decentraland-ui/dist/components/Navbar/Navbar'
+import { NavbarProps } from 'decentraland-ui/dist/components/Navbar/Navbar.types'
 import { ManaBalancesProps } from 'decentraland-ui/dist/components/UserMenu/ManaBalances/ManaBalances.types'
 import { config } from 'decentraland-ui/dist/config'
 
@@ -52,8 +52,8 @@ import type { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Drop
 
 import './Layout.css'
 
-export type Layout2Props = Omit<PageProps, 'children'> &
-  Navbar2Props &
+export type LayoutProps = Omit<PageProps, 'children'> &
+  NavbarProps &
   FooterProps & {
     hideNavbar?: boolean
     hideFooter?: boolean
@@ -64,14 +64,14 @@ export type Layout2Props = Omit<PageProps, 'children'> &
     children?: React.ReactNode
   }
 
-export default function Layout2({
+export default function Layout({
   children,
   pageContext,
   availableProviders,
   hideNavbar,
   hideFooter,
   ...props
-}: Layout2Props) {
+}: LayoutProps) {
   const locale = pageContext?.intl?.locale || 'en'
   const locales = pageContext?.intl?.locales || ['en']
   const [ff] = useFeatureFlagContext()
@@ -231,7 +231,7 @@ export default function Layout2({
   return (
     <>
       {!hideNavbar && (
-        <Navbar2
+        <Navbar
           manaBalances={manaBalances as ManaBalancesProps['manaBalances']}
           address={user || undefined}
           avatar={(profile as Avatar) || undefined}
