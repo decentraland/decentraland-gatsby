@@ -4,8 +4,8 @@
     "typescript"
   ],
   "editor.codeActionsOnSave": {
-    "source.fixAll": true,
-    "source.organizeImports": false,
+    "source.fixAll": "explicit",
+    "source.organizeImports": "never"
   },
   "cSpell.words": [
     "Ethereum",
