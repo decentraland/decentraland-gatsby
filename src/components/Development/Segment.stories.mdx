@@ -1,0 +1,84 @@
+import { Args, Meta, Canvas, ArgsTable, Source } from '../Storybook'
+
+<Meta
+  title="components/Development/Segment"
+  parameters={{
+    viewMode: 'docs',
+    previewTabs: {
+      canvas: { hidden: true },
+    },
+  }}
+/>
+
+# Segment
+
+Automatically injects segment (`window.analytics`) into the global environment.
+
+See [Segment documentation](https://segment.com/docs/connections/sources/catalog/libraries/website/javascript/) for more details about events tracking.
+
+> Development components are meant to be used on `gatsby-ssr.js`, see [README.md](./?path=/docs/components-development-readme-md--docs) for more details
+
+<Source
+  dark
+  language="tsx"
+  code={`<Segment segmentKey={SEGMENT_KEY} trackPage={true}  />`}
+/>
+
+<ArgsTable
+  rows={[
+    Args.Prop('segmentKey', 'Segment write key', {
+      type: Args.Types.String,
+      defaultValue: Args.Types.Environment('SEGMENT_KEY'),
+    }),
+    Args.Prop('trackPage', 'react component to render from each item ', {
+      type: Args.Types.Boolean,
+      defaultValue: false,
+    }),
+    Args.Environment('SEGMENT_KEY', 'Segment write key'),
+  ]}
+/>
+
+## Locate your Segment Key
+
+The Segement Key is the unique identifier for each Source. To find the key follow the instructions detailed in the [documentation](https://segment.com/docs/connections/find-writekey/).
+
+## Tracking page changes
+
+For web apps with a only one page the easiest way to track when users enter is by enabaling the `trackPage` prop, but, for more complex application is recomended to setup the `onClientEntry` and `onRouteUpdate` function in [gatsby-browser.js](https://v4.gatsbyjs.com/docs/reference/config-files/gatsby-browser/) that allow better control and handle gatsby internal routing
+
+```javascript
+// gatsby-browser.js
+
+/**
+ * Implement Gatsby's Browser APIs in this file.
+ *
+ * See: https://www.gatsbyjs.org/docs/browser-apis/
+ */
+
+// ...
+
+import segment from 'decentraland-gatsby/dist/utils/development/segment'
+
+// ...
+
+export const onClientEntry = () => {
+  segment((analytics) => analytics.page())
+}
+
+export const onRouteUpdate = () => {
+  segment((analytics) => analytics.page())
+}
+
+// ...
+```
+
+## Use with CSP (Content Security Policy)
+
+If you rely on allowlisting you will need to add the following directive:
+
+```txt
+script-src:
+  https://cdn.segment.com
+```
+
+> see the [full documentaion](https://segment.com/docs/connections/sources/catalog/libraries/website/javascript/upgrade-to-ajs2/#using-a-strict-content-security-policy-on-the-page) for more details

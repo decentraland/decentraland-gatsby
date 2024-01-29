@@ -1,6 +1,6 @@
-import { yellow } from 'colors/safe'
+import chalk from 'chalk'
 
-import { ServiceStartHandler, ServiceStopHandler } from './types'
+import type { ServiceStartHandler, ServiceStopHandler } from './types'
 
 export async function initializeServices(
   serviceInitializers: (ServiceStartHandler | false | null | undefined)[]
@@ -14,7 +14,7 @@ export async function initializeServices(
   }
 
   process.on('SIGTERM', async () => {
-    console.log(`SIGTERM received: ${yellow('shutting down services')}`)
+    console.log(`SIGTERM received: ${chalk.yellow('shutting down services')}`)
     while (services.length) {
       const stop = services.pop()!
       try {

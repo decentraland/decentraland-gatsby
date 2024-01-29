@@ -1,12 +1,19 @@
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { useState, useMemo, useEffect, useRef } from 'react'
-import { Source, ArgsTable } from '@storybook/components'
-import { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs'
+import {
+  Meta,
+  Story,
+  Preview,
+  Canvas,
+  Subtitle,
+  Source,
+  PureArgsTable as ArgsTable,
+} from '@storybook/addon-docs'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import ModalContainer from '../Storybook/ModalContainer'
 import WalletSelectorModal from './WalletSelectorModal'
 
-<Meta title="Components/Modal/WalletSelectorModal" />
+<Meta title="components/Modal/WalletSelectorModal" />
 
 <Canvas isExpanded>
   <Story name="All providers">

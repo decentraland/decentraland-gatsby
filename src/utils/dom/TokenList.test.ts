@@ -66,8 +66,8 @@ describe('TokenList', () => {
 
   test('add: should fail if the new token is empty or contains any espace', () => {
     const token = TokenList.from('token1')
-    expect(() => token.add('')).toThrowError()
-    expect(() => token.add('token2 token3')).toThrowError()
+    expect(() => token.add('')).toThrow()
+    expect(() => token.add('token2 token3')).toThrow()
     expect(token.value).toEqual('token1')
   })
 
@@ -91,8 +91,8 @@ describe('TokenList', () => {
 
   test('remove: should fail if the token is empty or contains any espace', () => {
     const token = TokenList.from('')
-    expect(() => token.remove('')).toThrowError()
-    expect(() => token.remove('token1 token2')).toThrowError()
+    expect(() => token.remove('')).toThrow()
+    expect(() => token.remove('token1 token2')).toThrow()
   })
 
   test('remove: should remove the token if exists', () => {
@@ -115,10 +115,10 @@ describe('TokenList', () => {
 
   test('replace: should fail if the token is empty or contains any espace', () => {
     const token = TokenList.from('token1')
-    expect(() => token.replace('token1', '')).toThrowError()
-    expect(() => token.replace('', 'token2')).toThrowError()
-    expect(() => token.replace('token1 token1', 'token2')).toThrowError()
-    expect(() => token.replace('token1', 'token2 token2')).toThrowError()
+    expect(() => token.replace('token1', '')).toThrow()
+    expect(() => token.replace('', 'token2')).toThrow()
+    expect(() => token.replace('token1 token1', 'token2')).toThrow()
+    expect(() => token.replace('token1', 'token2 token2')).toThrow()
   })
 
   test("replace: should retun false if the token wasn't replace", () => {
@@ -151,8 +151,8 @@ describe('TokenList', () => {
 
   test('toggle: should fail if the token is empty or contains any espace', () => {
     const token = TokenList.from('')
-    expect(() => token.toggle('')).toThrowError()
-    expect(() => token.toggle('token1 token2')).toThrowError()
+    expect(() => token.toggle('')).toThrow()
+    expect(() => token.toggle('token1 token2')).toThrow()
   })
 
   test('toggle: should return true if the new token was added', () => {

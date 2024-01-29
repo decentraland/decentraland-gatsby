@@ -1,4 +1,4 @@
-import { yellow } from 'colors/safe'
+import chalk from 'chalk'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
 
 import env from '../../utils/env'
@@ -11,7 +11,7 @@ const adminAddresses = new Set(
 )
 
 adminAddresses.forEach((address) =>
-  console.log('admin address:', yellow(address))
+  console.log('admin address:', chalk.yellow(address))
 )
 
 export default function isAdmin(user?: string | null | undefined) {

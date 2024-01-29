@@ -18,7 +18,7 @@ afterAll(() => {
 describe(`Model.createOne`, () => {
   test(`should call Model.createMany`, async () => {
     namedRowCount.mockResolvedValue(1)
-    expect(await Model.createOne<any>({ id: 123 })).toBe(1)
+    await expect(Model.createOne<any>({ id: 123 })).resolves.toBe(1)
     expect(namedRowCount.mock.calls.length).toBe(1)
     expect(namedQuery.mock.calls.length).toBe(0)
 
@@ -38,22 +38,24 @@ describe(`Model.createOne`, () => {
 
 describe(`Model.createMany`, () => {
   test(`should fail if receive a non word character as key`, async () => {
-    await expect(() =>
+    await expect(
       Model.createMany<any>([{ 'invalid field': 123 }])
-    ).rejects.toThrowError()
+    ).rejects.toThrow()
     expect(namedRowCount.mock.calls.length).toBe(0)
     expect(namedQuery.mock.calls.length).toBe(0)
   })
 
   test(`should skip query if receive an empty list`, async () => {
-    expect(await Model.createMany<any>([])).toBe(0)
+    await expect(Model.createMany<any>([])).resolves.toBe(0)
     expect(namedRowCount.mock.calls.length).toBe(0)
     expect(namedQuery.mock.calls.length).toBe(0)
   })
 
   test(`should run a bulk query`, async () => {
     namedRowCount.mockResolvedValue(2)
-    expect(await Model.createMany<any>([{ id: 123 }, { id: 456 }])).toBe(2)
+    await expect(
+      Model.createMany<any>([{ id: 123 }, { id: 456 }])
+    ).resolves.toBe(2)
     expect(namedRowCount.mock.calls.length).toBe(1)
     expect(namedQuery.mock.calls.length).toBe(0)
 
@@ -73,36 +75,36 @@ describe(`Model.createMany`, () => {
 
 describe(`Model.updateTo`, () => {
   test(`should fail if receive a non word character as key`, async () => {
-    await expect(() =>
+    await expect(
       Model.updateTo<any>({ 'invalid field': 123 }, { valid_key: 123 })
-    ).rejects.toThrowError()
-    await expect(() =>
+    ).rejects.toThrow()
+    await expect(
       Model.updateTo<any>({ valid_key: 123 }, { 'invalid field': 123 })
-    ).rejects.toThrowError()
+    ).rejects.toThrow()
     expect(namedRowCount.mock.calls.length).toBe(0)
     expect(namedQuery.mock.calls.length).toBe(0)
   })
 
   test(`should fail if receive an empty condition`, async () => {
-    await expect(() => Model.updateTo<any>({}, {})).rejects.toThrowError()
+    await expect(Model.updateTo<any>({}, {})).rejects.toThrow()
     expect(namedRowCount.mock.calls.length).toBe(0)
     expect(namedQuery.mock.calls.length).toBe(0)
   })
 
   test(`should skip query if receive and empty update`, async () => {
-    expect(await Model.updateTo<any>({}, { id: 123 })).toBe(0)
+    await expect(Model.updateTo<any>({}, { id: 123 })).resolves.toBe(0)
     expect(namedRowCount.mock.calls.length).toBe(0)
     expect(namedQuery.mock.calls.length).toBe(0)
   })
 
   test(`should run an update query and return how many records were updated`, async () => {
     namedRowCount.mockResolvedValueOnce(20)
-    expect(
-      await Model.updateTo<any>(
+    await expect(
+      Model.updateTo<any>(
         { name: 'new name' },
         { id: 123, name: null, labels: ['label1', 'label2'] }
       )
-    ).toBe(20)
+    ).resolves.toBe(20)
     expect(namedRowCount.mock.calls.length).toBe(1)
     expect(namedQuery.mock.calls.length).toBe(0)
 
@@ -125,7 +127,9 @@ describe(`Model.updateTo`, () => {
   })
 
   test(`should skip query if receive and empty condition prop`, async () => {
-    expect(await Model.updateTo<any>({ name: 'new name' }, { id: [] })).toBe(0)
+    await expect(
+      Model.updateTo<any>({ name: 'new name' }, { id: [] })
+    ).resolves.toBe(0)
     expect(namedRowCount.mock.calls.length).toBe(0)
     expect(namedQuery.mock.calls.length).toBe(0)
   })
@@ -133,24 +137,24 @@ describe(`Model.updateTo`, () => {
 
 describe(`Model.updateMany`, () => {
   test(`should fail if receive a non word character as key`, async () => {
-    await expect(() =>
+    await expect(
       Model.updateMany<any>([{ 'invalid field': 123 }], ['valid_key'])
-    ).rejects.toThrowError()
-    await expect(() =>
+    ).rejects.toThrow()
+    await expect(
       Model.updateMany<any>([{ valid_key: 123 }], ['invalid field'])
-    ).rejects.toThrowError()
+    ).rejects.toThrow()
     expect(namedRowCount.mock.calls.length).toBe(0)
     expect(namedQuery.mock.calls.length).toBe(0)
   })
 
   test(`should fails if doesn't receive any key`, async () => {
-    await expect(() => Model.updateMany<any>([{}], [])).rejects.toThrowError()
+    await expect(Model.updateMany<any>([{}], [])).rejects.toThrow()
     expect(namedRowCount.mock.calls.length).toBe(0)
     expect(namedQuery.mock.calls.length).toBe(0)
   })
 
   test(`shoudl skip query if get an empty list of updates`, async () => {
-    expect(await Model.updateMany<any>([], [])).toBe(0)
+    await expect(Model.updateMany<any>([], [])).resolves.toBe(0)
     expect(namedRowCount.mock.calls.length).toBe(0)
     expect(namedQuery.mock.calls.length).toBe(0)
   })
@@ -170,7 +174,7 @@ describe(`Model.updateMany`, () => {
       },
     ]
 
-    await expect(await Model.updateMany<any>(updates, ['id'])).toBe(2)
+    await expect(Model.updateMany<any>(updates, ['id'])).resolves.toBe(2)
     expect(namedQuery.mock.calls.length).toBe(0)
     expect(namedRowCount.mock.calls.length).toBe(1)
 
@@ -221,8 +225,8 @@ describe(`Model.updateMany`, () => {
     ]
 
     await expect(
-      await Model.updateMany<any>(updates, ['id'], ['description'])
-    ).toBe(2)
+      Model.updateMany<any>(updates, ['id'], ['description'])
+    ).resolves.toBe(2)
     expect(namedQuery.mock.calls.length).toBe(0)
     expect(namedRowCount.mock.calls.length).toBe(1)
 

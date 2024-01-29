@@ -1,0 +1,12 @@
+.ui.grid.AuthChainTable > .row {
+  padding: 0.5rem;
+}
+.ui.grid.AuthChainTable > .row > .column {
+  padding: 0;
+}
+.ui.grid.AuthChainTable > .row .prismjs {
+  padding: 20px 15px;
+}
+.ui.grid.AuthChainTable > .row .docblock-source {
+  margin: 0;
+}

@@ -1,6 +1,13 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Source, ArgsTable } from '@storybook/components'
-import { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs'
+import {
+  Meta,
+  Story,
+  Preview,
+  Canvas,
+  Subtitle,
+  Source,
+  PureArgsTable as ArgsTable,
+} from '@storybook/addon-docs'
 import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid'
 import Avatar from './Avatar'
 import { Size } from '../Props/types'
@@ -11,7 +18,7 @@ import Code from '../Text/Code'
 import useAuth from '../../hooks/useAuth.ts'
 import './Avatar.stories.css'
 
-<Meta title="Components/User/Avatar" />
+<Meta title="components/User/Avatar" />
 
 # Avatar component
 

@@ -1,0 +1,60 @@
+import { Meta, Canvas, ArgsTable, Args, Source } from '../Storybook'
+
+<Meta
+  title="components/Development/Sentry"
+  parameters={{
+    viewMode: 'docs',
+    previewTabs: {
+      canvas: { hidden: true },
+    },
+  }}
+/>
+
+# Sentry
+
+Automatically injects rollbar (`window.Sentry`) into the global environment.
+
+See [Sentry documentation](https://docs.sentry.io/platforms/javascript) for more details about error tracking.
+
+> Development components are meant to be used on `gatsby-ssr.js`, see [README.md](./?path=/docs/components-development-readme-md--docs) for more details
+
+<Source dark language="tsx" code={`<Sentry src={SENTRY_SRC} />`} />
+
+<ArgsTable
+  rows={[
+    Args.Prop('src', 'Sentry DSN', {
+      type: Args.Types.String,
+      defaultValue: Args.Types.Environment('SENTRY_SRC'),
+    }),
+    Args.Environment('SENTRY_SRC', 'Sentry DSN'),
+    Args.Environment('ENVIRONMENT', 'Running environment', {
+      defaultValue: 'local',
+    }),
+    Args.Environment('COMMIT_SHA', 'Commit hash of the running application'),
+    Args.Environment('COMMIT_SHORT_SHA', 'Short version fo the commit hash'),
+    Args.Environment(
+      'COMMIT_REF_NAME',
+      'Ref version of the running application'
+    ),
+    Args.Environment('COMMIT_BRANCH', 'Brach of the running application'),
+    Args.Environment('COMMIT_TAG', 'Commit tag of the running application'),
+  ]}
+/>
+
+The rest of the available configuration can be found in the [docs](https://docs.sentry.io/platforms/javascript/guides/gatsby/configuration).
+
+## Locate your Sentry Script
+
+The Loader Script is the easiest way to initialize the Sentry SDK. The Loader Script also automatically keeps your Sentry SDK up to date and offers configuration for different Sentry features. To learn about the Sentry JavaScript Loader Script please follow the instructions in the [documentation](https://docs.sentry.io/platforms/javascript/install/loader/).
+
+## Use with CSP (Content Security Policy)
+
+If you rely on allowlisting you will need to add the following directive:
+
+```txt
+script-src: https://browser.sentry-cdn.com https://js.sentry-cdn.com
+connect-src: *.sentry.io
+worker-src: blob:
+```
+
+> see the [full documentaion](https://docs.sentry.io/platforms/javascript/install/loader/#content-security-policy) for more details

@@ -5,6 +5,8 @@ import type * as express from 'express'
 export type DevelopMiddlewareConfig = {
   prefix: string
   url: string
+  followRedirects?: boolean
+  changeOrigin?: boolean
 }
 
 export type DevelopMiddlewarePaths =
@@ -20,6 +22,8 @@ export default function developMiddleware(paths: DevelopMiddlewarePaths) {
         createProxyMiddleware({
           target: config.url,
           secure: !config.url.startsWith('https://localhost:'),
+          changeOrigin: config.changeOrigin,
+          followRedirects: config.followRedirects,
         })
       )
     }

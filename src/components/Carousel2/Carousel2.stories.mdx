@@ -1,0 +1,237 @@
+import { useState, useMemo, useEffect } from 'react'
+import {
+  Meta,
+  Story,
+  Preview,
+  Canvas,
+  Subtitle,
+  Source,
+  PureArgsTable as ArgsTable,
+} from '@storybook/addon-docs'
+import { Args } from '../Storybook/utils'
+import Carousel2, { IndicatorType } from './Carousel2'
+import Divider from '../Text/Divider'
+import ImgFixed from '../Image/ImgFixed'
+import Land from '../../utils/api/Land.ts'
+
+export const items = [
+  {
+    src: Land.getInstance().getParcelImage([-29, 55]),
+    dimension: 'wide',
+  },
+  {
+    src: Land.getInstance().getParcelImage([-29, 155]),
+    dimension: 'wide',
+  },
+  {
+    src: Land.getInstance().getParcelImage([-129, 55]),
+    dimension: 'wide',
+  },
+  {
+    src: Land.getInstance().getParcelImage([-29, 5]),
+    dimension: 'wide',
+  },
+  {
+    src: Land.getInstance().getParcelImage([-9, 55]),
+    dimension: 'wide',
+  },
+]
+
+export const manyItems = [...items, ...items, ...items]
+
+export const differentHeightItems = [
+  {
+    src: Land.get().getParcelImage([-29, 55]),
+    dimension: 'wide',
+  },
+  {
+    src: Land.get().getParcelImage([-29, 155]),
+    dimension: 'vertical',
+  },
+  {
+    src: Land.get().getParcelImage([-129, 55]),
+    dimension: 'wide',
+  },
+  {
+    src: Land.get().getParcelImage([-29, 5]),
+    dimension: 'vertical',
+  },
+  {
+    src: Land.get().getParcelImage([-9, 55]),
+    dimension: 'wide',
+  },
+]
+
+export const CarouselItemComponent = (props) => (
+  <ImgFixed src={props.item.src} dimension={props.item.dimension} />
+)
+
+<Meta
+  title="components/Carousel2"
+  parameters={{
+    viewMode: 'docs',
+    previewTabs: {
+      canvas: { hidden: true },
+    },
+  }}
+  decorators={[
+    (Story) => (
+      <div style={{ width: '90%', maxWidth: '700px', margin: '0 auto' }}>
+        <Story />
+      </div>
+    ),
+  ]}
+/>
+
+# Carousel2
+
+<Canvas withSource="open">
+  <Story name="Carousel2">
+    <Carousel2 items={items} component={CarouselItemComponent} />
+  </Story>
+</Canvas>
+
+<ArgsTable
+  rows={[
+    Args.Prop('items', 'list of items to show into the carrousel ', {
+      type: Args.Types.Raw(`T[]`),
+      required: true,
+    }),
+    Args.Prop('component', 'react component to render from each item ', {
+      type: Args.Types.ComponentType(`{ item: T }`),
+      required: true,
+    }),
+    Args.Prop('time', 'time in milliseconds between item change ', {
+      type: Args.Types.Number,
+      defaultValue: 3000,
+    }),
+    Args.Prop('loading', 'set the carousel as loading ', {
+      type: Args.Types.Boolean,
+      defaultValue: false,
+    }),
+    Args.Prop(
+      'dynamicBullets',
+      'grow and shrink bullets to always use the same space ',
+      { type: Args.Types.Boolean, defaultValue: false }
+    ),
+    Args.Prop('indicatorType', 'change bullet shape ', {
+      type: Args.Types.Enum(`IndicatorType`, IndicatorType),
+      defaultValue: IndicatorType.Bullet,
+    }),
+    Args.Prop('isFullscreen', 'change position of the navigation components ', {
+      type: Args.Types.Boolean,
+      defaultValue: false,
+    }),
+    Args.Prop('isNavigationHidden', 'hide navigation component ', {
+      type: Args.Types.Boolean,
+      defaultValue: false,
+    }),
+    Args.HTMLProps('HTMLDivElement'),
+  ]}
+/>
+
+<Divider size="small" />
+
+## Loading
+
+`loading` prop shows a loading block instead of the component
+
+<Canvas withSource="open">
+  <Story name="Loading">
+    <Carousel2 loading items={items} component={CarouselItemComponent} />
+  </Story>
+</Canvas>
+
+<Divider size="small" />
+
+## Dynamic bullets
+
+`dynamicBullets` makes bullets' size grow and shrink to always to use the same space
+
+<Canvas withSource="open">
+  <Story name="Dynamic Bullets">
+    <Carousel2 dynamicBullets items={items} component={CarouselItemComponent} />
+  </Story>
+</Canvas>
+
+<Divider size="small" />
+
+## Automatic Dynamic Bullets
+
+`dynamicBullets` prop is automatically turned `true` if there is more than 5 items
+
+<Canvas withSource="open">
+  <Story name="Automatic Dynamic Bullets">
+    <Carousel2 items={manyItems} component={CarouselItemComponent} />
+  </Story>
+</Canvas>
+
+<Divider size="small" />
+
+## Time between slide
+
+`time` prop sets up a custom time between each slide in milliseconds
+
+<Canvas withSource="open">
+  <Story name="Time between slide">
+    <Carousel2 time={1000} items={items} component={CarouselItemComponent} />
+  </Story>
+</Canvas>
+
+<Divider size="small" />
+
+## Indicator Type: Dash
+
+`indicatorType` prop changes the default bullet design for a flatten style
+
+<Canvas withSource="open">
+  <Story name="Indicator Type: Dash">
+    <Carousel2
+      items={items}
+      component={CarouselItemComponent}
+      indicatorType={IndicatorType.Dash}
+    />
+  </Story>
+</Canvas>
+
+<Divider size="small" />
+
+## Navigation Positon: Inner
+
+`isFullscreen` prop position all the navigation controllers on top of the items
+
+<Canvas withSource="open">
+  <Story name="Navigation position: inside">
+    <Carousel2 isFullscreen items={items} component={CarouselItemComponent} />
+  </Story>
+</Canvas>
+
+<Divider size="small" />
+
+## Hide Navigation
+
+`isNavigationHidden` prop hides all navigation components
+
+<Canvas withSource="open">
+  <Story name="Hide Navigation">
+    <Carousel2
+      isNavigationHide
+      items={items}
+      component={CarouselItemComponent}
+    />
+  </Story>
+</Canvas>
+
+<Divider size="small" />
+
+## Handle items with different heights
+
+`Carousel2` takes the height of the bigger item
+
+<Canvas withSource="open">
+  <Story name="Handle different heights">
+    <Carousel2 items={differentHeightItems} component={CarouselItemComponent} />
+  </Story>
+</Canvas>
+
+<Divider size="small" />

@@ -1,7 +1,7 @@
-import { hash } from 'immutable'
-
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
+import sentry from '../development/sentry'
+import singleton from '../immutable/singleton'
 
 export type TargetListener = Pick<
   HTMLElement,
@@ -34,7 +34,7 @@ export default class SingletonListener<T extends TargetListener> {
    * @param target listener target
    */
   static from<T extends TargetListener>(target: T): SingletonListener<T> {
-    const id = hash(target)
+    const id = singleton(target)
     if (!this.cache.has(id)) {
       this.cache.set(id, new SingletonListener(target))
     }
@@ -83,6 +83,14 @@ export default class SingletonListener<T extends TargetListener> {
           console.error(`Error executing listener: ${err.message}`, err)
           rollbar((rollbar) =>
             rollbar.error(`Error executing listener: ${err.message}`, err)
+          )
+          sentry((sentry) =>
+            sentry.captureException(
+              `Error executing listener: ${err.message}`,
+              {
+                extra: err,
+              }
+            )
           )
           segment((analytics) =>
             analytics.track('error', {

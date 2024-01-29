@@ -12,10 +12,12 @@ export type WrongNetworkModalProps = ModalProps & {
   currentNetwork?: ChainId | null
   expectedNetwork?: ChainId | ChainId[]
   providerType?: ProviderType | null
+  isSwitching?: boolean
   onSwitchNetwork?: (chainId: ChainId) => void
 }
 
 const anyNetwork = [
+  ChainId.ETHEREUM_SEPOLIA,
   ChainId.ETHEREUM_GOERLI,
   ChainId.ETHEREUM_KOVAN,
   ChainId.ETHEREUM_MAINNET,
@@ -28,6 +30,7 @@ const anyNetwork = [
 export default React.memo(function WrongNetworkModal({
   open,
   currentNetwork,
+  isSwitching,
   expectedNetwork,
   onSwitchNetwork,
   providerType,
@@ -86,7 +89,11 @@ export default React.memo(function WrongNetworkModal({
   )
 
   const allowNetworkSwitch = useMemo(
-    () => providerType === ProviderType.INJECTED,
+    () =>
+      providerType === ProviderType.INJECTED ||
+      providerType === ProviderType.MAGIC ||
+      providerType === ProviderType.WALLET_CONNECT_V2 ||
+      providerType === ProviderType.WALLET_CONNECT,
     [providerType]
   )
 
@@ -110,6 +117,8 @@ export default React.memo(function WrongNetworkModal({
             return (
               <Button
                 fluid
+                loading={isSwitching}
+                disabled={isSwitching}
                 key={chainId}
                 basic={index !== 0}
                 primary={index === 0}

@@ -1,17 +1,17 @@
 import Analytics from 'analytics-node'
-import { yellow } from 'colors/safe'
+import chalk from 'chalk'
 
+import env from '../../utils/env'
 import { LoggerSubscription } from './logger'
 
 export default function createSegmentSubscriber(): LoggerSubscription {
-  const segmentKey =
-    process.env.GATSBY_SEGMENT || process.env.GATSBY_SEGMENT_KEY
+  const segmentKey = env('SEGMENT') || env('SEGMENT_KEY')
   if (!segmentKey) {
     console.log(
       `missing`,
-      yellow('GATSBY_SEGMENT'),
+      chalk.yellow('GATSBY_SEGMENT'),
       ' or ',
-      yellow('GATSBY_SEGMENT_KEY')
+      chalk.yellow('GATSBY_SEGMENT_KEY')
     )
     return () => {}
   }

@@ -1,61 +1,130 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Source, ArgsTable } from '@storybook/components'
-import { Meta, Story, Preview, Canvas, Subtitle } from '@storybook/addon-docs'
+import {
+  Source,
+  ArgsTable,
+  Args,
+  Meta,
+  Story,
+  Preview,
+  Canvas,
+  Subtitle,
+} from '../Storybook'
 import { Container } from 'decentraland-ui/dist/components/Container/Container'
 import { Stats } from 'decentraland-ui/dist/components/Stats/Stats'
 import { Card } from 'decentraland-ui/dist/components/Card/Card'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import Accordion from './Accordion'
 import Divider from '../Text/Divider'
 import Paragraph from '../Text/Paragraph'
 import ImgFixed from '../Image/ImgFixed'
 import Land from '../../utils/api/Land.ts'
 
-<Meta title="Components/Accordion" />
+<Meta
+  title="components/Accordion"
+  parameters={{
+    viewMode: 'docs',
+    previewTabs: {
+      canvas: { hidden: true },
+    },
+  }}
+  decorators={[
+    (Story) => (
+      <Container>
+        <Story />
+      </Container>
+    ),
+  ]}
+/>
+
+# Accordion
+
+<Canvas withSource="open">
+  <Story name="Accordion">
+    <Accordion title={<Header>Accordion title</Header>}>
+      Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+      Lorem Ipsum has been the industry's standard dummy text ever since the
+      1500s, when an unknown printer took a galley of type and scrambled it to
+      make a type specimen book. It has survived not only five centuries, but
+      also the leap into electronic typesetting, remaining essentially
+      unchanged. It was popularised in the 1960s with the release of Letraset
+      sheets containing Lorem Ipsum passages, and more recently with desktop
+      publishing software like Aldus PageMaker including versions of Lorem Ipsum
+    </Accordion>
+  </Story>
+</Canvas>
+
+<ArgsTable
+  rows={[
+    Args.Prop('title', 'Title on the left of the accordtion item', {
+      type: Args.Types.ReactNode,
+    }),
+    Args.Prop('description', 'Description on the right of the accordtion', {
+      type: Args.Types.ReactNode,
+    }),
+    Args.Prop('open', 'Force the accordion to be open or close', {
+      type: Args.Types.Boolean,
+    }),
+    Args.HTMLProps('HTMLDivElement'),
+  ]}
+/>
+
+## With `Stats` component as title
+
+<Canvas withSource="open">
+  <Story name="With stats title">
+    <Accordion
+      title={<Stats title="Accordion sub title">Accordion title</Stats>}
+    />
+  </Story>
+</Canvas>
+
+## With `Paragraph` component as description
+
+<Canvas withSource="open">
+  <Story name="With description">
+    <Accordion
+      title={<Stats title="Accordion sub title">Accordion title</Stats>}
+      description={
+        <Paragraph secondary small>
+          Accordion description
+        </Paragraph>
+      }
+    />
+  </Story>
+</Canvas>
+
+<Divider size="small" />
 
 ## With content
 
-<Canvas isExpanded>
+<Canvas withSource="open">
   <Story name="With content">
-    <Container>
-      <Accordion
-        title={<Stats title="Accordion sub title">Accordion title</Stats>}
-        description={
-          <Paragraph secondary small>
-            Accordion description
-          </Paragraph>
-        }
-      >
-        <ImgFixed src={Land.get().getParcelImage([-29, 55])} dimension="wide" />
-      </Accordion>
-    </Container>
+    <Accordion
+      title={<Stats title="Accordion sub title">Accordion title</Stats>}
+      description={
+        <Paragraph secondary small>
+          Accordion description
+        </Paragraph>
+      }
+    >
+      Lorem Ipsum is simply dummy text of the printing and typesetting industry.
+      Lorem Ipsum has been the industry's standard dummy text ever since the
+      1500s, when an unknown printer took a galley of type and scrambled it to
+      make a type specimen book. It has survived not only five centuries, but
+      also the leap into electronic typesetting, remaining essentially
+      unchanged. It was popularised in the 1960s with the release of Letraset
+      sheets containing Lorem Ipsum passages, and more recently with desktop
+      publishing software like Aldus PageMaker including versions of Lorem Ipsum
+    </Accordion>
   </Story>
 </Canvas>
 
 <Divider size="small" />
 
-## Without content
+## With Card component
 
-<Canvas isExpanded>
-  <Story name="Without content">
-    <Container>
-      <Accordion
-        title={<Stats title="Accordion sub title">Accordion title</Stats>}
-        description={
-          <Paragraph secondary small>
-            Accordion description
-          </Paragraph>
-        }
-      />
-    </Container>
-  </Story>
-</Canvas>
-
-<Divider size="small" />
-
-## With content and Card
-
-<Canvas isExpanded>
-  <Story name="With content and Card">
+<Canvas withSource="open">
+  <Story name="With Card">
     <Card style={{ width: '100%' }}>
       <Card.Content>
         <Accordion
@@ -66,32 +135,16 @@ import Land from '../../utils/api/Land.ts'
             </Paragraph>
           }
         >
-          <ImgFixed
-            src={Land.get().getParcelImage([-108, -30])}
-            dimension="wide"
-          />
+          Lorem Ipsum is simply dummy text of the printing and typesetting
+          industry. Lorem Ipsum has been the industry's standard dummy text ever
+          since the 1500s, when an unknown printer took a galley of type and
+          scrambled it to make a type specimen book. It has survived not only
+          five centuries, but also the leap into electronic typesetting,
+          remaining essentially unchanged. It was popularised in the 1960s with
+          the release of Letraset sheets containing Lorem Ipsum passages, and
+          more recently with desktop publishing software like Aldus PageMaker
+          including versions of Lorem Ipsum
         </Accordion>
-      </Card.Content>
-    </Card>
-  </Story>
-</Canvas>
-
-<Divider size="small" />
-
-## Without content and Card
-
-<Canvas isExpanded>
-  <Story name="Without content and Card">
-    <Card style={{ width: '100%' }}>
-      <Card.Content>
-        <Accordion
-          title={<Stats title="Accordion sub title">Accordion title</Stats>}
-          description={
-            <Paragraph secondary small>
-              Accordion description
-            </Paragraph>
-          }
-        />
       </Card.Content>
     </Card>
   </Story>

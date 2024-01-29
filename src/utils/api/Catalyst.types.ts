@@ -1,9 +1,10 @@
+import type { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import type { EntityType } from '@dcl/schemas/dist/platform/entity'
 
 export type Snapshot = {
-  face: string
-  face128: string
-  face256: string
+  face?: string
+  face128?: string
+  face256?: string
   body: string
 }
 
@@ -16,6 +17,16 @@ export type BodyColor = {
   }
 }
 
+export enum SceneContentRating {
+  RATING_PENDING = 'RP',
+  EVERYONE = 'E',
+  TEEN = 'T',
+  ADULT = 'A',
+  RESTRICTED = 'R',
+}
+
+/** @TODO remove */
+/** @deprecated use @dcl/schemas/dist/platform/profile/avatar */
 export type Avatar = {
   userId: string
   email: string | null | undefined
@@ -31,11 +42,13 @@ export type Avatar = {
     hair: BodyColor
     skin: BodyColor
     wearables: string[]
-    version: number
+    emotes?: { slot: number; urn: string }[]
+    version?: number
   }
-  inventory: string[]
-  blocked: string[]
+  inventory?: string[]
+  blocked?: string[]
   tutorialStep: number
+  hasConnectedWeb3?: boolean
 }
 
 export type ProfileMetadata = {
@@ -77,6 +90,41 @@ export type CommsStatusWithLayers = CommsStatus & {
 export type CommsStatusWithUsers = CommsStatus & {
   usersCount: number
   usersParcels: [number, number][]
+}
+
+export type CatalystAbout = {
+  healthy: boolean
+  content: {
+    healthy: boolean
+    version: string //"6.0.6",
+    commitHash: string //"d2eeccaffe2a9c22ac963348851c7791b63fc517",
+    publicUrl: string //"https://peer.decentraland.org/content/"
+  }
+  lambdas: {
+    healthy: boolean
+    version: string //"6.0.6",
+    commitHash: string //"d2eeccaffe2a9c22ac963348851c7791b63fc517",
+    publicUrl: string //"https://peer.decentraland.org/lambdas/"
+  }
+  configurations: {
+    networkId: ChainId
+    globalScenesUrn: string[]
+    scenesUrn: string[]
+    realmName: string // "hera"
+  }
+  comms: {
+    healthy: boolean
+    protocol: string // "v3",
+    commitHash: string //"b3ec3327ceef53473853068dcdad8ea08d7a0f9c"
+  }
+  bff: {
+    healthy: boolean
+    commitHash: string //"4352737ca24a0c590387fba4b46da297408e899a",
+    userCount: number
+    protocolVersion: string //"1.0_0",
+    publicUrl: string //"/bff"
+  }
+  acceptingUsers: boolean
 }
 
 export type LambdasStatus = {
@@ -146,6 +194,16 @@ export type HotScene = {
   realms: Realm[]
 }
 
+export type WorldLivePerWorldProps = {
+  users: number
+  worldName: string
+}
+
+export type WorldLiveDataProps = {
+  perWorld: WorldLivePerWorldProps[]
+  totalUsers: number
+}
+
 export type LayerUser = {
   id: string
   userId: string
@@ -157,6 +215,7 @@ export type LayerUser = {
   address: string
 }
 
+/**@deprecated */
 export type EntityScene = {
   id: string
   type: 'scene'
@@ -187,7 +246,7 @@ export type EntityScene = {
       signalling: string
     }
     policy: {
-      contentRating: 'E' | 'T' | 'M'
+      contentRating: SceneContentRating
       fly: boolean
       voiceEnabled: boolean
       blacklist: []
@@ -236,14 +295,15 @@ export type ContentDeploymentOptions = {
   sortingOrder: ContentDeploymentSortingOrder
 }
 
-export type ContentDepoyment =
-  | ContentDepoymentScene
-  | ContentDepoymentProfile
-  | ContentDepoymentWearable
-  | ContentDepoymentStore
-  | ContentDepoymentEmote
+export type ContentDeployment =
+  | ContentDeploymentScene
+  | ContentDeploymentProfile
+  | ContentDeploymentWearable
+  | ContentDeploymentStore
+  | ContentDeploymentEmote
+  | ContentDeploymentWorld
 
-export type ContentDepoymentBase = {
+export type ContentDeploymentBase = {
   entityId: string
   entityTimestamp: number
   localTimestamp: number
@@ -259,29 +319,44 @@ export type SceneMetadata = {
     favicon?: string // "favicon_asset",
     navmapThumbnail?: string // "scene-thumbnail.png" | "https://decentraland.org/images/thumbnail.png"
   }
-  owner: string
+  owner?: string
   contact?: {
     name?: string
     email?: string
   }
-  main: string // "bin/game.js",
-  tags: string[]
-  scene: {
+  main?: string // "bin/game.js",
+  tags?: string[]
+  scene?: {
     parcels: string[]
     base: string
   }
-  communications: {
+  requiredPermissions?: string[]
+  spawnPoints?: {
+    name: string
+    default: boolean
+    position: {
+      x: number[]
+      y: number[]
+      z: number[]
+    }
+    cameraTarget: {
+      x: number
+      y: number
+      z: number
+    }
+  }[]
+  communications?: {
     type: string // "webrtc",
     signalling: string // "https://signalling-01.decentraland.org"
   }
-  policy: {
-    contentRating: string
+  policy?: {
+    contentRating: SceneContentRating
     fly: boolean
     voiceEnabled: boolean
     blacklist: string[]
     teleportPosition: string
   }
-  source: {
+  source?: {
     version: number
     origin: string
     projectId: string
@@ -295,20 +370,95 @@ export type SceneMetadata = {
       cols: number // 1
     }
   }
+  worldConfiguration?:
+    | {
+        name: string
+        dclName?: never
+        fixedAdapter?: string
+        minimapVisible?: boolean
+        skybox?: number
+        skyboxConfig?: {
+          fixedHour: number
+          textures: string[]
+        }
+        placesConfig?: {
+          optOut: boolean
+        }
+      }
+    | {
+        // old property
+        dclName: string
+        name?: never
+        fixedAdapter?: never
+        minimapVisible?: never
+        skybox?: never
+        skyboxConfig?: never
+        placesConfig?: never
+      }
 }
 
-export type ContentDepoymentScene = ContentDepoymentBase & {
+export type ContentEntity = {
+  version: string
+  pointers: string[]
+  timestamp: number
+  content: { file: string; hash: string }[]
+}
+
+export type ContentEntityScene = ContentEntity & {
+  type: EntityType.SCENE
+  metadata: SceneMetadata
+}
+
+export type ContentEntityProfile = ContentEntity & {
+  type: EntityType.PROFILE
+  metadata: ProfileMetadata
+}
+
+export type ContentEntityWearable = ContentEntity & {
+  type: EntityType.WEARABLE
+  metadata: WearableMetadata
+}
+
+export type ContentEntityStore = ContentEntity & {
+  type: EntityType.STORE
+  metadata: StoreMetadata
+}
+
+export type ContentEntityEmote = ContentEntity & {
+  type: EntityType.EMOTE
+  metadata: {} // TODO: emote metadata
+}
+
+export type ContentDeploymentScene = ContentDeploymentBase & {
   entityType: EntityType.SCENE
   metadata: SceneMetadata
 }
 
-export type ContentDepoymentProfile = ContentDepoymentBase & {
+export type ContentDeploymentWorld = ContentDeploymentBase & {
+  entityType: EntityType.SCENE
+  metadata: SceneMetadata
+}
+
+export type ContentDeploymentProfile = ContentDeploymentBase & {
   entityType: EntityType.PROFILE
   metadata: ProfileMetadata
 }
 
 export type WearableMetadata = {
   id: string
+  name: string
+  description: string
+  collectionAddress: string
+  rarity: string
+  image: string
+  metrics: {
+    triangles: number
+    materials: number
+    textures: number
+    meshes: number
+    bodies: number
+    entities: number
+  }
   thumbnail: string
   data: {
     tags: string[]
@@ -324,7 +474,7 @@ export type WearableMetadata = {
   updatedAt: number
 }
 
-export type ContentDepoymentWearable = ContentDepoymentBase & {
+export type ContentDeploymentWearable = ContentDeploymentBase & {
   entityType: EntityType.WEARABLE
   metadata: WearableMetadata
 }
@@ -338,18 +488,18 @@ export type StoreMetadata = {
   version: number
 }
 
-export type ContentDepoymentStore = ContentDepoymentBase & {
+export type ContentDeploymentStore = ContentDeploymentBase & {
   entityType: EntityType.STORE
   metadata: StoreMetadata
 }
 
-export type ContentDepoymentEmote = ContentDepoymentBase & {
+export type ContentDeploymentEmote = ContentDeploymentBase & {
   entityType: EntityType.EMOTE
   metadata: {} // TODO
 }
 
 export type ContentDeploymentResponse = {
-  deployments: ContentDepoyment[]
+  deployments: ContentDeployment[]
   filters: Pick<
     ContentDeploymentOptions,
     'from' | 'to' | 'entityIds' | 'entityTypes'

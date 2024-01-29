@@ -1,0 +1,83 @@
+import { Meta, Canvas, ArgsTable, Args, Source } from '../Storybook'
+
+<Meta
+  title="components/Development/Rollbar"
+  parameters={{
+    viewMode: 'docs',
+    previewTabs: {
+      canvas: { hidden: true },
+    },
+  }}
+/>
+
+# Rollbar (deprecated)
+
+Automatically injects rollbar (`window.Rollbar`) into the global environment.
+
+See [Rollbar documentation](https://docs.rollbar.com/docs/javascript) for more details about error tracking.
+
+> Development components are meant to be used on `gatsby-ssr.js`, see [README.md](./?path=/docs/components-development-readme-md--docs) for more details
+
+<Source
+  dark
+  language="tsx"
+  code={`<Rollbar accessToken={ROLLBAR_ACCESS_TOKEN} />`}
+/>
+
+<ArgsTable
+  rows={[
+    Args.Prop('accessToken', 'Rollbar access token', {
+      type: Args.Types.String,
+      defaultValue: Args.Types.Environment('ROLLBAR_TOKEN'),
+    }),
+    Args.Prop('captureUncaught', 'capture uncaught exceptions', {
+      type: Args.Types.Boolean,
+      defaultValue: true,
+    }),
+    Args.Prop(
+      'captureUnhandledRejections',
+      'capture uncaught unhandled rejections',
+      {
+        type: Args.Types.Boolean,
+        defaultValue: true,
+      }
+    ),
+    Args.Prop(
+      'payload',
+      'key/value map with extra that will be send to Rollbar ',
+      {
+        type: Args.Types.Raw(`Record<string, string | number>`),
+        defaultValue: Args.Types.Raw('{}'),
+      }
+    ),
+    Args.Prop('version', 'sets an specific Rollbar version ', {
+      type: Args.Types.String,
+      defaultValue: 'v2.24.0',
+    }),
+    Args.Environment('ROLLBAR_TOKEN', 'Rollbar access token'),
+    Args.Environment('ENVIRONMENT', 'Running environment', {
+      defaultValue: 'local',
+    }),
+    Args.Environment('COMMIT_SHA', 'Commit hash of the running application'),
+    Args.Environment('COMMIT_SHORT_SHA', 'Short version fo the commit hash'),
+    Args.Environment(
+      'COMMIT_REF_NAME',
+      'Ref version of the running application'
+    ),
+    Args.Environment('COMMIT_BRANCH', 'Brach of the running application'),
+    Args.Environment('COMMIT_TAG', 'Commit tag of the running application'),
+  ]}
+/>
+
+## Locate your Access Token
+
+The Access Token is the unique identifier for each Source. To find the key follow the instructions detailed in the [documentation](https://docs.rollbar.com/docs/project-configurations#project-access-tokens).
+
+## Use with CSP (Content Security Policy)
+
+If you rely on allowlisting you will need to add the following directive:
+
+```txt
+script-src:
+  https://cdn.rollbar.com
+```

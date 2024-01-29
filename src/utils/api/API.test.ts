@@ -1,8 +1,7 @@
-import fetch from '../../entities/Development/fetch.test'
+import { sleep } from 'radash'
+
 import API from './API'
 import '../../entities/Development/logger.test'
-
-const HTTPBIN_ENDPOINT = process.env.HTTPBIN_ENDPOINT || 'https://httpbin.org'
 
 describe('utils/api/API', () => {
   describe('#catch', () => {
@@ -190,36 +189,20 @@ describe('utils/api/API', () => {
     })
 
     test('.fetch(): http get as default method', async () => {
-      const api = new API(HTTPBIN_ENDPOINT)
-      fetch.once(
-        'https://httpbin.org/anything',
-        new Response('{}', { status: 200 })
+      const random = Math.random()
+      const mock = jest.fn()
+      mock.mockResolvedValue(
+        new Response(JSON.stringify({ random }), { status: 200 })
       )
-      await api.fetch('/anything')
-      expect(fetch.lastUrl()).toBe('https://httpbin.org/anything')
-      expect(fetch.lastOptions()).toEqual({})
-    })
 
-    test('.fetch(): http get method', async () => {
-      const api = new API(HTTPBIN_ENDPOINT)
-      fetch.once(
-        'https://httpbin.org/anything',
-        new Response('{}', { status: 200 })
-      )
-      await api.fetch('/anything', api.options().method('get'))
-      expect(fetch.lastUrl()).toBe('https://httpbin.org/anything')
-      expect(fetch.lastOptions()).toEqual({ method: 'get' })
-    })
+      const api = new API('https://decentraland.org/api').setFetcher(mock)
+      await expect(api.fetch('/anything')).resolves.toEqual({ random })
 
-    test('.fetch(): http delete method', async () => {
-      const api = new API(HTTPBIN_ENDPOINT)
-      fetch.once(
-        'https://httpbin.org/anything',
-        new Response('{}', { status: 200 })
+      expect(mock).toHaveBeenCalledTimes(1)
+      expect(mock).toHaveBeenCalledWith(
+        'https://decentraland.org/api/anything',
+        {}
       )
-      await api.fetch('/anything', api.options().method('delete'))
-      expect(fetch.lastUrl()).toBe('https://httpbin.org/anything')
-      expect(fetch.lastOptions()).toEqual({ method: 'delete' })
     })
 
     for (const method of [
@@ -232,15 +215,131 @@ describe('utils/api/API', () => {
       'options',
     ]) {
       test(`.fetch(): http ${method} method`, async () => {
-        const api = new API(HTTPBIN_ENDPOINT)
-        fetch.once(
-          'https://httpbin.org/anything',
-          new Response('{}', { status: 200 })
+        const random = Math.random()
+        const mock = jest.fn(((): any => {}) as typeof fetch)
+        mock.mockResolvedValue(
+          new Response(JSON.stringify({ random }), { status: 200 })
         )
-        await api.fetch('/anything', api.options().method(method))
-        expect(fetch.lastUrl()).toBe('https://httpbin.org/anything')
-        expect(fetch.lastOptions()).toEqual({ method })
+
+        const api = new API('https://decentraland.org/api').setFetcher(mock)
+
+        await expect(
+          api.fetch('/anything', api.options().method(method))
+        ).resolves.toEqual({ random })
+
+        expect(mock).toHaveBeenCalledTimes(1)
+        expect(mock).toHaveBeenCalledWith(
+          'https://decentraland.org/api/anything',
+          { method }
+        )
       })
     }
+  })
+})
+
+describe('timeout', () => {
+  test(`should automatically return a request timeout if timeout is 0 `, async () => {
+    const random = Math.random()
+    const mock = jest.fn(((): any => {}) as typeof fetch)
+    mock.mockResolvedValue(
+      new Response(JSON.stringify({ random }), { status: 200 })
+    )
+
+    const api = new API('https://decentraland.org/api').setFetcher(mock)
+    await expect(
+      api.fetch('/timeout/0', api.options().timeout(0))
+    ).rejects.toThrowError('Request Timeout')
+
+    expect(mock).toHaveBeenCalledTimes(0)
+  })
+
+  test(`should return fallback value if timeoutWithFallback is set`, async () => {
+    const random = Math.random()
+    const mock = jest.fn(((): any => {}) as typeof fetch)
+    mock.mockResolvedValue(
+      new Response(JSON.stringify({ random }), { status: 200 })
+    )
+
+    const api = new API('https://decentraland.org/api').setFetcher(mock)
+    await expect(
+      api.fetch(
+        '/timeout/0',
+        api.options().timeoutWithFallback(0, { fallback: true })
+      )
+    ).resolves.toEqual({ fallback: true })
+
+    expect(mock).toHaveBeenCalledTimes(0)
+  })
+
+  test(`should perform fetch if timeout is greater than 0`, async () => {
+    const random = Math.random()
+    const mock = jest.fn(((): any => {}) as typeof fetch)
+    mock.mockImplementation(() =>
+      sleep(20).then(
+        () => new Response(JSON.stringify({ random }), { status: 200 })
+      )
+    )
+
+    const api = new API('https://decentraland.org/api').setFetcher(mock)
+    await expect(
+      api.fetch('/timeout/20', api.options().timeout(10))
+    ).rejects.toThrowError('Request Timeout')
+
+    expect(mock).toHaveBeenCalledTimes(1)
+
+    const [target, options] = mock.mock.calls[0]
+    expect(target).toBe('https://decentraland.org/api/timeout/20')
+    expect(options?.signal).toBeInstanceOf(AbortSignal)
+    expect(options?.signal?.aborted).toBe(true)
+  })
+
+  test(`should return fallback if the request times out`, async () => {
+    const random = Math.random()
+    const mock = jest.fn(((): any => {}) as typeof fetch)
+    mock.mockImplementation(() =>
+      sleep(20).then(
+        () => new Response(JSON.stringify({ random }), { status: 200 })
+      )
+    )
+
+    const api = new API('https://decentraland.org/api').setFetcher(mock)
+    await expect(
+      api.fetch(
+        '/timeout/20',
+        api.options().timeoutWithFallback(10, { fallback: true })
+      )
+    ).resolves.toEqual({ fallback: true })
+
+    expect(mock).toHaveBeenCalledTimes(1)
+
+    const [target, options] = mock.mock.calls[0]
+    expect(target).toBe('https://decentraland.org/api/timeout/20')
+    expect(options?.signal).toBeInstanceOf(AbortSignal)
+    expect(options?.signal?.aborted).toBe(true)
+  })
+
+  test(`should peform fetch as usual if it doesn't time out`, async () => {
+    const random = Math.random()
+    const mock = jest.fn(((): any => {}) as typeof fetch)
+    mock.mockImplementation(() =>
+      sleep(10).then(
+        () => new Response(JSON.stringify({ random }), { status: 200 })
+      )
+    )
+
+    const api = new API('https://decentraland.org/api').setFetcher(mock)
+    await expect(
+      api.fetch(
+        '/timeout/10',
+        api.options().timeoutWithFallback(20, { fallback: true })
+      )
+    ).resolves.toEqual({ random })
+
+    expect(mock).toHaveBeenCalledTimes(1)
+
+    const [target, options] = mock.mock.calls[0]
+    expect(target).toBe('https://decentraland.org/api/timeout/10')
+    expect(options?.signal).toBeInstanceOf(AbortSignal)
+    expect(options?.signal?.aborted).toBe(false)
   })
 })

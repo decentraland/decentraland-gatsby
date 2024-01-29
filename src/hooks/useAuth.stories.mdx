@@ -1,6 +1,11 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Source, ArgsTable } from '@storybook/components'
-import { Meta, Story, Preview } from '@storybook/addon-docs'
+import {
+  Meta,
+  Story,
+  Preview,
+  Source,
+  PureArgsTable as ArgsTable,
+} from '@storybook/addon-docs'
 import { ChainId, getChainName } from '@dcl/schemas'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
@@ -10,6 +15,8 @@ import { Args } from '../components/Storybook/utils'
 import Container from '../components/Storybook/Container'
 import Textarea from '../components/Form/Textarea'
 import Paragraph from '../components/Text/Paragraph'
+import AuthProvider from '../context/Auth/AuthProvider'
+import useAuthContext from '../context/Auth/useAuthContext'
 import useAuth from './useAuth'
 import { chains } from './useAuth.utils'
 
@@ -72,13 +79,15 @@ const [account, state] = useAuth()
 ## Connect Preview
 
 export const ConnectExample = () => {
-  const [account, state] = useAuth()
+  const [account, state] = useAuthContext()
   const [chain, setChain] = useState(ChainId.ETHEREUM_MAINNET)
   const selectChain = (_, { value }) => setChain(value)
   const connectInjected = () => state.connect(ProviderType.INJECTED, chain)
   const connectFortmatic = () => state.connect(ProviderType.FORTMATIC, chain)
   const connectWalletConnect = () =>
     state.connect(ProviderType.WALLET_CONNECT, chain)
+  const connectWalletConnect2 = () =>
+    state.connect(ProviderType.WALLET_CONNECT_V2, chain)
   const connectWalletLink = () => state.connect(ProviderType.WALLET_LINK, chain)
   const disconnect = () => state.disconnect()
   return (
@@ -155,6 +164,16 @@ export const ConnectExample = () => {
             style={{ margin: '0 .5em .5em 0' }}
             disabled={!!account}
             loading={state.loading}
+            onClick={connectWalletConnect2}
+          >
+            wallet connect 2
+          </Button>
+          <Button
+            primary
+            size="small"
+            style={{ margin: '0 .5em .5em 0' }}
+            disabled={!!account}
+            loading={state.loading}
             onClick={connectWalletConnect}
           >
             wallet connect
@@ -199,7 +218,15 @@ export const ConnectExample = () => {
   )
 }
 
-<ConnectExample />
+export const ConnectExampleWrapper = () => {
+  return (
+    <AuthProvider sso="https://id.decentraland.zone">
+      <ConnectExample />
+    </AuthProvider>
+  )
+}
+
+<ConnectExampleWrapper />
 
 ```tsx dark=true
 import React from 'react'
@@ -299,9 +326,9 @@ export const SwitchExample = () => {
 
 ## Related hooks
 
-- [`useAuth`](./?path=/story/hooks-useauth--page): allows to create a user session using one of the availables providers
-- [`useSign`](./?path=/story/hooks-usesign--page): allow to sign a message using a pair address and provider
-- [`useTransaction`](./?path=/story/hooks-usetransaction--page): allow to track transactions
-- [`useAuthContext`](./?path=/story/context-auth-useauthcontext--page): use a single instance of `useAuth` injected through a provider
-- [`useSignContext`](./?path=/story/context-auth-usesigncontext--page): same as `useSign` but detects params automatically usgin the `useAuthContext` hook
-- [`useTransactionContext`](./?path=/story/context-auth-usetransactioncontext--page): same as `useTransaction` but detects params automatically usign the `useAuthContext` hook
+- [`useAuth`](./?path=/docs/hooks-useauth--docs): allows to create a user session using one of the availables providers
+- [`useSign`](./?path=/docs/hooks-usesign--docs): allow to sign a message using a pair address and provider
+- [`useTransaction`](./?path=/docs/hooks-usetransaction--docs): allow to track transactions
+- [`useAuthContext`](./?path=/docs/context-auth-useauthcontext--docs): use a single instance of `useAuth` injected through a provider
+- [`useSignContext`](./?path=/docs/context-auth-usesigncontext--docs): same as `useSign` but detects params automatically usgin the `useAuthContext` hook
+- [`useTransactionContext`](./?path=/docs/context-auth-usetransactioncontext--docs): same as `useTransaction` but detects params automatically usign the `useAuthContext` hook

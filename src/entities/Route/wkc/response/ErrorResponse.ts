@@ -1,3 +1,4 @@
+import env from '../../../../utils/env'
 import Response from './Response'
 
 export default class ErrorResponse extends Error {
@@ -21,7 +22,7 @@ export default class ErrorResponse extends Error {
       body.data = data
     }
 
-    if (err.stack && process.env.NODE_ENV === 'production') {
+    if (err.stack && env('NODE_ENV', 'development') === 'production') {
       body.stack = err.stack
     }
 

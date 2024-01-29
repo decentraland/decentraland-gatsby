@@ -8,7 +8,7 @@ export type JobAttributes<P extends {} = {}> = {
 
 export type CronTime = keyof typeof TimePresets | string | Date
 
-export const TimePresets = {
+export const TimePresets: Record<string, string> = {
   '@yearly': '0 0 0 1 0 *',
   '@monthly': '0 0 0 1 * *',
   '@weekly': '0 0 0 * * 0',

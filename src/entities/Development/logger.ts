@@ -1,3 +1,5 @@
+import env from '../../utils/env'
+
 export type LoggerLevel = 'info' | 'warning' | 'error'
 export type LoggerData = Record<string, any> & { level: LoggerLevel }
 export type LoggerSubscription = (message: string, data: LoggerData) => any
@@ -15,7 +17,7 @@ export class Logger {
         ? 'warn'
         : 'log'
 
-    if (process.env.NODE_ENV === 'production') {
+    if (env('NODE_ENV', 'development') === 'production') {
       console[method](JSON.stringify({ log: message, data }))
     } else {
       console[method](

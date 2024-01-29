@@ -1,3 +1,5 @@
+import env from '../../utils/env'
+
 export default class RequestError extends Error {
   static BadRequest = 400
   static Unauthorized = 401
@@ -10,7 +12,7 @@ export default class RequestError extends Error {
   static NotImplemented = 501
   static ServiceUnavailable = 503
 
-  static Code = {
+  static Code: Record<number, string> = {
     [400]: 'bad_request',
     [401]: 'unauthorized',
     [403]: 'forbidden',
@@ -33,19 +35,18 @@ export default class RequestError extends Error {
       result.code = (err as RequestError).code
     }
 
-    if (
-      !(err as RequestError).code &&
-      (err as RequestError).statusCode &&
-      RequestError[(err as RequestError).statusCode!]
-    ) {
-      result.code = RequestError[(err as RequestError).statusCode!]
+    if (!(err as RequestError).code && (err as RequestError).statusCode) {
+      const statusCode = (err as RequestError).statusCode!
+      if (RequestError.Code[statusCode]) {
+        result.code = RequestError.Code[statusCode]
+      }
     }
 
     if (Object.keys((err as RequestError).data || {}).length > 0) {
       result.data = (err as RequestError).data
     }
 
-    if (result.stack && process.env.NODE_ENV !== 'production') {
+    if (result.stack && env('NODE_ENV', 'development') === 'production') {
       result.stack = err.stack
     }
 

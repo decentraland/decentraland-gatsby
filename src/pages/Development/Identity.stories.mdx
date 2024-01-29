@@ -1,0 +1,310 @@
+import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
+import { useState, useMemo, useEffect } from 'react'
+import { Meta, PureArgsTable as ArgsTable } from '@storybook/addon-docs'
+import { Wallet } from '@ethersproject/wallet'
+import { Web3Provider } from '@ethersproject/providers'
+import Grid from 'semantic-ui-react/dist/commonjs/collections/Grid/Grid'
+import { Header } from 'decentraland-ui/dist/components/Header/Header'
+import { Button } from 'decentraland-ui/dist/components/Button/Button'
+import MissingAuthMessage from '../../components/Storybook/MissingAuthMessage'
+import Container from '../../components/Storybook/Container'
+import Code from '../../components/Text/Code'
+import Divider from '../../components/Text/Divider'
+import useAuth from '../../hooks/useAuth'
+import useAsyncTask from '../../hooks/useAsyncTask'
+import { Authenticator } from '@dcl/crypto/dist/Authenticator'
+
+<Meta title="Development/Identity" />
+
+export function Identity({ address, privateKey, identity }) {
+  return (
+    <>
+      {address && (
+        <Grid.Row>
+          <Grid.Column tablet="16">
+            <Header sub>Owner Address</Header>
+            <Code inline>{String(address)}</Code>
+          </Grid.Column>
+        </Grid.Row>
+      )}
+      {privateKey && (
+        <Grid.Row>
+          <Grid.Column tablet="16">
+            <Header sub>Private key</Header>
+            <Code inline>{String(privateKey)}</Code>
+          </Grid.Column>
+        </Grid.Row>
+      )}
+      <Grid.Row>
+        <Grid.Column tablet="16">
+          <Code note="Identity" copy language="json">
+            {JSON.stringify(identity, null, 2)}
+          </Code>
+        </Grid.Column>
+      </Grid.Row>
+    </>
+  )
+}
+
+export function createIdentity(address, expiration, signer) {
+  const ephemeralWallet = Wallet.createRandom()
+  const payload = {
+    address: ephemeralWallet.address,
+    privateKey: ephemeralWallet.privateKey,
+    publicKey: ephemeralWallet.publicKey,
+  }
+  return Authenticator.initializeAuthChain(address, payload, expiration, signer)
+}
+
+## Ephimeral Identity Generator
+
+export function EphimeralIdentityGenerator() {
+  const [state, setState] = useState({
+    expiration: 60 * 24 * 30,
+  })
+  const [result, setResult] = useState({
+    address: null,
+    privateKey: null,
+    identity: null,
+  })
+  const [generating, generate] = useAsyncTask(async () => {
+    const sourceWallet = Wallet.createRandom()
+    const identity = await createIdentity(
+      sourceWallet.address,
+      Number(state.expiration),
+      (message) => sourceWallet.signMessage(message)
+    )
+    setResult({
+      address: sourceWallet.address,
+      privateKey: sourceWallet.privateKey,
+      identity,
+    })
+  }, [state])
+  return (
+    <Container>
+      <Grid>
+        <Grid.Row>
+          <Grid.Column tablet="16">
+            <ArgsTable
+              compact={true}
+              updateArgs={(value) => {
+                setState((current) => ({ ...current, ...value }))
+              }}
+              rows={{
+                expiration: {
+                  name: 'expires in (seconds):',
+                  control: {
+                    type: 'number',
+                    value: state.expiration,
+                    placeholder: '',
+                  },
+                },
+              }}
+            />
+            <div style={{ textAlign: 'right' }}>
+              <Button
+                primary
+                size="small"
+                style={{ minWidth: '200px', margin: '0 auto' }}
+                disabled={!state.expiration || generating}
+                loading={generating}
+                onClick={generate}
+              >
+                Generate
+              </Button>
+            </div>
+          </Grid.Column>
+        </Grid.Row>
+        {result.identity && (
+          <Identity
+            address={result.address}
+            privateKey={result.privateKey}
+            identity={result.identity}
+          />
+        )}
+      </Grid>
+    </Container>
+  )
+}
+
+<EphimeralIdentityGenerator />
+
+<Divider />
+
+## Identity Generator
+
+export function IdentityGenerator() {
+  const [state, setState] = useState(() => ({
+    expiration: 60 * 24 * 30,
+    privateKey:
+      '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff',
+  }))
+  const [result, setResult] = useState({
+    address: null,
+    privateKey: null,
+    identity: null,
+  })
+  const [generating, generate] = useAsyncTask(async () => {
+    if (!state.privateKey) {
+      return
+    }
+    const sourceWallet = new Wallet(state.privateKey)
+    const identity = await createIdentity(
+      sourceWallet.address,
+      Number(state.expiration),
+      (message) => sourceWallet.signMessage(message)
+    )
+    setResult({
+      address: sourceWallet.address,
+      privateKey: state.privateKey,
+      identity,
+    })
+  }, [state])
+  return (
+    <Container>
+      <Grid>
+        <Grid.Row>
+          <Grid.Column tablet="16">
+            <ArgsTable
+              compact={true}
+              updateArgs={(value) => {
+                setState((current) => ({ ...current, ...value }))
+              }}
+              rows={{
+                privateKey: {
+                  name: 'Private key:',
+                  control: {
+                    type: 'text',
+                    value: state.privateKey,
+                    placeholder:
+                      '0x0000000000000000000000000000000000000000000000000000000000000000',
+                  },
+                },
+                expiration: {
+                  name: 'expires in (seconds):',
+                  control: {
+                    type: 'number',
+                    value: state.expiration,
+                    placeholder: '',
+                  },
+                },
+              }}
+            />
+            <div style={{ textAlign: 'right' }}>
+              <Button
+                primary
+                size="small"
+                style={{ minWidth: '200px', margin: '0 auto' }}
+                disabled={!state.expiration || generating}
+                loading={generating}
+                onClick={generate}
+              >
+                Generate
+              </Button>
+            </div>
+          </Grid.Column>
+        </Grid.Row>
+        {result.identity && (
+          <Identity
+            address={result.address}
+            privateKey={result.privateKey}
+            identity={result.identity}
+          />
+        )}
+      </Grid>
+    </Container>
+  )
+}
+
+<IdentityGenerator />
+
+<Divider />
+
+## Selft Identity Generator
+
+export function SelfIdentityGenerator() {
+  const [account, ctx] = useAuth()
+  const [state, setState] = useState({
+    expiration: 60 * 24 * 30,
+  })
+  const [result, setResult] = useState({
+    address: null,
+    identity: null,
+  })
+  const [generating, generate] = useAsyncTask(async () => {
+    if (!account) {
+      return
+    }
+    const sourceWallet = Wallet.createRandom()
+    const identity = await createIdentity(
+      account,
+      Number(state.expiration),
+      (message) =>
+        new Web3Provider(ctx.provider).getSigner().signMessage(message)
+    )
+    setResult({
+      address: account,
+      identity,
+    })
+  }, [account, ctx, state])
+  return (
+    <Container>
+      <Grid>
+        {!account && (
+          <Grid.Row>
+            <Grid.Column mobile="16">
+              <MissingAuthMessage />
+            </Grid.Column>
+          </Grid.Row>
+        )}
+        <Grid.Row>
+          <Grid.Column tablet="16">
+            <ArgsTable
+              compact={true}
+              updateArgs={(value) => {
+                setState((current) => ({ ...current, ...value }))
+              }}
+              rows={{
+                address: {
+                  name: 'Current address',
+                  control: {
+                    type: 'text',
+                    value: account || '',
+                    placeholder: '',
+                  },
+                },
+                expiration: {
+                  name: 'expires in (seconds):',
+                  control: {
+                    type: 'number',
+                    value: state.expiration,
+                    placeholder: '',
+                  },
+                },
+              }}
+            />
+            <div style={{ textAlign: 'right' }}>
+              <Button
+                primary
+                size="small"
+                style={{ minWidth: '200px', margin: '0 auto' }}
+                disabled={!account || !state.expiration || generating}
+                loading={generating}
+                onClick={generate}
+              >
+                Generate
+              </Button>
+            </div>
+          </Grid.Column>
+        </Grid.Row>
+        {result.identity && (
+          <Identity address={result.address} identity={result.identity} />
+        )}
+      </Grid>
+    </Container>
+  )
+}
+
+<SelfIdentityGenerator />
+
+<Divider />

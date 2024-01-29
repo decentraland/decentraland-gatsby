@@ -2,13 +2,14 @@ import cluster from 'cluster'
 import { Server } from 'http'
 import { networkInterfaces } from 'os'
 
-import { green, yellow } from 'colors/safe'
+import chalk from 'chalk'
 import { Application } from 'express'
 
+import env from '../../utils/env'
 import { clusterInitializer } from '../Cluster/utils'
 import { ServiceStartHandler, emptyServiceInitializer } from './types'
 
-export const DEFAULT_PORT = 4000
+export const DEFAULT_PORT = '4000'
 export const DEFAULT_HOST = '0.0.0.0'
 
 function log(protocol: string, host: string, port: string | number) {
@@ -19,22 +20,22 @@ function log(protocol: string, host: string, port: string | number) {
   if (host === '127.0.0.1') {
     console.log(
       `running server on:`,
-      yellow(`${protocol}localhost:${port}`),
-      green(JSON.stringify(workerDetails))
+      chalk.yellow(`${protocol}localhost:${port}`),
+      chalk.green(JSON.stringify(workerDetails))
     )
   }
 
   console.log(
     `running server on:`,
-    yellow(`${protocol}${host}:${port}`),
-    green(JSON.stringify(workerDetails))
+    chalk.yellow(`${protocol}${host}:${port}`),
+    chalk.green(JSON.stringify(workerDetails))
   )
 }
 
 export async function listen(
   app: Application,
-  port: number | string = process.env.PORT || DEFAULT_PORT,
-  host: string = process.env.HOST || DEFAULT_HOST
+  port: number | string = env('PORT', DEFAULT_PORT),
+  host: string = env('HOST', DEFAULT_HOST)
 ) {
   port = Number(port)
 
@@ -72,12 +73,13 @@ export const serverInitializer = (
   port: number | string = DEFAULT_PORT,
   host: string = DEFAULT_HOST
 ): ServiceStartHandler => {
-  if (process.env.HTTP === 'false') {
+  if (env('HTTP', 'true') === 'false') {
     return emptyServiceInitializer()
   }
 
   return clusterInitializer(
-    process.env.CLUSTER === 'true' || process.env.HTTP_CLUSTER === 'true',
+    env('CLUSTER', 'false') === 'true' ||
+      env('TASKS_CLUSTER', 'false') === 'true',
     {
       CLUSTER: 'false',
       HTTP_CLUSTER: 'false',

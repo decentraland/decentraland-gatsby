@@ -1,4 +1,4 @@
-import { v4 as uuid } from 'uuid'
+import { randomUUID } from 'crypto'
 
 import Time from '../../utils/date/Time'
 import { Model } from '../Database/model'
@@ -9,6 +9,7 @@ import { CreateTaskAttributes, TaskAttributes, TaskStatus } from './types'
 export default class TaskModel extends Model<TaskAttributes> {
   static tableName = 'tasks'
 
+  /** @deprecated */
   static async insertQuery(sql: SQLStatement) {
     return this.rowCount(SQL`
       INSERT
@@ -17,6 +18,19 @@ export default class TaskModel extends Model<TaskAttributes> {
         )} ("id", "name", "status", "payload", "runner", "run_at", "created_at", "updated_at")
         ${sql}
     `)
+  }
+
+  static async namedInsertQuery(name: string, sql: SQLStatement) {
+    return this.namedRowCount(
+      name,
+      SQL`
+      INSERT
+        INTO ${table(
+          this
+        )} ("id", "name", "status", "payload", "runner", "run_at", "created_at", "updated_at")
+        ${sql}
+    `
+    )
   }
 
   static async initialize(tasks: Task[]) {
@@ -33,7 +47,7 @@ export default class TaskModel extends Model<TaskAttributes> {
     const newTasks = join(
       tasks.map(
         (task) => SQL`(SELECT
-            ${uuid()} as "id",
+            ${randomUUID()} as "id",
             ${task.name} as "name",
             ${TaskStatus.pending}::type_task_status as "status",
             ${JSON.stringify({})} as "payload",
@@ -52,7 +66,10 @@ export default class TaskModel extends Model<TaskAttributes> {
       SELECT * FROM (${newTasks}) as t WHERE "name" NOT IN (${alreadyInitializedTasks})
     )`
 
-    return this.insertQuery(missingInitializedTasks)
+    return this.namedInsertQuery(
+      `missing_initialized_tasks`,
+      missingInitializedTasks
+    )
   }
 
   static async lock(options: {
@@ -86,7 +103,9 @@ export default class TaskModel extends Model<TaskAttributes> {
       LIMIT
         ${limit}
     `
-    const locked = await this.rowCount(SQL`
+    const locked = await this.namedRowCount(
+      `lock_task`,
+      SQL`
       UPDATE
         ${table(this)}
       SET
@@ -96,7 +115,8 @@ export default class TaskModel extends Model<TaskAttributes> {
         "run_at" = ${now}
       WHERE
         "id" IN (${selectIdleTask})
-    `)
+    `
+    )
 
     if (locked === 0) {
       return []
@@ -119,18 +139,25 @@ export default class TaskModel extends Model<TaskAttributes> {
   }
 
   static async complete(tasks: TaskAttributes[]) {
+    return this.completeTasks(tasks)
+  }
+
+  static async completeTasks(tasks: TaskAttributes[]) {
     if (tasks.length === 0) {
       return 0
     }
 
-    return this.rowCount(SQL`
+    return this.namedRowCount(
+      `complete_tasks`,
+      SQL`
       DELETE
         FROM ${table(this)}
         WHERE "id" IN (${join(
           tasks.map((task) => SQL`${task.id}`),
           SQL`, `
         )})
-    `)
+    `
+    )
   }
 
   static async schedule(tasks: CreateTaskAttributes[]) {
@@ -139,11 +166,12 @@ export default class TaskModel extends Model<TaskAttributes> {
     }
 
     const now = new Date()
-    return this.insertQuery(
+    return this.namedInsertQuery(
+      'schedule_tasks',
       SQL`VALUES ${join(
         tasks.map(
           (task) =>
-            SQL`(${uuid()}, ${task.name}, ${
+            SQL`(${randomUUID()}, ${task.name}, ${
               TaskStatus.pending
             }::type_task_status, ${JSON.stringify(task.payload)}, ${null}, ${
               task.run_at
@@ -157,7 +185,9 @@ export default class TaskModel extends Model<TaskAttributes> {
   static async releaseTimeout() {
     const now = new Date()
     const timeout = new Date(now.getTime() - Time.Minute * 30)
-    return this.rowCount(SQL`
+    return this.namedRowCount(
+      `release_timeout`,
+      SQL`
       UPDATE ${table(this)}
       SET
         "runner" = NULL,
@@ -167,6 +197,7 @@ export default class TaskModel extends Model<TaskAttributes> {
         "runner" IS NOT NULL AND
         "status" = ${TaskStatus.running}::type_task_status AND
         "run_at" < ${timeout}
-    `)
+    `
+    )
   }
 }

@@ -12,4 +12,4 @@ updates:
       interval: "daily"
       time: "12:00"
     reviewers:
-      - "2fd"
+      - "braianj"

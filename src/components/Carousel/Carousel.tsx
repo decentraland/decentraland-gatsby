@@ -8,7 +8,7 @@ import Prev from './Prev'
 
 import './Carousel.css'
 
-export enum IndicatorsType {
+export enum IndicatorType {
   Bullet = 'bullet',
   Dash = 'dash',
 }
@@ -18,7 +18,7 @@ export type CarouselProps = React.HTMLProps<HTMLDivElement> & {
   progress?: boolean
   time?: number | false
   autoResize?: boolean
-  indicatorsType?: IndicatorsType
+  indicatorType?: IndicatorType
 }
 
 export type CarouselState = {
@@ -29,6 +29,7 @@ export type CarouselState = {
   timer: TimeInterval | null
 }
 
+/** @deprecated */
 export default React.memo(function Carousel({
   className,
   children,
@@ -36,7 +37,7 @@ export default React.memo(function Carousel({
   onMove,
   time,
   autoResize,
-  indicatorsType,
+  indicatorType: indicatorsType,
   ...props
 }: CarouselProps) {
   const size = React.Children.count(children)
@@ -122,10 +123,15 @@ export default React.memo(function Carousel({
     (e: React.TouchEvent<HTMLDivElement>) => {
       setState((prev) => {
         prev.timer?.stop()
+        const targetTouch = e.targetTouches && e.targetTouches[0]
+        if (!targetTouch) {
+          return prev
+        }
+
         return {
           ...prev,
-          touchStart: e.targetTouches[0].clientX,
-          touchEnd: e.targetTouches[0].clientX,
+          touchStart: targetTouch.clientX,
+          touchEnd: targetTouch.clientX,
         }
       })
     },
@@ -133,25 +139,29 @@ export default React.memo(function Carousel({
   )
 
   const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
-    setState((prev) => ({
-      ...prev,
-      touchEnd: e.targetTouches[0].clientX,
-    }))
+    setState((prev) => {
+      const targetTouch = e.targetTouches && e.targetTouches[0]
+      if (!targetTouch) {
+        return prev
+      }
+
+      return {
+        ...prev,
+        touchEnd: targetTouch.clientX,
+      }
+    })
   }, [])
 
-  const handleTouchEnd = useCallback(
-    (e: React.TouchEvent<HTMLDivElement>) => {
-      handleTimerOn()
-      if (state.touchStart - state.touchEnd > 150) {
-        handleMove(1)
-      }
+  const handleTouchEnd = useCallback(() => {
+    handleTimerOn()
+    if (state.touchStart - state.touchEnd > 150) {
+      handleMove(1)
+    }
 
-      if (state.touchStart - state.touchEnd < -150) {
-        handleMove(-1)
-      }
-    },
-    [state]
-  )
+    if (state.touchStart - state.touchEnd < -150) {
+      handleMove(-1)
+    }
+  }, [state])
 
   return (
     <div
@@ -159,7 +169,7 @@ export default React.memo(function Carousel({
       className={TokenList.join([
         'Carousel',
         className,
-        indicatorsType === IndicatorsType.Dash && 'dash-indicators',
+        indicatorsType === IndicatorType.Dash && 'dash-indicators',
       ])}
     >
       <div className="Carousel__Items">

@@ -5,10 +5,9 @@ import isEmail from 'validator/lib/isEmail'
 
 import usePatchState from '../../hooks/usePatchState'
 import TokenList from '../../utils/dom/TokenList'
+import env from '../../utils/env'
 import { StyleNamespace } from '../../variables'
 import Input from './Input'
-
-import 'isomorphic-fetch'
 
 import './Subscribe.css'
 
@@ -59,8 +58,10 @@ export enum ErrorKind {
   ServerError,
 }
 
-const DEFAULT_ACTION =
-  process.env.GATSBY_SUBSCRIBE_TARGET || 'https://decentraland.org/v2/subscribe'
+const DEFAULT_ACTION = env(
+  'SUBSCRIBE_TARGET',
+  'https://subscription.decentraland.org/subscribe'
+)
 
 export default function Subscribe(props: SubscribeProps) {
   const [state, patchState] = usePatchState({

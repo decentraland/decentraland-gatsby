@@ -41,7 +41,7 @@ export default React.memo(function ShareModal({
   useEffect(() => {
     if (!mounted.current) {
       mounted.current = true
-    } else if (track) {
+    } else {
       // eslint-disable-next-line no-extra-boolean-cast
       if (!!data) {
         track(ShareEvent.SharePopupOpen)
@@ -58,20 +58,39 @@ export default React.memo(function ShareModal({
     return ''
   }, [data])
 
-  const getFacebookLink = useCallback(() => {
-    track(ShareEvent.ShareFallback, { data, social: 'facebook' })
-    return encodeURI(l('@growth.ShareModal.uri.facebook', { url: data?.url }))
-  }, [data, track])
+  const facebookLink = useMemo(
+    () => encodeURI(l('@growth.ShareModal.uri.facebook', { url: data?.url })),
+    [data]
+  )
 
-  const getTwitterLink = useCallback(() => {
-    track(ShareEvent.ShareFallback, { data, social: 'twitter' })
-    return encodeURI(
-      l('@growth.ShareModal.uri.twitter', {
-        url: data?.url,
-        description: shareableText,
-      })
-    )
-  }, [data, shareableText, track])
+  const handleFacebookShare = useCallback(
+    (e) => {
+      e.preventDefault()
+      track(ShareEvent.ShareFallback, { data, social: 'facebook' })
+      handleShare(e, facebookLink)
+    },
+    [data, facebookLink, track]
+  )
+
+  const twitterLink = useMemo(
+    () =>
+      encodeURI(
+        l('@growth.ShareModal.uri.twitter', {
+          url: data?.url,
+          description: shareableText,
+        })
+      ),
+    [data, shareableText]
+  )
+
+  const handleTwitterShare = useCallback(
+    (e) => {
+      e.preventDefault()
+      track(ShareEvent.ShareFallback, { data, social: 'twitter' })
+      handleShare(e, twitterLink)
+    },
+    [data, twitterLink, track]
+  )
 
   return (
     <Modal
@@ -104,16 +123,16 @@ export default React.memo(function ShareModal({
             <Button
               as="a"
               className="button facebook"
-              onClick={(e) => handleShare(e, getFacebookLink())}
-              href={getFacebookLink()}
+              onClick={handleFacebookShare}
+              href={facebookLink}
             >
               <Icon name="facebook f" /> {l(`@growth.ShareModal.share`)}
             </Button>
             <Button
               as="a"
               className="button twitter"
-              onClick={(e) => handleShare(e, getTwitterLink())}
-              href={getTwitterLink()}
+              onClick={handleTwitterShare}
+              href={twitterLink}
             >
               <Icon name="twitter" /> {l(`@growth.ShareModal.share`)}
             </Button>

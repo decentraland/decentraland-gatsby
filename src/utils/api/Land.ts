@@ -94,23 +94,32 @@ const REVERSE_FACTOR = BigNumber.from('0x1000000000000000000000000000000')
 
 export default class Land extends API {
   static Url =
-    process.env.GATSBY_LAND_API ||
-    process.env.REACT_APP_LAND_API ||
-    process.env.STORYBOOK_LAND_API ||
-    process.env.LAND_API ||
-    process.env.GATSBY_LAND_URL ||
-    process.env.REACT_APP_LAND_URL ||
-    process.env.STORYBOOK_LAND_URL ||
-    process.env.LAND_URL ||
-    'https://api.decentraland.org'
+    env('LAND_API', '') || // @deprecated
+    env('LAND_URL', 'https://api.decentraland.org')
 
   static Cache = new Map<string, Land>()
 
+  /**
+   * TODO(#323): remove on v6
+   * @deprecated use getInstance instead
+   */
   static get() {
-    return this.from(env('LAND_URL', this.Url))
+    return this.getInstance()
   }
 
+  static getInstance() {
+    return this.getInstanceFrom(env('LAND_URL', this.Url))
+  }
+
+  /**
+   * TODO(#323): remove on v6
+   * @deprecated use getInstanceFrom instead
+   */
   static from(baseUrl: string) {
+    return this.getInstanceFrom(baseUrl)
+  }
+
+  static getInstanceFrom(baseUrl: string) {
     if (!this.Cache.has(baseUrl)) {
       this.Cache.set(baseUrl, new Land(baseUrl))
     }

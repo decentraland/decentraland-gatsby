@@ -3,7 +3,11 @@ export default class FetchError extends Error {
   url: string
   options: RequestInit = {}
   constructor(url: string, options: RequestInit = {}, message: string) {
-    super(`Fail to fetch resource "${options.method} ${url}": ${message}`)
+    super(
+      `Fail to fetch resource "${(
+        options.method || 'get'
+      ).toLowerCase()} ${url}": ${message}`
+    )
     this.url = url
     this.options = options
   }
