@@ -1,4 +1,4 @@
-import { uid } from 'radash/dist/random'
+import { uid } from 'radash'
 
 import env, { Env, setupEnv } from '../../../utils/env'
 import { Request } from '../../Route/wkc/request/Request'
@@ -17,11 +17,9 @@ test(`should fails if authorization is invalid`, async () => {
     headers: { authorization: 'Bearer ' + uid(24) },
   })
 
-  expect(async () => withAuth({ request: unauthorized })).rejects.toThrowError()
-  expect(async () =>
-    withAuth({ request: invalidAutorization })
-  ).rejects.toThrowError()
-  expect(async () => withAuth({ request: invalidToken })).rejects.toThrowError()
+  await expect(withAuth({ request: unauthorized })).rejects.toThrow()
+  await expect(withAuth({ request: invalidAutorization })).rejects.toThrow()
+  await expect(withAuth({ request: invalidToken })).rejects.toThrow()
 })
 
 test(`shoudl return the PROMETHEUS_BEARER_TOKEN if the token is present in headers`, async () => {

@@ -1,6 +1,11 @@
 import { useState, useMemo, useEffect } from 'react'
-import { Source, ArgsTable } from '@storybook/components'
-import { Meta, Story, Preview } from '@storybook/addon-docs'
+import {
+  Meta,
+  Story,
+  Preview,
+  Source,
+  PureArgsTable as ArgsTable,
+} from '@storybook/addon-docs'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import { randomHexadecimal } from '../utils/string/random'
 import { Args } from '../components/Storybook/utils'
@@ -55,7 +60,7 @@ export const WithoutTimeout = () => {
         size="small"
         onClick={() => clipboard.copy(randomHexadecimal(24))}
       >
-        copy a random
+        {value === null ? 'copy a random' : 'copied!'}
       </Button>
       <Button primary size="small" onClick={() => clipboard.clear()}>
         clear
@@ -77,7 +82,7 @@ export function Example() {
   return (
     <div>
       <button onClick={() => clipboard.copy(randomHexadecimal())}>
-        copy a random
+        {value === null ? 'copy a random' : 'copied!'}
       </button>
       <button onClick={() => clipboard.clear()}>clear</button>
       <pre>{JSON.stringify(value, null, 2)}</pre>
@@ -89,7 +94,7 @@ export function Example() {
 ## Preview with clipboard
 
 export const WithTimeout = () => {
-  const [value, clipboard] = useClipboardCopy(Time.Second)
+  const [value, clipboard] = useClipboardCopy(3 * Time.Second)
   return (
     <Container>
       <Button
@@ -97,7 +102,7 @@ export const WithTimeout = () => {
         size="small"
         onClick={() => clipboard.copy(randomHexadecimal(24))}
       >
-        copy random with timeout
+        {value === null ? 'copy random with timeout' : 'copied!'}
       </Button>
       <Source language="json" code={JSON.stringify(value, null, 2)} />
     </Container>
@@ -117,7 +122,7 @@ export function Example() {
   return (
     <div>
       <button onClick={() => clipboard.copy(randomHexadecimal())}>
-        copy random with timeout
+        {value === null ? 'copy random with timeout' : 'copied!'}
       </button>
       <pre>{JSON.stringify(value, null, 2)}</pre>
     </div>

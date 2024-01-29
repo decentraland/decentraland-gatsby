@@ -1,4 +1,23 @@
-import { ArgType, TableAnnotation } from '@storybook/components'
+export type TypeAnnotation = {
+  summary: string
+  detail?: string
+  required?: boolean
+}
+
+export type TypeAnnotationParam =
+  | TypeAnnotation
+  | string
+  | number
+  | bigint
+  | boolean
+  | null
+
+export type ArgType = {
+  name?: string
+  description?: string
+  defaultValue?: any
+  [key: string]: any
+}
 
 const Types = {
   Raw: (summary: string, detail?: string) => ({ summary, detail }),
@@ -75,9 +94,7 @@ export const Args = {
     return this.type(summary, types.map(String).join('\n'))
   },
 
-  Type: (
-    t?: TableAnnotation['type'] | string | number | bigint | boolean | null
-  ): TableAnnotation['type'] | undefined => {
+  Type: (t?: TypeAnnotationParam): TypeAnnotation | undefined => {
     if (t === undefined) {
       return undefined
     }
@@ -102,8 +119,8 @@ export const Args = {
     name: string,
     description: string | false | undefined,
     props: {
-      type?: TableAnnotation['type'] | string | number | boolean | null
-      defaultValue?: TableAnnotation['type'] | string | number | boolean | null
+      type?: TypeAnnotationParam
+      defaultValue?: TypeAnnotationParam
       required?: boolean
       category?: string
     } = {}
@@ -124,8 +141,8 @@ export const Args = {
     name: string,
     description: string | false | undefined,
     props: {
-      type?: TableAnnotation['type'] | string | number | boolean | null
-      defaultValue?: TableAnnotation['type'] | string | number | boolean | null
+      type?: TypeAnnotationParam
+      defaultValue?: TypeAnnotationParam
       required?: boolean
     } = {}
   ): ArgType {
@@ -149,7 +166,7 @@ export const Args = {
     name: string,
     description: string | false | undefined,
     props: {
-      defaultValue?: TableAnnotation['type'] | string | number | boolean | null
+      defaultValue?: TypeAnnotationParam
       required?: boolean
     } = {}
   ): ArgType {
@@ -171,7 +188,7 @@ export const Args = {
   prop(
     name: string,
     description: string,
-    type?: TableAnnotation['type'] | string
+    type?: TypeAnnotation | string
   ): ArgType {
     return {
       name,
@@ -186,7 +203,7 @@ export const Args = {
   requiredProp(
     name: string,
     description: string,
-    type?: TableAnnotation['type'] | string
+    type?: TypeAnnotation | string
   ): ArgType {
     return {
       name,
@@ -201,7 +218,7 @@ export const Args = {
   param(
     name: string,
     description: string,
-    type?: TableAnnotation['type'] | string
+    type?: TypeAnnotation | string
   ): ArgType {
     return {
       name,
@@ -216,7 +233,7 @@ export const Args = {
   requiredParam(
     name: string,
     description: string,
-    type?: TableAnnotation['type'] | string
+    type?: TypeAnnotation | string
   ): ArgType {
     return {
       name,
@@ -229,11 +246,7 @@ export const Args = {
     }
   },
 
-  returns(
-    name: string,
-    description: string,
-    type?: TableAnnotation['type'] | string
-  ) {
+  returns(name: string, description: string, type?: TypeAnnotation | string) {
     return {
       name,
       description,

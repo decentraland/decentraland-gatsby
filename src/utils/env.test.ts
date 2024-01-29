@@ -1,17 +1,25 @@
-import { uid } from 'radash/dist/random'
+import { uid } from 'radash'
 
 import env, { Env, requiredEnv, setupEnv } from './env'
 
+// First not empty environment variable
+const EXISTING_ENV_NAME = Object.keys(process.env).find(
+  (name) => !!process.env[name]
+)!
+const MISSING_ENV_NAME = 'MISSING_ENV_' + String((Math.random() * 1000) | 0)
+
 describe(`env`, () => {
   test(`should return the value if exists`, () => {
-    expect(env('NODE_ENV')).toBe('test')
+    expect(env(EXISTING_ENV_NAME)).toBe(process.env[EXISTING_ENV_NAME])
   })
   test(`should return undefined if exists doens't exists`, () => {
-    expect(env('MISSING_ENV')).toBe(undefined)
+    expect(env(MISSING_ENV_NAME)).toBe(undefined)
   })
   test(`should return the default value if the environment is not defined`, () => {
-    expect(env('MISSING_ENV', 'missing')).toBe('missing')
-    expect(env('NODE_ENV', 'missing')).toBe('test')
+    expect(env(EXISTING_ENV_NAME, 'missing')).toBe(
+      process.env[EXISTING_ENV_NAME]
+    )
+    expect(env(MISSING_ENV_NAME, 'missing')).toBe('missing')
   })
   test(`should fallback to other frameworks variables`, () => {
     const RANDOM_ENV1 = uid(24)
@@ -36,11 +44,11 @@ describe(`env`, () => {
 
 describe(`requiredEnv`, () => {
   test(`should return the value if the environment exists`, () => {
-    expect(requiredEnv('NODE_ENV')).toBe('test')
+    expect(requiredEnv(EXISTING_ENV_NAME)).toBe(process.env[EXISTING_ENV_NAME])
   })
   test(`should fail if the value doens't exists`, () => {
-    expect(() => requiredEnv('MISSING_ENV')).toThrowError(
-      'Missing "MISSING_ENV" environment variable'
+    expect(() => requiredEnv(MISSING_ENV_NAME)).toThrow(
+      `Missing "${MISSING_ENV_NAME}" environment variable`
     )
   })
   test(`should fallback to other frameworks variables`, () => {
@@ -66,18 +74,18 @@ describe(`requiredEnv`, () => {
 
 describe('setupEnv', () => {
   test(`should create new environment variables`, () => {
-    expect(env('NODE_ENV')).toBe('test')
-    expect(env('MISSING_ENV')).toBe(undefined)
-    expect(env('MISSING_ENV', 'missing')).toBe('missing')
+    expect(env(EXISTING_ENV_NAME)).toBe(process.env[EXISTING_ENV_NAME])
+    expect(env(MISSING_ENV_NAME)).toBe(undefined)
+    expect(env(MISSING_ENV_NAME, 'missing')).toBe('missing')
 
     setupEnv({
       [Env.LOCAL]: {
-        MISSING_ENV: 'exists',
+        [MISSING_ENV_NAME]: 'exists',
       },
     })
 
-    expect(env('NODE_ENV')).toBe('test')
-    expect(env('MISSING_ENV')).toBe('exists')
-    expect(env('MISSING_ENV', 'missing')).toBe('exists')
+    expect(env(EXISTING_ENV_NAME)).toBe(process.env[EXISTING_ENV_NAME])
+    expect(env(MISSING_ENV_NAME)).toBe('exists')
+    expect(env(MISSING_ENV_NAME, 'missing')).toBe('exists')
   })
 })

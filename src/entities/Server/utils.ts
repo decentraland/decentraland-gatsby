@@ -2,7 +2,7 @@ import cluster from 'cluster'
 import { Server } from 'http'
 import { networkInterfaces } from 'os'
 
-import { green, yellow } from 'colors/safe'
+import chalk from 'chalk'
 import { Application } from 'express'
 
 import env from '../../utils/env'
@@ -20,15 +20,15 @@ function log(protocol: string, host: string, port: string | number) {
   if (host === '127.0.0.1') {
     console.log(
       `running server on:`,
-      yellow(`${protocol}localhost:${port}`),
-      green(JSON.stringify(workerDetails))
+      chalk.yellow(`${protocol}localhost:${port}`),
+      chalk.green(JSON.stringify(workerDetails))
     )
   }
 
   console.log(
     `running server on:`,
-    yellow(`${protocol}${host}:${port}`),
-    green(JSON.stringify(workerDetails))
+    chalk.yellow(`${protocol}${host}:${port}`),
+    chalk.green(JSON.stringify(workerDetails))
   )
 }
 

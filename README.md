@@ -8,6 +8,21 @@
 
 You can use our [project template](https://github.com/decentraland/decentraland-gatsby-template) if you need to create a new repository.
 
+## Node 16?
+
+If you are using node 16 you may need to install `isomorphic-fetch` in order to avoid a `ReferenceError: fetch is not defined`
+
+```bash
+  npm install --save isomorphic-fetch
+  npm install --save-dev isomorphic-fetch
+```
+
+and imported in your `src/server.ts`
+
+```typescript
+import 'isomorphic-fetch'
+```
+
 ## Start project
 
 ```bash
@@ -70,7 +85,7 @@ You can use our [project template](https://github.com/decentraland/decentraland-
   .prettierrc
 
   Dockerfile     ......... Docker files
-  entrypoint.sh
+  entrypoint.sh  ......... Bash script executed when the container starts
 
   gatsby-browser.js  ..... gatsby configuration
   gatsby-config.js
@@ -115,11 +130,11 @@ GATSBY_CHAIN_ID=
 # production (ethereum, polygon)
 # GATSBY_CHAIN_ID=1,137
 
-# test (ropsten, mumbai)
-# GATSBY_CHAIN_ID=3,80001
+# test (sepolia, mumbai)
+# GATSBY_CHAIN_ID=11155111,80001
 
 # any
-# GATSBY_CHAIN_ID=1,3,4,5,42,137,80001
+# GATSBY_CHAIN_ID=1,3,4,5,42,137,80001,11155111
 ```
 
 ## Project commands

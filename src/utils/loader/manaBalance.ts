@@ -6,7 +6,6 @@ import rollbar from '../development/rollbar'
 import segment from '../development/segment'
 import sentry from '../development/sentry'
 import Loader from './Loader'
-import 'isomorphic-fetch'
 
 export type ChainId = keyof typeof MANA_GRAPH_BY_CHAIN_ID
 

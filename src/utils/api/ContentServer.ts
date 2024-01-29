@@ -38,6 +38,10 @@ export default class ContentServer extends API {
     return this.url(`/contents/${hash}`)
   }
 
+  async getLiveData(): Promise<ContentStatus> {
+    return this.fetch('/live-data')
+  }
+
   async getContentEntity(
     hash: string
   ): Promise<

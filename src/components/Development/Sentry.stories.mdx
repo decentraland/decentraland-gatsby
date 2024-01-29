@@ -16,7 +16,7 @@ Automatically injects rollbar (`window.Sentry`) into the global environment.
 
 See [Sentry documentation](https://docs.sentry.io/platforms/javascript) for more details about error tracking.
 
-> Development components are meant to be used on `gatsby-ssr.js`, see [README.md](./?path=/docs/components-development-readme-md--page) for more details
+> Development components are meant to be used on `gatsby-ssr.js`, see [README.md](./?path=/docs/components-development-readme-md--docs) for more details
 
 <Source dark language="tsx" code={`<Sentry src={SENTRY_SRC} />`} />
 
@@ -46,3 +46,15 @@ The rest of the available configuration can be found in the [docs](https://docs.
 ## Locate your Sentry Script
 
 The Loader Script is the easiest way to initialize the Sentry SDK. The Loader Script also automatically keeps your Sentry SDK up to date and offers configuration for different Sentry features. To learn about the Sentry JavaScript Loader Script please follow the instructions in the [documentation](https://docs.sentry.io/platforms/javascript/install/loader/).
+
+## Use with CSP (Content Security Policy)
+
+If you rely on allowlisting you will need to add the following directive:
+
+```txt
+script-src: https://browser.sentry-cdn.com https://js.sentry-cdn.com
+connect-src: *.sentry.io
+worker-src: blob:
+```
+
+> see the [full documentaion](https://docs.sentry.io/platforms/javascript/install/loader/#content-security-policy) for more details

@@ -1,11 +1,6 @@
 import { worldContent } from '../../__mocks__/content'
 import ContentServer from './ContentServer'
 
-const contentSceneWorld = jest.spyOn(
-  ContentServer.getInstance(),
-  'getContentEntity'
-)
-
 describe('utils/api/ContentServer', () => {
   test(`should hava a default prop Url`, () => {
     expect(ContentServer.Url).toBeTruthy()
@@ -20,13 +15,21 @@ describe('utils/api/ContentServer', () => {
 
   describe(`.getContentEntity()`, () => {
     test(`should return an instance of a ContentServer`, async () => {
-      const contentScene = await ContentServer.getInstance().getContentEntity(
+      const mock = jest.fn(fetch)
+      const server = ContentServer.getInstance().setFetcher(mock)
+
+      mock.mockResolvedValue(
+        new Response(JSON.stringify(worldContent), { status: 200 })
+      )
+      const content = await server.getContentEntity(
         'bafkreih62bkfpytlitkkcwle5jjo5doiv2xuifeturmnmmhrnrugjsguee'
       )
-      contentSceneWorld.mockResolvedValueOnce(Promise.resolve(worldContent))
-      expect(contentScene).toEqual(worldContent)
-
-      expect(contentSceneWorld.mock.calls.length).toBe(1)
+      expect(content).toEqual(worldContent)
+      expect(mock.mock.calls.length).toBe(1)
+      expect(mock.mock.calls[0]).toEqual([
+        'https://worlds-content-server.decentraland.org/contents/bafkreih62bkfpytlitkkcwle5jjo5doiv2xuifeturmnmmhrnrugjsguee',
+        {},
+      ])
     })
   })
 })
