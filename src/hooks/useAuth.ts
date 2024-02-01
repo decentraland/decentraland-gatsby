@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
-import { connection } from 'decentraland-connect/dist/ConnectionManager'
+import { connection } from 'decentraland-connect/cjs/ConnectionManager'
 
 import logger from '../entities/Development/logger'
 import { clearIdentity, setCurrentIdentity } from '../utils/auth/storage'
@@ -233,7 +233,7 @@ export default function useAuth(
       connection
         .disconnect()
         .then(() => setCurrentIdentity(null))
-        .catch((err) => {
+        .catch((err: any) => {
           console.error(err)
           rollbar((rollbar) => rollbar.error(err))
           sentry((sentry) => sentry.captureException(err))

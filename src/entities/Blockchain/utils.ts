@@ -1,6 +1,6 @@
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
-import { getConfiguration } from 'decentraland-connect/dist/configuration'
+import { getConfiguration } from 'decentraland-connect/cjs/configuration'
 
 import { ConnectionOptions, ConnectionType } from './types'
 

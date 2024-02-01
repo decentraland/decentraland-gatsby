@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
-import { connection } from 'decentraland-connect/dist/ConnectionManager'
+import { connection } from 'decentraland-connect/cjs/ConnectionManager'
 import { toModalOptionType } from 'decentraland-dapps/dist/containers/LoginModal/utils'
 import {
   LoginModal,
