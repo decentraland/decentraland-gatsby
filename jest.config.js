@@ -12,7 +12,9 @@ const config = {
   transform: {
     '^.+\\.[tj]sx?$': 'esbuild-jest',
   },
-  transformIgnorePatterns: ['node_modules/(?!(decentraland-dapps)/)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(decentraland-dapps|decentraland-connect)/)',
+  ],
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '.github',
