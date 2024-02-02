@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
-import { connection } from 'decentraland-connect/dist/ConnectionManager'
+import { connection } from 'decentraland-connect/esm/ConnectionManager'
 
 import logger from '../entities/Development/logger'
 import { clearIdentity, setCurrentIdentity } from '../utils/auth/storage'

@@ -1,8 +1,8 @@
 import { ChainId, getChainName } from '@dcl/schemas/dist/dapps/chain-id'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import * as SSO from '@dcl/single-sign-on-client'
-import { connection } from 'decentraland-connect/dist/ConnectionManager'
-import { Provider } from 'decentraland-connect/dist/types'
+import { connection } from 'decentraland-connect/esm/ConnectionManager'
+import { Provider } from 'decentraland-connect/esm/types'
 import { getChainConfiguration } from 'decentraland-dapps/dist/lib/chainConfiguration'
 import { AddEthereumChainParameters } from 'decentraland-dapps/dist/modules/wallet/types'
 
