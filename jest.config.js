@@ -12,9 +12,6 @@ const config = {
   transform: {
     '^.+\\.(t|j)sx?$': '@swc/jest',
   },
-  transformIgnorePatterns: [
-    'node_modules/(?!(decentraland-dapps|decentraland-connect)/)',
-  ],
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '.github',
