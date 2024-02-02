@@ -2,8 +2,8 @@
   "compilerOptions": {
     "outDir": "build/lib",
     "module": "commonjs",
-    "target": "es6",
-    "lib": ["es7", "es2017", "dom", "webworker"],
+    "target": "ES2018",
+    "lib": ["ES2018", "dom", "webworker"],
     "sourceMap": true,
     "allowJs": true,
     "jsx": "react",
