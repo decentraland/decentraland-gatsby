@@ -2,6 +2,8 @@ import '../buffer/buffer'
 import { Web3Provider } from '@ethersproject/providers'
 import { Wallet } from '@ethersproject/wallet'
 
+import type { ConnectionResponse } from 'decentraland-connect'
+
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
 import sentry from '../development/sentry'
@@ -9,7 +11,6 @@ import EmptyAccountsError from '../errors/EmptyAccountsError'
 import once from '../function/once'
 
 import type { AuthChain, AuthIdentity } from '@dcl/crypto/dist/types'
-import type { ConnectionResponse } from 'decentraland-connect/esm/types'
 
 const authenticator = once(() => import('@dcl/crypto/dist/Authenticator'))
 
