@@ -1,6 +1,8 @@
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
-import { getConfiguration } from 'decentraland-connect/dist/configuration'
+
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { getConfiguration } from 'decentraland-connect'
 
 import { ConnectionOptions, ConnectionType } from './types'
 
