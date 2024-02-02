@@ -39,7 +39,7 @@ After that you can use this hook in your components
 ```tsx dark=true
 // componenet.jsx
 import React from 'react'
-import { ProviderType, ChainId } from 'decentraland-connect/dist/types'
+import type { ProviderType, ChainId } from 'decentraland-connect'
 
 export default function Component() {
   const [ff] = useFeatureFlagContext()

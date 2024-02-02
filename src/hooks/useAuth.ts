@@ -1,7 +1,9 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
-import { connection } from 'decentraland-connect/cjs/ConnectionManager'
+
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { connection } from 'decentraland-connect'
 
 import logger from '../entities/Development/logger'
 import { clearIdentity, setCurrentIdentity } from '../utils/auth/storage'

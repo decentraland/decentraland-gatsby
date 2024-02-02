@@ -230,7 +230,7 @@ export const ConnectExampleWrapper = () => {
 
 ```tsx dark=true
 import React from 'react'
-import { ProviderType, ChainId } from 'decentraland-connect/dist/types'
+import type { ProviderType, ChainId } from 'decentraland-connect'
 
 export function ConnectExample() {
   const [account, state] = useAuth()

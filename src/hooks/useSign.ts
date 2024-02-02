@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
 import { Web3Provider } from '@ethersproject/providers'
-import { Provider } from 'decentraland-connect/cjs/types'
+import { Provider } from 'decentraland-connect/esm/types'
 
 import logger from '../entities/Development/logger'
 

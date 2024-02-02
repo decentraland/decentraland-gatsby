@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
-import { connection } from 'decentraland-connect/cjs/ConnectionManager'
 import { toModalOptionType } from 'decentraland-dapps/dist/containers/LoginModal/utils'
 import {
   LoginModal,
@@ -10,6 +9,9 @@ import {
 import { Modal } from 'decentraland-ui/dist/components/Modal/Modal'
 import { ModalNavigation } from 'decentraland-ui/dist/components/ModalNavigation/ModalNavigation'
 import ModalContent from 'semantic-ui-react/dist/commonjs/modules/Modal/ModalContent'
+
+// eslint-disable-next-line @typescript-eslint/no-restricted-imports
+import { connection } from 'decentraland-connect'
 
 import { getChainId } from '../../context/Auth/utils'
 import useAnchor from '../../hooks/useAnchor'

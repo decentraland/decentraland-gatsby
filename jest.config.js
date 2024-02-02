@@ -10,7 +10,7 @@ const config = {
   setupFilesAfterEnv: ['./jest.setup.js'],
   roots: ['<rootDir>/src/'],
   transform: {
-    '^.+\\.[tj]sx?$': 'esbuild-jest',
+    '^.+\\.(t|j)sx?$': '@swc/jest',
   },
   transformIgnorePatterns: [
     'node_modules/(?!(decentraland-dapps|decentraland-connect)/)',
@@ -24,6 +24,7 @@ const config = {
     'static',
     'storybook-static',
   ],
+  transformIgnorePatterns: ['node_modules/?!(decentraland-dapps)'],
 }
 
 module.exports = config
