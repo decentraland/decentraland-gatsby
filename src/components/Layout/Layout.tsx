@@ -5,10 +5,12 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React, { useCallback } from 'react'
+import React, { useCallback, useMemo } from 'react'
 
 import type { PageProps } from 'gatsby'
 
+import { localStorageGetIdentity } from '@dcl/single-sign-on-client'
+import { AuthIdentity } from '@dcl/crypto'
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { Network } from '@dcl/schemas/dist/dapps/network'
 import { Avatar } from '@dcl/schemas/dist/platform/profile/avatar'
@@ -18,6 +20,13 @@ import {
   DROPDOWN_MENU_ITEM_CLICK_EVENT,
   DROPDOWN_MENU_SIGN_OUT_EVENT,
 } from 'decentraland-dapps/dist/containers/Navbar/constants'
+import {
+  NotificationLocale,
+  NotificationActiveTab,
+} from 'decentraland-ui/dist/components/Notifications/types'
+import { shorten } from 'decentraland-ui/dist/components/AddressField/utils'
+
+import useNotifications from 'decentraland-dapps/dist/hooks/useNotifications'
 import {
   Footer,
   FooterProps,
@@ -37,6 +46,7 @@ import useShareContext from '../../context/Share/useShareContext'
 import useTrackLinkContext from '../../context/Track/useTrackLinkContext'
 import useAsyncState from '../../hooks/useAsyncState'
 import useChainId from '../../hooks/useChainId'
+import Profile from '../Profile/Avatar'
 import { DecentralandIntlContext } from '../../plugins/intl/types'
 import { changeLocale } from '../../plugins/intl/utils'
 import segment from '../../utils/development/segment'
@@ -77,6 +87,52 @@ export default function Layout({
   const [ff] = useFeatureFlagContext()
   const [user, userState] = useAuthContext()
   const [, shareState] = useShareContext()
+  const identity: AuthIdentity | undefined = useMemo(() => {
+    if (user) {
+      return localStorageGetIdentity(user) ?? undefined
+    }
+    return undefined
+  }, [user])
+
+  const {
+    isModalOpen,
+    isNotificationsOnboarding,
+    modalActiveTab,
+    isLoading,
+    notifications,
+    handleNotificationsOpen,
+    handleOnBegin,
+    handleOnChangeModalTab,
+  } = useNotifications(identity, true)
+
+  const notificationProps = useMemo(
+    () => ({
+      locale: locale as NotificationLocale,
+      isLoading,
+      isOnboarding: isNotificationsOnboarding,
+      isOpen: isModalOpen,
+      items: notifications,
+      activeTab: modalActiveTab,
+      identity,
+      onClick: handleNotificationsOpen,
+      onClose: handleNotificationsOpen,
+      onBegin: handleOnBegin,
+      onChangeTab: (_: unknown, tab: NotificationActiveTab) =>
+        handleOnChangeModalTab(tab),
+      renderProfile: (address: string) => <div><Profile address={address} size="tiny" /> {shorten(address)}</div>,
+    }),
+    [
+      isLoading,
+      isNotificationsOnboarding,
+      isModalOpen,
+      notifications,
+      modalActiveTab,
+      handleNotificationsOpen,
+      handleNotificationsOpen,
+      handleOnBegin,
+      handleOnChangeModalTab,
+    ]
+  )
 
   const handleChangeLocal = function (
     _: React.SyntheticEvent<HTMLElement>,
@@ -246,6 +302,7 @@ export default function Layout({
             isAuthDappEnabled ? userState.authorize : userState.select
           }
           onClickSignOut={handleSignOut}
+          notifications={notificationProps}
         />
       )}
       <main
