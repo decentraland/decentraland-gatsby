@@ -119,7 +119,7 @@ export default function Layout({
       onChangeTab: (_: unknown, tab: NotificationActiveTab) =>
         handleOnChangeModalTab(tab),
       renderProfile: (address: string) => (
-        <div>
+        <div className="layout__notifications-profile">
           <Profile address={address} size="tiny" /> {shorten(address)}
         </div>
       ),
