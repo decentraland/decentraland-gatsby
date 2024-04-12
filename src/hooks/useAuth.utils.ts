@@ -273,6 +273,78 @@ export function getAddEthereumChainParameters(
         rpcUrls: ['https://rpc-mumbai.maticvigil.com/'],
         blockExplorerUrls: ['https://mumbai.polygonscan.com/'],
       }
+    case ChainId.MATIC_AMOY:
+      return {
+        chainId: hexChainId,
+        chainName,
+        nativeCurrency: {
+          name: 'MATIC',
+          symbol: 'MATIC',
+          decimals: 18,
+        },
+        rpcUrls: ['https://rpc.decentraland.org/amoy'],
+        blockExplorerUrls: ['https://www.oklink.com/amoy'],
+      }
+    case ChainId.ARBITRUM_MAINNET:
+      return {
+        chainId: hexChainId,
+        chainName,
+        nativeCurrency: {
+          name: 'Aributrum',
+          symbol: 'ARB',
+          decimals: 18,
+        },
+        rpcUrls: ['https://rpc.decentraland.org/arbitrum'],
+        blockExplorerUrls: ['https://arbiscan.io/'],
+      }
+    case ChainId.AVALANCHE_MAINNET:
+      return {
+        chainId: hexChainId,
+        chainName,
+        nativeCurrency: {
+          name: 'Avalanche',
+          symbol: 'AVAX',
+          decimals: 18,
+        },
+        rpcUrls: ['https://rpc.decentraland.org/arbitrum'],
+        blockExplorerUrls: ['https://avascan.info/'],
+      }
+    case ChainId.OPTIMISM_MAINNET:
+      return {
+        chainId: hexChainId,
+        chainName,
+        nativeCurrency: {
+          name: 'Optimism',
+          symbol: 'OP',
+          decimals: 18,
+        },
+        rpcUrls: ['https://rpc.decentraland.org/optimism'],
+        blockExplorerUrls: ['https://optimistic.etherscan.io/'],
+      }
+    case ChainId.BSC_MAINNET:
+      return {
+        chainId: hexChainId,
+        chainName,
+        nativeCurrency: {
+          name: 'Binance Smart Chain',
+          symbol: 'BSC',
+          decimals: 18,
+        },
+        rpcUrls: ['https://rpc.decentraland.org/binance'],
+        blockExplorerUrls: ['https://bscscan.com/'],
+      }
+    case ChainId.FANTOM_MAINNET:
+      return {
+        chainId: hexChainId,
+        chainName,
+        nativeCurrency: {
+          name: 'Fantom',
+          symbol: 'FTM',
+          decimals: 18,
+        },
+        rpcUrls: ['https://rpc.decentraland.org/fantom'],
+        blockExplorerUrls: ['https://ftmscan.com/'],
+      }
     case ChainId.ETHEREUM_MAINNET:
     case ChainId.ETHEREUM_ROPSTEN:
     case ChainId.ETHEREUM_RINKEBY:
