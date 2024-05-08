@@ -216,37 +216,9 @@ export default function Layout({
       return {}
     }
 
-    switch (chainId) {
-      case ChainId.ETHEREUM_MAINNET: {
-        const [ETHEREUM, MATIC] = await Promise.all([
-          fetchManaBalance(user, chainId),
-          fetchManaBalance(user, ChainId.MATIC_MAINNET),
-        ])
+    const manaBalance = await fetchManaBalance(user, chainId)
 
-        return { ETHEREUM, MATIC }
-      }
-
-      case ChainId.ETHEREUM_SEPOLIA:
-      case ChainId.ETHEREUM_GOERLI:
-      case ChainId.ETHEREUM_RINKEBY:
-      case ChainId.ETHEREUM_ROPSTEN: {
-        const [ETHEREUM, MATIC] = await Promise.all([
-          fetchManaBalance(user, chainId),
-          fetchManaBalance(user, ChainId.MATIC_MUMBAI),
-        ])
-
-        return { ETHEREUM, MATIC }
-      }
-
-      case ChainId.MATIC_MAINNET:
-      case ChainId.MATIC_MUMBAI: {
-        const MATIC = await fetchManaBalance(user, chainId)
-        return { MATIC }
-      }
-
-      default:
-        return {}
-    }
+    return manaBalance
   }, [user, chainId])
 
   const handleClickBalance = useCallback(
