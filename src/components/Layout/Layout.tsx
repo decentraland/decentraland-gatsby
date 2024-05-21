@@ -148,9 +148,9 @@ export default function Layout({
     function (
       event: React.MouseEvent<HTMLElement, MouseEvent>,
       options: {
-        eventTrackingName: string
+        type: string
         url?: string
-        trackingId?: string
+        track_uuid?: string
       }
     ) {
       event.preventDefault()
