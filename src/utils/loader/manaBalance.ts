@@ -1,5 +1,7 @@
-import { formatUnits } from '@ethersproject/units'
-import { MANA_GRAPH_BY_CHAIN_ID } from 'decentraland-dapps/dist/lib/chainConfiguration'
+import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
+import { Network } from '@dcl/schemas/dist/dapps/network'
+import { buildWallet } from 'decentraland-dapps/dist/modules/wallet/utils/buildWallet'
+import { ManaBalancesProps } from 'decentraland-ui/dist/components/UserMenu/ManaBalances/ManaBalances.types'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
 
 import rollbar from '../development/rollbar'
@@ -7,37 +9,23 @@ import segment from '../development/segment'
 import sentry from '../development/sentry'
 import Loader from './Loader'
 
-export type ChainId = keyof typeof MANA_GRAPH_BY_CHAIN_ID
-
-const QUERY = `
-query ($address: String!) {
-  accounts(where: { id: $address }) {
-    id,
-    mana
-  }
-}
-`
-
 export async function fetchManaBalance(address: string, chainId: ChainId) {
   if (!isEthereumAddress(address)) {
-    return 0
+    return {}
   }
 
   try {
-    const response = await fetch(MANA_GRAPH_BY_CHAIN_ID[chainId], {
-      method: 'post',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        query: QUERY,
-        variables: { address: address.toLowerCase() },
-      }),
-    })
+    const { networks } = await buildWallet(chainId)
+    const manaBalances: ManaBalancesProps['manaBalances'] = {}
+    const networkList = [Network.ETHEREUM, Network.MATIC]
+    for (const network of networkList as [Network.ETHEREUM, Network.MATIC]) {
+      const networkData = networks[network]
+      if (networkData) {
+        manaBalances[network] = networks[network].mana
+      }
+    }
 
-    const body = await response.json()
-    const accounts = body?.data?.accounts || []
-    const account = accounts[0]
-    const mana = account?.mana || '0'
-    return parseFloat(formatUnits(mana, 'ether'))
+    return manaBalances
   } catch (err) {
     console.error(err)
     rollbar((rollbar) => rollbar.error(err))
@@ -49,13 +37,27 @@ export async function fetchManaBalance(address: string, chainId: ChainId) {
         stack: err.stack,
       })
     )
-    return 0
+    return {}
+  }
+}
+
+function mapChainIdToNetwork(chainId: ChainId): Network {
+  switch (chainId) {
+    case ChainId.ETHEREUM_MAINNET:
+    case ChainId.ETHEREUM_SEPOLIA:
+      return Network.ETHEREUM
+    case ChainId.MATIC_MAINNET:
+    case ChainId.MATIC_AMOY:
+      return Network.MATIC
+    default:
+      return Network.ETHEREUM
   }
 }
 
 function createBalanceLoader(chainId: ChainId) {
   return new Loader(async (address: string) => {
-    return fetchManaBalance(address, chainId)
+    const manaBalances = await fetchManaBalance(address, chainId)
+    return manaBalances[mapChainIdToNetwork(chainId)] || 0
   })
 }
 
