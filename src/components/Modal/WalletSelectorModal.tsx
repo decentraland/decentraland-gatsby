@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 
+import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import { toModalOptionType } from 'decentraland-dapps/dist/containers/LoginModal/utils'
 import {
@@ -16,7 +17,6 @@ import { connection } from 'decentraland-connect'
 import { getChainId } from '../../context/Auth/utils'
 import useAnchor from '../../hooks/useAnchor'
 import useFormatMessage from '../../hooks/useFormatMessage'
-import { ChainId } from '../../utils/loader/ensBalance'
 import Loader from '../Progress/Loader'
 import Markdown from '../Text/Markdown'
 
