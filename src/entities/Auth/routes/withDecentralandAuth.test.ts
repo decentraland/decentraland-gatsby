@@ -43,6 +43,20 @@ describe(`withAuth`, () => {
     )
   })
 
+  test('should fail for requests with an invalid signer', async () => {
+    const logger = new Logger({}, { disabled: true })
+    const errors = jest.spyOn(logger, 'error')
+    errors.mockImplementation(() => null)
+    const request = signRequest(new Request('/'), {
+      identity,
+      metadata: { signer: 'decentraland-kernel-scene' },
+    })
+
+    await expect(() => withAuth({ request, logger })).rejects.toThrow(
+      'Invalid signer'
+    )
+  })
+
   test(`should return auth data for signed request`, async () => {
     const request = signRequest(new Request('/'), {
       identity,
@@ -80,6 +94,16 @@ describe(`withAuthOptional`, () => {
       identity,
       timestamp: Time.utc().subtract(100, 'years').getTime(),
     })
+    expect(await withAuthOptional({ request, logger })).toBe(null)
+  })
+
+  test('should return null for requests with an invalid signer', async () => {
+    const logger = new Logger({}, { disabled: true })
+    const request = signRequest(new Request('/'), {
+      identity,
+      metadata: { signer: 'decentraland-kernel-scene' },
+    })
+
     expect(await withAuthOptional({ request, logger })).toBe(null)
   })
 
