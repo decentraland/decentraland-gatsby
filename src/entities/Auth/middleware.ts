@@ -17,11 +17,18 @@ export function withChainHeader(options: AuthOptions = {}) {
   return middleware(
     async (req: Pick<Request, 'method' | 'baseUrl' | 'path' | 'headers'>) => {
       try {
-        const data = await verify(
+        const data = await verify<Record<string, string>>(
           req.method,
           req.baseUrl + req.path,
           req.headers
         )
+        if (
+          data.authMetadata &&
+          'signer' in data.authMetadata &&
+          data.authMetadata.signer === 'decentraland-kernel-scene'
+        ) {
+          throw new RequestError('Invalid signer', RequestError.BadRequest)
+        }
         Object.assign(req, data)
       } catch (err) {
         if (err.statusCode === 401) {
