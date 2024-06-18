@@ -18,8 +18,7 @@ export type AuthOptions = {
 }
 
 export function withChainHeader(
-  options: AuthOptions = {},
-  verifyOptions: VerifyAuthChainHeadersOptions = {}
+  options: AuthOptions & VerifyAuthChainHeadersOptions = {}
 ) {
   return middleware(
     async (req: Pick<Request, 'method' | 'baseUrl' | 'path' | 'headers'>) => {
@@ -30,7 +29,7 @@ export function withChainHeader(
           req.headers,
           {
             verifyMetadataContent: verifySigner,
-            ...verifyOptions,
+            ...options,
           }
         )
 
@@ -54,10 +53,9 @@ export function withChainHeader(
 }
 
 export function auth(
-  options: AuthOptions = {},
-  verifyOptions: VerifyAuthChainHeadersOptions = {}
+  options: AuthOptions & VerifyAuthChainHeadersOptions = {}
 ) {
-  const checkChainHeader = withChainHeader(options, verifyOptions)
+  const checkChainHeader = withChainHeader(options)
   const checkOptional = middleware(async () => {
     if (!options.optional) {
       throw new RequestError(`Unauthorized`, RequestError.Unauthorized)
