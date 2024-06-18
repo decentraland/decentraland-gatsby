@@ -1,4 +1,7 @@
-import { AUTH_CHAIN_HEADER_PREFIX } from 'decentraland-crypto-middleware/lib/types'
+import {
+  AUTH_CHAIN_HEADER_PREFIX,
+  VerifyAuthChainHeadersOptions,
+} from 'decentraland-crypto-middleware/lib/types'
 import verify from 'decentraland-crypto-middleware/lib/verify'
 import { NextFunction, Request, Response } from 'express'
 
@@ -6,6 +9,7 @@ import logger from '../Development/logger'
 import RequestError from '../Route/error'
 import middleware from '../Route/handle/middleware'
 import { AuthData, WithAuth } from './types'
+import { verifySigner } from './utils'
 
 export { AuthData, WithAuth }
 
@@ -13,22 +17,22 @@ export type AuthOptions = {
   optional?: boolean
 }
 
-export function withChainHeader(options: AuthOptions = {}) {
+export function withChainHeader(
+  options: AuthOptions & VerifyAuthChainHeadersOptions = {}
+) {
   return middleware(
     async (req: Pick<Request, 'method' | 'baseUrl' | 'path' | 'headers'>) => {
       try {
         const data = await verify<Record<string, string>>(
           req.method,
           req.baseUrl + req.path,
-          req.headers
+          req.headers,
+          {
+            verifyMetadataContent: verifySigner,
+            ...options,
+          }
         )
-        if (
-          data.authMetadata &&
-          'signer' in data.authMetadata &&
-          data.authMetadata.signer === 'decentraland-kernel-scene'
-        ) {
-          throw new RequestError('Invalid signer', RequestError.BadRequest)
-        }
+
         Object.assign(req, data)
       } catch (err) {
         if (err.statusCode === 401) {
@@ -48,7 +52,9 @@ export function withChainHeader(options: AuthOptions = {}) {
   )
 }
 
-export function auth(options: AuthOptions = {}) {
+export function auth(
+  options: AuthOptions & VerifyAuthChainHeadersOptions = {}
+) {
   const checkChainHeader = withChainHeader(options)
   const checkOptional = middleware(async () => {
     if (!options.optional) {
