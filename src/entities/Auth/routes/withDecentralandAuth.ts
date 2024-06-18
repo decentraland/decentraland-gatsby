@@ -5,11 +5,11 @@ import {
 import verify from 'decentraland-crypto-middleware/lib/verify'
 
 import globalLogger from '../../Development/logger'
-import RequestError from '../../Route/error'
 import Context from '../../Route/wkc/context/Context'
 import ErrorResponse from '../../Route/wkc/response/ErrorResponse'
 import Router from '../../Route/wkc/routes/Router'
 import { WithAuth } from '../types'
+import { verifySigner } from '../utils'
 
 export type WithDecentralandAuthOptions = VerifyAuthChainHeadersOptions & {
   optional?: boolean
@@ -55,21 +55,18 @@ function withDecentralandAuth(options: WithDecentralandAuthOptions = {}) {
         headers[header] = value
       })
 
+      const verifyOptions: VerifyAuthChainHeadersOptions = {
+        verifyMetadataContent: verifySigner,
+        ...options,
+      }
+
       try {
         const data = await verify<Record<string, string>>(
           method,
           path,
           headers,
-          options
+          verifyOptions
         )
-
-        if (
-          data.authMetadata &&
-          'signer' in data.authMetadata &&
-          data.authMetadata.signer === 'decentraland-kernel-scene'
-        ) {
-          throw new RequestError('Invalid signer', RequestError.BadRequest)
-        }
 
         return {
           address: data.auth,

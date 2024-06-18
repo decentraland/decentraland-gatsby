@@ -5,9 +5,13 @@ import {
   signRequest,
 } from '../../Development/identity'
 import { Logger } from '../../Development/logger'
+import RequestError from '../../Route/error'
 import { Request } from '../../Route/wkc/request/Request'
 import { WithAuth } from '../types'
-import { withAuth, withAuthOptional } from './withDecentralandAuth'
+import withDecentralandAuth, {
+  withAuth,
+  withAuthOptional,
+} from './withDecentralandAuth'
 
 test(`should be compatible with express.Request + auth middleware`, async () => {
   const expressRequestMock: WithAuth = { auth: 'user', authMetadata: {} } as any
@@ -18,6 +22,51 @@ test(`should be compatible with express.Request + auth middleware`, async () => 
   const authOptional = await withAuthOptional(expressRequestMock)
   expect(authOptional?.address).toBe(expressRequestMock.auth)
   expect(authOptional?.metadata).toBe(expressRequestMock.authMetadata)
+})
+
+describe('withDecentralandAuth', () => {
+  describe('when custom verifyMetadataContent function is sent', () => {
+    describe('and it returns true', () => {
+      test('should return auth data', async () => {
+        const logger = new Logger({}, { disabled: true })
+        const request = signRequest(new Request('/'), {
+          identity,
+          metadata: { signer: 'decentraland-kernel-scene' },
+        })
+
+        expect(
+          await withDecentralandAuth({ verifyMetadataContent: () => true })({
+            request,
+            logger,
+          })
+        ).toEqual({
+          address: IdentitySigner.toLowerCase(),
+          metadata: { signer: 'decentraland-kernel-scene' },
+        })
+      })
+    })
+
+    describe('and it throws an error', () => {
+      test('should fail', async () => {
+        const logger = new Logger({}, { disabled: true })
+        const request = signRequest(new Request('/'), {
+          identity,
+          metadata: { signer: 'decentraland-kernel-scene' },
+        })
+
+        await expect(async () =>
+          withDecentralandAuth({
+            verifyMetadataContent: () => {
+              throw new RequestError('error', 400)
+            },
+          })({
+            request,
+            logger,
+          })
+        ).rejects.toThrow('error')
+      })
+    })
+  })
 })
 
 describe(`withAuth`, () => {
