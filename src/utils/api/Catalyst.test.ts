@@ -90,10 +90,10 @@ describe('utils/api/Catalyst', () => {
     test(`should return an instance of a Catalyst`, async () => {
       const catalyst = Catalyst.getInstance()
       const profile = await catalyst.getProfile(
-        '0x05d48ee3e815bf376fc79d283301cfdef872e280'
+        '0xd9b96b5dc720fc52bede1ec3b40a930e15f70ddd'
       )
       expect((profile?.ethAddress || '').toLowerCase()).toEqual(
-        '0x05d48ee3e815bf376fc79d283301cfdef872e280'
+        '0xd9b96b5dc720fc52bede1ec3b40a930e15f70ddd'
       )
     })
   })
@@ -102,12 +102,12 @@ describe('utils/api/Catalyst', () => {
     test(`should return an instance of a Catalyst`, async () => {
       const catalyst = Catalyst.getInstance()
       const profiles = await catalyst.getProfiles([
-        '0x05d48ee3e815bf376fc79d283301cfdef872e280',
+        '0xd9b96b5dc720fc52bede1ec3b40a930e15f70ddd',
       ])
       expect(Array.isArray(profiles)).toBe(true)
       expect(profiles.length).toBe(1)
       expect((profiles[0]?.ethAddress || '').toLowerCase()).toEqual(
-        '0x05d48ee3e815bf376fc79d283301cfdef872e280'
+        '0xd9b96b5dc720fc52bede1ec3b40a930e15f70ddd'
       )
     })
   })
