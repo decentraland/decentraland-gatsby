@@ -23,6 +23,7 @@ export const chains = [
   ChainId.ETHEREUM_SEPOLIA,
   ChainId.MATIC_MAINNET,
   ChainId.MATIC_MUMBAI,
+  ChainId.MATIC_AMOY,
 ]
 
 export enum AuthEvent {
