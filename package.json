@@ -84,7 +84,7 @@
     "husky": "^7.0.4",
     "jest": "^29.6.4",
     "jest-environment-jsdom": "^29.6.4",
-    "leasot": "^13.1.0",
+    "leasot": "^14.4.0",
     "lint-staged": "^14.0.1",
     "node-pg-migrate": "^6.0.0",
     "postcss": "^8.4.29",
