@@ -121,7 +121,7 @@
     "@well-known-components/http-server": "^1.1.5",
     "@well-known-components/interfaces": "^1.1.2",
     "ajv": "^8.12.0",
-    "ajv-formats": "^2.1.1",
+    "ajv-formats": "^3.0.1",
     "analytics-node": "^6.2.0",
     "autoprefixer": "^10.4.15",
     "browser-lang": "0.1.0",
