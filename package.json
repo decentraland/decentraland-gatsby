@@ -1,7 +1,7 @@
 {
   "name": "decentraland-gatsby",
   "version": "0.0.0-development",
-  "description": "Common Gastby components by Decentraland",
+  "description": "Common Gatsby components by Decentraland",
   "main": "dist/index.js",
   "engines": {
     "node": ">=16.0.0",
