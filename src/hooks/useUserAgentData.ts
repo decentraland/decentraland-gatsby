@@ -13,7 +13,6 @@ export type NavigatorUAData = {
   brands: Brand[]
   mobile: boolean
   platform: string
-  cpu: string
 }
 
 export type Brand = {
@@ -25,7 +24,6 @@ const defaultGlobalValue: NavigatorUAData = {
   brands: [],
   mobile: false,
   platform: 'Unknown',
-  cpu: 'Unknown',
 }
 
 const getUserAgentData = once((): NavigatorUAData => {
@@ -50,17 +48,8 @@ const getUserAgentData = once((): NavigatorUAData => {
       })
     }
 
-    let architecture
-    if (!ua.cpu.architecture) {
-      architecture =
-        ua.os.name === 'Mac OS' && isAppleSilicon(ua) ? 'arm64' : 'Unknown'
-    } else {
-      architecture = ua.cpu.architecture
-    }
-
     return {
       platform: ua.os.name ?? defaultGlobalValue.platform,
-      cpu: architecture,
       mobile: isMobile(),
       brands,
     }
