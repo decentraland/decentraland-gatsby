@@ -63,8 +63,13 @@ export default function useAdvancedUserAgentData(): [
 
     let architecture: string
     if (!cpuData.architecture) {
-      architecture =
-        os.name === 'macOS' && isAppleSilicon(ua) ? 'arm64' : 'Unknown'
+      try {
+        architecture =
+          os.name === 'macOS' && isAppleSilicon(ua) ? 'arm64' : 'Unknown'
+      } catch (error) {
+        console.log('Error trying to get the architecture: ', error)
+        architecture = 'Unknown'
+      }
     } else {
       architecture = cpuData.architecture
     }
