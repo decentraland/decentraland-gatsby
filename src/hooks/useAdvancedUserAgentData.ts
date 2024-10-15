@@ -43,6 +43,7 @@ export default function useAdvancedUserAgentData(): [
     setLoading(true)
     const ua = new UAParser(navigator.userAgent)
     const uaData = ua.getResult()
+    const uaDataWithClientHints = await ua.getResult().withClientHints()
     const browser = {
       name: uaData.browser.name ?? DEFAULT_VALUE,
       version: uaData.browser.version ?? DEFAULT_VALUE,
@@ -63,13 +64,10 @@ export default function useAdvancedUserAgentData(): [
 
     let architecture: string
     if (!cpuData.architecture) {
-      try {
-        architecture =
-          os.name === 'macOS' && isAppleSilicon(ua) ? 'arm64' : 'Unknown'
-      } catch (error) {
-        console.log('Error trying to get the architecture: ', error)
-        architecture = 'Unknown'
-      }
+      architecture =
+        os.name === 'macOS' && isAppleSilicon(uaDataWithClientHints)
+          ? 'arm64'
+          : 'Unknown'
     } else {
       architecture = cpuData.architecture
     }
