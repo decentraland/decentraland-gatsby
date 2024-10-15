@@ -43,7 +43,7 @@ export default function useAdvancedUserAgentData(): [
     setLoading(true)
     const ua = new UAParser(navigator.userAgent)
     const uaData = ua.getResult()
-    const uaDataWithClientHints = await ua.getResult().withClientHints()
+    const uaDataWithClientHints = await uaData.withClientHints()
     const browser = {
       name: uaData.browser.name ?? DEFAULT_VALUE,
       version: uaData.browser.version ?? DEFAULT_VALUE,
