@@ -2,7 +2,7 @@ import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
-import { getConfiguration } from 'decentraland-connect'
+import { getRpcUrls } from 'decentraland-connect'
 
 import { ConnectionOptions, ConnectionType } from './types'
 
@@ -29,6 +29,13 @@ export function onceWithConnectionOptions<T>(
   }
 }
 
+type SupportedChainIds = keyof ReturnType<typeof getRpcUrls>
 export function getRPCUrl(chainId: ChainId) {
-  return getConfiguration()[ProviderType.NETWORK].urls[chainId]
+  const rpcUrls = getRpcUrls(ProviderType.NETWORK)
+
+  if (!(chainId in rpcUrls)) {
+    throw new Error(`ChainId ${chainId} not supported`)
+  }
+
+  return getRpcUrls(ProviderType.NETWORK)[chainId as SupportedChainIds]
 }
