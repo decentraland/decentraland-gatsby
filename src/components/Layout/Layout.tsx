@@ -320,6 +320,7 @@ export default function Layout({
           ])}
           i18n={props.i18n}
           onChange={trackEvent(handleChangeLocal)}
+          hideSocialLinks={props.hideSocialLinks}
         />
       )}
     </>
