@@ -21,20 +21,21 @@ import {
   DROPDOWN_MENU_SIGN_OUT_EVENT,
 } from 'decentraland-dapps/dist/containers/Navbar/constants'
 import useNotifications from 'decentraland-dapps/dist/hooks/useNotifications'
-import { shorten } from 'decentraland-ui/dist/components/AddressField/utils'
 import {
   Footer,
   FooterProps,
 } from 'decentraland-ui/dist/components/Footer/Footer'
 import { Locale } from 'decentraland-ui/dist/components/LanguageIcon/LanguageIcon'
-import { Navbar } from 'decentraland-ui/dist/components/Navbar/Navbar'
-import { NavbarProps } from 'decentraland-ui/dist/components/Navbar/Navbar.types'
+import { config } from 'decentraland-ui2/dist/config'
+
 import {
+  ManaBalancesProps,
+  Navbar,
+  NavbarProps,
   NotificationActiveTab,
   NotificationLocale,
-} from 'decentraland-ui/dist/components/Notifications/types'
-import { ManaBalancesProps } from 'decentraland-ui/dist/components/UserMenu/ManaBalances/ManaBalances.types'
-import { config } from 'decentraland-ui/dist/config'
+  dclAddressUtils,
+} from 'decentraland-ui2'
 
 import useAuthContext from '../../context/Auth/useAuthContext'
 import useProfileInjected from '../../context/Auth/useProfileContext'
@@ -120,11 +121,13 @@ export default function Layout({
         handleOnChangeModalTab(tab),
       renderProfile: (address: string) => (
         <div className="layout__notifications-profile">
-          <Profile address={address} size="tiny" /> {shorten(address)}
+          <Profile address={address} size="tiny" />{' '}
+          {dclAddressUtils.shorten(address)}
         </div>
       ),
     }),
     [
+      locale,
       isLoading,
       isNotificationsOnboarding,
       isModalOpen,
@@ -223,13 +226,19 @@ export default function Layout({
 
   const handleClickBalance = useCallback(
     (
-      event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-      network: Network
+      event: React.MouseEvent<
+        HTMLButtonElement | HTMLAnchorElement,
+        MouseEvent
+      >,
+      network?: Network
     ) => {
       event.preventDefault()
-      segment((analytics) => {
-        analytics.track(DROPDOWN_MENU_BALANCE_CLICK_EVENT, { network })
-      })
+
+      if (network) {
+        segment((analytics) => {
+          analytics.track(DROPDOWN_MENU_BALANCE_CLICK_EVENT, { network })
+        })
+      }
 
       setTimeout(() => {
         window.open(config.get('ACCOUNT_URL'), '_blank', 'noopener')
