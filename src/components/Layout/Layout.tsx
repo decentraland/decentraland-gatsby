@@ -209,7 +209,6 @@ export default function Layout({
 
   const [profile, profileState] = useProfileInjected()
   const chainId = useChainId()
-  const isAuthDappEnabled = ff.enabled(DappsFeatureFlags.AuthDappEnabled)
   const loading = userState.loading || profileState.loading
 
   const [manaBalances] = useAsyncState<
@@ -282,9 +281,7 @@ export default function Layout({
           onClickNavbarItem={handleClickNavbarOption}
           onClickUserMenuItem={handleClickUserMenuOption}
           onClickOpen={handleOpen}
-          onClickSignIn={
-            isAuthDappEnabled ? userState.authorize : userState.select
-          }
+          onClickSignIn={userState.authorize}
           onClickSignOut={handleSignOut}
           notifications={notificationProps}
         />
