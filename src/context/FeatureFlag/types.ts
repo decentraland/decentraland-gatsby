@@ -4,4 +4,5 @@ export enum DappsFeatureFlags {
    * @see https://medium.com/walletconnect/walletconnect-v1-0-sunset-notice-and-migration-schedule-8af9d3720d2e
    */
   WalletConnectV2 = 'dapps-wallet-connect-v2',
+  AuthDappEnabled = 'dapps-auth-dapp',
 }
