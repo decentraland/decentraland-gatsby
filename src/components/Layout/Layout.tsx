@@ -56,6 +56,7 @@ import ShareModal from '../Modal/ShareModal'
 import WalletSelectorModal from '../Modal/WalletSelectorModal'
 import WrongNetworkModal from '../Modal/WrongNetworkModal'
 import Profile from '../Profile/Avatar'
+import EnhancedIntercom from '../Development/EnhancedIntercom'
 
 import type { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import type { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Dropdown'
@@ -332,6 +333,8 @@ export default function Layout({
           hideSocialLinks={props.hideSocialLinks}
         />
       )}
+      {/* This component is for client-side only, updating the Intercom data */}
+      <EnhancedIntercom />
     </>
   )
 }
