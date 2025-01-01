@@ -26,3 +26,9 @@
   gap: 5px;
   font-weight: 500;
 }
+
+@media only screen and (min-width: 1200px) {
+  .ui.container {
+    width: 1124px;
+  }
+}
