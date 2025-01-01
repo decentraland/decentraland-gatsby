@@ -1,0 +1,15 @@
+.layout__main-container {
+  margin-top: 64px;
+}
+
+@media only screen and (min-width: 1200px) {
+  .layout__main-container {
+    margin-top: 48px;
+  }
+}
+
+@media only screen and (min-width: 997px) {
+  .layout__main-container {
+    margin-top: 56px;
+  }
+}

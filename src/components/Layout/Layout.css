@@ -27,24 +27,8 @@
   font-weight: 500;
 }
 
-.LayoutMainContainer.layout__main {
-  margin-top: 64px;
-}
-
-@media only screen and (min-width: 1200px) {
-  .LayoutMainContainer.layout__main {
-    margin-top: 48px;
-  }
-}
-
 @media only screen and (min-width: 1200px) {
   .ui.container {
     width: 1124px;
-  }
-}
-
-@media only screen and (min-width: 997px) {
-  .LayoutMainContainer.layout__main {
-    margin-top: 56px;
   }
 }
