@@ -21,20 +21,21 @@ import {
   DROPDOWN_MENU_SIGN_OUT_EVENT,
 } from 'decentraland-dapps/dist/containers/Navbar/constants'
 import useNotifications from 'decentraland-dapps/dist/hooks/useNotifications'
-import { shorten } from 'decentraland-ui/dist/components/AddressField/utils'
 import {
   Footer,
   FooterProps,
 } from 'decentraland-ui/dist/components/Footer/Footer'
 import { Locale } from 'decentraland-ui/dist/components/LanguageIcon/LanguageIcon'
-import { Navbar } from 'decentraland-ui/dist/components/Navbar/Navbar'
-import { NavbarProps } from 'decentraland-ui/dist/components/Navbar/Navbar.types'
+import { config } from 'decentraland-ui2/dist/config'
+
 import {
+  ManaBalancesProps,
+  Navbar,
+  NavbarProps,
   NotificationActiveTab,
   NotificationLocale,
-} from 'decentraland-ui/dist/components/Notifications/types'
-import { ManaBalancesProps } from 'decentraland-ui/dist/components/UserMenu/ManaBalances/ManaBalances.types'
-import { config } from 'decentraland-ui/dist/config'
+  dclAddressUtils,
+} from 'decentraland-ui2'
 
 import useAuthContext from '../../context/Auth/useAuthContext'
 import useProfileInjected from '../../context/Auth/useProfileContext'
@@ -51,7 +52,6 @@ import segment from '../../utils/development/segment'
 import TokenList from '../../utils/dom/TokenList'
 import { fetchManaBalance } from '../../utils/loader/manaBalance'
 import trackEvent from '../../utils/segment/trackEvent'
-import EnhancedIntercom from '../Development/EnhancedIntercom'
 import ShareModal from '../Modal/ShareModal'
 import WalletSelectorModal from '../Modal/WalletSelectorModal'
 import WrongNetworkModal from '../Modal/WrongNetworkModal'
@@ -60,7 +60,7 @@ import Profile from '../Profile/Avatar'
 import type { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import type { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Dropdown'
 
-import './Layout.css'
+import './Layout2.css'
 
 export type LayoutProps = Omit<PageProps, 'children'> &
   NavbarProps &
@@ -74,7 +74,7 @@ export type LayoutProps = Omit<PageProps, 'children'> &
     children?: React.ReactNode
   }
 
-export default function Layout({
+export default function Layout2({
   children,
   pageContext,
   availableProviders,
@@ -121,11 +121,13 @@ export default function Layout({
         handleOnChangeModalTab(tab),
       renderProfile: (address: string) => (
         <div className="layout__notifications-profile">
-          <Profile address={address} size="tiny" /> {shorten(address)}
+          <Profile address={address} size="tiny" />{' '}
+          {dclAddressUtils.shorten(address)}
         </div>
       ),
     }),
     [
+      locale,
       isLoading,
       isNotificationsOnboarding,
       isModalOpen,
@@ -224,13 +226,19 @@ export default function Layout({
 
   const handleClickBalance = useCallback(
     (
-      event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-      network: Network
+      event: React.MouseEvent<
+        HTMLButtonElement | HTMLAnchorElement,
+        MouseEvent
+      >,
+      network?: Network
     ) => {
       event.preventDefault()
-      segment((analytics) => {
-        analytics.track(DROPDOWN_MENU_BALANCE_CLICK_EVENT, { network })
-      })
+
+      if (network) {
+        segment((analytics) => {
+          analytics.track(DROPDOWN_MENU_BALANCE_CLICK_EVENT, { network })
+        })
+      }
 
       setTimeout(() => {
         window.open(config.get('ACCOUNT_URL'), '_blank', 'noopener')
@@ -281,16 +289,7 @@ export default function Layout({
           notifications={notificationProps}
         />
       )}
-      <main
-        className={TokenList.join([
-          // TODO(#323): remove on v6 use bem notation
-          'LayoutMainContainer',
-          'layout__main',
-          props.className,
-        ])}
-      >
-        {children}
-      </main>
+      <main className="layout__main-container">{children}</main>
       <ShareModal data={shareState.data} onClose={shareState.close} />
       <WrongNetworkModal
         currentNetwork={userState.chainId}
@@ -324,8 +323,6 @@ export default function Layout({
           hideSocialLinks={props.hideSocialLinks}
         />
       )}
-      {/* This component is for client-side only, updating the Intercom data */}
-      <EnhancedIntercom />
     </>
   )
 }
