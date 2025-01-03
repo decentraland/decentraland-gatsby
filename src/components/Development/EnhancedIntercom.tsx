@@ -55,7 +55,9 @@ export default function EnhancedIntercom() {
           enhancedData['Wallet type'] = providerType
         }
 
-        window.Intercom('update', enhancedData)
+        if (account || providerType) {
+          window.Intercom('update', enhancedData)
+        }
       }
     }
 
