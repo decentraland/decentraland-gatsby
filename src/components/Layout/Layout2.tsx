@@ -289,6 +289,7 @@ export default function Layout2({
           notifications={notificationProps}
         />
       )}
+
       <main className="layout__main-container">{children}</main>
       <ShareModal data={shareState.data} onClose={shareState.close} />
       <WrongNetworkModal
