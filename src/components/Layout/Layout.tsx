@@ -51,6 +51,7 @@ import segment from '../../utils/development/segment'
 import TokenList from '../../utils/dom/TokenList'
 import { fetchManaBalance } from '../../utils/loader/manaBalance'
 import trackEvent from '../../utils/segment/trackEvent'
+import EnhancedIntercom from '../Development/EnhancedIntercom'
 import ShareModal from '../Modal/ShareModal'
 import WalletSelectorModal from '../Modal/WalletSelectorModal'
 import WrongNetworkModal from '../Modal/WrongNetworkModal'
@@ -323,6 +324,8 @@ export default function Layout({
           hideSocialLinks={props.hideSocialLinks}
         />
       )}
+      {/* This component is for client-side only, updating the Intercom data */}
+      <EnhancedIntercom />
     </>
   )
 }
