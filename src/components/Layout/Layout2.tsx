@@ -40,8 +40,6 @@ import {
 import useAuthContext from '../../context/Auth/useAuthContext'
 import useProfileInjected from '../../context/Auth/useProfileContext'
 import { getSupportedChainIds } from '../../context/Auth/utils'
-import { useFeatureFlagContext } from '../../context/FeatureFlag'
-import { DappsFeatureFlags } from '../../context/FeatureFlag/types'
 import useShareContext from '../../context/Share/useShareContext'
 import useTrackLinkContext from '../../context/Track/useTrackLinkContext'
 import useAsyncState from '../../hooks/useAsyncState'
@@ -53,7 +51,6 @@ import TokenList from '../../utils/dom/TokenList'
 import { fetchManaBalance } from '../../utils/loader/manaBalance'
 import trackEvent from '../../utils/segment/trackEvent'
 import ShareModal from '../Modal/ShareModal'
-import WalletSelectorModal from '../Modal/WalletSelectorModal'
 import WrongNetworkModal from '../Modal/WrongNetworkModal'
 import Profile from '../Profile/Avatar'
 
@@ -84,7 +81,6 @@ export default function Layout2({
 }: LayoutProps) {
   const locale = pageContext?.intl?.locale || 'en'
   const locales = pageContext?.intl?.locales || ['en']
-  const [ff] = useFeatureFlagContext()
   const [user, userState] = useAuthContext()
   const [, shareState] = useShareContext()
   const identity: AuthIdentity | undefined = useMemo(() => {
@@ -196,20 +192,8 @@ export default function Layout2({
     [userState]
   )
 
-  const handleConnect = useCallback(
-    (providerType: ProviderType, chainId: ChainId) =>
-      userState.connect(providerType, chainId),
-    [userState]
-  )
-
-  const handleCancelConnect = useCallback(
-    () => userState.select(false),
-    [userState]
-  )
-
   const [profile, profileState] = useProfileInjected()
   const chainId = useChainId()
-  const isAuthDappEnabled = ff.enabled(DappsFeatureFlags.AuthDappEnabled)
   const loading = userState.loading || profileState.loading
 
   const [manaBalances] = useAsyncState<
@@ -282,9 +266,7 @@ export default function Layout2({
           onClickNavbarItem={handleClickNavbarOption}
           onClickUserMenuItem={handleClickUserMenuOption}
           onClickOpen={handleOpen}
-          onClickSignIn={
-            isAuthDappEnabled ? userState.authorize : userState.select
-          }
+          onClickSignIn={userState.authorize}
           onClickSignOut={handleSignOut}
           notifications={notificationProps}
         />
@@ -298,15 +280,6 @@ export default function Layout2({
         expectedNetwork={getSupportedChainIds()}
         onSwitchNetwork={handleSwitchNetwork}
         providerType={userState.providerType}
-      />
-      <WalletSelectorModal
-        open={userState.selecting}
-        loading={userState.loading}
-        error={userState.error}
-        onConnect={handleConnect}
-        availableProviders={availableProviders}
-        disabledWalletConnect2={!ff.enabled(DappsFeatureFlags.WalletConnectV2)}
-        onClose={handleCancelConnect}
       />
       {!hideFooter && (
         <Footer
