@@ -145,7 +145,7 @@ export default function Layout({
     changeLocale(data.value as string)
   }
 
-  const handleClickUserMenuOption = useTrackLinkContext(
+  const handleClickUserMenuOption = useCallback(
     function (
       event: React.MouseEvent<HTMLElement, MouseEvent>,
       options: {
