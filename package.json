@@ -101,7 +101,7 @@
     "@aws-sdk/client-ses": "^3.421.0",
     "@dcl/crypto": "^3.4.3",
     "@dcl/feature-flags": "^1.2.0",
-    "@dcl/schemas": "^13.13.0",
+    "@dcl/schemas": "^16.0.0",
     "@dcl/single-sign-on-client": "^0.1.0",
     "@dcl/ui-env": "^1.4.1",
     "@ethersproject/bignumber": "^5.7.0",
