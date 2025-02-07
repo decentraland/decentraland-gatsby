@@ -1,3 +1,5 @@
+import { isbot } from 'isbot'
+
 import { getMouseEventData, getMouseEventName, isMeta } from '../dom/events'
 import { isBlankTarget, isLocalLink } from '../dom/links'
 import once from '../function/once'
@@ -42,7 +44,11 @@ const getContext = once((): TrackContext => {
 })
 
 export default function segment(tracker: Tracker, callback?: () => void) {
-  if (typeof window !== 'undefined' && window.analytics) {
+  const userAgent = window.navigator.userAgent
+
+  const isBot = isbot(userAgent)
+
+  if (typeof window !== 'undefined' && window.analytics && !isBot) {
     tracker(window.analytics, getContext(), callback ?? emptyCallback)
   } else if (callback) {
     Promise.resolve().then(() => callback())
@@ -54,7 +60,11 @@ export function track(
   data: Record<string, any> = {},
   callback?: () => void
 ) {
-  if (typeof window !== 'undefined' && window.analytics) {
+  const userAgent = window.navigator.userAgent
+
+  const isBot = isbot(userAgent)
+
+  if (typeof window !== 'undefined' && window.analytics && !isBot) {
     const analytics = window.analytics
     analytics.track(event, { ...getContext(), ...data }, callback)
   } else if (callback) {
