@@ -167,24 +167,21 @@ export default function Layout2({
     [props.onClickUserMenuItem]
   )
 
-  const handleClickDownload = useCallback(
-    function (
-      event: React.MouseEvent<HTMLElement, MouseEvent>,
-      options: {
-        href?: string
-      }
-    ) {
-      event.preventDefault()
-      segment((analytics) => {
-        analytics.track(NAVBAR_DOWNLOAD_EVENT, {
-          ...options,
-          place: NAVBAR_DOWNLOAD_EVENT_PLACE,
-        })
+  const handleClickDownload = useCallback(function (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+    options: {
+      href?: string
+    }
+  ) {
+    event.preventDefault()
+    segment((analytics) => {
+      analytics.track(NAVBAR_DOWNLOAD_EVENT, {
+        ...options,
+        place: NAVBAR_DOWNLOAD_EVENT_PLACE,
       })
-      return null
-    },
-    [props.onClickUserMenuItem]
-  )
+    })
+    return null
+  }, [])
 
   const handleClickNavbarOption = useTrackLinkContext(
     function (
