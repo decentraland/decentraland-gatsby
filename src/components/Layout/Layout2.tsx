@@ -66,6 +66,7 @@ export type LayoutProps = Omit<PageProps, 'children'> &
   FooterProps & {
     hideNavbar?: boolean
     hideFooter?: boolean
+    hideDownloadButton?: boolean
     pageContext?: {
       intl?: DecentralandIntlContext
     }
@@ -78,6 +79,7 @@ export default function Layout2({
   pageContext,
   hideNavbar,
   hideFooter,
+  hideDownloadButton,
   ...props
 }: LayoutProps) {
   const locale = pageContext?.intl?.locale || 'en'
@@ -287,6 +289,7 @@ export default function Layout2({
           onClickSignOut={handleSignOut}
           notifications={notificationProps}
           onClickDownload={handleClickDownload}
+          hideDownloadButton={hideDownloadButton}
         />
       )}
 
