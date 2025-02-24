@@ -17,12 +17,13 @@ const SECURE_RESPONSE = {
     'x-content-type-options': 'nosniff',
     'x-frame-options': 'DENY',
     'x-xss-protection': '1; mode=block',
+    'cross-origin-opener-policy': 'same-origin',
   },
   body: Buffer.alloc(0),
 }
 
 describe('addSecurityHeaders', () => {
-  test(`should add securoty headers into a request`, () => {
+  test(`should add security headers into a request`, () => {
     const request = addWebsiteSecurityHeaders(BASE_RESPONSE)
     expect(request.headers).toEqual(SECURE_RESPONSE.headers)
   })
@@ -35,16 +36,18 @@ describe('addSecurityHeaders', () => {
       xContentTypeOptions: false,
       xFrameOptions: false,
       xXssProtection: false,
+      crossOriginOpenerPolicy: false,
     })
     expect(request.headers).toEqual({})
   })
 
-  test(`should allow users to modify headers some headers`, () => {
+  test(`should allow users to modify some headers`, () => {
     const request = addWebsiteSecurityHeaders(BASE_RESPONSE, {
       contentSecurityPolicy: false,
       xContentTypeOptions: false,
       xFrameOptions: false,
       xXssProtection: false,
+      crossOriginOpenerPolicy: false,
       strictTransportSecurity: 'custom value',
       referrerPolicy: 'new value',
     })
@@ -62,6 +65,7 @@ describe('addSecurityHeaders', () => {
       xContentTypeOptions: false,
       xFrameOptions: false,
       xXssProtection: false,
+      crossOriginOpenerPolicy: false,
       contentSecurityPolicy: {
         scriptSrc: 'https://decentraland.org https://*.decentraland.org',
       },
