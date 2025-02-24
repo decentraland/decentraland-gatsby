@@ -292,7 +292,7 @@ export function addWebsiteSecurityHeaders<R extends Response>(
         'cross-origin-opener-policy':
           typeof options.crossOriginOpenerPolicy === 'string'
             ? options.crossOriginOpenerPolicy
-            : 'same-origin-allow-popups',
+            : 'same-origin',
       },
     }
   )
