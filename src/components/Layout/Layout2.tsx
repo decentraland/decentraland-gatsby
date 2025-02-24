@@ -19,6 +19,8 @@ import {
   DROPDOWN_MENU_DISPLAY_EVENT,
   DROPDOWN_MENU_ITEM_CLICK_EVENT,
   DROPDOWN_MENU_SIGN_OUT_EVENT,
+  NAVBAR_DOWNLOAD_EVENT,
+  NAVBAR_DOWNLOAD_EVENT_PLACE,
 } from 'decentraland-dapps/dist/containers/Navbar/constants'
 import useNotifications from 'decentraland-dapps/dist/hooks/useNotifications'
 import {
@@ -64,6 +66,7 @@ export type LayoutProps = Omit<PageProps, 'children'> &
   FooterProps & {
     hideNavbar?: boolean
     hideFooter?: boolean
+    hideDownloadButton?: boolean
     pageContext?: {
       intl?: DecentralandIntlContext
     }
@@ -74,9 +77,9 @@ export type LayoutProps = Omit<PageProps, 'children'> &
 export default function Layout2({
   children,
   pageContext,
-  availableProviders,
   hideNavbar,
   hideFooter,
+  hideDownloadButton,
   ...props
 }: LayoutProps) {
   const locale = pageContext?.intl?.locale || 'en'
@@ -165,6 +168,22 @@ export default function Layout2({
     },
     [props.onClickUserMenuItem]
   )
+
+  const handleClickDownload = useCallback(function (
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
+    options: {
+      href?: string
+    }
+  ) {
+    event.preventDefault()
+    segment((analytics) => {
+      analytics.track(NAVBAR_DOWNLOAD_EVENT, {
+        ...options,
+        place: NAVBAR_DOWNLOAD_EVENT_PLACE,
+      })
+    })
+    return null
+  }, [])
 
   const handleClickNavbarOption = useTrackLinkContext(
     function (
@@ -269,6 +288,8 @@ export default function Layout2({
           onClickSignIn={userState.authorize}
           onClickSignOut={handleSignOut}
           notifications={notificationProps}
+          onClickDownload={handleClickDownload}
+          hideDownloadButton={hideDownloadButton}
         />
       )}
 
