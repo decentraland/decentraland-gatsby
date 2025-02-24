@@ -175,6 +175,17 @@ export type WebsiteSecurityOptions = Partial<{
    * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Feature-Policy
    */
   permissonPolicy: false | {}
+
+  /**
+   * Disabled or extends Cross-Origin-Opener-Policy
+   *
+   * The HTTP Cross-Origin-Opener-Policy (COOP) response header allows a website to control whether a new top-level
+   * document, opened using Window.open() or by navigating to a new page, is opened in the same
+   * browsing context group (BCG) or in a new browsing context group.
+   *
+   * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Cross-Origin-Opener-Policy
+   */
+  crossOriginOpenerPolicy: false | string
 }>
 
 export function addWebsiteSecurityHeaders<R extends Response>(
@@ -274,6 +285,14 @@ export function addWebsiteSecurityHeaders<R extends Response>(
         ]
           .filter(Boolean)
           .join('; '),
+      },
+    },
+    options.crossOriginOpenerPolicy !== false && {
+      headers: {
+        'cross-origin-opener-policy':
+          typeof options.crossOriginOpenerPolicy === 'string'
+            ? options.crossOriginOpenerPolicy
+            : 'same-origin-allow-popups',
       },
     }
   )
