@@ -6,10 +6,15 @@ import type { BrowserOptions } from '@sentry/browser'
 
 type SentryProps = {
   src?: string
+  sentryOptions?: BrowserOptions
 } & React.ScriptHTMLAttributes<HTMLScriptElement> &
   React.HTMLProps<HTMLScriptElement>
 
-export default React.memo(function Sentry({ src, ...props }: SentryProps) {
+export default React.memo(function Sentry({
+  src,
+  sentryOptions,
+  ...props
+}: SentryProps) {
   src = src || env('SENTRY_SRC', process.env.GATSBY_SENTRY_SRC || '')
 
   if (!src) {
@@ -53,6 +58,7 @@ export default React.memo(function Sentry({ src, ...props }: SentryProps) {
     // Session Replay
     replaysSessionSampleRate: 0.1,
     replaysOnErrorSampleRate: 1.0,
+    ...sentryOptions,
   }
 
   return (
