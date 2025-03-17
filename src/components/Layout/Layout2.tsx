@@ -293,7 +293,15 @@ export default function Layout2({
         />
       )}
 
-      <main className="layout__main-container">{children}</main>
+      <main
+        className={TokenList.join([
+          // TODO(#323): remove on v6 use bem notation
+          'layout__main-container',
+          props.className,
+        ])}
+      >
+        {children}
+      </main>
       <ShareModal data={shareState.data} onClose={shareState.close} />
       <WrongNetworkModal
         currentNetwork={userState.chainId}
