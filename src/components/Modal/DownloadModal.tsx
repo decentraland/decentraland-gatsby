@@ -12,8 +12,14 @@ import TokenList from '../../utils/dom/TokenList'
 
 import './DownloadModal.css'
 
-export default function DownloadModal(props: ModalProps) {
-  const { onClose } = props
+export type DownloadModalProps = Omit<ModalProps, 'children'> & {
+  title?: string
+  description?: string
+  buttonLabel?: string
+}
+
+export default function DownloadModal(props: DownloadModalProps) {
+  const { onClose, title, description, buttonLabel } = props
   const l = useFormatMessage()
 
   const handleClose = useCallback(
@@ -37,9 +43,13 @@ export default function DownloadModal(props: ModalProps) {
       <div>
         <img src={ExplorerJumpinImage} alt="Explorer Jump In" />
       </div>
-      <Title>{l(`components.modal.download.title`)}</Title>
-      <Paragraph>{l(`components.modal.download.description`)}</Paragraph>
-      <DownloadButton label={l(`components.modal.download.button_label`)} />
+      <Title>{title || l(`@growth.DownloadModal.title`)}</Title>
+      <Paragraph>
+        {description || l(`@growth.DownloadModal.description`)}
+      </Paragraph>
+      <DownloadButton
+        label={buttonLabel || l(`@growth.DownloadModal.button_label`)}
+      />
     </Modal>
   )
 }
