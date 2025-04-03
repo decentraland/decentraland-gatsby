@@ -14,20 +14,13 @@ import DownloadModal from './DownloadModal'
 
 <Canvas isExpanded>
   <Story name="Default">
-    <ModalContainer
-      Modal={DownloadModal}
-      open
-    />
+    <ModalContainer Modal={DownloadModal} open />
   </Story>
 </Canvas>
 
 <Canvas>
   <Story name="With custom title">
-    <ModalContainer
-      Modal={DownloadModal}
-      open
-      title="Custom Download Title"
-    />
+    <ModalContainer Modal={DownloadModal} open title="Custom Download Title" />
   </Story>
 </Canvas>
 
@@ -43,11 +36,7 @@ import DownloadModal from './DownloadModal'
 
 <Canvas>
   <Story name="With custom button label">
-    <ModalContainer
-      Modal={DownloadModal}
-      open
-      buttonLabel="Download Now"
-    />
+    <ModalContainer Modal={DownloadModal} open buttonLabel="Download Now" />
   </Story>
 </Canvas>
 
