@@ -16,10 +16,11 @@ export type DownloadModalProps = Omit<ModalProps, 'children'> & {
   title?: string
   description?: string
   buttonLabel?: string
+  onDownloadClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
 export default function DownloadModal(props: DownloadModalProps) {
-  const { onClose, title, description, buttonLabel } = props
+  const { title, description, buttonLabel, onClose, onDownloadClick } = props
   const l = useFormatMessage()
 
   const handleClose = useCallback(
@@ -49,6 +50,7 @@ export default function DownloadModal(props: DownloadModalProps) {
       </Paragraph>
       <DownloadButton
         label={buttonLabel || l(`@growth.DownloadModal.button_label`)}
+        onClick={onDownloadClick}
       />
     </Modal>
   )
