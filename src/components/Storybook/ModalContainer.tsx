@@ -7,7 +7,12 @@ import type { ModalProps } from 'decentraland-ui/dist/components/Modal/Modal'
 import './ModalContainer.css'
 
 export type ModalContainerProps = ModalProps & {
-  Modal?: React.JSXElementConstructor<ModalProps>
+  Modal?: React.JSXElementConstructor<any>
+  title?: string
+  description?: string
+  buttonLabel?: string
+  onDownloadClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+  href?: string
 }
 
 const uid = (() => {

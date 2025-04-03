@@ -1,9 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
 import { UAParser } from 'ua-parser-js'
-// @ts-expect-error: missing types
-// eslint-disable-next-line import/no-unresolved
-import { isAppleSilicon } from 'ua-parser-js/helpers'
 
 import once from '../utils/function/once'
 import isMobile from '../utils/react/isMobile'

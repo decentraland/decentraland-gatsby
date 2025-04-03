@@ -1,0 +1,45 @@
+.ui.modal.download-modal {
+  max-width: 520px;
+  position: relative;
+  text-align: center;
+  padding: 48px 80px;
+}
+
+.ui.modal.download-modal .dg.Title,
+.ui.modal.download-modal .dg.SubTitle,
+.ui.modal.download-modal .dg.Paragraph {
+  margin-top: 0;
+}
+
+.ui.modal.download-modal .dg.Title,
+.ui.modal.download-modal .dg.SubTitle {
+  font-size: 21px;
+  font-weight: 600;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.43;
+  letter-spacing: 0.3px;
+  text-align: center;
+}
+
+.ui.modal.download-modal .dg.Paragraph {
+  font-size: 17px;
+  font-weight: normal;
+  font-stretch: normal;
+  font-style: normal;
+  line-height: 1.53;
+  letter-spacing: -0.2px;
+  text-align: center;
+}
+
+.ui.modal.download-modal .download-modal__close {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 14px;
+  cursor: pointer;
+}
+
+.ui.modal.download-modal .ui.button {
+  width: 100%;
+}

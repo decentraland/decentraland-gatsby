@@ -1,4 +1,4 @@
-import Ajv, { ValidateFunction } from 'ajv'
+import { Ajv, ValidateFunction } from 'ajv'
 
 import defaultAjv from '../Schema/index'
 import { AjvObjectSchema } from '../Schema/types'
