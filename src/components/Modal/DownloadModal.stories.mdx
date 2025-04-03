@@ -1,0 +1,62 @@
+import {
+  Meta,
+  Story,
+  Preview,
+  Canvas,
+  Subtitle,
+  Source,
+  PureArgsTable as ArgsTable,
+} from '@storybook/addon-docs'
+import ModalContainer from '../Storybook/ModalContainer'
+import DownloadModal from './DownloadModal'
+
+<Meta title="components/Modal/DownloadModal" />
+
+<Canvas isExpanded>
+  <Story name="Default">
+    <ModalContainer
+      Modal={DownloadModal}
+      open
+    />
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story name="With custom title">
+    <ModalContainer
+      Modal={DownloadModal}
+      open
+      title="Custom Download Title"
+    />
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story name="With custom description">
+    <ModalContainer
+      Modal={DownloadModal}
+      open
+      description="Custom download description text"
+    />
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story name="With custom button label">
+    <ModalContainer
+      Modal={DownloadModal}
+      open
+      buttonLabel="Download Now"
+    />
+  </Story>
+</Canvas>
+
+<Canvas>
+  <Story name="With custom download handler">
+    <ModalContainer
+      Modal={DownloadModal}
+      open
+      onDownloadClick={() => console.log('Download clicked')}
+    />
+  </Story>
+</Canvas>
