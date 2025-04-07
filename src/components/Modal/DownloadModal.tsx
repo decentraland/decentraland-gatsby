@@ -1,16 +1,14 @@
 import React, { useCallback } from 'react'
 
-import { Modal, ModalProps } from 'decentraland-ui/dist/components/Modal/Modal'
-import { DownloadButton } from 'decentraland-ui2/dist/components/DownloadButton/DownloadButton'
+import { DownloadButton } from 'decentraland-ui2/dist/components/DownloadButton'
+import { Modal, ModalProps } from 'decentraland-ui2/dist/components/Modal'
+
+import { emotionStyled as styled } from 'decentraland-ui2'
 
 import Paragraph from '../../components/Text/Paragraph'
-import Title from '../../components/Text/Title'
 import useFormatMessage from '../../hooks/useFormatMessage'
 import ExplorerJumpinImage from '../../images/explorer-jumpin-modal.svg'
-import closeIcon from '../../images/popup-close.svg'
-import TokenList from '../../utils/dom/TokenList'
-
-import './DownloadModal.css'
+import Title from '../Text/Title'
 
 export type DownloadModalProps = Omit<ModalProps, 'children'> & {
   title?: string
@@ -19,39 +17,86 @@ export type DownloadModalProps = Omit<ModalProps, 'children'> & {
   onDownloadClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
 }
 
+const StyledTitle = styled(Title)({
+  '&.dg.Title': {
+    fontSize: '21px',
+    fontWeight: 600,
+    fontStretch: 'normal',
+    fontStyle: 'normal',
+    lineHeight: 1.43,
+    letterSpacing: '0.3px',
+    textAlign: 'center',
+  },
+})
+
+const StyledDescription = styled(Paragraph)({
+  '&.dg.Paragraph': {
+    fontSize: '17px',
+    fontWeight: 'normal',
+    fontStretch: 'normal',
+    fontStyle: 'normal',
+    lineHeight: 1.53,
+    letterSpacing: '-0.2px',
+    textAlign: 'center',
+  },
+})
+
+const Content = styled.div({
+  display: 'flex',
+  flexDirection: 'column',
+  alignItems: 'center',
+  position: 'relative',
+})
+
+const ImageContainer = styled.div({
+  '& img': {
+    maxWidth: '100%',
+    height: 'auto',
+  },
+})
+
 export default function DownloadModal(props: DownloadModalProps) {
-  const { title, description, buttonLabel, onClose, onDownloadClick } = props
+  const {
+    title,
+    description,
+    buttonLabel,
+    open,
+    onClose,
+    onDownloadClick,
+    ...modalProps
+  } = props
   const l = useFormatMessage()
 
   const handleClose = useCallback(
-    (event: React.MouseEvent<HTMLElement>) => {
+    (event: React.MouseEvent<HTMLButtonElement>) => {
       if (onClose) {
-        onClose(event, props)
+        onClose(event)
       }
     },
-    [onClose, props]
+    [onClose]
   )
 
   return (
     <Modal
-      {...props}
-      className={TokenList.join(['download-modal', props.className])}
+      {...modalProps}
+      open={open}
+      size="tiny"
+      title=" " // this is to move the close button to the right
+      onClose={handleClose}
     >
-      <div className="download-modal__close" onClick={handleClose}>
-        <img src={closeIcon} width="14" height="14" />
-      </div>
-
-      <div>
-        <img src={ExplorerJumpinImage} alt="Explorer Jump In" />
-      </div>
-      <Title>{title || l(`@growth.DownloadModal.title`)}</Title>
-      <Paragraph>
-        {description || l(`@growth.DownloadModal.description`)}
-      </Paragraph>
-      <DownloadButton
-        label={buttonLabel || l(`@growth.DownloadModal.button_label`)}
-        onClick={onDownloadClick}
-      />
+      <Content>
+        <ImageContainer>
+          <img src={ExplorerJumpinImage} alt="Explorer Jump In" />
+        </ImageContainer>
+        <StyledTitle>{title || l(`@growth.DownloadModal.title`)}</StyledTitle>
+        <StyledDescription>
+          {description || l(`@growth.DownloadModal.description`)}
+        </StyledDescription>
+        <DownloadButton
+          label={buttonLabel || l(`@growth.DownloadModal.button_label`)}
+          onClick={onDownloadClick}
+        />
+      </Content>
     </Modal>
   )
 }
