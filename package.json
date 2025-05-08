@@ -162,7 +162,7 @@
     "react-highlight": "^0.14.0",
     "react-intersection-observer": "^9.5.3",
     "react-intl": "^5.21.0",
-    "react-markdown": "^7.1.0",
+    "react-markdown": "^10.1.0",
     "remark-emoji": "3.0.2",
     "remark-gfm": "^3.0.1",
     "sharp": "^0.32.5",
