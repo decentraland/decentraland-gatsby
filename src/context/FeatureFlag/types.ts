@@ -5,4 +5,5 @@ export enum DappsFeatureFlags {
    */
   WalletConnectV2 = 'dapps-wallet-connect-v2',
   AuthDappEnabled = 'dapps-auth-dapp',
+  LauncherLinks = 'dapps-launcher-links',
 }
