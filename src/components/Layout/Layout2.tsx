@@ -86,7 +86,7 @@ export default function Layout2({
 }: LayoutProps) {
   const locale = pageContext?.intl?.locale || 'en'
   const locales = pageContext?.intl?.locales || ['en']
-  const [ff] = useFeatureFlagContext()
+  const [ff, ffState] = useFeatureFlagContext()
   const [user, userState] = useAuthContext()
   const [, shareState] = useShareContext()
   const identity: AuthIdentity | undefined = useMemo(() => {
@@ -218,6 +218,10 @@ export default function Layout2({
   const chainId = useChainId()
   const loading = userState.loading || profileState.loading
   const cdnLinks = ff.payload(DappsFeatureFlags.LauncherLinks, undefined)
+  const loadingCdnLinks = useMemo(
+    () => ffState.loading || !ffState.loaded,
+    [ffState.loaded, ffState.loading]
+  )
 
   const [manaBalances] = useAsyncState<
     ManaBalancesProps['manaBalances']
@@ -294,6 +298,7 @@ export default function Layout2({
           notifications={notificationProps}
           onClickDownload={handleClickDownload}
           hideDownloadButton={hideDownloadButton}
+          loadingCdnLinks={loadingCdnLinks}
           cdnLinks={cdnLinks}
         />
       )}
