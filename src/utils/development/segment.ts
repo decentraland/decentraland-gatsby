@@ -4,7 +4,6 @@ import once from '../function/once'
 import isMobile from '../isMobile'
 
 export type TrackContext = {
-  wallet: boolean | string
   mobile: boolean
 }
 
@@ -27,29 +26,27 @@ export const getAnalyticsUtils = async () => {
   return analyticsUtils
 }
 
-const getContext = once(async (): Promise<TrackContext> => {
-  const utils = await getAnalyticsUtils()
-  const wallets = utils.getAllWallets()
+const getContext = once((): TrackContext => {
   return {
     mobile: isMobile(),
-    wallet: wallets.length === 0 ? 'none' : wallets.join(','),
   }
 })
 
-function getAnalytics(): SegmentAnalytics.AnalyticsJS | null {
-  return typeof window !== 'undefined' && window.analytics
-    ? window.analytics
-    : null
+async function getAnalytics(): Promise<SegmentAnalytics.AnalyticsJS | null> {
+  const utils = await getAnalyticsUtils()
+  return utils.getAnalytics()
 }
 
 export default function segment(tracker: Tracker, callback?: () => void) {
-  const analytics = getAnalytics()
-  if (analytics) {
-    getContext().then((context) => {
-      tracker(analytics, context, callback ?? emptyCallback)
+  if (typeof window !== 'undefined' && window.analytics) {
+    getAnalytics().then((analytics) => {
+      if (analytics) {
+        const context = getContext()
+        tracker(analytics, context, callback ?? emptyCallback)
+      } else if (callback) {
+        Promise.resolve().then(() => callback())
+      }
     })
-  } else if (callback) {
-    Promise.resolve().then(() => callback())
   }
 }
 
@@ -58,14 +55,15 @@ export function track(
   data: Record<string, any> = {},
   callback?: () => void
 ) {
-  const analytics = getAnalytics()
-
-  if (analytics) {
-    getContext().then((context) => {
-      analytics.track(event, { ...context, ...data }, callback)
+  if (typeof window !== 'undefined' && window.analytics) {
+    getAnalytics().then((analytics) => {
+      if (analytics) {
+        const context = getContext()
+        analytics.track(event, { ...context, ...data }, callback)
+      } else if (callback) {
+        Promise.resolve().then(() => callback())
+      }
     })
-  } else if (callback) {
-    Promise.resolve().then(() => callback())
   }
 }
 
