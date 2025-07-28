@@ -1,8 +1,3 @@
-import {
-  getAllWallets,
-  getAnalytics,
-} from 'decentraland-dapps/dist/modules/analytics/utils'
-
 import { getMouseEventData, getMouseEventName, isMeta } from '../dom/events'
 import { isBlankTarget, isLocalLink } from '../dom/links'
 import once from '../function/once'
@@ -20,18 +15,39 @@ export type Tracker = (
 ) => void
 
 const emptyCallback = () => {}
-const getContext = once((): TrackContext => {
-  const wallets = getAllWallets()
+
+// Dynamic import to handle ESM compatibility
+let analyticsUtils: any = null
+export const getAnalyticsUtils = async () => {
+  if (!analyticsUtils) {
+    analyticsUtils = await import(
+      'decentraland-dapps/dist/modules/analytics/utils'
+    )
+  }
+  return analyticsUtils
+}
+
+const getContext = once(async (): Promise<TrackContext> => {
+  const utils = await getAnalyticsUtils()
+  const wallets = utils.getAllWallets()
   return {
     mobile: isMobile(),
     wallet: wallets.length === 0 ? 'none' : wallets.join(','),
   }
 })
 
+function getAnalytics(): SegmentAnalytics.AnalyticsJS | null {
+  return typeof window !== 'undefined' && window.analytics
+    ? window.analytics
+    : null
+}
+
 export default function segment(tracker: Tracker, callback?: () => void) {
   const analytics = getAnalytics()
   if (analytics) {
-    tracker(analytics, getContext(), callback ?? emptyCallback)
+    getContext().then((context) => {
+      tracker(analytics, context, callback ?? emptyCallback)
+    })
   } else if (callback) {
     Promise.resolve().then(() => callback())
   }
@@ -45,7 +61,9 @@ export function track(
   const analytics = getAnalytics()
 
   if (analytics) {
-    analytics.track(event, { ...getContext(), ...data }, callback)
+    getContext().then((context) => {
+      analytics.track(event, { ...context, ...data }, callback)
+    })
   } else if (callback) {
     Promise.resolve().then(() => callback())
   }
