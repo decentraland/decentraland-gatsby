@@ -2,7 +2,6 @@ export type TaskAttributes<P extends {} = {}> = {
   id: string
   name: string
   status: TaskStatus
-  payload: P
 
   runner: string | null
   run_at: Date
@@ -13,7 +12,7 @@ export type TaskAttributes<P extends {} = {}> = {
 
 export type CreateTaskAttributes<P extends {} = {}> = Pick<
   TaskAttributes<P>,
-  'name' | 'payload' | 'run_at'
+  'name' | 'run_at'
 >
 
 export type TaskTimmer = () => Pick<Date, 'getTime'> | null

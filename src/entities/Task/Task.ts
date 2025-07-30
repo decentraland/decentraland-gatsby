@@ -14,25 +14,23 @@ export type TaskOptions = {
   repeat?: TaskTimmer
 }
 
-export type TaskRunOptions<P extends {} = {}> = {
+export type TaskRunOptions = {
   id: string
   runner: string
-  payload: P
   logger: Logger
 }
 
-export type TaskRunContext<P extends {} = {}> = {
+export type TaskRunContext = {
   id: string
   name: string
   runner: string
-  payload: P
   logger: Logger
-  schedule<T extends {} = {}>(task: Task<T>, payload?: T): void
+  schedule(task: Task): void
 }
 
 export type TaskHandler = (context: TaskRunContext) => Promise<any>
 
-export default class Task<P extends {} = {}> {
+export default class Task {
   static Repeat = {
     Never: () => null,
     Immediately: () => Time.from(),
@@ -67,18 +65,16 @@ export default class Task<P extends {} = {}> {
     return null
   }
 
-  async run(options: Partial<TaskRunOptions<P>> = {}) {
+  async run(options: Partial<TaskRunOptions> = {}) {
     const id = options.id ?? randomUUID()
-    const payload = options.payload ?? ({} as P)
     const runner = options.runner ?? 'unkown'
     const data = { id, runner, name: this.name }
     const newTasks: CreateTaskAttributes[] = []
     const logger = (options.logger ?? globalLogger).extend(data)
-    const schedule = <T extends {} = {}>(task: Task<T>, payload?: T) => {
+    const schedule = (task: Task) => {
       newTasks.push({
         name: task.name,
         run_at: Task.Repeat.Immediately().toDate(),
-        payload: payload || {},
       })
     }
 
@@ -88,7 +84,7 @@ export default class Task<P extends {} = {}> {
     const stopTimer = task_manager_duration_seconds.startTimer(label)
 
     try {
-      await this.options.task({ ...data, payload, logger, schedule })
+      await this.options.task({ ...data, logger, schedule })
     } catch (err) {
       error = 1
       logger.error(

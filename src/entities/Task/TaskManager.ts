@@ -16,7 +16,6 @@ export type TaskRunContext<P extends {} = {}> = {
   id: string
   name: string
   runner: string
-  payload: P
   logger: Logger
 }
 
@@ -205,7 +204,6 @@ export default class TaskManager {
     const handle = this._tasks.get(task.name)!
     const reschedules = await handle.run({
       id: task.id,
-      payload: task.payload,
       runner: this._id,
       logger: this._logger,
     })
@@ -215,7 +213,6 @@ export default class TaskManager {
       const timestamp = typeof repeat === 'number' ? repeat : repeat.getTime()
       reschedules.push({
         name: handle.name,
-        payload: {},
         run_at: new Date(timestamp),
       })
     }
