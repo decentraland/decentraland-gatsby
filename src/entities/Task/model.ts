@@ -31,8 +31,12 @@ export default class TaskModel extends Model<TaskAttributes> {
 
     const now = new Date()
     // Only insert tasks that are not already scheduled
-    return this.namedRowCount('initialize_tasks', SQL`
-      INSERT INTO ${table(this)} ("id", "name", "status", "runner", "run_at", "created_at", "updated_at")
+    return this.namedRowCount(
+      'initialize_tasks',
+      SQL`
+      INSERT INTO ${table(
+        this
+      )} ("id", "name", "status", "runner", "run_at", "created_at", "updated_at")
       SELECT * FROM (VALUES ${join(
         tasks.map(
           (task) => SQL`(
@@ -49,9 +53,12 @@ export default class TaskModel extends Model<TaskAttributes> {
       )}) AS new_tasks("id", "name", "status", "runner", "run_at", "created_at", "updated_at")
       WHERE NOT EXISTS (
         SELECT 1 FROM ${table(this)} 
-        WHERE "name" = new_tasks."name" AND "status" = ${TaskStatus.pending}::type_task_status
+        WHERE "name" = new_tasks."name" AND "status" = ${
+          TaskStatus.pending
+        }::type_task_status
       )
-    `)
+    `
+    )
   }
 
   static async lock(options: {
@@ -70,9 +77,11 @@ export default class TaskModel extends Model<TaskAttributes> {
     }
 
     const now = new Date()
-    
+
     // Locks and returns the tasks that are locked (only one task per name to avoid duplicates)
-    const lockTasksResult = await this.namedQuery<TaskAttributes>('lock_task', SQL`
+    const lockTasksResult = await this.namedQuery<TaskAttributes>(
+      'lock_task',
+      SQL`
       WITH selected_tasks AS (
         SELECT DISTINCT ON ("name") 
           "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
@@ -81,7 +90,10 @@ export default class TaskModel extends Model<TaskAttributes> {
         WHERE
           "runner" IS NULL AND
           "status" = ${TaskStatus.pending}::type_task_status AND
-          "name" IN (${join(names.map((name) => SQL`${name}`), SQL`, `)}) AND
+          "name" IN (${join(
+            names.map((name) => SQL`${name}`),
+            SQL`, `
+          )}) AND
           "run_at" <= ${now}
         ORDER BY
           "name", "run_at" ASC
@@ -98,7 +110,8 @@ export default class TaskModel extends Model<TaskAttributes> {
       FROM selected_tasks
       WHERE
         ${table(this)}."id" = selected_tasks."id"
-      RETURNING *`)
+      RETURNING *`
+    )
 
     return lockTasksResult
   }
@@ -129,15 +142,23 @@ export default class TaskModel extends Model<TaskAttributes> {
     const now = new Date()
 
     // Simple: Always schedule, let locking handle concurrency
-    return this.namedRowCount('schedule_tasks', SQL`
-    INSERT INTO ${table(this)} ("id", "name", "status", "runner", "run_at", "created_at", "updated_at")
+    return this.namedRowCount(
+      'schedule_tasks',
+      SQL`
+    INSERT INTO ${table(
+      this
+    )} ("id", "name", "status", "runner", "run_at", "created_at", "updated_at")
         VALUES ${join(
           tasks.map(
-            (task) => SQL`(${randomUUID()}, ${task.name}, ${TaskStatus.pending}::type_task_status, ${null}, ${task.run_at}, ${now}, ${now})`
+            (task) =>
+              SQL`(${randomUUID()}, ${task.name}, ${
+                TaskStatus.pending
+              }::type_task_status, ${null}, ${task.run_at}, ${now}, ${now})`
           ),
           SQL`, `
         )}
-    `)
+    `
+    )
   }
 
   static async releaseTimeout() {
@@ -156,7 +177,9 @@ export default class TaskModel extends Model<TaskAttributes> {
         "status" = ${TaskStatus.running}::type_task_status AND
         "run_at" < ${timeout}
         AND NOT EXISTS (
-          SELECT 1 FROM ${table(this)} WHERE "name" = ${table(this)}."name" AND "status" = ${TaskStatus.pending}::type_task_status
+          SELECT 1 FROM ${table(this)} WHERE "name" = ${table(
+        this
+      )}."name" AND "status" = ${TaskStatus.pending}::type_task_status
         )
     `
     )
