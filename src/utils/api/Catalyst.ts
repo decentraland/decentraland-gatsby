@@ -387,7 +387,7 @@ export default class Catalyst extends API {
     return this.fetch<{ parcels: StatsParcel[] }>('/stats/parcels')
   }
 
-  async getOwnerByName(name: string) {
+  async getNameOwner(name: string) {
     return this.fetch<{ owner: string }>(`/lambdas/names/${name}/owner`)
   }
 
