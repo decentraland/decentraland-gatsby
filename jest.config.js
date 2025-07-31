@@ -21,7 +21,7 @@ const config = {
     'static',
     'storybook-static',
   ],
-  transformIgnorePatterns: ['node_modules/?!(decentraland-dapps)'],
+  transformIgnorePatterns: ['node_modules/?!(decentraland-dapps|isbot)'],
 }
 
 module.exports = config

@@ -1,12 +1,9 @@
-import { isbot } from 'isbot'
-
 import { getMouseEventData, getMouseEventName, isMeta } from '../dom/events'
 import { isBlankTarget, isLocalLink } from '../dom/links'
 import once from '../function/once'
 import isMobile from '../isMobile'
 
 export type TrackContext = {
-  wallet: boolean | string
   mobile: boolean
 }
 
@@ -17,41 +14,39 @@ export type Tracker = (
 ) => void
 
 const emptyCallback = () => {}
+
+// Dynamic import to handle ESM compatibility
+let analyticsUtils: any = null
+export const getAnalyticsUtils = async () => {
+  if (!analyticsUtils) {
+    analyticsUtils = await import(
+      'decentraland-dapps/dist/modules/analytics/utils'
+    )
+  }
+  return analyticsUtils
+}
+
 const getContext = once((): TrackContext => {
-  const ethereum = window?.ethereum as any
   return {
     mobile: isMobile(),
-    wallet: !ethereum
-      ? 'none'
-      : ethereum?.isMetaMask
-      ? 'metamask'
-      : ethereum?.isDapper
-      ? 'dapper'
-      : ethereum?.isCucumber
-      ? 'cucumber'
-      : ethereum?.isTrust
-      ? 'trust'
-      : ethereum?.isToshi
-      ? 'coinbase'
-      : ethereum?.isGoWallet
-      ? 'goWallet'
-      : ethereum?.isAlphaWallet
-      ? 'alphaWallet'
-      : ethereum?.isStatus
-      ? 'status'
-      : 'other',
   }
 })
 
+async function getAnalytics(): Promise<SegmentAnalytics.AnalyticsJS | null> {
+  const utils = await getAnalyticsUtils()
+  return utils.getAnalytics()
+}
+
 export default function segment(tracker: Tracker, callback?: () => void) {
-  const userAgent = window.navigator.userAgent
-
-  const isBot = isbot(userAgent)
-
-  if (typeof window !== 'undefined' && window.analytics && !isBot) {
-    tracker(window.analytics, getContext(), callback ?? emptyCallback)
-  } else if (callback) {
-    Promise.resolve().then(() => callback())
+  if (typeof window !== 'undefined' && window.analytics) {
+    getAnalytics().then((analytics) => {
+      if (analytics) {
+        const context = getContext()
+        tracker(analytics, context, callback ?? emptyCallback)
+      } else if (callback) {
+        Promise.resolve().then(() => callback())
+      }
+    })
   }
 }
 
@@ -60,15 +55,15 @@ export function track(
   data: Record<string, any> = {},
   callback?: () => void
 ) {
-  const userAgent = window.navigator.userAgent
-
-  const isBot = isbot(userAgent)
-
-  if (typeof window !== 'undefined' && window.analytics && !isBot) {
-    const analytics = window.analytics
-    analytics.track(event, { ...getContext(), ...data }, callback)
-  } else if (callback) {
-    Promise.resolve().then(() => callback())
+  if (typeof window !== 'undefined' && window.analytics) {
+    getAnalytics().then((analytics) => {
+      if (analytics) {
+        const context = getContext()
+        analytics.track(event, { ...context, ...data }, callback)
+      } else if (callback) {
+        Promise.resolve().then(() => callback())
+      }
+    })
   }
 }
 
