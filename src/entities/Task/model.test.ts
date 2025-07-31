@@ -254,22 +254,27 @@ describe(`src/entities/Task/model`, () => {
             "runner" IS NULL AND
             "status" = $1::type_task_status AND
             "name" IN ($2) AND
-            "run_at" <= $3::timestamptz
+            "run_at" <= $3 AND
+            NOT EXISTS (
+              SELECT 1 FROM "tasks" t2 
+              WHERE t2."name" = "tasks"."name" 
+              AND t2."status" = $4::type_task_status
+            )
           FOR UPDATE SKIP LOCKED
         ),
         selected_tasks AS (
           SELECT DISTINCT ON ("name") "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
           FROM locked_candidates
           ORDER BY "name", "run_at" ASC
-          LIMIT $4
+          LIMIT $5
         )
         UPDATE
           "tasks"
         SET
-          "runner" = $5,
-          "status" = $6::type_task_status,
-          "updated_at" = $7::timestamptz,
-          "run_at" = $8::timestamptz
+          "runner" = $6,
+          "status" = $7::type_task_status,
+          "updated_at" = $8,
+          "run_at" = $9
         FROM selected_tasks
         WHERE
           "tasks"."id" = selected_tasks."id"
@@ -311,22 +316,27 @@ describe(`src/entities/Task/model`, () => {
             "runner" IS NULL AND
             "status" = $1::type_task_status AND
             "name" IN ($2) AND
-            "run_at" <= $3::timestamptz
+            "run_at" <= $3 AND
+            NOT EXISTS (
+              SELECT 1 FROM "tasks" t2 
+              WHERE t2."name" = "tasks"."name" 
+              AND t2."status" = $4::type_task_status
+            )
           FOR UPDATE SKIP LOCKED
         ),
         selected_tasks AS (
           SELECT DISTINCT ON ("name") "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
           FROM locked_candidates
           ORDER BY "name", "run_at" ASC
-          LIMIT $4
+          LIMIT $5
         )
         UPDATE
           "tasks"
         SET
-          "runner" = $5,
-          "status" = $6::type_task_status,
-          "updated_at" = $7::timestamptz,
-          "run_at" = $8::timestamptz
+          "runner" = $6,
+          "status" = $7::type_task_status,
+          "updated_at" = $8,
+          "run_at" = $9
         FROM selected_tasks
         WHERE
           "tasks"."id" = selected_tasks."id"
@@ -442,24 +452,11 @@ describe(`src/entities/Task/model`, () => {
       const [sql] = rawQuery.mock.calls[rawQuery.mock.calls.length - 1]
       expect(sqlFormat(sql.text)).toEqual(
         sqlFormat(`
-        UPDATE "tasks"
-        SET
-          "runner" = NULL,
-          "status" = $1::type_task_status,
-          "updated_at" = $2
+        DELETE FROM "tasks"
         WHERE
           "runner" IS NOT NULL AND
-          "status" = $3::type_task_status AND
-          "run_at" < $4
-          AND NOT EXISTS (
-            SELECT
-              1
-            FROM
-              "tasks"
-            WHERE
-              "name" = "tasks"."name"
-              AND "status" = $5::type_task_status
-          )
+          "status" = $1::type_task_status AND
+          "run_at" < $2
       `)
       )
     })

@@ -28,6 +28,7 @@ export default class TaskManager {
   private _nextTimeoutRelease: ReturnType<typeof setInterval> | null
   private _intervalTime = Time.Second * 15
   private _logger: Logger
+  private _promiseOfRunningTasksCycle: Promise<void> = Promise.resolve()
 
   constructor() {
     this._logger = globalLogger.extend({ runner: this._id })
@@ -103,7 +104,7 @@ export default class TaskManager {
           })
         }
 
-        this.runTasksCycle()
+        this._promiseOfRunningTasksCycle = this.runTasksCycle()
       }, random(0, this._intervalTime))
 
       // run task timeout
@@ -126,6 +127,9 @@ export default class TaskManager {
       if (this._nextTimeoutRelease) {
         clearInterval(this._nextTimeoutRelease)
       }
+
+      // Wait for the running tasks to finish
+      await this._promiseOfRunningTasksCycle
     }
   }
 
@@ -151,10 +155,9 @@ export default class TaskManager {
     }
 
     const nextCycle = this._intervalTime - (Date.now() - start)
-    this._nextCycle = setTimeout(
-      () => this.runTasksCycle(),
-      Math.max(nextCycle, 100)
-    )
+    this._nextCycle = setTimeout(() => {
+      this._promiseOfRunningTasksCycle = this.runTasksCycle()
+    }, Math.max(nextCycle, 100))
   }
 
   async runTasks() {

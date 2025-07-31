@@ -81,6 +81,8 @@ export default class TaskModel extends Model<TaskAttributes> {
     const now = new Date()
 
     // Locks and returns the tasks that are locked (only one task per name to avoid duplicates)
+    // It only locks tasks that are not already running and are pending.
+    // If there's a task left in a wrong running state, it will be released by the timeout query.
     const lockTasksResult = await this.namedQuery<TaskAttributes>(
       'lock_task',
       SQL`
@@ -95,7 +97,12 @@ export default class TaskModel extends Model<TaskAttributes> {
             names.map((name) => SQL`${name}`),
             SQL`, `
           )}) AND
-          "run_at" <= ${now}
+          "run_at" <= ${now} AND
+          NOT EXISTS (
+            SELECT 1 FROM ${table(this)} t2 
+            WHERE t2."name" = ${table(this)}."name" 
+            AND t2."status" = ${TaskStatus.running}::type_task_status
+          )
         FOR UPDATE SKIP LOCKED
       ),
       selected_tasks AS (
@@ -167,24 +174,15 @@ export default class TaskModel extends Model<TaskAttributes> {
 
   static async releaseTimeout() {
     const now = new Date()
-    const timeout = new Date(now.getTime() - Time.Minute * 30)
+    const timeout = new Date(now.getTime() - Time.Minute * 10)
     return this.namedRowCount(
       `release_timeout`,
       SQL`
-      UPDATE ${table(this)}
-      SET
-        "runner" = NULL,
-        "status" = ${TaskStatus.pending}::type_task_status,
-        "updated_at" = ${now}
+      DELETE FROM ${table(this)}
       WHERE
         "runner" IS NOT NULL AND
         "status" = ${TaskStatus.running}::type_task_status AND
         "run_at" < ${timeout}
-        AND NOT EXISTS (
-          SELECT 1 FROM ${table(this)} WHERE "name" = ${table(
-        this
-      )}."name" AND "status" = ${TaskStatus.pending}::type_task_status
-        )
     `
     )
   }
