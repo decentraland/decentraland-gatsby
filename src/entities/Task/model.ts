@@ -44,9 +44,11 @@ export default class TaskModel extends Model<TaskAttributes> {
             ${task.name}, 
             ${TaskStatus.pending}::type_task_status, 
             ${null}, 
-            ${new Date(task.repeateAt()!.getTime())}, 
-            ${now}, 
-            ${now}
+            to_timestamp(${new Date(
+              task.repeateAt()!.getTime()
+            ).toJSON()}, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp(${now.toJSON()}, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp(${now.toJSON()}, 'YYYY-MM-DDTHH:MI:SS.MSZ')
           )`
         ),
         SQL`, `
@@ -82,9 +84,8 @@ export default class TaskModel extends Model<TaskAttributes> {
     const lockTasksResult = await this.namedQuery<TaskAttributes>(
       'lock_task',
       SQL`
-      WITH selected_tasks AS (
-        SELECT DISTINCT ON ("name") 
-          "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
+      WITH locked_candidates AS (
+        SELECT "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
         FROM
           ${table(this)}
         WHERE
@@ -95,9 +96,12 @@ export default class TaskModel extends Model<TaskAttributes> {
             SQL`, `
           )}) AND
           "run_at" <= ${now}
-        ORDER BY
-          "name", "run_at" ASC
         FOR UPDATE SKIP LOCKED
+      ),
+      selected_tasks AS (
+        SELECT DISTINCT ON ("name") "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
+        FROM locked_candidates
+        ORDER BY "name", "run_at" ASC
         LIMIT ${limit}
       )
       UPDATE

@@ -86,7 +86,15 @@ describe(`src/entities/Task/model`, () => {
       FROM
         (
           VALUES
-          ($1, $2, $3::type_task_status, $4, $5, $6, $7)
+          (
+            $1,
+            $2,
+            $3::type_task_status,
+            $4,
+            to_timestamp($5, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp($6, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp($7, 'YYYY-MM-DDTHH:MI:SS.MSZ')
+          )
         ) AS new_tasks(
           "id",
           "name",
@@ -158,9 +166,33 @@ describe(`src/entities/Task/model`, () => {
       FROM
         (
           VALUES
-          ($1, $2, $3::type_task_status, $4, $5, $6, $7),
-          ($8, $9, $10::type_task_status, $11, $12, $13, $14),
-          ($15, $16, $17::type_task_status, $18, $19, $20, $21)
+          (
+            $1,
+            $2,
+            $3::type_task_status,
+            $4,
+            to_timestamp($5, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp($6, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp($7, 'YYYY-MM-DDTHH:MI:SS.MSZ')
+          ),
+          (
+            $8,
+            $9,
+            $10::type_task_status,
+            $11,
+            to_timestamp($12, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp($13, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp($14, 'YYYY-MM-DDTHH:MI:SS.MSZ')
+          ),
+          (
+            $15,
+            $16,
+            $17::type_task_status,
+            $18,
+            to_timestamp($19, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp($20, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp($21, 'YYYY-MM-DDTHH:MI:SS.MSZ')
+          )
         ) AS new_tasks(
           "id",
           "name",
@@ -214,19 +246,21 @@ describe(`src/entities/Task/model`, () => {
       expect(name).toBe('lock_task')
       expect(sqlFormat(sql.text)).toEqual(
         sqlFormat(`
-        WITH selected_tasks AS (
-          SELECT DISTINCT ON ("name") 
-            "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
+        WITH locked_candidates AS (
+          SELECT "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
           FROM
             "tasks"
           WHERE
             "runner" IS NULL AND
             "status" = $1::type_task_status AND
             "name" IN ($2) AND
-            "run_at" <= $3
-          ORDER BY
-            "name", "run_at" ASC
+            "run_at" <= $3::timestamptz
           FOR UPDATE SKIP LOCKED
+        ),
+        selected_tasks AS (
+          SELECT DISTINCT ON ("name") "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
+          FROM locked_candidates
+          ORDER BY "name", "run_at" ASC
           LIMIT $4
         )
         UPDATE
@@ -234,8 +268,8 @@ describe(`src/entities/Task/model`, () => {
         SET
           "runner" = $5,
           "status" = $6::type_task_status,
-          "updated_at" = $7,
-          "run_at" = $8
+          "updated_at" = $7::timestamptz,
+          "run_at" = $8::timestamptz
         FROM selected_tasks
         WHERE
           "tasks"."id" = selected_tasks."id"
@@ -269,19 +303,21 @@ describe(`src/entities/Task/model`, () => {
       expect(name).toBe('lock_task')
       expect(sqlFormat(sqlLock.text)).toEqual(
         sqlFormat(`
-        WITH selected_tasks AS (
-          SELECT DISTINCT ON ("name") 
-            "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
+        WITH locked_candidates AS (
+          SELECT "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
           FROM
             "tasks"
           WHERE
             "runner" IS NULL AND
             "status" = $1::type_task_status AND
             "name" IN ($2) AND
-            "run_at" <= $3
-          ORDER BY
-            "name", "run_at" ASC
+            "run_at" <= $3::timestamptz
           FOR UPDATE SKIP LOCKED
+        ),
+        selected_tasks AS (
+          SELECT DISTINCT ON ("name") "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
+          FROM locked_candidates
+          ORDER BY "name", "run_at" ASC
           LIMIT $4
         )
         UPDATE
@@ -289,8 +325,8 @@ describe(`src/entities/Task/model`, () => {
         SET
           "runner" = $5,
           "status" = $6::type_task_status,
-          "updated_at" = $7,
-          "run_at" = $8
+          "updated_at" = $7::timestamptz,
+          "run_at" = $8::timestamptz
         FROM selected_tasks
         WHERE
           "tasks"."id" = selected_tasks."id"
