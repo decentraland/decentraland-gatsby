@@ -387,6 +387,10 @@ export default class Catalyst extends API {
     return this.fetch<{ parcels: StatsParcel[] }>('/stats/parcels')
   }
 
+  async getNameOwner(name: string) {
+    return this.fetch<{ owner: string }>(`/lambdas/names/${name}/owner`)
+  }
+
   /**
    * @deprecated use `@dcl/crypto` instead.
    * @see https://adr.decentraland.org/adr/ADR-226#post-lambdas-validate-signature
