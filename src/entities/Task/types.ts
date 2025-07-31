@@ -1,4 +1,4 @@
-export type TaskAttributes<P extends {} = {}> = {
+export type TaskAttributes = {
   id: string
   name: string
   status: TaskStatus
@@ -10,10 +10,7 @@ export type TaskAttributes<P extends {} = {}> = {
   updated_at: Date
 }
 
-export type CreateTaskAttributes<P extends {} = {}> = Pick<
-  TaskAttributes<P>,
-  'name' | 'run_at'
->
+export type CreateTaskAttributes = Pick<TaskAttributes, 'name' | 'run_at'>
 
 export type TaskTimmer = () => Pick<Date, 'getTime'> | null
 

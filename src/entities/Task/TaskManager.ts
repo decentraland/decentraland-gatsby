@@ -12,7 +12,7 @@ type TaskManagerOptions = {
   interval: number
 }
 
-export type TaskRunContext<P extends {} = {}> = {
+export type TaskRunContext = {
   id: string
   name: string
   runner: string
