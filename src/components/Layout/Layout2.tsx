@@ -4,7 +4,6 @@
  *
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
-
 import React, { useCallback, useMemo } from 'react'
 
 import type { PageProps } from 'gatsby'
@@ -293,7 +292,14 @@ export default function Layout2({
         />
       )}
 
-      <main className="layout__main-container">{children}</main>
+      <main
+        className={TokenList.join([
+          'layout__main-container',
+          hideNavbar && 'hide-navbar',
+        ])}
+      >
+        {children}
+      </main>
       <ShareModal data={shareState.data} onClose={shareState.close} />
       <WrongNetworkModal
         currentNetwork={userState.chainId}

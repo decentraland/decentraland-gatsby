@@ -25,6 +25,11 @@
         "facebook": "https://www.facebook.com/sharer/sharer.php?u={url}",
         "twitter": "https://twitter.com/intent/tweet?text={description} {url}"
       }
+    },
+    "DownloadModal": {
+      "title": "Download Decentraland to Jump in.",
+      "description": "Download the all-new Decentraland and come back to this page to jump straight into this event.",
+      "button_label": "Download"
     }
   }
 }

@@ -65,7 +65,12 @@ export default class FeatureFlags {
         const { type, value } = this.variants[key].payload!
         switch (type) {
           case 'json':
-            return JSON.parse(value)
+            try {
+              return JSON.parse(value)
+            } catch (e) {
+              console.error(e)
+              return defaultValue
+            }
           default:
             return value
         }
