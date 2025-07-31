@@ -367,12 +367,10 @@ describe(`src/entities/Task/model`, () => {
       await TaskModel.schedule([
         {
           name: 'test_task',
-          payload: {},
           run_at: new Date(),
         },
         {
           name: 'test_task',
-          payload: {},
           run_at: new Date(),
         },
       ])
