@@ -10,6 +10,7 @@ import Task from './Task'
 import { TaskStatus } from './types'
 
 let query: jest.MockedFunction<any>
+let namedQuery: jest.SpyInstance
 const rawQueryResults = {
   rows: [],
   fields: [],
@@ -31,6 +32,8 @@ describe(`src/entities/Task/model`, () => {
     TaskModel.setDb('postgres')
     query = jest.spyOn(TaskModel.db, 'query')
     query.mockReturnValue([])
+    namedQuery = jest.spyOn(TaskModel, 'namedQuery')
+    namedQuery.mockResolvedValue([])
 
     TaskModel.db.client = { query: rawQuery } as any
   })
@@ -73,35 +76,43 @@ describe(`src/entities/Task/model`, () => {
         "id",
         "name",
         "status",
-        "payload",
         "runner",
         "run_at",
         "created_at",
         "updated_at"
-      ) (
-        SELECT
-          *
-        FROM
+      )
+      SELECT
+        *
+      FROM
+        (
+          VALUES
           (
-            (
-              SELECT
-                $1 as "id",
-                $2 as "name",
-                $3::type_task_status as "status",
-                $4 as "payload",
-                $5 as "runner",
-                to_timestamp($6, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "run_at",
-                to_timestamp($7, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "created_at",
-                to_timestamp($8, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "updated_at"
-            )
-          ) as t
-        WHERE
-          "name" NOT IN (
-            SELECT
-              DISTINCT "name"
-            FROM
-              "tasks"
+            $1,
+            $2,
+            $3::type_task_status,
+            $4,
+            to_timestamp($5, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp($6, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp($7, 'YYYY-MM-DDTHH:MI:SS.MSZ')
           )
+        ) AS new_tasks(
+          "id",
+          "name",
+          "status",
+          "runner",
+          "run_at",
+          "created_at",
+          "updated_at"
+        )
+      WHERE
+        NOT EXISTS (
+          SELECT
+            1
+          FROM
+            "tasks"
+          WHERE
+            "name" = new_tasks."name"
+            AND "status" = $8::type_task_status
         )
       `)
       )
@@ -109,11 +120,11 @@ describe(`src/entities/Task/model`, () => {
       expect(isUUID(sql.values[0])).toBe(true)
       expect(sql.values[1]).toBe('test_task')
       expect(sql.values[2]).toBe(TaskStatus.pending)
-      expect(sql.values[3]).toBe('{}')
-      expect(sql.values[4]).toBe(null)
+      expect(sql.values[3]).toBe(null)
+      expect(Number.isFinite(Date.parse(sql.values[4]))).toBe(true)
       expect(Number.isFinite(Date.parse(sql.values[5]))).toBe(true)
       expect(Number.isFinite(Date.parse(sql.values[6]))).toBe(true)
-      expect(Number.isFinite(Date.parse(sql.values[7]))).toBe(true)
+      expect(sql.values[7]).toBe(TaskStatus.pending)
     })
 
     test(`should initialize if there is more than one recursive task`, async () => {
@@ -145,57 +156,61 @@ describe(`src/entities/Task/model`, () => {
         "id",
         "name",
         "status",
-        "payload",
         "runner",
         "run_at",
         "created_at",
         "updated_at"
-      ) (
-        SELECT
-          *
-        FROM
+      )
+      SELECT
+        *
+      FROM
+        (
+          VALUES
           (
-            (
-              SELECT
-                $1 as "id",
-                $2 as "name",
-                $3::type_task_status as "status",
-                $4 as "payload",
-                $5 as "runner",
-                to_timestamp($6, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "run_at",
-                to_timestamp($7, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "created_at",
-                to_timestamp($8, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "updated_at"
-            ) union
-            (
-              SELECT
-                $9 as "id",
-                $10 as "name",
-                $11::type_task_status as "status",
-                $12 as "payload",
-                $13 as "runner",
-                to_timestamp($14, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "run_at",
-                to_timestamp($15, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "created_at",
-                to_timestamp($16, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "updated_at"
-            ) union
-            (
-              SELECT
-                $17 as "id",
-                $18 as "name",
-                $19::type_task_status as "status",
-                $20 as "payload",
-                $21 as "runner",
-                to_timestamp($22, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "run_at",
-                to_timestamp($23, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "created_at",
-                to_timestamp($24, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "updated_at"
-            )
-          ) as t
-        WHERE
-          "name" NOT IN (
-            SELECT
-              DISTINCT "name"
-            FROM
-              "tasks"
+            $1,
+            $2,
+            $3::type_task_status,
+            $4,
+            to_timestamp($5, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp($6, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp($7, 'YYYY-MM-DDTHH:MI:SS.MSZ')
+          ),
+          (
+            $8,
+            $9,
+            $10::type_task_status,
+            $11,
+            to_timestamp($12, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp($13, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp($14, 'YYYY-MM-DDTHH:MI:SS.MSZ')
+          ),
+          (
+            $15,
+            $16,
+            $17::type_task_status,
+            $18,
+            to_timestamp($19, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp($20, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp($21, 'YYYY-MM-DDTHH:MI:SS.MSZ')
           )
+        ) AS new_tasks(
+          "id",
+          "name",
+          "status",
+          "runner",
+          "run_at",
+          "created_at",
+          "updated_at"
+        )
+      WHERE
+        NOT EXISTS (
+          SELECT
+            1
+          FROM
+            "tasks"
+          WHERE
+            "name" = new_tasks."name"
+            AND "status" = $22::type_task_status
         )
       `)
       )
@@ -204,116 +219,128 @@ describe(`src/entities/Task/model`, () => {
 
   describe(`lock`, () => {
     test(`should not run a query if limit is lower than one`, async () => {
-      const initial = rawQuery.mock.calls.length
+      const initial = namedQuery.mock.calls.length
       await TaskModel.lock({
         id: randomUUID(),
         taskNames: ['test_name'],
         limit: 0,
       })
-      expect(rawQuery.mock.calls.length).toEqual(initial)
+      expect(namedQuery.mock.calls.length).toEqual(initial)
     })
 
     test(`should not run a query if there is no taskNames`, async () => {
-      const initial = rawQuery.mock.calls.length
+      const initial = namedQuery.mock.calls.length
       await TaskModel.lock({ id: randomUUID(), taskNames: [] })
-      expect(rawQuery.mock.calls.length).toEqual(initial)
+      expect(namedQuery.mock.calls.length).toEqual(initial)
     })
 
-    test(`should not run a query if there is no taskNames`, async () => {
-      const initial = rawQuery.mock.calls.length
-      rawQuery.mockReturnValue({
-        rows: [],
-        fields: [],
-        command: '',
-        rowCount: 0,
-      })
+    test(`should run a query when taskNames are provided`, async () => {
+      const initial = namedQuery.mock.calls.length
+      namedQuery.mockResolvedValueOnce([])
 
       await TaskModel.lock({ id: randomUUID(), taskNames: ['test_task'] })
-      expect(rawQuery.mock.calls.length).toEqual(initial + 1)
+      expect(namedQuery.mock.calls.length).toEqual(initial + 1)
 
-      const [sql] = rawQuery.mock.calls[rawQuery.mock.calls.length - 1]
+      const [name, sql] =
+        namedQuery.mock.calls[namedQuery.mock.calls.length - 1]
+      expect(name).toBe('lock_task')
       expect(sqlFormat(sql.text)).toEqual(
         sqlFormat(`
-        UPDATE "tasks"
+        WITH locked_candidates AS (
+          SELECT "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
+          FROM
+            "tasks"
+          WHERE
+            "runner" IS NULL AND
+            "status" = $1::type_task_status AND
+            "name" IN ($2) AND
+            "run_at" <= $3 AND
+            NOT EXISTS (
+              SELECT 1 FROM "tasks" t2 
+              WHERE t2."name" = "tasks"."name" 
+              AND t2."status" = $4::type_task_status
+            )
+          FOR UPDATE SKIP LOCKED
+        ),
+        selected_tasks AS (
+          SELECT DISTINCT ON ("name") "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
+          FROM locked_candidates
+          ORDER BY "name", "run_at" ASC
+          LIMIT $5
+        )
+        UPDATE
+          "tasks"
         SET
-          "runner" = $1,
-          "status" = $2::type_task_status,
-          "updated_at" = $3,
-          "run_at" = $4
+          "runner" = $6,
+          "status" = $7::type_task_status,
+          "updated_at" = $8,
+          "run_at" = $9
+        FROM selected_tasks
         WHERE
-          "id" IN (
-            SELECT
-              "id"
-            FROM
-              "tasks"
-            WHERE
-              "runner" IS NULL AND
-              "status" = $5::type_task_status AND
-              "name" IN ($6) AND
-              "run_at" < $7
-            ORDER BY
-              "run_at" ASC
-            LIMIT
-              $8
-          )
+          "tasks"."id" = selected_tasks."id"
+        RETURNING *
       `)
       )
     })
 
-    test(`should not run a sencond query if there was any loked task`, async () => {
+    test(`should run only one query with CTE to lock and return tasks`, async () => {
       const id = randomUUID()
-      const initialQuery = query.mock.calls.length
-      const initialLock = rawQuery.mock.calls.length
-      query.mockReturnValueOnce([])
-      rawQuery.mockReturnValueOnce({
-        rows: [],
-        fields: [],
-        command: '',
-        rowCount: 1,
-      })
+      const initialLock = namedQuery.mock.calls.length
+      namedQuery.mockResolvedValueOnce([
+        {
+          id: 'task-id',
+          name: 'test_task',
+          status: TaskStatus.running,
+          runner: id,
+          run_at: new Date(),
+          created_at: new Date(),
+          updated_at: new Date(),
+        },
+      ])
 
-      await TaskModel.lock({ id, taskNames: ['test_task'] })
-      expect(rawQuery.mock.calls.length).toEqual(initialLock + 1)
-      expect(query.mock.calls.length).toEqual(initialQuery + 1)
+      const result = await TaskModel.lock({ id, taskNames: ['test_task'] })
+      expect(namedQuery.mock.calls.length).toEqual(initialLock + 1)
+      expect(result).toHaveLength(1)
+      expect(result[0].runner).toBe(id)
 
-      const [sqlLock] = rawQuery.mock.calls[rawQuery.mock.calls.length - 1]
+      const [name, sqlLock] =
+        namedQuery.mock.calls[namedQuery.mock.calls.length - 1]
+      expect(name).toBe('lock_task')
       expect(sqlFormat(sqlLock.text)).toEqual(
         sqlFormat(`
-        UPDATE "tasks"
-        SET
-          "runner" = $1,
-          "status" = $2::type_task_status,
-          "updated_at" = $3,
-          "run_at" = $4
-        WHERE
-          "id" IN (
-            SELECT
-              "id"
-            FROM
-              "tasks"
-            WHERE
-              "runner" IS NULL AND
-              "status" = $5::type_task_status AND
-              "name" IN ($6) AND
-              "run_at" < $7
-            ORDER BY
-              "run_at" ASC
-            LIMIT
-              $8
-          )
-      `)
-      )
-
-      const [sqlFindLoked] = query.mock.calls[query.mock.calls.length - 1]
-      expect(sqlFormat(sqlFindLoked)).toEqual(
-        sqlFormat(`
-        SELECT
-          *
-        FROM
+        WITH locked_candidates AS (
+          SELECT "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
+          FROM
+            "tasks"
+          WHERE
+            "runner" IS NULL AND
+            "status" = $1::type_task_status AND
+            "name" IN ($2) AND
+            "run_at" <= $3 AND
+            NOT EXISTS (
+              SELECT 1 FROM "tasks" t2 
+              WHERE t2."name" = "tasks"."name" 
+              AND t2."status" = $4::type_task_status
+            )
+          FOR UPDATE SKIP LOCKED
+        ),
+        selected_tasks AS (
+          SELECT DISTINCT ON ("name") "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
+          FROM locked_candidates
+          ORDER BY "name", "run_at" ASC
+          LIMIT $5
+        )
+        UPDATE
           "tasks"
+        SET
+          "runner" = $6,
+          "status" = $7::type_task_status,
+          "updated_at" = $8,
+          "run_at" = $9
+        FROM selected_tasks
         WHERE
-          "runner" = $1 AND
-          "status" = $2::type_task_status
+          "tasks"."id" = selected_tasks."id"
+        RETURNING *
       `)
       )
     })
@@ -386,12 +413,10 @@ describe(`src/entities/Task/model`, () => {
       await TaskModel.schedule([
         {
           name: 'test_task',
-          payload: {},
           run_at: new Date(),
         },
         {
           name: 'test_task',
-          payload: {},
           run_at: new Date(),
         },
       ])
@@ -402,10 +427,10 @@ describe(`src/entities/Task/model`, () => {
         sqlFormat(`
         INSERT
           INTO "tasks"
-            ("id", "name", "status", "payload", "runner", "run_at", "created_at", "updated_at")
+            ("id", "name", "status", "runner", "run_at", "created_at", "updated_at")
         VALUES
-          ($1, $2, $3::type_task_status, $4, $5, $6, $7, $8),
-          ($9, $10, $11::type_task_status, $12, $13, $14, $15, $16)
+          ($1, $2, $3::type_task_status, $4, $5, $6, $7),
+          ($8, $9, $10::type_task_status, $11, $12, $13, $14)
       `)
       )
     })
@@ -427,15 +452,11 @@ describe(`src/entities/Task/model`, () => {
       const [sql] = rawQuery.mock.calls[rawQuery.mock.calls.length - 1]
       expect(sqlFormat(sql.text)).toEqual(
         sqlFormat(`
-        UPDATE "tasks"
-        SET
-          "runner" = NULL,
-          "status" = $1::type_task_status,
-          "updated_at" = $2
+        DELETE FROM "tasks"
         WHERE
           "runner" IS NOT NULL AND
-          "status" = $3::type_task_status AND
-          "run_at" < $4
+          "status" = $1::type_task_status AND
+          "run_at" < $2
       `)
       )
     })

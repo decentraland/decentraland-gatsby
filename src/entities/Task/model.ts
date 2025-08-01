@@ -9,17 +9,6 @@ import { CreateTaskAttributes, TaskAttributes, TaskStatus } from './types'
 export default class TaskModel extends Model<TaskAttributes> {
   static tableName = 'tasks'
 
-  /** @deprecated */
-  static async insertQuery(sql: SQLStatement) {
-    return this.rowCount(SQL`
-      INSERT
-        INTO ${table(
-          this
-        )} ("id", "name", "status", "payload", "runner", "run_at", "created_at", "updated_at")
-        ${sql}
-    `)
-  }
-
   static async namedInsertQuery(name: string, sql: SQLStatement) {
     return this.namedRowCount(
       name,
@@ -27,7 +16,7 @@ export default class TaskModel extends Model<TaskAttributes> {
       INSERT
         INTO ${table(
           this
-        )} ("id", "name", "status", "payload", "runner", "run_at", "created_at", "updated_at")
+        )} ("id", "name", "status", "runner", "run_at", "created_at", "updated_at")
         ${sql}
     `
     )
@@ -41,34 +30,36 @@ export default class TaskModel extends Model<TaskAttributes> {
     }
 
     const now = new Date()
-    const alreadyInitializedTasks = SQL`SELECT DISTINCT "name" FROM ${table(
-      this
-    )}`
-    const newTasks = join(
-      tasks.map(
-        (task) => SQL`(SELECT
-            ${randomUUID()} as "id",
-            ${task.name} as "name",
-            ${TaskStatus.pending}::type_task_status as "status",
-            ${JSON.stringify({})} as "payload",
-            ${null} as "runner",
+    // Only insert tasks that are not already scheduled
+    return this.namedRowCount(
+      'initialize_tasks',
+      SQL`
+      INSERT INTO ${table(
+        this
+      )} ("id", "name", "status", "runner", "run_at", "created_at", "updated_at")
+      SELECT * FROM (VALUES ${join(
+        tasks.map(
+          (task) => SQL`(
+            ${randomUUID()}, 
+            ${task.name}, 
+            ${TaskStatus.pending}::type_task_status, 
+            ${null}, 
             to_timestamp(${new Date(
               task.repeateAt()!.getTime()
-            ).toJSON()}, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "run_at",
-            to_timestamp(${now.toJSON()}, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "created_at",
-            to_timestamp(${now.toJSON()}, 'YYYY-MM-DDTHH:MI:SS.MSZ') as "updated_at"
+            ).toJSON()}, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp(${now.toJSON()}, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+            to_timestamp(${now.toJSON()}, 'YYYY-MM-DDTHH:MI:SS.MSZ')
           )`
-      ),
-      SQL` union `
-    )
-
-    const missingInitializedTasks = SQL`(
-      SELECT * FROM (${newTasks}) as t WHERE "name" NOT IN (${alreadyInitializedTasks})
-    )`
-
-    return this.namedInsertQuery(
-      `missing_initialized_tasks`,
-      missingInitializedTasks
+        ),
+        SQL`, `
+      )}) AS new_tasks("id", "name", "status", "runner", "run_at", "created_at", "updated_at")
+      WHERE NOT EXISTS (
+        SELECT 1 FROM ${table(this)} 
+        WHERE "name" = new_tasks."name" AND "status" = ${
+          TaskStatus.pending
+        }::type_task_status
+      )
+    `
     )
   }
 
@@ -88,24 +79,38 @@ export default class TaskModel extends Model<TaskAttributes> {
     }
 
     const now = new Date()
-    const selectIdleTask = SQL`
-      SELECT
-        "id"
-      FROM
-        ${table(this)}
-      WHERE
-        "runner" IS NULL AND
-        "status" = ${TaskStatus.pending}::type_task_status AND
-        "name" IN (${join(names.map((name) => SQL`${name}`, SQL`, `))}) AND
-        "run_at" < ${now}
-      ORDER BY
-        "run_at" ASC
-      LIMIT
-        ${limit}
-    `
-    const locked = await this.namedRowCount(
-      `lock_task`,
+
+    // Locks and returns the tasks that are locked (only one task per name to avoid duplicates)
+    // It only locks tasks that are not already running and are pending.
+    // If there's a task left in a wrong running state, it will be released by the timeout query.
+    const lockTasksResult = await this.namedQuery<TaskAttributes>(
+      'lock_task',
       SQL`
+      WITH locked_candidates AS (
+        SELECT "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
+        FROM
+          ${table(this)}
+        WHERE
+          "runner" IS NULL AND
+          "status" = ${TaskStatus.pending}::type_task_status AND
+          "name" IN (${join(
+            names.map((name) => SQL`${name}`),
+            SQL`, `
+          )}) AND
+          "run_at" <= ${now} AND
+          NOT EXISTS (
+            SELECT 1 FROM ${table(this)} t2 
+            WHERE t2."name" = ${table(this)}."name" 
+            AND t2."status" = ${TaskStatus.running}::type_task_status
+          )
+        FOR UPDATE SKIP LOCKED
+      ),
+      selected_tasks AS (
+        SELECT DISTINCT ON ("name") "id", "name", "status", "runner", "run_at", "created_at", "updated_at"
+        FROM locked_candidates
+        ORDER BY "name", "run_at" ASC
+        LIMIT ${limit}
+      )
       UPDATE
         ${table(this)}
       SET
@@ -113,33 +118,13 @@ export default class TaskModel extends Model<TaskAttributes> {
         "status" = ${TaskStatus.running}::type_task_status,
         "updated_at" = ${now},
         "run_at" = ${now}
+      FROM selected_tasks
       WHERE
-        "id" IN (${selectIdleTask})
-    `
+        ${table(this)}."id" = selected_tasks."id"
+      RETURNING *`
     )
 
-    if (locked === 0) {
-      return []
-    }
-
-    const tasks: TaskAttributes<any>[] = await this.query(SQL`
-      SELECT
-        *
-      FROM
-        ${table(this)}
-      WHERE
-        "runner" = ${options.id} AND
-        "status" = ${TaskStatus.running}::type_task_status
-    `)
-
-    return tasks.map((task) => ({
-      ...task,
-      payload: task.payload ? JSON.parse(task.payload) : {},
-    }))
-  }
-
-  static async complete(tasks: TaskAttributes[]) {
-    return this.completeTasks(tasks)
+    return lockTasksResult
   }
 
   static async completeTasks(tasks: TaskAttributes[]) {
@@ -166,33 +151,34 @@ export default class TaskModel extends Model<TaskAttributes> {
     }
 
     const now = new Date()
-    return this.namedInsertQuery(
+
+    // Simple: Always schedule, let locking handle concurrency
+    return this.namedRowCount(
       'schedule_tasks',
-      SQL`VALUES ${join(
-        tasks.map(
-          (task) =>
-            SQL`(${randomUUID()}, ${task.name}, ${
-              TaskStatus.pending
-            }::type_task_status, ${JSON.stringify(task.payload)}, ${null}, ${
-              task.run_at
-            }, ${now}, ${now})`
-        ),
-        SQL`, `
-      )}`
+      SQL`
+    INSERT INTO ${table(
+      this
+    )} ("id", "name", "status", "runner", "run_at", "created_at", "updated_at")
+        VALUES ${join(
+          tasks.map(
+            (task) =>
+              SQL`(${randomUUID()}, ${task.name}, ${
+                TaskStatus.pending
+              }::type_task_status, ${null}, ${task.run_at}, ${now}, ${now})`
+          ),
+          SQL`, `
+        )}
+    `
     )
   }
 
   static async releaseTimeout() {
     const now = new Date()
-    const timeout = new Date(now.getTime() - Time.Minute * 30)
+    const timeout = new Date(now.getTime() - Time.Minute * 10)
     return this.namedRowCount(
       `release_timeout`,
       SQL`
-      UPDATE ${table(this)}
-      SET
-        "runner" = NULL,
-        "status" = ${TaskStatus.pending}::type_task_status,
-        "updated_at" = ${now}
+      DELETE FROM ${table(this)}
       WHERE
         "runner" IS NOT NULL AND
         "status" = ${TaskStatus.running}::type_task_status AND

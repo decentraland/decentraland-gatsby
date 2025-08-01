@@ -13,8 +13,7 @@ export async function initializeServices(
     }
   }
 
-  process.on('SIGTERM', async () => {
-    console.log(`SIGTERM received: ${chalk.yellow('shutting down services')}`)
+  const shutdown = async () => {
     while (services.length) {
       const stop = services.pop()!
       try {
@@ -26,5 +25,15 @@ export async function initializeServices(
     }
 
     process.exit(0)
+  }
+
+  process.on('SIGINT', async () => {
+    console.log(`SIGINT received: ${chalk.yellow('shutting down services')}`)
+    await shutdown()
+  })
+
+  process.on('SIGTERM', async () => {
+    console.log(`SIGTERM received: ${chalk.yellow('shutting down services')}`)
+    await shutdown()
   })
 }

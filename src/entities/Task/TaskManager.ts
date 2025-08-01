@@ -12,11 +12,10 @@ type TaskManagerOptions = {
   interval: number
 }
 
-export type TaskRunContext<P extends {} = {}> = {
+export type TaskRunContext = {
   id: string
   name: string
   runner: string
-  payload: P
   logger: Logger
 }
 
@@ -29,6 +28,7 @@ export default class TaskManager {
   private _nextTimeoutRelease: ReturnType<typeof setInterval> | null
   private _intervalTime = Time.Second * 15
   private _logger: Logger
+  private _promiseOfRunningTasksCycle: Promise<void> = Promise.resolve()
 
   constructor() {
     this._logger = globalLogger.extend({ runner: this._id })
@@ -104,7 +104,7 @@ export default class TaskManager {
           })
         }
 
-        this.runTasksCycle()
+        this._promiseOfRunningTasksCycle = this.runTasksCycle()
       }, random(0, this._intervalTime))
 
       // run task timeout
@@ -127,6 +127,9 @@ export default class TaskManager {
       if (this._nextTimeoutRelease) {
         clearInterval(this._nextTimeoutRelease)
       }
+
+      // Wait for the running tasks to finish
+      await this._promiseOfRunningTasksCycle
     }
   }
 
@@ -152,10 +155,9 @@ export default class TaskManager {
     }
 
     const nextCycle = this._intervalTime - (Date.now() - start)
-    this._nextCycle = setTimeout(
-      () => this.runTasksCycle(),
-      Math.max(nextCycle, 100)
-    )
+    this._nextCycle = setTimeout(() => {
+      this._promiseOfRunningTasksCycle = this.runTasksCycle()
+    }, Math.max(nextCycle, 100))
   }
 
   async runTasks() {
@@ -205,7 +207,6 @@ export default class TaskManager {
     const handle = this._tasks.get(task.name)!
     const reschedules = await handle.run({
       id: task.id,
-      payload: task.payload,
       runner: this._id,
       logger: this._logger,
     })
@@ -215,7 +216,6 @@ export default class TaskManager {
       const timestamp = typeof repeat === 'number' ? repeat : repeat.getTime()
       reschedules.push({
         name: handle.name,
-        payload: {},
         run_at: new Date(timestamp),
       })
     }
