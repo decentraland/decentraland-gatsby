@@ -108,11 +108,9 @@ export default class TaskManager {
       }, random(0, this._intervalTime))
 
       // run task timeout
-      setTimeout(async () => {
-        this._nextTimeoutRelease = setInterval(async () => {
-          await this.runTaskTimeout()
-        }, Time.Minute * 10)
-      }, random(Time.Minute, Time.Minute * 1000))
+      this._nextTimeoutRelease = setInterval(async () => {
+        await this.runTaskTimeout()
+      }, Time.Minute * 10)
     }
   }
 
