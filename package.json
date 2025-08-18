@@ -125,7 +125,7 @@
     "autoprefixer": "^10.4.15",
     "browser-lang": "0.1.0",
     "buffer": "^6.0.3",
-    "chalk": "^4.1.2",
+    "chalk": "^5.6.0",
     "cherio": "^1.0.0-rc.2",
     "cors": "^2.8.5",
     "cron": "^1.8.2",
