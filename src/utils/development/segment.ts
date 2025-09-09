@@ -39,14 +39,21 @@ async function getAnalytics(): Promise<SegmentAnalytics.AnalyticsJS | null> {
 
 export default function segment(tracker: Tracker, callback?: () => void) {
   if (typeof window !== 'undefined' && window.analytics) {
-    getAnalytics().then((analytics) => {
-      if (analytics) {
-        const context = getContext()
-        tracker(analytics, context, callback ?? emptyCallback)
-      } else if (callback) {
-        Promise.resolve().then(() => callback())
-      }
-    })
+    getAnalytics()
+      .then((analytics) => {
+        if (analytics && typeof analytics.track === 'function') {
+          const context = getContext()
+          tracker(analytics, context, callback ?? emptyCallback)
+        } else if (callback) {
+          Promise.resolve().then(() => callback())
+        }
+      })
+      .catch((error) => {
+        console.warn('Analytics segment failed:', error)
+        if (callback) {
+          Promise.resolve().then(() => callback())
+        }
+      })
   }
 }
 
@@ -56,14 +63,21 @@ export function track(
   callback?: () => void
 ) {
   if (typeof window !== 'undefined' && window.analytics) {
-    getAnalytics().then((analytics) => {
-      if (analytics) {
-        const context = getContext()
-        analytics.track(event, { ...context, ...data }, callback)
-      } else if (callback) {
-        Promise.resolve().then(() => callback())
-      }
-    })
+    getAnalytics()
+      .then((analytics) => {
+        if (analytics && typeof analytics.track === 'function') {
+          const context = getContext()
+          analytics.track(event, { ...context, ...data }, callback)
+        } else if (callback) {
+          Promise.resolve().then(() => callback())
+        }
+      })
+      .catch((error) => {
+        console.warn('Analytics tracking failed:', error)
+        if (callback) {
+          Promise.resolve().then(() => callback())
+        }
+      })
   }
 }
 
