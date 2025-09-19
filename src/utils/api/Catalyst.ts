@@ -1,9 +1,11 @@
+import Time from '../date/Time'
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
 import sentry from '../development/sentry'
 import env from '../env'
 import random from '../number/random'
 import API from './API'
+import Options from './Options'
 
 import type {
   Avatar,
@@ -24,7 +26,9 @@ import type {
   LambdasStatus,
   Layer,
   LayerUser,
+  Paginated,
   Peer,
+  Permission,
   Position,
   ProfileResponse,
   Realm,
@@ -389,6 +393,44 @@ export default class Catalyst extends API {
 
   async getNameOwner(name: string) {
     return this.fetch<{ owner: string }>(`/lambdas/names/${name}/owner`)
+  }
+
+  async getAllOperatedLands(address: string): Promise<Permission[]> {
+    const allElements: Permission[] = []
+    let pageNum = 0
+    const pageSize = 100 // Default page size, adjust if needed
+    let hasMorePages = true
+
+    while (hasMorePages) {
+      const { signal, abort } = new AbortController()
+      const fetchOptions = new Options({ signal })
+
+      const timeoutId = setTimeout(() => {
+        abort()
+      }, Time.Second * 10)
+
+      try {
+        const response = await this.fetch<Paginated<Permission>>(
+          `/users/${address}/lands-permissions?pageNum=${pageNum}&pageSize=${pageSize}`,
+          fetchOptions
+        )
+
+        if (response.elements && response.elements.length > 0) {
+          allElements.push(...response.elements)
+        }
+
+        hasMorePages =
+          response.elements && response.elements.length === pageSize
+        pageNum++
+      } catch (error) {
+        console.error(`Error fetching operated lands page ${pageNum}:`, error)
+        break // return already fetched elements
+      } finally {
+        clearTimeout(timeoutId)
+      }
+    }
+
+    return allElements
   }
 
   /**
