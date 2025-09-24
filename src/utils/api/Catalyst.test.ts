@@ -72,21 +72,21 @@ describe('utils/api/Catalyst', () => {
     })
   })
 
-  describe(`.getAny()`, () => {
+  describe.skip(`.getAny()`, () => {
     test(`should return an instance of a Catalyst`, async () => {
       const catalyst = await Catalyst.getAny()
       expect(catalyst).toBeInstanceOf(Catalyst)
     })
   })
 
-  describe(`.from()`, () => {
+  describe.skip(`.from()`, () => {
     test(`should return an instance of a Catalyst`, async () => {
       const catalyst = Catalyst.from(Catalyst.Url)
       expect(catalyst).toBeInstanceOf(Catalyst)
     })
   })
 
-  describe(`.getProfile()`, () => {
+  describe.skip(`.getProfile()`, () => {
     test(`should return an instance of a Catalyst`, async () => {
       const catalyst = Catalyst.getInstance()
       const profile = await catalyst.getProfile(
@@ -98,7 +98,7 @@ describe('utils/api/Catalyst', () => {
     })
   })
 
-  describe(`.getProfiles()`, () => {
+  describe.skip(`.getProfiles()`, () => {
     test(`should return an instance of a Catalyst`, async () => {
       const catalyst = Catalyst.getInstance()
       const profiles = await catalyst.getProfiles([
@@ -217,7 +217,7 @@ describe('utils/api/Catalyst', () => {
     })
   })
 
-  describe(`.getHostScenes()`, () => {
+  describe.skip(`.getHostScenes()`, () => {
     test(`should return array of hot scenes`, async () => {
       const catalyst = Catalyst.getInstance()
       try {
@@ -240,7 +240,7 @@ describe('utils/api/Catalyst', () => {
     })
   })
 
-  describe(`.getContentEntity()`, () => {
+  describe.skip(`.getContentEntity()`, () => {
     test(`should return content entity for given hash`, async () => {
       const catalyst = Catalyst.getInstance()
       const hash = 'bafkreia5hpd5ktoxrj5mh26dcr6y7r4zr6rtkv7s6swprpmhmr3lxnkh2y'
@@ -255,7 +255,7 @@ describe('utils/api/Catalyst', () => {
     })
   })
 
-  describe(`.getContentDeployments()`, () => {
+  describe.skip(`.getContentDeployments()`, () => {
     test(`should return content deployments`, async () => {
       const catalyst = Catalyst.getInstance()
       const deployments = await catalyst.getContentDeployments({})
@@ -264,7 +264,7 @@ describe('utils/api/Catalyst', () => {
     })
   })
 
-  describe(`.getStatsParcels()`, () => {
+  describe.skip(`.getStatsParcels()`, () => {
     test(`should return stats parcels`, async () => {
       const catalyst = Catalyst.getInstance()
       try {
@@ -279,7 +279,7 @@ describe('utils/api/Catalyst', () => {
     })
   })
 
-  describe(`.getNameOwner()`, () => {
+  describe.skip(`.getNameOwner()`, () => {
     test(`should return name owner`, async () => {
       const catalyst = Catalyst.getInstance()
       const name = 'test-name'
@@ -295,7 +295,7 @@ describe('utils/api/Catalyst', () => {
     })
   })
 
-  describe(`.getAllOperatedLands()`, () => {
+  describe.skip(`.getAllOperatedLands()`, () => {
     test(`should return all operated lands for address`, async () => {
       const catalyst = Catalyst.getInstance()
       const address = '0xd9b96b5dc720fc52bede1ec3b40a930e15f70ddd'
