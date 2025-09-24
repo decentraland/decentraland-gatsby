@@ -517,3 +517,18 @@ export type StatsParcel = {
     y: number
   }
 }
+
+export type Permission = {
+  id: string
+  x: string
+  y: string
+  owner: string
+  updateOperator: string
+}
+
+export type Paginated<T> = {
+  totalAmount: number
+  pageNum: number
+  pageSize: number
+  elements: T[]
+}
