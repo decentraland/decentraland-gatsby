@@ -38,11 +38,11 @@ export default function useResponsive() {
 
   return useCallback(
     function responsive(limits: Partial<ResponsiveWidthShorthand> = {}) {
-      if (limits.minWidth !== undefined && width < limits.minWidth) {
+      if (limits.minWidth !== undefined && width < Number(limits.minWidth)) {
         return false
       }
 
-      if (limits.maxWidth !== undefined && width > limits.maxWidth) {
+      if (limits.maxWidth !== undefined && width > Number(limits.maxWidth)) {
         return false
       }
 

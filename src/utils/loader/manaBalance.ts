@@ -9,7 +9,10 @@ import segment from '../development/segment'
 import sentry from '../development/sentry'
 import Loader from './Loader'
 
-export async function fetchManaBalance(address: string, chainId: ChainId) {
+export async function fetchManaBalance(
+  address: string,
+  chainId: ChainId
+): Promise<ManaBalancesProps['manaBalances']> {
   if (!isEthereumAddress(address)) {
     return {}
   }
@@ -57,7 +60,7 @@ function mapChainIdToNetwork(chainId: ChainId): Network {
 function createBalanceLoader(chainId: ChainId) {
   return new Loader(async (address: string) => {
     const manaBalances = await fetchManaBalance(address, chainId)
-    return manaBalances[mapChainIdToNetwork(chainId)] || 0
+    return (manaBalances?.[mapChainIdToNetwork(chainId)] ?? 0) as number
   })
 }
 

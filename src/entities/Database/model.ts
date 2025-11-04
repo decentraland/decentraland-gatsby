@@ -34,6 +34,7 @@ function hash(query: SQLStatement) {
   return hash
 }
 
+// @ts-expect-error - TypeScript incorrectly infers the return type of query() as Promise<{}[]> instead of Promise<U[]>
 export class Model<T extends {}> extends BaseModel<T> {
   private static getLabels<U extends {} = any>(
     method: string,
@@ -243,7 +244,7 @@ export class Model<T extends {}> extends BaseModel<T> {
    * @returns
    */
   static async query<U extends {} = any>(query: SQLStatement): Promise<U[]> {
-    return this.namedQuery(hash(query), query)
+    return this.namedQuery<U>(hash(query), query)
   }
 
   static async namedQuery<U extends {} = any>(
@@ -252,7 +253,8 @@ export class Model<T extends {}> extends BaseModel<T> {
   ): Promise<U[]> {
     return withDatabaseMetrics(async () => {
       try {
-        return super.query(query.text, query.values)
+        const result = await super.query(query.text, query.values)
+        return result as U[]
       } catch (err) {
         throw Object.assign(err, { text: query.text, values: query.values })
       }

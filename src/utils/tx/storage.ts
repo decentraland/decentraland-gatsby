@@ -19,16 +19,20 @@ function injectTransaction(
   }
 
   let replaced = false
+  const transactionChainId = transaction.chainId
+  const chainIdValue: ChainId =
+    typeof transactionChainId === 'string'
+      ? (parseInt(transactionChainId, 16) as ChainId)
+      : transactionChainId
+
   transactions = transactions.map((tx) => {
     if (tx.hash === transaction.hash) {
       replaced = true
-      return {
+      const updatedTransaction: Transaction = {
         ...transaction,
-        chainId:
-          typeof transaction.chainId === 'string'
-            ? parseInt(transaction.chainId, 16)
-            : transaction.chainId,
+        chainId: chainIdValue,
       }
+      return updatedTransaction
     }
 
     return tx

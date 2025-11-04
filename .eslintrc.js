@@ -4,4 +4,10 @@
  */
 module.exports = {
   extends: ['@dcl/eslint-config/gatsby'],
+  ignorePatterns: ['node_modules/**', 'dist/**', 'build/**', '**/*.d.ts'],
+  parserOptions: {
+    project: null,
+    warnOnUnsupportedTypeScriptVersion: false,
+    createDefaultProgram: false,
+  },
 }

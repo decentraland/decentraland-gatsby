@@ -22,12 +22,16 @@
     "emitDecoratorMetadata": true,
     "downlevelIteration": true,
     "esModuleInterop": true,
-    "typeRoots": ["node_modules/@types", "src/@types"]
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "typeRoots": ["node_modules/@types", "src/@types"],
+    "types": ["jest", "node"]
   },
   "include": ["src/**/*"],
   "exclude": [
     "node_modules",
     "build",
+    "dist",
     "scripts",
     "src/**/*.stories.tsx",
     "src/**/*.stories.ts"
