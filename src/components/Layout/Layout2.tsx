@@ -22,6 +22,7 @@ import {
   NAVBAR_DOWNLOAD_EVENT_PLACE,
 } from 'decentraland-dapps/dist/containers/Navbar/constants'
 import useNotifications from 'decentraland-dapps/dist/hooks/useNotifications'
+import { getIdentityId } from 'decentraland-dapps/dist/modules/identityId'
 import {
   Footer,
   FooterProps,
@@ -79,12 +80,14 @@ export default function Layout2({
   hideNavbar,
   hideFooter,
   hideDownloadButton,
+  hideSignInButton,
   ...props
 }: LayoutProps) {
   const locale = pageContext?.intl?.locale || 'en'
   const locales = pageContext?.intl?.locales || ['en']
   const [user, userState] = useAuthContext()
   const [, shareState] = useShareContext()
+
   const identity: AuthIdentity | undefined = useMemo(() => {
     if (user) {
       return localStorageGetIdentity(user) ?? undefined
@@ -270,6 +273,22 @@ export default function Layout2({
     [userState.disconnect]
   )
 
+  const handleGetIdentityId = useCallback(async (): Promise<
+    string | undefined
+  > => {
+    if (identity?.authChain && identity?.ephemeralIdentity) {
+      try {
+        const response = await getIdentityId(identity)
+        return response
+      } catch (error) {
+        console.error('Failed to create identity ID:', error)
+        return undefined
+      }
+    }
+
+    return undefined
+  }, [identity])
+
   return (
     <>
       {!hideNavbar && (
@@ -288,6 +307,8 @@ export default function Layout2({
           onClickSignOut={handleSignOut}
           notifications={notificationProps}
           onClickDownload={handleClickDownload}
+          getIdentityId={handleGetIdentityId}
+          hideSignInButton={hideSignInButton}
           hideDownloadButton={hideDownloadButton}
         />
       )}
