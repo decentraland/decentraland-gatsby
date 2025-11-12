@@ -313,6 +313,7 @@ export default function useAuth(
       provider: !loading ? state.provider : null,
       providerType: !loading ? state.providerType : null,
       chainId: !loading ? state.chainId : null,
+      identity: !loading ? state.identity : null,
     }),
     [connect, disconnect, switchTo, select, authorize, loading, state]
   )

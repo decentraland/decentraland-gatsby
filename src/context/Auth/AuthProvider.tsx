@@ -21,6 +21,7 @@ const defaultAuthState: ReturnType<typeof useAuth> = [
     connect: () => {},
     authorize: () => {},
     disconnect: () => {},
+    identity: null,
   },
 ]
 
