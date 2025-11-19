@@ -42,6 +42,8 @@ import {
 import useAuthContext from '../../context/Auth/useAuthContext'
 import useProfileInjected from '../../context/Auth/useProfileContext'
 import { getSupportedChainIds } from '../../context/Auth/utils'
+import { useFeatureFlagContext } from '../../context/FeatureFlag'
+import { DappsFeatureFlags } from '../../context/FeatureFlag/types'
 import useShareContext from '../../context/Share/useShareContext'
 import useTrackLinkContext from '../../context/Track/useTrackLinkContext'
 import useAsyncState from '../../hooks/useAsyncState'
@@ -93,6 +95,11 @@ export default function Layout2({
     }
     return undefined
   }, [user])
+
+  const [ff] = useFeatureFlagContext()
+  const shouldDownloadBeforeRedirect = !ff.enabled(
+    DappsFeatureFlags.DownloadInSuccessPage
+  )
 
   const {
     isModalOpen,
@@ -309,6 +316,7 @@ export default function Layout2({
           getIdentityId={handleGetIdentityId}
           hideSignInButton={hideSignInButton}
           hideDownloadButton={hideDownloadButton}
+          shouldDownloadBeforeRedirect={shouldDownloadBeforeRedirect}
         />
       )}
 
