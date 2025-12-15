@@ -63,14 +63,16 @@ export default React.memo(function Sentry({
 
   return (
     <>
+      {/* Sentry SDK script loaded directly in static HTML */}
+      <script key="sentry-sdk" defer src={src} />
+      {/* Sentry initialization script - runs after SDK loads */}
       <script
         {...props}
         id="__dgatsby_sentry__"
-        data-src={src}
         data-settings={JSON.stringify(sentrySettings)}
         data-commit={JSON.stringify(commitInfo)}
         dangerouslySetInnerHTML={{
-          __html: `!function(){var e=window,t=document,r=t.getElementById("__dgatsby_sentry__"),a=JSON.parse(r.dataset.settings),n=JSON.parse(r.dataset.commit),s=e.Sentry;if("object"==typeof s)console.log("Sentry is already initialized");else{var s=t.createElement("script");s.type="text/javascript",s.defer=!0,s.src=r.dataset.src,s.onload=function(){e.Sentry.onLoad(function(){e.Sentry.init(a),e.Sentry.setTags(n),e.Sentry.setExtras(n)})},s.onerror=function(){console.error("Failed to load Sentry script")};var i=t.getElementsByTagName("script")[0];i.parentNode.insertBefore(s,i)}}();`,
+          __html: `!function(){var r=document.getElementById("__dgatsby_sentry__"),a=JSON.parse(r.dataset.settings),n=JSON.parse(r.dataset.commit);function init(){if(window.Sentry&&window.Sentry.onLoad){window.Sentry.onLoad(function(){Sentry.init(a);Sentry.setTags(n);Sentry.setExtras(n);});}else{setTimeout(init,50);}}init();}();`,
         }}
       />
     </>
