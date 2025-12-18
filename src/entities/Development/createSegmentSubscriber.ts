@@ -1,8 +1,8 @@
 import Analytics from 'analytics-node'
 import chalk from 'chalk'
 
-import env from '../../utils/env'
 import { LoggerSubscription } from './logger'
+import env from '../../utils/env'
 
 export default function createSegmentSubscriber(): LoggerSubscription {
   const segmentKey = env('SEGMENT') || env('SEGMENT_KEY')
@@ -18,6 +18,10 @@ export default function createSegmentSubscriber(): LoggerSubscription {
 
   const analytics = new Analytics(segmentKey)
   return (message, data) => {
-    analytics.track({ event: data.level, properties: { ...data, message } })
+    analytics.track({
+      anonymousId: 'server',
+      event: data.level,
+      properties: { ...data, message },
+    })
   }
 }

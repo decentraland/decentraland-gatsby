@@ -5,11 +5,10 @@ import { StyleNamespace } from '../../variables'
 
 import './Bold.css'
 
-export type BoldProps = React.Props<HTMLSpanElement> &
-  React.HTMLProps<HTMLSpanElement> & {
-    primary?: boolean
-    secondary?: boolean
-  }
+export type BoldProps = React.HTMLProps<HTMLSpanElement> & {
+  primary?: boolean
+  secondary?: boolean
+}
 
 export default React.memo(function Bold({
   primary,

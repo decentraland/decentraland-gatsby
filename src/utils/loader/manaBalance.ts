@@ -1,22 +1,26 @@
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { Network } from '@dcl/schemas/dist/dapps/network'
 import { buildWallet } from 'decentraland-dapps/dist/modules/wallet/utils/buildWallet'
-import { ManaBalancesProps } from 'decentraland-ui/dist/components/UserMenu/ManaBalances/ManaBalances.types'
 import isEthereumAddress from 'validator/lib/isEthereumAddress'
 
+import Loader from './Loader'
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
 import sentry from '../development/sentry'
-import Loader from './Loader'
 
-export async function fetchManaBalance(address: string, chainId: ChainId) {
+type ManaBalances = Partial<Record<Network, number>>
+
+export async function fetchManaBalance(
+  address: string,
+  chainId: ChainId
+): Promise<ManaBalances> {
   if (!isEthereumAddress(address)) {
     return {}
   }
 
   try {
     const { networks } = await buildWallet(chainId)
-    const manaBalances: ManaBalancesProps['manaBalances'] = {}
+    const manaBalances: ManaBalances = {}
     const networkList = [Network.ETHEREUM, Network.MATIC]
     for (const network of networkList as [Network.ETHEREUM, Network.MATIC]) {
       const networkData = networks[network]
