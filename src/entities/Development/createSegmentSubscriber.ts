@@ -4,6 +4,7 @@ import chalk from 'chalk'
 import { LoggerSubscription } from './logger'
 import env from '../../utils/env'
 
+/** @deprecated This function is deprecated and will be removed in future versions. */
 export default function createSegmentSubscriber(): LoggerSubscription {
   const segmentKey = env('SEGMENT') || env('SEGMENT_KEY')
   if (!segmentKey) {
@@ -18,8 +19,8 @@ export default function createSegmentSubscriber(): LoggerSubscription {
 
   const analytics = new Analytics(segmentKey)
   return (message, data) => {
+    // @ts-expect-error analytics-node types require anonymousId but this is deprecated code
     analytics.track({
-      anonymousId: 'server',
       event: data.level,
       properties: { ...data, message },
     })
