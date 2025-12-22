@@ -4,8 +4,8 @@
   "description": "Common Gatsby components by Decentraland",
   "main": "dist/index.js",
   "engines": {
-    "node": ">=16.20.0",
-    "npm": ">=7.0.0"
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   },
   "scripts": {
     "test": "jest",
