@@ -13,7 +13,7 @@ import { Locale } from 'decentraland-ui/dist/components/Language/Language'
 
 export type MetaProps = JSX.IntrinsicElements['meta']
 
-export type HeadProps = React.Props<any> & {
+export type HeadProps = React.PropsWithChildren<{
   lang?: Locale
   title?: string
   titleTemplate?: string | null
@@ -21,7 +21,7 @@ export type HeadProps = React.Props<any> & {
   description?: string
   image?: string
   meta: Partial<MetaProperties>
-}
+}>
 
 export type MetaProperties = {
   // Open Graph props

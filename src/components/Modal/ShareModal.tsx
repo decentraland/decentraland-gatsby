@@ -17,7 +17,7 @@ export type ShareModalProps = Omit<ModalProps, 'open'> & {
   data: DCLShareData | null
 }
 
-const handleShare = (e: React.MouseEvent<HTMLButtonElement>, url: string) => {
+const handleShare = (e: React.MouseEvent, url: string) => {
   e.preventDefault()
   const width = 600
   const height = 350
@@ -64,7 +64,7 @@ export default React.memo(function ShareModal({
   )
 
   const handleFacebookShare = useCallback(
-    (e) => {
+    (e: React.MouseEvent) => {
       e.preventDefault()
       track(ShareEvent.ShareFallback, { data, social: 'facebook' })
       handleShare(e, facebookLink)
@@ -84,7 +84,7 @@ export default React.memo(function ShareModal({
   )
 
   const handleTwitterShare = useCallback(
-    (e) => {
+    (e: React.MouseEvent) => {
       e.preventDefault()
       track(ShareEvent.ShareFallback, { data, social: 'twitter' })
       handleShare(e, twitterLink)

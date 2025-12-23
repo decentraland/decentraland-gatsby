@@ -34,6 +34,7 @@ function hash(query: SQLStatement) {
   return hash
 }
 
+// @ts-expect-error - BaseModel types from decentraland-server are not fully compatible
 export class Model<T extends {}> extends BaseModel<T> {
   private static getLabels<U extends {} = any>(
     method: string,
@@ -277,7 +278,7 @@ export class Model<T extends {}> extends BaseModel<T> {
     return withDatabaseMetrics(async () => {
       try {
         const result = await this.db.client.query(query)
-        return result.rowCount
+        return result.rowCount ?? 0
       } catch (err) {
         throw Object.assign(err, { text: query.text, values: query.values })
       }
