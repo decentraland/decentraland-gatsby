@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 
 import { useInView } from 'react-intersection-observer'
 
-import { SectionTrackEvent } from './utils'
 import useTrackContext from '../../context/Track/useTrackContext'
+import { SectionTrackEvent } from './utils'
 
 import './SectionTrack.css'
 

@@ -5,10 +5,11 @@ import { StyleNamespace } from '../../variables'
 
 import './Underline.css'
 
-export type UnderlineProps = React.HTMLProps<HTMLSpanElement> & {
-  primary?: boolean
-  secondary?: boolean
-}
+export type UnderlineProps = React.Props<HTMLSpanElement> &
+  React.HTMLProps<HTMLSpanElement> & {
+    primary?: boolean
+    secondary?: boolean
+  }
 
 export default React.memo(function Underline({
   primary,

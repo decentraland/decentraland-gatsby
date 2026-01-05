@@ -2,14 +2,15 @@ import React from 'react'
 
 import env from '../../utils/env'
 
-export type SegmentProps = React.HTMLProps<HTMLScriptElement> & {
-  /** @deprecated use segmentKey instead */
-  analyticsKey?: string
-  /** Segment key */
-  segmentKey?: string
-  /** Track the first time the page load */
-  trackPage?: boolean
-}
+export type SegmentProps = React.Props<HTMLScriptElement> &
+  React.HTMLProps<HTMLScriptElement> & {
+    /** @deprecated use segmentKey instead */
+    analyticsKey?: string
+    /** Segment key */
+    segmentKey?: string
+    /** Track the first time the page load */
+    trackPage?: boolean
+  }
 
 export default React.memo(function Segment({
   analyticsKey,

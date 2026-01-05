@@ -1,9 +1,9 @@
 import { Registry, register } from 'prom-client'
 
-import withPrometheusToken from './withPrometheusToken'
 import Context from '../../Route/wkc/context/Context'
 import ContentTypeResponse from '../../Route/wkc/response/ContentTypeResponse'
 import routes from '../../Route/wkc/routes'
+import withPrometheusToken from './withPrometheusToken'
 
 export default function metrics(registries: Registry[]) {
   const globalRegistry = Registry.merge(registries)

@@ -4,10 +4,10 @@ import { Card } from 'decentraland-ui/dist/components/Card/Card'
 import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import { Stats } from 'decentraland-ui/dist/components/Stats/Stats'
 
-import MethodLabel from './MethodLabel'
 import Accordion from '../Accordion/Accordion'
 import Code from '../Text/Code'
 import Paragraph from '../Text/Paragraph'
+import MethodLabel from './MethodLabel'
 
 import './ApiCard.css'
 

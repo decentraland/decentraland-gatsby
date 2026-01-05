@@ -7,8 +7,8 @@ import {
   fetchFlags,
 } from '@dcl/feature-flags'
 
-import useAsyncState from './useAsyncState'
 import FeatureFlags from '../utils/development/FeatureFlags'
+import useAsyncState from './useAsyncState'
 
 export const DEFAULT_FEATURE_FLAG = new FeatureFlags({
   flags: {},

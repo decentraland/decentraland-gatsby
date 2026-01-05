@@ -260,14 +260,6 @@ export default function Layout({
     [userState.disconnect]
   )
 
-  const handleSignIn = useCallback(() => {
-    if (isAuthDappEnabled) {
-      userState.authorize()
-    } else {
-      userState.select()
-    }
-  }, [isAuthDappEnabled, userState.authorize, userState.select])
-
   return (
     <>
       {!hideNavbar && (
@@ -282,7 +274,9 @@ export default function Layout({
           onClickNavbarItem={handleClickNavbarOption}
           onClickUserMenuItem={handleClickUserMenuOption}
           onClickOpen={handleOpen}
-          onClickSignIn={handleSignIn}
+          onClickSignIn={
+            isAuthDappEnabled ? userState.authorize : userState.select
+          }
           onClickSignOut={handleSignOut}
           notifications={notificationProps}
         />

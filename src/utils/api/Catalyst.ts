@@ -1,11 +1,11 @@
-import API from './API'
-import Options from './Options'
 import Time from '../date/Time'
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
 import sentry from '../development/sentry'
 import env from '../env'
 import random from '../number/random'
+import API from './API'
+import Options from './Options'
 
 import type {
   Avatar,

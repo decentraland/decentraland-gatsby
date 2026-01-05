@@ -2,10 +2,10 @@ import React, { useCallback, useMemo } from 'react'
 
 import { useIntl } from 'react-intl'
 
-import { navigate } from './utils'
 import BaseLink from '../../components/Text/Link'
 import { isMeta } from '../../utils/dom/events'
 import { isBlankTarget, isLocalLink } from '../../utils/dom/links'
+import { navigate } from './utils'
 
 export type LinkProps<S extends {} = {}> =
   React.AnchorHTMLAttributes<HTMLAnchorElement> & {

@@ -16,5 +16,5 @@ export type ReportMetricsRequest = {
 export type ReportMetricsResponse = {
   type: ClusterMessageType.ResponsetMetric
   id: string
-  metrics: client.Metric[]
+  metrics: client.metric[]
 }

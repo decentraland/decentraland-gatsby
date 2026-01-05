@@ -5,6 +5,11 @@ import { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 // eslint-disable-next-line @typescript-eslint/no-restricted-imports
 import { connection } from 'decentraland-connect'
 
+import logger from '../entities/Development/logger'
+import { clearIdentity, setCurrentIdentity } from '../utils/auth/storage'
+import rollbar from '../utils/development/rollbar'
+import segment from '../utils/development/segment'
+import sentry from '../utils/development/sentry'
 import useAsyncTask from './useAsyncTask'
 import {
   AuthEvent,
@@ -16,11 +21,6 @@ import {
   restoreConnection,
   switchToChainId,
 } from './useAuth.utils'
-import logger from '../entities/Development/logger'
-import { clearIdentity, setCurrentIdentity } from '../utils/auth/storage'
-import rollbar from '../utils/development/rollbar'
-import segment from '../utils/development/segment'
-import sentry from '../utils/development/sentry'
 
 import type { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 

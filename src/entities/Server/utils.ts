@@ -5,9 +5,9 @@ import { networkInterfaces } from 'os'
 import chalk from 'chalk'
 import { Application } from 'express'
 
-import { ServiceStartHandler, emptyServiceInitializer } from './types'
 import env from '../../utils/env'
 import { clusterInitializer } from '../Cluster/utils'
+import { ServiceStartHandler, emptyServiceInitializer } from './types'
 
 export const DEFAULT_PORT = '4000'
 export const DEFAULT_HOST = '0.0.0.0'

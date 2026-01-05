@@ -1,8 +1,8 @@
-import BatchLoader from './BatchLoader'
 import Catalyst from '../api/Catalyst'
 import rollbar from '../development/rollbar'
 import segment from '../development/segment'
 import sentry from '../development/sentry'
+import BatchLoader from './BatchLoader'
 
 import type { Avatar } from '../api/Catalyst'
 

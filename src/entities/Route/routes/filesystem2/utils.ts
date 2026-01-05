@@ -3,11 +3,11 @@ import { resolve, sep } from 'path'
 import e from 'express'
 import glob from 'glob'
 
-import { Response } from './types'
 import RequestError from '../../error'
 import handleExpressError from '../../handle/handleExpressError'
 import { withHttpMetrics } from '../../middleware'
 import withLogs from '../../middleware/withLogs'
+import { Response } from './types'
 
 export function resolvePath(basePath: string, path: string) {
   if (!basePath.endsWith(sep)) {

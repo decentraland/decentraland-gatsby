@@ -1,12 +1,12 @@
 import { randomUUID } from 'crypto'
 
+import Time from '../../utils/date/Time'
+import globalLogger, { Logger } from '../Development/logger'
 import {
   task_manager_duration_seconds,
   task_manager_pool_size,
 } from './metrics'
 import { CreateTaskAttributes, TaskTimmer } from './types'
-import Time from '../../utils/date/Time'
-import globalLogger, { Logger } from '../Development/logger'
 
 export type TaskOptions = {
   name: string

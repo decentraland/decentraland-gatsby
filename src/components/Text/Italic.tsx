@@ -5,10 +5,11 @@ import { StyleNamespace } from '../../variables'
 
 import './Italic.css'
 
-export type ItalicProps = React.HTMLProps<HTMLSpanElement> & {
-  primary?: boolean
-  secondary?: boolean
-}
+export type ItalicProps = React.Props<HTMLSpanElement> &
+  React.HTMLProps<HTMLSpanElement> & {
+    primary?: boolean
+    secondary?: boolean
+  }
 
 export default React.memo(function Italic({
   primary,
