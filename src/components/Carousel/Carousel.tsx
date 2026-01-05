@@ -1,10 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
-import Next from './Next'
-import Prev from './Prev'
 import TokenList from '../../utils/dom/TokenList'
 import mod from '../../utils/number/mod'
 import TimeInterval from '../../utils/timer/timeInterval'
+import Next from './Next'
+import Prev from './Prev'
 
 import './Carousel.css'
 

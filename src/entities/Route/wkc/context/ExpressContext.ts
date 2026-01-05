@@ -1,7 +1,7 @@
 import { getRequestFromNodeMessage } from '@well-known-components/http-server/dist/logic'
 
-import { FullContext } from './Context'
 import logger from '../../../Development/logger'
+import { FullContext } from './Context'
 
 import type { IHttpServerComponent } from '@well-known-components/interfaces/dist/components/http-server'
 import type * as express from 'express'

@@ -5,10 +5,10 @@ import {
   SendEmailResponse,
 } from '@aws-sdk/client-ses'
 
+import chuck from '../../utils/array/chunk'
 import { aws_ses_sent_total } from './metrics'
 import TemplateManager from './template'
 import { Destination, TemplateAttributes, TemplateContent } from './types'
-import chuck from '../../utils/array/chunk'
 
 export type Options = Omit<SESClientConfig, 'region'> & {
   region?: string

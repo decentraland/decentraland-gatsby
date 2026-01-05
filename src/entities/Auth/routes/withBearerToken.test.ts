@@ -1,7 +1,7 @@
 import { uid } from 'radash'
 
-import withBearerToken from './withBearerToken'
 import { Request } from '../../Route/wkc/request/Request'
+import withBearerToken from './withBearerToken'
 
 const token = uid(24)
 const withAuth = withBearerToken({ tokens: [token] })

@@ -1,10 +1,10 @@
 import { AuthLinkType } from '@dcl/crypto/dist/types'
 import * as SSO from '@dcl/single-sign-on-client'
 
-import { ownerAddress } from './identify'
-import { Identity } from './types'
 import Time from '../date/Time'
 import { PersistedKeys } from '../loader/types'
+import { ownerAddress } from './identify'
+import { Identity } from './types'
 
 const STORE_LEGACY_KEY = 'auth'
 let CURRENT_IDENTITY: Identity | null = null

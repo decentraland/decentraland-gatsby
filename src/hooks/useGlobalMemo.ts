@@ -12,7 +12,7 @@ export default function useGlobalMemo<T>(
   deps: DependencyList
 ) {
   return useMemo<T>(() => {
-    const id = deps.map((dep) => String(singleton(dep as {}))).join('::')
+    const id = deps.map((dep) => singleton(dep)).join('::')
     if (!globalMemo.has(id)) {
       globalMemo.set(id, callback())
     }

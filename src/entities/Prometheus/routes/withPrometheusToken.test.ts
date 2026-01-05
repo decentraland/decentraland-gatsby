@@ -1,8 +1,8 @@
 import { uid } from 'radash'
 
-import withPrometheusToken from './withPrometheusToken'
 import env, { Env, setupEnv } from '../../../utils/env'
 import { Request } from '../../Route/wkc/request/Request'
+import withPrometheusToken from './withPrometheusToken'
 
 const withMissingAuth = withPrometheusToken()
 setupEnv({ [Env.LOCAL]: { PROMETHEUS_BEARER_TOKEN: uid(24) } })

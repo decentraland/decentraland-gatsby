@@ -3,9 +3,9 @@ import React, { createContext, useEffect } from 'react'
 import * as SSO from '@dcl/single-sign-on-client'
 import isURL from 'validator/lib/isURL'
 
-import { AuthProviderProps } from './utils'
 import useAuth from '../../hooks/useAuth'
 import useTransaction from '../../hooks/useTransaction'
+import { AuthProviderProps } from './utils'
 
 const defaultAuthState: ReturnType<typeof useAuth> = [
   null,
