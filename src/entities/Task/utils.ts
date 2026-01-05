@@ -1,7 +1,7 @@
+import TaskManager from './TaskManager'
 import env from '../../utils/env'
 import { clusterInitializer } from '../Cluster/utils'
 import { ServiceStartHandler, emptyServiceInitializer } from '../Server/types'
-import TaskManager from './TaskManager'
 
 export const taskInitializer = (manager: TaskManager): ServiceStartHandler => {
   if (env('TASKS', 'true') === 'false') {

@@ -5,13 +5,13 @@ import {
 } from 'decentraland-crypto-middleware/lib/types'
 import { sleep } from 'radash'
 
+import Options, { RequestOptions } from './Options'
 import logger from '../../entities/Development/logger'
 import { signPayload } from '../auth/identify'
 import { getCurrentIdentity } from '../auth/storage'
 import FetchError from '../errors/FetchError'
 import RequestError from '../errors/RequestError'
 import { toBase64 } from '../string/base64'
-import Options, { RequestOptions } from './Options'
 
 import type { Identity } from '../auth/types'
 

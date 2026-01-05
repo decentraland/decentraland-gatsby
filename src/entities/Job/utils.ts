@@ -1,5 +1,5 @@
-import env from '../../utils/env'
 import JobManager from './manager'
+import env from '../../utils/env'
 
 import type { ServiceStartHandler } from '../Server/types'
 

@@ -1,5 +1,5 @@
-import { worldContent } from '../../__mocks__/content'
 import ContentServer from './ContentServer'
+import { worldContent } from '../../__mocks__/content'
 
 describe('utils/api/ContentServer', () => {
   test(`should hava a default prop Url`, () => {

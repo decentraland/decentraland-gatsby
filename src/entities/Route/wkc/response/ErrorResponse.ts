@@ -1,5 +1,5 @@
-import env from '../../../../utils/env'
 import Response from './Response'
+import env from '../../../../utils/env'
 
 export default class ErrorResponse extends Error {
   static toResponse(err: ErrorResponse): Response {
