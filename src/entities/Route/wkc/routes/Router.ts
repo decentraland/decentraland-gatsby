@@ -1,11 +1,11 @@
 import * as express from 'express'
 import { memo } from 'radash'
 
+import { route } from './utils'
 import defaultAjv from '../../../Schema/index'
 import Context from '../context/Context'
 import ErrorResponse from '../response/ErrorResponse'
 import Response from '../response/Response'
-import { route } from './utils'
 
 import type { IMiddlewareAdapterHandler } from '@well-known-components/interfaces/dist/components/base-component'
 import type { IHttpServerComponent } from '@well-known-components/interfaces/dist/components/http-server'

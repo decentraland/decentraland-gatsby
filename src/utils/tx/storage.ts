@@ -22,12 +22,14 @@ function injectTransaction(
   transactions = transactions.map((tx) => {
     if (tx.hash === transaction.hash) {
       replaced = true
+      // Handle chainId that might come as hex string from storage
+      const rawChainId = transaction.chainId as string | number
       return {
         ...transaction,
         chainId:
-          typeof transaction.chainId === 'string'
-            ? parseInt(transaction.chainId, 16)
-            : transaction.chainId,
+          typeof rawChainId === 'string'
+            ? parseInt(rawChainId, 16)
+            : rawChainId,
       }
     }
 

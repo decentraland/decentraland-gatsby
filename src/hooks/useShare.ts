@@ -1,7 +1,7 @@
 import { useCallback, useMemo, useState } from 'react'
 
-import useTrackContext from '../context/Track/useTrackContext'
 import { ShareEvent } from './useShare.utils'
+import useTrackContext from '../context/Track/useTrackContext'
 
 export type DCLShareData = ShareData & {
   thumbnail?: string

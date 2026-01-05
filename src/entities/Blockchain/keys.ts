@@ -1,11 +1,11 @@
 // TODO(#323): remove on v6
 import { ChainId, getChainName } from '@dcl/schemas/dist/dapps/chain-id'
 
+import { ConnectionOptions } from './types'
+import { onceWithConnectionOptions } from './utils'
 import env from '../../utils/env'
 import once from '../../utils/function/once'
 import roundRobin from '../../utils/iterator/roundRobin'
-import { ConnectionOptions } from './types'
-import { onceWithConnectionOptions } from './utils'
 
 const INFURA_KEYS = env('INFURA_KEYS', '')
 

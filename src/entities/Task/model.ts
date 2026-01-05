@@ -1,10 +1,10 @@
 import { randomUUID } from 'crypto'
 
+import Task from './Task'
+import { CreateTaskAttributes, TaskAttributes, TaskStatus } from './types'
 import Time from '../../utils/date/Time'
 import { Model } from '../Database/model'
 import { SQL, SQLStatement, join, table } from '../Database/utils'
-import Task from './Task'
-import { CreateTaskAttributes, TaskAttributes, TaskStatus } from './types'
 
 export default class TaskModel extends Model<TaskAttributes> {
   static tableName = 'tasks'

@@ -3,10 +3,10 @@ import { readFile } from 'fs/promises'
 
 import mime from 'mime'
 
-import logger from '../../../Development/logger'
-import { createVoidPool } from '../../../Pool/utils'
 import { Response } from './types'
 import { createHandlerFromResponse, resolvePath } from './utils'
+import logger from '../../../Development/logger'
+import { createVoidPool } from '../../../Pool/utils'
 
 const POOL = createVoidPool({ min: 0, max: 20 })
 const FILES = new Map<string | null, Promise<Response<Buffer>>>()

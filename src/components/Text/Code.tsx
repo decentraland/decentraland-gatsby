@@ -1,6 +1,6 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useRef } from 'react'
 
-import Highlight from 'react-highlight'
+import hljs from 'highlight.js'
 
 import useClipboardCopy from '../../hooks/useClipboardCopy'
 import Time from '../../utils/date/Time'
@@ -9,6 +9,29 @@ import { StyleNamespace } from '../../variables'
 
 import 'highlight.js/styles/github.css'
 import './Code.css'
+
+type HighlightCodeProps = {
+  language: string
+  children: React.ReactNode
+}
+
+function HighlightCode({ language, children }: HighlightCodeProps) {
+  const codeRef = useRef<HTMLElement>(null)
+
+  useEffect(() => {
+    if (codeRef.current) {
+      hljs.highlightElement(codeRef.current)
+    }
+  }, [children, language])
+
+  return (
+    <pre>
+      <code ref={codeRef} className={language}>
+        {children}
+      </code>
+    </pre>
+  )
+}
 
 export type CodeProps = React.HTMLProps<HTMLPreElement> &
   React.HTMLProps<HTMLSpanElement> & {
@@ -51,7 +74,7 @@ export default React.memo(function Code({
       {!inline && preview && <div className="Code__Preview">{preview}</div>}
       {!language && <pre>{children ?? value}</pre>}
       {language && (
-        <Highlight className={language}>{children ?? value}</Highlight>
+        <HighlightCode language={language}>{children ?? value}</HighlightCode>
       )}
       {!inline && copy && (
         <div
