@@ -5,11 +5,11 @@ import {
 import verify from 'decentraland-crypto-middleware/lib/verify'
 import { NextFunction, Request, Response } from 'express'
 
+import { AuthData, WithAuth } from './types'
+import { verifySigner } from './utils'
 import logger from '../Development/logger'
 import RequestError from '../Route/error'
 import middleware from '../Route/handle/middleware'
-import { AuthData, WithAuth } from './types'
-import { verifySigner } from './utils'
 
 export { AuthData, WithAuth }
 

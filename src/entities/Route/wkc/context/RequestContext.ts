@@ -1,6 +1,6 @@
+import { FullContext } from './Context'
 import logger from '../../../Development/logger'
 import { Request, RequestInit } from '../request/Request'
-import { FullContext } from './Context'
 
 export type RequestContextInit = Omit<RequestInit, 'headers'> & {
   // query?: URLSearchParams | string | Record<string, string | ReadonlyArray<string>> | Iterable<[string, string]> | ReadonlyArray<[string, string]>

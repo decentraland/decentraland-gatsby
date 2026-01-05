@@ -4,10 +4,9 @@ import TokenList from '../../utils/dom/TokenList'
 
 import './Background.css'
 
-export type BackgroundProps = React.Props<HTMLDivElement> &
-  React.HTMLProps<HTMLDivElement> & {
-    src?: string
-  }
+export type BackgroundProps = React.HTMLProps<HTMLDivElement> & {
+  src?: string
+}
 
 export default function Background({ src, ...props }: BackgroundProps) {
   return (

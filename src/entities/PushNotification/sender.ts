@@ -1,11 +1,11 @@
 import { PushSubscription, RequestOptions, sendNotification } from 'web-push'
 
+import { web_notification_sent_total } from './metrics'
+import { PushNotificationSenderOptions, Subscription } from './types'
 import chunk from '../../utils/array/chunk'
 import { PushNotificationAttributes } from '../../utils/webworker/types'
 import logger from '../Development/logger'
 import Sender from '../Mail/sender'
-import { web_notification_sent_total } from './metrics'
-import { PushNotificationSenderOptions, Subscription } from './types'
 
 export default class PushNotificationSender {
   publicKey: string
