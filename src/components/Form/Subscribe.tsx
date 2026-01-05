@@ -3,11 +3,11 @@ import React from 'react'
 import { Button } from 'decentraland-ui/dist/components/Button/Button'
 import isEmail from 'validator/lib/isEmail'
 
+import Input from './Input'
 import usePatchState from '../../hooks/usePatchState'
 import TokenList from '../../utils/dom/TokenList'
 import env from '../../utils/env'
 import { StyleNamespace } from '../../variables'
-import Input from './Input'
 
 import './Subscribe.css'
 

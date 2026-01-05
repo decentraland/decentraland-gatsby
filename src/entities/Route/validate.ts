@@ -1,8 +1,8 @@
 import { Ajv, ValidateFunction } from 'ajv'
 
+import RequestError from './error'
 import defaultAjv from '../Schema/index'
 import { AjvObjectSchema } from '../Schema/types'
-import RequestError from './error'
 
 export default function validate<R extends {}>(
   validator: ValidateFunction,

@@ -1,7 +1,7 @@
 import { basename } from 'path'
 
-import logger from '../../../Development/logger'
 import { createETag, readFileFromDisk, readFileFromMemory } from './file'
+import logger from '../../../Development/logger'
 
 const errors = jest.spyOn(logger, 'error')
 

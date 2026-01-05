@@ -3,9 +3,9 @@ import React, { useMemo } from 'react'
 import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import { Table } from 'decentraland-ui/dist/components/Table/Table'
 
+import { toArray } from './utils'
 import Code from '../Text/Code'
 import Paragraph from '../Text/Paragraph'
-import { toArray } from './utils'
 
 import type {
   AjvArraySchema,

@@ -24,7 +24,6 @@ In order to use this hook you must include an `AuthProvider` in your `gatsby-bro
 ```tsx dark=true
 // gatsby-browser.js
 import React from 'react'
-import ReactDOM from 'react-dom'
 import AuthProvider from 'decentraland-gatsby/dist/context/Auth/AuthProvider'
 
 export const wrapRootElement = ({ element }) => (
@@ -83,7 +82,6 @@ This is useful when you want to share the same identity between multiple applica
 ```tsx dark=true
 // gatsby-browser.js
 import React from 'react'
-import ReactDOM from 'react-dom'
 import AuthProvider from 'decentraland-gatsby/dist/context/Auth/AuthProvider'
 
 export const wrapRootElement = ({ element }) => (

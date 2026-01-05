@@ -3,9 +3,9 @@ import React, { useCallback, useState } from 'react'
 import { Header } from 'decentraland-ui/dist/components/Header/Header'
 import { Radio } from 'decentraland-ui/dist/components/Radio/Radio'
 
+import Textarea, { TextareaProps } from './Textarea'
 import TokenList from '../../utils/dom/TokenList'
 import Markdown from '../Text/Markdown'
-import Textarea, { TextareaProps } from './Textarea'
 
 import './MarkdownTextarea.css'
 

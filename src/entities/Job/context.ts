@@ -1,5 +1,5 @@
-import logger from '../Development/logger'
 import { ScheduleFunction, UpdatePayloadFunction } from './types'
+import logger from '../Development/logger'
 
 export default class JobContext<P extends {} = {}> {
   id: string | null

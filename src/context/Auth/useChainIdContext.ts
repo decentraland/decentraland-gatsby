@@ -1,6 +1,6 @@
-import { createAsyncStateState } from '../../hooks/useAsyncState'
 import useAuthContext from './useAuthContext'
 import { getDefaultChainId } from './utils'
+import { createAsyncStateState } from '../../hooks/useAsyncState'
 
 const fakeState = createAsyncStateState<ReturnType<typeof getDefaultChainId>>()
 
