@@ -1,0 +1,19 @@
+.ui.input.action .ui.button {
+  min-width: auto;
+}
+
+.ui.input > .ui.input > input {
+  border-radius: 0;
+}
+
+.ui.input > input:first-child,
+.ui.input > .ui.input:first-child > input {
+  border-radius: 4px 0 0 4px;
+  border-right-color: white;
+}
+
+.ui.input > input:last-child,
+.ui.input > .ui.input:last-child > input {
+  border-radius: 0 4px 4px 0;
+  border-right-color: rgba(34, 36, 38, 0.15);
+}
