@@ -39,6 +39,17 @@ const config: StorybookConfig = {
     })
 
     config.target = 'web'
+
+    // Mock thirdweb modules that are optional peer dependencies of decentraland-connect
+    // These are not needed for Storybook documentation
+    config.resolve = config.resolve || {}
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      'thirdweb/chains': require.resolve('./thirdweb-mock.js'),
+      'thirdweb/wallets': require.resolve('./thirdweb-mock.js'),
+      thirdweb: require.resolve('./thirdweb-mock.js'),
+    }
+
     return config
   },
 
