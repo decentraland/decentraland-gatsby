@@ -41,15 +41,18 @@ const config: StorybookConfig = {
     config.target = 'web'
 
     // Mock optional peer dependencies that are not needed for Storybook documentation
+    const mockPath = require.resolve('./module-mock.js')
     config.resolve = config.resolve || {}
     config.resolve.alias = {
       ...config.resolve.alias,
       // thirdweb - optional peer dependency of decentraland-connect
-      'thirdweb/chains': require.resolve('./module-mock.js'),
-      'thirdweb/wallets': require.resolve('./module-mock.js'),
-      thirdweb: require.resolve('./module-mock.js'),
-      // lottie-react - optional peer dependency of decentraland-ui2
-      'lottie-react': require.resolve('./module-mock.js'),
+      'thirdweb/chains': mockPath,
+      'thirdweb/wallets': mockPath,
+      thirdweb: mockPath,
+      // decentraland-ui2 optional peer dependencies
+      'lottie-react': mockPath,
+      '@contentful/rich-text-react-renderer': mockPath,
+      '@contentful/rich-text-types': mockPath,
     }
 
     return config
