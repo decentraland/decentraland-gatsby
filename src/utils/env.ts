@@ -1,5 +1,3 @@
-import * as UILocation from '@dcl/ui-env/dist/location'
-
 export enum Env {
   LOCAL = 'local',
   DEVELOPMENT = 'dev',
@@ -19,8 +17,34 @@ export function isEnv(value: any) {
   }
 }
 
-const getEnvFromTLD = UILocation.getEnvFromTLD
-const getEnvFromQueryParam = UILocation.getEnvFromQueryParam
+/**
+ * Returns the Env from the top level domain if possible
+ */
+function getEnvFromTLD(location: Location): Env | null {
+  const { hostname } = location
+  if (hostname.endsWith('.org')) {
+    return Env.PRODUCTION
+  }
+  if (hostname.endsWith('.today')) {
+    return Env.STAGING
+  }
+  if (hostname.endsWith('.zone')) {
+    return Env.DEVELOPMENT
+  }
+  return null
+}
+
+/**
+ * Returns the Env from the query param if possible
+ */
+function getEnvFromQueryParam(location: Location): Env | null {
+  const params = new URLSearchParams(location.search)
+  const envParam = params.get('env')
+  if (envParam && isEnv(envParam)) {
+    return envParam as Env
+  }
+  return null
+}
 
 export type EnvRecord = Record<string, string | undefined>
 export type EnvMap = Partial<Record<Env, EnvRecord>>
