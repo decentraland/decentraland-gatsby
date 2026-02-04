@@ -29,7 +29,7 @@ import 'isomorphic-fetch'
   npm start
 ```
 
-> If it's the first time that you run a decentraland-gatsby project you may run it as sudo in order to create https files
+> If it's the first time that you run a decentraland-gatsby project you may need to run it as sudo in order to create HTTPS certificates
 
 ## Project structure
 
