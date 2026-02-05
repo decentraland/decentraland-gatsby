@@ -178,7 +178,7 @@
     "yaml": "^1.10.0"
   },
   "peerDependencies": {
-    "@sentry/browser": "^7.64.0",
+    "@sentry/browser": "^9.47.1",
     "rollbar": "^2.26.2"
   },
   "publishConfig": {
