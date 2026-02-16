@@ -12,6 +12,7 @@ const config = {
   transform: {
     '^.+\\.(t|j)sx?$': '@swc/jest',
   },
+  testPathIgnorePatterns: ['\\.integration\\.test\\.'],
   coveragePathIgnorePatterns: [
     '/node_modules/',
     '.github',

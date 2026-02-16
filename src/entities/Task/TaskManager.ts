@@ -24,6 +24,7 @@ export default class TaskManager {
   private _running = false
   private _concurrency = 5
   private _tasks = new Map<string, Task>()
+  private _initialTimeout: ReturnType<typeof setTimeout> | null = null
   private _nextCycle: ReturnType<typeof setTimeout> | null
   private _nextTimeoutRelease: ReturnType<typeof setInterval> | null
   private _intervalTime = Time.Second * 15
@@ -79,7 +80,9 @@ export default class TaskManager {
       this._running = true
 
       // run task cycle
-      setTimeout(async () => {
+      this._initialTimeout = setTimeout(async () => {
+        this._initialTimeout = null
+
         if (!this._running) {
           return
         }
@@ -93,6 +96,10 @@ export default class TaskManager {
           })
         }
 
+        if (!this._running) {
+          return
+        }
+
         const tasks = Array.from(this._tasks.values())
         try {
           await TaskModel.initialize(tasks)
@@ -102,6 +109,10 @@ export default class TaskManager {
             ...err,
             tasks,
           })
+        }
+
+        if (!this._running) {
+          return
         }
 
         this._promiseOfRunningTasksCycle = this.runTasksCycle()
@@ -118,8 +129,13 @@ export default class TaskManager {
     if (this._running) {
       this._running = false
 
+      if (this._initialTimeout) {
+        clearTimeout(this._initialTimeout)
+        this._initialTimeout = null
+      }
+
       if (this._nextCycle) {
-        clearInterval(this._nextCycle)
+        clearTimeout(this._nextCycle)
       }
 
       if (this._nextTimeoutRelease) {
@@ -193,8 +209,7 @@ export default class TaskManager {
       newTasks = [...newTasks, ...result]
     }
 
-    await TaskModel.schedule(newTasks)
-    await TaskModel.completeTasks(tasks)
+    await TaskModel.completeAndSchedule(tasks, newTasks, this.id)
   }
 
   async runTask(task: TaskAttributes) {
@@ -202,7 +217,12 @@ export default class TaskManager {
       return []
     }
 
-    const handle = this._tasks.get(task.name)!
+    const handle = this._tasks.get(task.name)
+    if (!handle) {
+      this._logger.error(`Unknown task name: "${task.name}"`, { id: task.id })
+      return []
+    }
+
     const reschedules = await handle.run({
       id: task.id,
       runner: this._id,

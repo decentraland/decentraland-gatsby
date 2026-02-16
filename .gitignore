@@ -112,3 +112,6 @@ build/
 storybook-static/
 public/
 .DS_Store
+
+# AI
+.cursor

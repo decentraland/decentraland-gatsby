@@ -81,39 +81,17 @@ describe(`src/entities/Task/model`, () => {
         "created_at",
         "updated_at"
       )
-      SELECT
-        *
-      FROM
+      VALUES
         (
-          VALUES
-          (
-            $1,
-            $2,
-            $3::type_task_status,
-            $4,
-            to_timestamp($5, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
-            to_timestamp($6, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
-            to_timestamp($7, 'YYYY-MM-DDTHH:MI:SS.MSZ')
-          )
-        ) AS new_tasks(
-          "id",
-          "name",
-          "status",
-          "runner",
-          "run_at",
-          "created_at",
-          "updated_at"
+          $1,
+          $2,
+          $3::type_task_status,
+          $4,
+          to_timestamp($5, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+          to_timestamp($6, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+          to_timestamp($7, 'YYYY-MM-DDTHH:MI:SS.MSZ')
         )
-      WHERE
-        NOT EXISTS (
-          SELECT
-            1
-          FROM
-            "tasks"
-          WHERE
-            "name" = new_tasks."name"
-            AND "status" = $8::type_task_status
-        )
+      ON CONFLICT DO NOTHING
       `)
       )
 
@@ -124,7 +102,6 @@ describe(`src/entities/Task/model`, () => {
       expect(Number.isFinite(Date.parse(sql.values[4]))).toBe(true)
       expect(Number.isFinite(Date.parse(sql.values[5]))).toBe(true)
       expect(Number.isFinite(Date.parse(sql.values[6]))).toBe(true)
-      expect(sql.values[7]).toBe(TaskStatus.pending)
     })
 
     test(`should initialize if there is more than one recursive task`, async () => {
@@ -161,57 +138,35 @@ describe(`src/entities/Task/model`, () => {
         "created_at",
         "updated_at"
       )
-      SELECT
-        *
-      FROM
+      VALUES
         (
-          VALUES
-          (
-            $1,
-            $2,
-            $3::type_task_status,
-            $4,
-            to_timestamp($5, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
-            to_timestamp($6, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
-            to_timestamp($7, 'YYYY-MM-DDTHH:MI:SS.MSZ')
-          ),
-          (
-            $8,
-            $9,
-            $10::type_task_status,
-            $11,
-            to_timestamp($12, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
-            to_timestamp($13, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
-            to_timestamp($14, 'YYYY-MM-DDTHH:MI:SS.MSZ')
-          ),
-          (
-            $15,
-            $16,
-            $17::type_task_status,
-            $18,
-            to_timestamp($19, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
-            to_timestamp($20, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
-            to_timestamp($21, 'YYYY-MM-DDTHH:MI:SS.MSZ')
-          )
-        ) AS new_tasks(
-          "id",
-          "name",
-          "status",
-          "runner",
-          "run_at",
-          "created_at",
-          "updated_at"
+          $1,
+          $2,
+          $3::type_task_status,
+          $4,
+          to_timestamp($5, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+          to_timestamp($6, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+          to_timestamp($7, 'YYYY-MM-DDTHH:MI:SS.MSZ')
+        ),
+        (
+          $8,
+          $9,
+          $10::type_task_status,
+          $11,
+          to_timestamp($12, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+          to_timestamp($13, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+          to_timestamp($14, 'YYYY-MM-DDTHH:MI:SS.MSZ')
+        ),
+        (
+          $15,
+          $16,
+          $17::type_task_status,
+          $18,
+          to_timestamp($19, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+          to_timestamp($20, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
+          to_timestamp($21, 'YYYY-MM-DDTHH:MI:SS.MSZ')
         )
-      WHERE
-        NOT EXISTS (
-          SELECT
-            1
-          FROM
-            "tasks"
-          WHERE
-            "name" = new_tasks."name"
-            AND "status" = $22::type_task_status
-        )
+      ON CONFLICT DO NOTHING
       `)
       )
     })
@@ -387,6 +342,102 @@ describe(`src/entities/Task/model`, () => {
     })
   })
 
+  describe(`completeAndSchedule`, () => {
+    test(`should not run a query if both lists are empty`, async () => {
+      const initial = rawQuery.mock.calls.length
+      const result = await TaskModel.completeAndSchedule([], [], randomUUID())
+      expect(rawQuery.mock.calls.length).toEqual(initial)
+      expect(result).toEqual(0)
+    })
+
+    test(`should delegate to schedule if there are no tasks to complete`, async () => {
+      const initial = rawQuery.mock.calls.length
+      rawQuery.mockReturnValue({
+        rows: [],
+        fields: [],
+        command: '',
+        rowCount: 0,
+      })
+
+      await TaskModel.completeAndSchedule(
+        [],
+        [{ name: 'test_task', run_at: new Date() }],
+        randomUUID()
+      )
+      expect(rawQuery.mock.calls.length).toEqual(initial + 1)
+
+      const [sql] = rawQuery.mock.calls[rawQuery.mock.calls.length - 1]
+      expect(sqlFormat(sql.text)).toEqual(
+        sqlFormat(`
+        INSERT
+          INTO "tasks"
+            ("id", "name", "status", "runner", "run_at", "created_at", "updated_at")
+        VALUES
+          ($1, $2, $3::type_task_status, $4, $5, $6, $7)
+        ON CONFLICT DO NOTHING
+      `)
+      )
+    })
+
+    test(`should only delete with runner scope if there are no tasks to schedule`, async () => {
+      const initial = rawQuery.mock.calls.length
+      const runnerId = randomUUID()
+      rawQuery.mockReturnValue({
+        rows: [],
+        fields: [],
+        command: '',
+        rowCount: 0,
+      })
+
+      await TaskModel.completeAndSchedule(
+        [{ id: randomUUID() } as any, { id: randomUUID() } as any],
+        [],
+        runnerId
+      )
+      expect(rawQuery.mock.calls.length).toEqual(initial + 1)
+
+      const [sql] = rawQuery.mock.calls[rawQuery.mock.calls.length - 1]
+      expect(sqlFormat(sql.text)).toEqual(
+        sqlFormat(`
+        DELETE FROM "tasks"
+        WHERE "id" IN ($1, $2) AND "runner" = $3
+      `)
+      )
+    })
+
+    test(`should use CTE when both completed and new tasks exist`, async () => {
+      const initial = rawQuery.mock.calls.length
+      const runnerId = randomUUID()
+      rawQuery.mockReturnValue({
+        rows: [],
+        fields: [],
+        command: '',
+        rowCount: 0,
+      })
+
+      await TaskModel.completeAndSchedule(
+        [{ id: randomUUID() } as any],
+        [{ name: 'test_task', run_at: new Date() }],
+        runnerId
+      )
+      expect(rawQuery.mock.calls.length).toEqual(initial + 1)
+
+      const [sql] = rawQuery.mock.calls[rawQuery.mock.calls.length - 1]
+      expect(sqlFormat(sql.text)).toEqual(
+        sqlFormat(`
+        WITH deleted AS (
+          DELETE FROM "tasks"
+          WHERE "id" IN ($1) AND "runner" = $2
+          RETURNING *
+        )
+        INSERT INTO "tasks" ("id", "name", "status", "runner", "run_at", "created_at", "updated_at")
+        VALUES ($3, $4, $5::type_task_status, $6, $7, $8, $9)
+        ON CONFLICT DO NOTHING
+      `)
+      )
+    })
+  })
+
   describe(`schedule`, () => {
     test(`should not run a query if there is no task to schedule`, async () => {
       const initial = rawQuery.mock.calls.length
@@ -431,6 +482,7 @@ describe(`src/entities/Task/model`, () => {
         VALUES
           ($1, $2, $3::type_task_status, $4, $5, $6, $7),
           ($8, $9, $10::type_task_status, $11, $12, $13, $14)
+        ON CONFLICT DO NOTHING
       `)
       )
     })
@@ -452,11 +504,18 @@ describe(`src/entities/Task/model`, () => {
       const [sql] = rawQuery.mock.calls[rawQuery.mock.calls.length - 1]
       expect(sqlFormat(sql.text)).toEqual(
         sqlFormat(`
-        DELETE FROM "tasks"
-        WHERE
-          "runner" IS NOT NULL AND
-          "status" = $1::type_task_status AND
-          "run_at" < $2
+        WITH timed_out AS (
+          DELETE FROM "tasks"
+          WHERE
+            "runner" IS NOT NULL AND
+            "status" = $1::type_task_status AND
+            "run_at" < $2
+          RETURNING *
+        )
+        INSERT INTO "tasks" ("id", "name", "status", "runner", "run_at", "created_at", "updated_at")
+        SELECT gen_random_uuid(), "name", $3::type_task_status, $4, $5, "created_at", $6
+        FROM timed_out
+        ON CONFLICT DO NOTHING
       `)
       )
     })
