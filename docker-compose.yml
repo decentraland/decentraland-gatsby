@@ -1,0 +1,11 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: test_tasks
+    ports:
+      - '5432:5432'
+    tmpfs:
+      - /var/lib/postgresql/data

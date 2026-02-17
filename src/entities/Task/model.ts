@@ -23,42 +23,41 @@ export default class TaskModel extends Model<TaskAttributes> {
   }
 
   static async initialize(tasks: Task[]) {
-    tasks = tasks.filter((task) => task.repeateAt() !== null)
+    const repeatingTasks = tasks
+      .map((task) => ({ task, runAt: task.repeateAt() }))
+      .filter(
+        (entry): entry is { task: Task; runAt: Pick<Date, 'getTime'> } =>
+          entry.runAt !== null
+      )
 
-    if (!tasks.length) {
+    if (!repeatingTasks.length) {
       return 0
     }
 
     const now = new Date()
-    // Only insert tasks that are not already scheduled
     return this.namedRowCount(
       'initialize_tasks',
       SQL`
       INSERT INTO ${table(
         this
       )} ("id", "name", "status", "runner", "run_at", "created_at", "updated_at")
-      SELECT * FROM (VALUES ${join(
-        tasks.map(
-          (task) => SQL`(
+      VALUES ${join(
+        repeatingTasks.map(
+          ({ task, runAt }) => SQL`(
             ${randomUUID()}, 
             ${task.name}, 
             ${TaskStatus.pending}::type_task_status, 
             ${null}, 
             to_timestamp(${new Date(
-              task.repeateAt()!.getTime()
+              runAt.getTime()
             ).toJSON()}, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
             to_timestamp(${now.toJSON()}, 'YYYY-MM-DDTHH:MI:SS.MSZ'),
             to_timestamp(${now.toJSON()}, 'YYYY-MM-DDTHH:MI:SS.MSZ')
           )`
         ),
         SQL`, `
-      )}) AS new_tasks("id", "name", "status", "runner", "run_at", "created_at", "updated_at")
-      WHERE NOT EXISTS (
-        SELECT 1 FROM ${table(this)} 
-        WHERE "name" = new_tasks."name" AND "status" = ${
-          TaskStatus.pending
-        }::type_task_status
-      )
+      )}
+      ON CONFLICT DO NOTHING
     `
     )
   }
@@ -152,7 +151,6 @@ export default class TaskModel extends Model<TaskAttributes> {
 
     const now = new Date()
 
-    // Simple: Always schedule, let locking handle concurrency
     return this.namedRowCount(
       'schedule_tasks',
       SQL`
@@ -168,6 +166,63 @@ export default class TaskModel extends Model<TaskAttributes> {
           ),
           SQL`, `
         )}
+    ON CONFLICT DO NOTHING
+    `
+    )
+  }
+
+  static async completeAndSchedule(
+    completedTasks: TaskAttributes[],
+    newTasks: CreateTaskAttributes[],
+    runnerId: string
+  ) {
+    if (completedTasks.length === 0 && newTasks.length === 0) {
+      return 0
+    }
+
+    if (completedTasks.length === 0) {
+      return this.schedule(newTasks)
+    }
+
+    const now = new Date()
+
+    if (newTasks.length === 0) {
+      return this.namedRowCount(
+        'complete_and_schedule',
+        SQL`
+        DELETE FROM ${table(this)}
+        WHERE "id" IN (${join(
+          completedTasks.map((task) => SQL`${task.id}`),
+          SQL`, `
+        )}) AND "runner" = ${runnerId}
+      `
+      )
+    }
+
+    return this.namedRowCount(
+      'complete_and_schedule',
+      SQL`
+      WITH deleted AS (
+        DELETE FROM ${table(this)}
+        WHERE "id" IN (${join(
+          completedTasks.map((task) => SQL`${task.id}`),
+          SQL`, `
+        )}) AND "runner" = ${runnerId}
+        RETURNING *
+      )
+      INSERT INTO ${table(
+        this
+      )} ("id", "name", "status", "runner", "run_at", "created_at", "updated_at")
+      VALUES ${join(
+        newTasks.map(
+          (task) =>
+            SQL`(${randomUUID()}, ${task.name}, ${
+              TaskStatus.pending
+            }::type_task_status, ${null}, ${task.run_at}, ${now}, ${now})`
+        ),
+        SQL`, `
+      )}
+      ON CONFLICT DO NOTHING
     `
     )
   }
@@ -178,11 +233,22 @@ export default class TaskModel extends Model<TaskAttributes> {
     return this.namedRowCount(
       `release_timeout`,
       SQL`
-      DELETE FROM ${table(this)}
-      WHERE
-        "runner" IS NOT NULL AND
-        "status" = ${TaskStatus.running}::type_task_status AND
-        "run_at" < ${timeout}
+      WITH timed_out AS (
+        DELETE FROM ${table(this)}
+        WHERE
+          "runner" IS NOT NULL AND
+          "status" = ${TaskStatus.running}::type_task_status AND
+          "run_at" < ${timeout}
+        RETURNING *
+      )
+      INSERT INTO ${table(
+        this
+      )} ("id", "name", "status", "runner", "run_at", "created_at", "updated_at")
+      SELECT gen_random_uuid(), "name", ${
+        TaskStatus.pending
+      }::type_task_status, ${null}, ${now}, "created_at", ${now}
+      FROM timed_out
+      ON CONFLICT DO NOTHING
     `
     )
   }

@@ -9,6 +9,7 @@
   },
   "scripts": {
     "test": "jest",
+    "test:integration": "CONNECTION_STRING=postgres://postgres:postgres@localhost:5432/test_tasks jest --testPathPattern=integration --testPathIgnorePatterns=[]",
     "build": "npm run build:clear && npm run build:code && npm run build:plugin:intl && npm run build:style",
     "build:clear": "rm -rf dist",
     "build:code": "tsc -p . -outDir dist --sourceMap false --skipLibCheck",
