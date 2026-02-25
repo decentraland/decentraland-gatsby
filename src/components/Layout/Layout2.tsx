@@ -304,7 +304,7 @@ export default function Layout2({
           avatar={(profile as Avatar) || undefined}
           activePage={props.activePage}
           isSignedIn={!!profile}
-          isSigningIn={loading}
+          isSigningIn={loading || (!!user && !profile)}
           onClickBalance={handleClickBalance}
           onClickNavbarItem={handleClickNavbarOption}
           onClickUserMenuItem={handleClickUserMenuOption}
