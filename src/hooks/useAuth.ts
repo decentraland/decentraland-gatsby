@@ -193,7 +193,7 @@ export default function useAuth(
               }
 
               segment((analytics, context) => {
-                analytics.identify(conn)
+                analytics.identify(conn.account!, conn)
                 analytics.track(AuthEvent.Connected, { ...context, ...conn })
               })
 
@@ -247,9 +247,10 @@ export default function useAuth(
             })
           )
         })
-      segment((analytics, context) =>
+      segment((analytics, context) => {
         analytics.track(AuthEvent.Disconnected, context)
-      )
+        analytics.reset()
+      })
       rollbar((rollbar) =>
         rollbar.configure({ payload: { person: { id: null } } })
       )
