@@ -46,10 +46,10 @@ jobs:
       - name: testing
         run: npm test -- --coverage
 
+      - name: building
+        run: npm run build
+
       - name: coveralls
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: building
-        run: npm run build
