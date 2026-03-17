@@ -133,7 +133,7 @@ export default React.memo(function WalletSelector(props: WalletSelectorProps) {
       {props.error && <p className="error visible">{props.error}</p>}
       {props.loading ? (
         <>
-          <Loader size="big" active provider={props.providerType} />
+          <Loader size="big" active provider={props.providerType as any} />
           <div className="loader-background"></div>
         </>
       ) : null}
