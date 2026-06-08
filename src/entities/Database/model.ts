@@ -24,14 +24,32 @@ export type OrderBy<U extends Record<string, any> = {}> = Partial<
   Record<keyof U, 'asc' | 'desc'>
 >
 
+/**
+ * Hard cap on the number of distinct `query` label values produced by the
+ * hash-based fallback of the deprecated `query()` / `rowCount()` helpers.
+ * Dynamically-built SQL (variable `IN (...)` lists, `SQL.raw()` interpolation,
+ * conditional clauses) yields a new text — and therefore a new hash — on every
+ * shape, which can explode Prometheus cardinality. Once this many distinct
+ * hashes have been seen, further unseen statements collapse to `other`.
+ *
+ * This is only a backstop: prefer `namedQuery()` / `namedRowCount()` to attach
+ * a stable, readable label instead of relying on this fallback.
+ */
+export const MAX_DISTINCT_QUERY_HASHES = 100
 export const QUERY_HASHES = new Map<string, string>()
 function hash(query: SQLStatement) {
-  const hash = createHash('sha1').update(query.text).digest('hex')
-  if (!QUERY_HASHES.has(hash)) {
-    QUERY_HASHES.set(hash, query.text)
+  const digest = createHash('sha1').update(query.text).digest('hex')
+
+  if (QUERY_HASHES.has(digest)) {
+    return digest
   }
 
-  return hash
+  if (QUERY_HASHES.size >= MAX_DISTINCT_QUERY_HASHES) {
+    return 'other'
+  }
+
+  QUERY_HASHES.set(digest, query.text)
+  return digest
 }
 
 // @ts-expect-error - BaseModel types from decentraland-server are not fully compatible
