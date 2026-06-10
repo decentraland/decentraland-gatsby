@@ -79,6 +79,7 @@ export default class Job extends Model<JobAttributes> {
       return false
     }
 
-    return this.delete({ id })
+    const result = await this.delete({ id })
+    return (result.rowCount ?? 0) > 0
   }
 }
