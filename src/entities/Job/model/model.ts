@@ -1,7 +1,7 @@
 import isUUID from 'validator/lib/isUUID'
 
-import { Model, SQL, raw } from 'decentraland-server'
-
+import { Model } from '../../Database/model'
+import { SQL, raw } from '../../Database/utils'
 import { JobAttributes } from '../types'
 
 export default class Job extends Model<JobAttributes> {
@@ -21,7 +21,7 @@ export default class Job extends Model<JobAttributes> {
       Job.tableName
     )} WHERE run_at <= ${new Date()}`
     try {
-      const jobs = await this.query(query)
+      const jobs = await this.namedQuery('get_pending', query)
       return jobs.map((job) => this.build(job))
     } catch (err) {
       throw Object.assign(new Error(err.message), { query: query.text })
@@ -37,7 +37,7 @@ export default class Job extends Model<JobAttributes> {
       Job.tableName
     )} SET payload = ${JSON.stringify(payload)} WHERE id = ${id}`
     try {
-      const result = await Job.query(query)
+      const result = await Job.namedQuery('update_payload', query)
       return result
     } catch (err) {
       throw Object.assign(new Error(err.message), { query: query.text })
@@ -67,7 +67,7 @@ export default class Job extends Model<JobAttributes> {
     `
 
     try {
-      await Job.query(query)
+      await Job.namedQuery('schedule', query)
       return job
     } catch (err) {
       throw Object.assign(new Error(err.message), { query: query.text })
@@ -79,6 +79,7 @@ export default class Job extends Model<JobAttributes> {
       return false
     }
 
-    return this.delete({ id })
+    const result = await this.delete({ id })
+    return (result.rowCount ?? 0) > 0
   }
 }
