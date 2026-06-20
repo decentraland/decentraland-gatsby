@@ -2,7 +2,7 @@ import {
   AUTH_CHAIN_HEADER_PREFIX,
   AUTH_METADATA_HEADER,
   AUTH_TIMESTAMP_HEADER,
-} from 'decentraland-crypto-middleware/lib/types'
+} from '@dcl/crypto-middleware'
 import { sleep } from 'radash'
 
 import Options, { RequestOptions } from './Options'

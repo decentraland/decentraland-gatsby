@@ -1,4 +1,4 @@
-import type { IHttpServerComponent } from '@well-known-components/interfaces/dist/components/http-server'
+import type { IHttpServerComponent } from '@dcl/core-commons'
 
 export type ResponseBody =
   | IHttpServerComponent.JsonBody

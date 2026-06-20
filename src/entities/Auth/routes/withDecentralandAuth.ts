@@ -1,8 +1,8 @@
 import {
   DecentralandSignatureData,
   VerifyAuthChainHeadersOptions,
-} from 'decentraland-crypto-middleware/lib/types'
-import verify from 'decentraland-crypto-middleware/lib/verify'
+  verify,
+} from '@dcl/crypto-middleware'
 
 import globalLogger from '../../Development/logger'
 import Context from '../../Route/wkc/context/Context'
@@ -56,7 +56,7 @@ function withDecentralandAuth(options: WithDecentralandAuthOptions = {}) {
       })
 
       const verifyOptions: VerifyAuthChainHeadersOptions = {
-        verifyMetadataContent: verifySigner,
+        metadataValidator: verifySigner,
         ...options,
       }
 

@@ -1,8 +1,8 @@
 import {
   AUTH_CHAIN_HEADER_PREFIX,
   VerifyAuthChainHeadersOptions,
-} from 'decentraland-crypto-middleware/lib/types'
-import verify from 'decentraland-crypto-middleware/lib/verify'
+  verify,
+} from '@dcl/crypto-middleware'
 import { NextFunction, Request, Response } from 'express'
 
 import { AuthData, WithAuth } from './types'
@@ -28,7 +28,7 @@ export function withChainHeader(
           req.baseUrl + req.path,
           req.headers,
           {
-            verifyMetadataContent: verifySigner,
+            metadataValidator: verifySigner,
             ...options,
           }
         )
