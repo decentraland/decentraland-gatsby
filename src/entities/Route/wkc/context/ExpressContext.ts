@@ -1,3 +1,6 @@
+// `getRequestFromNodeMessage` is not re-exported from the @dcl/http-server
+// package root yet, so it is imported from its published `dist/logic` entry.
+// TODO: switch to a public root export once @dcl/http-server provides one.
 import { getRequestFromNodeMessage } from '@dcl/http-server/dist/logic'
 
 import { FullContext } from './Context'

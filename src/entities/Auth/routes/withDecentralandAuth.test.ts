@@ -67,6 +67,27 @@ describe('withDecentralandAuth', () => {
       })
     })
   })
+
+  describe('when the legacy verifyMetadataContent alias is sent', () => {
+    test('should forward it to metadataValidator and fail when it throws', async () => {
+      const logger = new Logger({}, { disabled: true })
+      const request = signRequest(new Request('http://0.0.0.0/'), {
+        identity,
+        metadata: { signer: 'decentraland-kernel-scene' },
+      })
+
+      await expect(async () =>
+        withDecentralandAuth({
+          verifyMetadataContent: () => {
+            throw new RequestError('legacy', 400)
+          },
+        })({
+          request,
+          logger,
+        })
+      ).rejects.toThrow('legacy')
+    })
+  })
 })
 
 describe(`withAuth`, () => {

@@ -1,12 +1,11 @@
-import {
-  AUTH_CHAIN_HEADER_PREFIX,
-  VerifyAuthChainHeadersOptions,
-  verify,
-} from '@dcl/crypto-middleware'
+import { AUTH_CHAIN_HEADER_PREFIX, verify } from '@dcl/crypto-middleware'
 import { NextFunction, Request, Response } from 'express'
 
 import { AuthData, WithAuth } from './types'
-import { verifySigner } from './utils'
+import {
+  LegacyVerifyAuthChainHeadersOptions,
+  resolveVerifyOptions,
+} from './utils'
 import logger from '../Development/logger'
 import RequestError from '../Route/error'
 import middleware from '../Route/handle/middleware'
@@ -18,7 +17,7 @@ export type AuthOptions = {
 }
 
 export function withChainHeader(
-  options: AuthOptions & VerifyAuthChainHeadersOptions = {}
+  options: AuthOptions & LegacyVerifyAuthChainHeadersOptions = {}
 ) {
   return middleware(
     async (req: Pick<Request, 'method' | 'baseUrl' | 'path' | 'headers'>) => {
@@ -27,10 +26,7 @@ export function withChainHeader(
           req.method,
           req.baseUrl + req.path,
           req.headers,
-          {
-            metadataValidator: verifySigner,
-            ...options,
-          }
+          resolveVerifyOptions(options)
         )
 
         Object.assign(req, data)
@@ -53,7 +49,7 @@ export function withChainHeader(
 }
 
 export function auth(
-  options: AuthOptions & VerifyAuthChainHeadersOptions = {}
+  options: AuthOptions & LegacyVerifyAuthChainHeadersOptions = {}
 ) {
   const checkChainHeader = withChainHeader(options)
   const checkOptional = middleware(async () => {
