@@ -6,22 +6,6 @@ on:
       - master
 
 jobs:
-
-  bun:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v6
-      - uses: oven-sh/setup-bun@v1
-
-      - name: Installing
-        run: bun install
-        continue-on-error: true
-
-      - name: Testing
-        run: bun test
-        continue-on-error: true
-
   node:
     runs-on: ubuntu-latest
 
