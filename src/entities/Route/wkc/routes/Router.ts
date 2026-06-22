@@ -7,8 +7,8 @@ import Context from '../context/Context'
 import ErrorResponse from '../response/ErrorResponse'
 import Response from '../response/Response'
 
+import type { IHttpServerComponent } from '@dcl/core-commons'
 import type { IMiddlewareAdapterHandler } from '@well-known-components/interfaces/dist/components/base-component'
-import type { IHttpServerComponent } from '@well-known-components/interfaces/dist/components/http-server'
 import type { default as Ajv, JSONSchemaType } from 'ajv'
 
 export { JSONSchemaType }

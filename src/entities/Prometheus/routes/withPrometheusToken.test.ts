@@ -9,11 +9,11 @@ setupEnv({ [Env.LOCAL]: { PROMETHEUS_BEARER_TOKEN: uid(24) } })
 
 const withAuth = withPrometheusToken()
 test(`should fails if authorization is invalid`, async () => {
-  const unauthorized = new Request('/')
-  const invalidAutorization = new Request('/', {
+  const unauthorized = new Request('http://0.0.0.0/')
+  const invalidAutorization = new Request('http://0.0.0.0/', {
     headers: { authorization: 'Basic user:12345' },
   })
-  const invalidToken = new Request('/', {
+  const invalidToken = new Request('http://0.0.0.0/', {
     headers: { authorization: 'Bearer ' + uid(24) },
   })
 
@@ -23,7 +23,7 @@ test(`should fails if authorization is invalid`, async () => {
 })
 
 test(`shoudl return the PROMETHEUS_BEARER_TOKEN if the token is present in headers`, async () => {
-  const validToken = new Request('/', {
+  const validToken = new Request('http://0.0.0.0/', {
     headers: {
       authorization: 'Bearer ' + env('PROMETHEUS_BEARER_TOKEN'),
     },
@@ -35,14 +35,14 @@ test(`shoudl return the PROMETHEUS_BEARER_TOKEN if the token is present in heade
 })
 
 test(`should return null if PROMETHEUS_BEARER_TOKEN is not present`, async () => {
-  const unauthorized = new Request('/')
-  const invalidAutorization = new Request('/', {
+  const unauthorized = new Request('http://0.0.0.0/')
+  const invalidAutorization = new Request('http://0.0.0.0/', {
     headers: { authorization: 'Basic user:12345' },
   })
-  const invalidToken = new Request('/', {
+  const invalidToken = new Request('http://0.0.0.0/', {
     headers: { authorization: 'Bearer ' + uid(24) },
   })
-  const validToken = new Request('/', {
+  const validToken = new Request('http://0.0.0.0/', {
     headers: {
       authorization: 'Bearer ' + env('PROMETHEUS_BEARER_TOKEN'),
     },

@@ -25,17 +25,17 @@ test(`should be compatible with express.Request + auth middleware`, async () => 
 })
 
 describe('withDecentralandAuth', () => {
-  describe('when custom verifyMetadataContent function is sent', () => {
+  describe('when custom metadataValidator function is sent', () => {
     describe('and it returns true', () => {
       test('should return auth data', async () => {
         const logger = new Logger({}, { disabled: true })
-        const request = signRequest(new Request('/'), {
+        const request = signRequest(new Request('http://0.0.0.0/'), {
           identity,
           metadata: { signer: 'decentraland-kernel-scene' },
         })
 
         expect(
-          await withDecentralandAuth({ verifyMetadataContent: () => true })({
+          await withDecentralandAuth({ metadataValidator: () => true })({
             request,
             logger,
           })
@@ -49,14 +49,14 @@ describe('withDecentralandAuth', () => {
     describe('and it throws an error', () => {
       test('should fail', async () => {
         const logger = new Logger({}, { disabled: true })
-        const request = signRequest(new Request('/'), {
+        const request = signRequest(new Request('http://0.0.0.0/'), {
           identity,
           metadata: { signer: 'decentraland-kernel-scene' },
         })
 
         await expect(async () =>
           withDecentralandAuth({
-            verifyMetadataContent: () => {
+            metadataValidator: () => {
               throw new RequestError('error', 400)
             },
           })({
@@ -67,11 +67,32 @@ describe('withDecentralandAuth', () => {
       })
     })
   })
+
+  describe('when the legacy verifyMetadataContent alias is sent', () => {
+    test('should forward it to metadataValidator and fail when it throws', async () => {
+      const logger = new Logger({}, { disabled: true })
+      const request = signRequest(new Request('http://0.0.0.0/'), {
+        identity,
+        metadata: { signer: 'decentraland-kernel-scene' },
+      })
+
+      await expect(async () =>
+        withDecentralandAuth({
+          verifyMetadataContent: () => {
+            throw new RequestError('legacy', 400)
+          },
+        })({
+          request,
+          logger,
+        })
+      ).rejects.toThrow('legacy')
+    })
+  })
 })
 
 describe(`withAuth`, () => {
   test(`should fail for unauthenticated requests`, async () => {
-    const request = new Request('/')
+    const request = new Request('http://0.0.0.0/')
     const logger = new Logger({}, { disabled: true })
     await expect(() => withAuth({ request, logger })).rejects.toThrow(
       'Invalid Auth Chain'
@@ -82,7 +103,7 @@ describe(`withAuth`, () => {
     const logger = new Logger({}, { disabled: true })
     const errors = jest.spyOn(logger, 'error')
     errors.mockImplementation(() => null)
-    const request = signRequest(new Request('/'), {
+    const request = signRequest(new Request('http://0.0.0.0/'), {
       identity,
       timestamp: Time.utc().subtract(100, 'years').getTime(),
     })
@@ -96,7 +117,7 @@ describe(`withAuth`, () => {
     const logger = new Logger({}, { disabled: true })
     const errors = jest.spyOn(logger, 'error')
     errors.mockImplementation(() => null)
-    const request = signRequest(new Request('/'), {
+    const request = signRequest(new Request('http://0.0.0.0/'), {
       identity,
       metadata: { signer: 'decentraland-kernel-scene' },
     })
@@ -107,7 +128,7 @@ describe(`withAuth`, () => {
   })
 
   test(`should return auth data for signed request`, async () => {
-    const request = signRequest(new Request('/'), {
+    const request = signRequest(new Request('http://0.0.0.0/'), {
       identity,
     })
 
@@ -119,7 +140,7 @@ describe(`withAuth`, () => {
 
   test(`should return metadata for signed request`, async () => {
     const metadata = { value: Math.random() }
-    const request = signRequest(new Request('/'), {
+    const request = signRequest(new Request('http://0.0.0.0/'), {
       identity,
       metadata,
     })
@@ -133,13 +154,13 @@ describe(`withAuth`, () => {
 
 describe(`withAuthOptional`, () => {
   test(`should return null for unauthenticated requests`, async () => {
-    const request = new Request('/')
+    const request = new Request('http://0.0.0.0/')
     const logger = new Logger({}, { disabled: true })
     expect(await withAuthOptional({ request, logger })).toBe(null)
   })
   test(`should return null for expired requests`, async () => {
     const logger = new Logger({}, { disabled: true })
-    const request = signRequest(new Request('/'), {
+    const request = signRequest(new Request('http://0.0.0.0/'), {
       identity,
       timestamp: Time.utc().subtract(100, 'years').getTime(),
     })
@@ -148,7 +169,7 @@ describe(`withAuthOptional`, () => {
 
   test('should return null for requests with an invalid signer', async () => {
     const logger = new Logger({}, { disabled: true })
-    const request = signRequest(new Request('/'), {
+    const request = signRequest(new Request('http://0.0.0.0/'), {
       identity,
       metadata: { signer: 'decentraland-kernel-scene' },
     })
@@ -157,7 +178,7 @@ describe(`withAuthOptional`, () => {
   })
 
   test(`should return auth data for signed request`, async () => {
-    const request = signRequest(new Request('/'), {
+    const request = signRequest(new Request('http://0.0.0.0/'), {
       identity,
     })
 
@@ -169,7 +190,7 @@ describe(`withAuthOptional`, () => {
 
   test(`should return metadata for signed request`, async () => {
     const metadata = { value: Math.random() }
-    const request = signRequest(new Request('/'), {
+    const request = signRequest(new Request('http://0.0.0.0/'), {
       identity,
       metadata,
     })

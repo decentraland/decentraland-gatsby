@@ -10,12 +10,12 @@ const withEmptyAuth = withBearerToken({ tokens: [] })
 const withEmptyAuthOptional = withBearerToken({ tokens: [], optional: true })
 
 test(`should fail if the request doesn't have an Authorization header`, async () => {
-  const request = new Request('/')
+  const request = new Request('http://0.0.0.0/')
   await expect(withAuth({ request })).rejects.toThrow()
 })
 
 test(`should fail if the request doesn't use and Bearer autorization`, async () => {
-  const request = new Request('/', {
+  const request = new Request('http://0.0.0.0/', {
     headers: { authorization: 'Basic user:12345' },
   })
 
@@ -23,7 +23,7 @@ test(`should fail if the request doesn't use and Bearer autorization`, async () 
 })
 
 test(`should fail if the request doesn't use one of the token in params`, async () => {
-  const request = new Request('/', {
+  const request = new Request('http://0.0.0.0/', {
     headers: { authorization: 'Bearer ' + uid(24) },
   })
 
@@ -31,7 +31,7 @@ test(`should fail if the request doesn't use one of the token in params`, async 
 })
 
 test(`should returns the token used on the authorization`, async () => {
-  const request = new Request('/', {
+  const request = new Request('http://0.0.0.0/', {
     headers: { authorization: 'Bearer ' + token },
   })
 
@@ -39,14 +39,14 @@ test(`should returns the token used on the authorization`, async () => {
 })
 
 test(`should return null if the authentication fails but is optional`, async () => {
-  const unauthorized = new Request('/')
-  const invalidAutorization = new Request('/', {
+  const unauthorized = new Request('http://0.0.0.0/')
+  const invalidAutorization = new Request('http://0.0.0.0/', {
     headers: { authorization: 'Basic user:12345' },
   })
-  const invalidToken = new Request('/', {
+  const invalidToken = new Request('http://0.0.0.0/', {
     headers: { authorization: 'Bearer ' + uid(24) },
   })
-  const validToken = new Request('/', {
+  const validToken = new Request('http://0.0.0.0/', {
     headers: { authorization: 'Bearer ' + token },
   })
 
@@ -57,11 +57,11 @@ test(`should return null if the authentication fails but is optional`, async () 
 })
 
 test(`should always fails if tokens is empty`, async () => {
-  const unauthorized = new Request('/')
-  const invalidAutorization = new Request('/', {
+  const unauthorized = new Request('http://0.0.0.0/')
+  const invalidAutorization = new Request('http://0.0.0.0/', {
     headers: { authorization: 'Basic user:12345' },
   })
-  const invalidToken = new Request('/', {
+  const invalidToken = new Request('http://0.0.0.0/', {
     headers: { authorization: 'Bearer ' + uid(24) },
   })
 
@@ -73,11 +73,11 @@ test(`should always fails if tokens is empty`, async () => {
 })
 
 test(`should always returns null if tokens is empty but is optional`, async () => {
-  const unauthorized = new Request('/')
-  const invalidAutorization = new Request('/', {
+  const unauthorized = new Request('http://0.0.0.0/')
+  const invalidAutorization = new Request('http://0.0.0.0/', {
     headers: { authorization: 'Basic user:12345' },
   })
-  const invalidToken = new Request('/', {
+  const invalidToken = new Request('http://0.0.0.0/', {
     headers: { authorization: 'Bearer ' + uid(24) },
   })
 

@@ -1,6 +1,6 @@
 import { Logger } from '../../../Development/logger'
 
-import type { IHttpServerComponent } from '@well-known-components/interfaces/dist/components/http-server'
+import type { IHttpServerComponent } from '@dcl/core-commons'
 import type { Query } from 'express-serve-static-core'
 import type { IncomingHttpHeaders } from 'http'
 

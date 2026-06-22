@@ -4,7 +4,7 @@ import {
   AUTH_CHAIN_HEADER_PREFIX,
   AUTH_METADATA_HEADER,
   AUTH_TIMESTAMP_HEADER,
-} from 'decentraland-crypto-middleware/lib/types'
+} from '@dcl/crypto-middleware'
 
 export const IdentitySigner = '0xb92702b3EeFB3c2049aEB845B0335b283e11E9c6'
 
