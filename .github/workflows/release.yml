@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
       - uses: oven-sh/setup-bun@v1
 
       - name: Installing
@@ -32,21 +32,22 @@ jobs:
       id-token: write # to enable use of OIDC for npm provenance
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v6
 
       - name: Reconfigure git to use HTTP authentication
         run: >
           git config --global url."https://github.com/".insteadOf "ssh://git@github.com/"
 
-      - name: node.js 18
-        uses: actions/setup-node@v3
+      # No registry-url: it would write a placeholder-token .npmrc that breaks OIDC.
+      # Trusted publishing authenticates via id-token; npmjs.org is the default registry.
+      - name: node.js 24
+        uses: actions/setup-node@v6
         with:
           node-version: 24
-          registry-url: https://registry.npmjs.org/
           cache: 'npm'
 
       - name: installing npm
-        run: npm i -g npm@10
+        run: npm i -g npm@11
 
       - name: installing
         run: npm ci --audit false --fund false
@@ -73,7 +74,6 @@ jobs:
         run: npm run semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: coveralls
         uses: coverallsapp/github-action@648a8eb78e6d50909eff900e4ec85cab4524a45b # @master
