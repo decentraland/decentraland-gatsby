@@ -8,6 +8,10 @@ on:
       - opened
       - synchronize
 
+permissions:
+  checks: write # lint-action creates check runs with annotations
+  contents: read
+
 jobs:
   node:
     runs-on: ubuntu-latest
