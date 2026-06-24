@@ -277,14 +277,19 @@ export default class API {
         let completed = false
         const controller = new AbortController()
 
+        // keep a reference to the in-flight request so a discarded (timed-out)
+        // response can be released below
+        const request = this.#fetch(
+          url,
+          opt.toObject({ signal: controller.signal })
+        ).then((res) => {
+          completed = true
+          return res
+        })
+
         // race against fetch and timeout
         res = await Promise.race([
-          this.#fetch(url, opt.toObject({ signal: controller.signal })).then(
-            (res) => {
-              completed = true
-              return res
-            }
-          ),
+          request,
 
           sleep(timeout.timeout).then(() => {
             // abort fetch in background
@@ -303,6 +308,17 @@ export default class API {
             return new Response('Request Timeout', { status: 408 })
           }),
         ])
+
+        // if the timeout won the race, the in-flight request may still settle
+        // with a real Response whose body is never read. Release it so its
+        // underlying socket and buffered bytes aren't pinned until GC. This is
+        // a no-op when the fetch rejected on abort, and works with the native
+        // fetch of both the browser and Node.
+        if (!completed) {
+          request
+            .then((response) => response.body?.cancel())
+            .catch(() => undefined)
+        }
 
         // If not timeout was set then just perform the fetch
       } else {
