@@ -342,4 +342,59 @@ describe('timeout', () => {
     expect(options?.signal).toBeInstanceOf(AbortSignal)
     expect(options?.signal?.aborted).toBe(false)
   })
+
+  // Builds a Response whose body stays a real ReadableStream (so `instanceof`
+  // checks keep holding) while its `cancel` is observable. `cancelled` resolves
+  // the moment the body is released, so assertions don't depend on timing.
+  function createObservableResponse() {
+    const late = new Response(JSON.stringify({ random: Math.random() }), {
+      status: 200,
+    })
+    let resolveCancelled: () => void = () => undefined
+    const cancelled = new Promise<void>((resolve) => {
+      resolveCancelled = resolve
+    })
+    const cancel = jest
+      .spyOn(late.body!, 'cancel')
+      .mockImplementation(async () => {
+        resolveCancelled()
+      })
+
+    return { late, cancel, cancelled }
+  }
+
+  test(`should release the body of a response that arrives after a timeout with fallback`, async () => {
+    const { late, cancel, cancelled } = createObservableResponse()
+    const mock = jest.fn(((): any => {}) as typeof fetch)
+    mock.mockImplementation(() => sleep(20).then(() => late))
+
+    const api = new API('https://decentraland.org/api').setFetcher(mock)
+    await expect(
+      api.fetch(
+        '/timeout/20',
+        api.options().timeoutWithFallback(10, { fallback: true })
+      )
+    ).resolves.toEqual({ fallback: true })
+
+    // the in-flight request settles after the timeout won the race; await the
+    // release directly so the assertion doesn't depend on timing margins
+    await cancelled
+    expect(cancel).toHaveBeenCalledTimes(1)
+  })
+
+  test(`should release the body of a response that arrives after a timeout without fallback`, async () => {
+    const { late, cancel, cancelled } = createObservableResponse()
+    const mock = jest.fn(((): any => {}) as typeof fetch)
+    mock.mockImplementation(() => sleep(20).then(() => late))
+
+    const api = new API('https://decentraland.org/api').setFetcher(mock)
+    // the non-fallback path rejects with a 408, but the discarded body must
+    // still be released
+    await expect(
+      api.fetch('/timeout/20', api.options().timeout(10))
+    ).rejects.toThrowError('Request Timeout')
+
+    await cancelled
+    expect(cancel).toHaveBeenCalledTimes(1)
+  })
 })
