@@ -104,7 +104,7 @@
     "@dcl/crypto": "^3.4.3",
     "@dcl/crypto-middleware": "^4.0.0",
     "@dcl/feature-flags": "^1.2.0",
-    "@dcl/http-server": "^2.0.1",
+    "@dcl/http-server": "^2.1.0",
     "@dcl/schemas": "^25.1.0",
     "@dcl/single-sign-on-client": "^0.1.0",
     "@dcl/ui-env": "^2.0.0",
