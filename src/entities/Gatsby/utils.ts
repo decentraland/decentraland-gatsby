@@ -58,38 +58,32 @@ export function createHelmetMetadataReplacer(page: string) {
           )
           break
         }
-        case `image`:
-          injected.push(
-            `<meta name="twitter:image" content="${metadata[name]}" />`
-          )
-          injected.push(
-            `<meta property="og:image" content="${metadata[name]}" />`
-          )
+        case `image`: {
+          const image = escape(String(metadata[name] ?? ''))
+          injected.push(`<meta name="twitter:image" content="${image}" />`)
+          injected.push(`<meta property="og:image" content="${image}" />`)
           break
+        }
 
-        case `url`:
-          injected.push(
-            `<meta name="twitter:url" content="${metadata[name]}" />`
-          )
-          injected.push(
-            `<meta property="og:url" content="${metadata[name]}" />`
-          )
+        case `url`: {
+          const url = escape(String(metadata[name] ?? ''))
+          injected.push(`<meta name="twitter:url" content="${url}" />`)
+          injected.push(`<meta property="og:url" content="${url}" />`)
           break
+        }
 
-        default:
+        default: {
+          // The metadata key is interpolated into an attribute too, so it must be
+          // escaped as well — an unescaped key could otherwise break out of the
+          // `name`/`property` attribute even when the value is safe.
+          const key = escape(name)
+          const value = escape(String(metadata[name] ?? ''))
           if (name.startsWith('og:')) {
-            injected.push(
-              `<meta property="${name}" content="${escape(
-                String(metadata[name] ?? '')
-              )}" />`
-            )
+            injected.push(`<meta property="${key}" content="${value}" />`)
           } else {
-            injected.push(
-              `<meta name="${name}" content="${escape(
-                String(metadata[name] ?? '')
-              )}" />`
-            )
+            injected.push(`<meta name="${key}" content="${value}" />`)
           }
+        }
       }
     }
 
