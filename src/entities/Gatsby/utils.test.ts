@@ -33,5 +33,26 @@ describe(`src/entities/Gatsby/utils`, () => {
 
       expect(min(replaceHelmetMetadata(initial, meta))).toBe(min(injected))
     })
+
+    describe(`when the image and url values contain HTML-breakout characters`, () => {
+      let output: string
+      let breakout: string
+
+      beforeEach(() => {
+        breakout = `https://a"><script>alert(1)</script><meta name="x`
+        output = replaceHelmetMetadata(initial, {
+          image: breakout,
+          url: breakout,
+        })
+      })
+
+      it(`should render the injected script as escaped text instead of a live element`, () => {
+        expect(output).toContain(`&lt;script&gt;alert(1)&lt;/script&gt;`)
+      })
+
+      it(`should not break out of the content attribute with a raw double quote`, () => {
+        expect(output).not.toContain(`content="https://a">`)
+      })
+    })
   })
 })

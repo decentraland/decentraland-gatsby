@@ -58,23 +58,19 @@ export function createHelmetMetadataReplacer(page: string) {
           )
           break
         }
-        case `image`:
-          injected.push(
-            `<meta name="twitter:image" content="${metadata[name]}" />`
-          )
-          injected.push(
-            `<meta property="og:image" content="${metadata[name]}" />`
-          )
+        case `image`: {
+          const image = escape(String(metadata[name] ?? ''))
+          injected.push(`<meta name="twitter:image" content="${image}" />`)
+          injected.push(`<meta property="og:image" content="${image}" />`)
           break
+        }
 
-        case `url`:
-          injected.push(
-            `<meta name="twitter:url" content="${metadata[name]}" />`
-          )
-          injected.push(
-            `<meta property="og:url" content="${metadata[name]}" />`
-          )
+        case `url`: {
+          const url = escape(String(metadata[name] ?? ''))
+          injected.push(`<meta name="twitter:url" content="${url}" />`)
+          injected.push(`<meta property="og:url" content="${url}" />`)
           break
+        }
 
         default:
           if (name.startsWith('og:')) {
