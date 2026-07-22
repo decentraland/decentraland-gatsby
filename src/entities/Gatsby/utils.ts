@@ -72,20 +72,18 @@ export function createHelmetMetadataReplacer(page: string) {
           break
         }
 
-        default:
+        default: {
+          // The metadata key is interpolated into an attribute too, so it must be
+          // escaped as well — an unescaped key could otherwise break out of the
+          // `name`/`property` attribute even when the value is safe.
+          const key = escape(name)
+          const value = escape(String(metadata[name] ?? ''))
           if (name.startsWith('og:')) {
-            injected.push(
-              `<meta property="${name}" content="${escape(
-                String(metadata[name] ?? '')
-              )}" />`
-            )
+            injected.push(`<meta property="${key}" content="${value}" />`)
           } else {
-            injected.push(
-              `<meta name="${name}" content="${escape(
-                String(metadata[name] ?? '')
-              )}" />`
-            )
+            injected.push(`<meta name="${key}" content="${value}" />`)
           }
+        }
       }
     }
 

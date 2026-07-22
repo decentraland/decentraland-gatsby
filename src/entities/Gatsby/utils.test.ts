@@ -54,5 +54,45 @@ describe(`src/entities/Gatsby/utils`, () => {
         expect(output).not.toContain(`content="https://a">`)
       })
     })
+
+    describe(`when a metadata key contains HTML-breakout characters`, () => {
+      let output: string
+      let breakoutKey: string
+
+      beforeEach(() => {
+        breakoutKey = `x"><script>alert(1)</script><meta name="y`
+        output = replaceHelmetMetadata(initial, {
+          [breakoutKey]: 'value',
+        } as Partial<MetadataOptions>)
+      })
+
+      it(`should render the injected script as escaped text instead of a live element`, () => {
+        expect(output).toContain(`&lt;script&gt;alert(1)&lt;/script&gt;`)
+      })
+
+      it(`should not break out of the name attribute with a raw double quote`, () => {
+        expect(output).not.toContain(`name="x">`)
+      })
+    })
+
+    describe(`when an og: metadata key contains HTML-breakout characters`, () => {
+      let output: string
+      let breakoutKey: string
+
+      beforeEach(() => {
+        breakoutKey = `og:x"><script>alert(1)</script><meta property="y`
+        output = replaceHelmetMetadata(initial, {
+          [breakoutKey]: 'value',
+        } as Partial<MetadataOptions>)
+      })
+
+      it(`should render the injected script as escaped text instead of a live element`, () => {
+        expect(output).toContain(`&lt;script&gt;alert(1)&lt;/script&gt;`)
+      })
+
+      it(`should not break out of the property attribute with a raw double quote`, () => {
+        expect(output).not.toContain(`property="og:x">`)
+      })
+    })
   })
 })
