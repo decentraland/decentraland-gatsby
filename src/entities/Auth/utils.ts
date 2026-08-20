@@ -18,7 +18,7 @@ const isNotSceneSigner = rejectIfSigner(SCENE_SIGNER)
  * or duplicated key still leaves the field ambiguous, and which spelling a consumer reads would
  * depend on nothing the guard controls. Refused rather than resolved.
  */
-function hasOnlyCanonicalSignerKey(metadata: Record<string, any>): boolean {
+function hasOnlyCanonicalSignerKey(metadata: Record<string, unknown>): boolean {
   return Object.keys(metadata)
     .filter((key) => key.toLowerCase() === SIGNER_KEY)
     .every((key) => key === SIGNER_KEY)
@@ -44,7 +44,7 @@ function hasOnlyCanonicalSignerKey(metadata: Record<string, any>): boolean {
  * under a non-canonical or duplicated key.
  */
 export function verifySigner(
-  authMetadata: Record<string, any> | undefined
+  authMetadata: Record<string, unknown> | undefined
 ): boolean {
   const metadata = authMetadata ?? {}
   if (!hasOnlyCanonicalSignerKey(metadata) || !isNotSceneSigner(metadata)) {

@@ -239,7 +239,7 @@ describe(`withAuth`, () => {
       identity,
     })
 
-    expect(await withAuthOptional({ request })).toEqual({
+    expect(await withAuth({ request })).toEqual({
       address: IdentitySigner.toLowerCase(),
       metadata: {},
     })
@@ -252,7 +252,7 @@ describe(`withAuth`, () => {
       metadata,
     })
 
-    expect(await withAuthOptional({ request })).toEqual({
+    expect(await withAuth({ request })).toEqual({
       address: IdentitySigner.toLowerCase(),
       metadata,
     })
@@ -306,7 +306,7 @@ describe(`withAuthOptional`, () => {
       identity,
     })
 
-    expect(await withAuth({ request })).toEqual({
+    expect(await withAuthOptional({ request })).toEqual({
       address: IdentitySigner.toLowerCase(),
       metadata: {},
     })
@@ -319,7 +319,7 @@ describe(`withAuthOptional`, () => {
       metadata,
     })
 
-    expect(await withAuth({ request })).toEqual({
+    expect(await withAuthOptional({ request })).toEqual({
       address: IdentitySigner.toLowerCase(),
       metadata,
     })
