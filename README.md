@@ -8,20 +8,12 @@
 
 You can use our [project template](https://github.com/decentraland/decentraland-gatsby-template) if you need to create a new repository.
 
-## Node 16?
+## Runtime
 
-If you are using node 16 you may need to install `isomorphic-fetch` in order to avoid a `ReferenceError: fetch is not defined`
+Node 22 or newer. `@dcl/crypto-middleware`, which backs the signed-fetch helpers, requires it.
 
-```bash
-  npm install --save isomorphic-fetch
-  npm install --save-dev isomorphic-fetch
-```
-
-and imported in your `src/server.ts`
-
-```typescript
-import 'isomorphic-fetch'
-```
+The `isomorphic-fetch` workaround previously documented here was for Node 16, which had no global
+`fetch`. It is not needed on any supported version.
 
 ## Start project
 

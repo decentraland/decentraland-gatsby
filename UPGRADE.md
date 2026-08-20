@@ -5,7 +5,14 @@ Two breaking changes land together: the signed-fetch payload format and the Node
 ### Node 22 is now the minimum
 
 `@dcl/crypto-middleware@6` declares `engines.node >= 22.0.0`, so this package does too. Raise your
-runtime before upgrading, or `npm ci` may fail under `engine-strict`.
+runtime before upgrading.
+
+Note a pre-existing conflict this makes visible rather than introduces: `decentraland-ui@7.x`, a peer
+of `decentraland-dapps`, declares `engines.node: "20"` — a single major rather than a range. Since
+`@dcl/crypto-middleware` has required `>= 22` since v5, no Node version satisfies both, so
+`--engine-strict` installs already failed before this release regardless of what this package
+advertised. Ordinary installs warn and succeed. Resolving it needs `decentraland-ui` to widen its
+engine, or `decentraland-dapps` to widen its peer range.
 
 ### The signed-fetch payload binds metadata casing
 
