@@ -1,9 +1,82 @@
 import { sleep } from 'radash'
 
 import API from './API'
+import Options from './Options'
+import { signPayload } from '../auth/identify'
+import { getCurrentIdentity } from '../auth/storage'
 import '../../entities/Development/logger.test'
 
+jest.mock('../auth/identify')
+jest.mock('../auth/storage')
+
 describe('utils/api/API', () => {
+  // The signing half of the 6.x payload format. Covered here because it decides whether requests
+  // this library signs verify against services on @dcl/crypto-middleware 6: the method, path and
+  // timestamp are lowercased, but the metadata is joined verbatim so its casing is bound by the
+  // signature. Folding the whole payload — as this did up to 5.x — is what left casing unbound.
+  describe('#signOptions', () => {
+    const identity = {
+      authChain: [{ type: 'SIGNER', payload: '0xabc', signature: '' }],
+    }
+
+    let signedPayload: string
+
+    beforeEach(() => {
+      ;(getCurrentIdentity as jest.Mock).mockReturnValue(identity)
+      ;(signPayload as jest.Mock).mockImplementation(
+        async (_identity: unknown, payload: string) => {
+          signedPayload = payload
+          return identity.authChain
+        }
+      )
+      jest.spyOn(Date, 'now').mockReturnValue(1700000000000)
+    })
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+
+    describe('when the metadata contains mixed-case keys and values', () => {
+      beforeEach(async () => {
+        const api = new API('https://example.org')
+        await api.signOptions(
+          '/Path/To/Thing',
+          new Options({})
+            .method('POST')
+            .metadata({ sceneId: 'QmAbC' } as never)
+            .authorization({ sign: true, identity: true, optional: true })
+        )
+      })
+
+      it('should lowercase the method and path and join the metadata verbatim', () => {
+        expect(signedPayload).toBe(
+          'post:/path/to/thing:1700000000000:{"sceneId":"QmAbC"}'
+        )
+      })
+
+      it('should not fold the payload, which would unbind the metadata casing', () => {
+        expect(signedPayload).not.toBe(signedPayload.toLowerCase())
+      })
+    })
+
+    describe('when the metadata is empty', () => {
+      beforeEach(async () => {
+        const api = new API('https://example.org')
+        await api.signOptions(
+          '/thing',
+          new Options({})
+            .method('GET')
+            .authorization({ sign: true, identity: true, optional: true })
+        )
+      })
+
+      it('should be byte-identical under either format, so such callers are unaffected', () => {
+        expect(signedPayload).toBe('get:/thing:1700000000000:{}')
+        expect(signedPayload).toBe(signedPayload.toLowerCase())
+      })
+    })
+  })
+
   describe('#catch', () => {
     test('should bypass values for fulfilled Promises', async () => {
       const value = Math.random()
