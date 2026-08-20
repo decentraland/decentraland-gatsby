@@ -16,10 +16,13 @@ import withDecentralandAuth, {
 } from './withDecentralandAuth'
 
 /**
- * Signs the canonical scene signer and then delivers a spelling that differs only in case.
- * `signRequest` lowercases the payload before signing, so the signature stays genuinely valid
- * while the header reads differently to `verifySigner`'s strict comparison — which is what lets
- * a scene request pass as a directly user-signed one. Nothing here weakens the signature.
+ * Signs the canonical scene signer and then overwrites the delivered header with a spelling that
+ * differs only in case — the in-flight variant.
+ *
+ * `signRequest` no longer folds the payload, so the delivered bytes are not the ones that were
+ * signed and this is refused. It was accepted up to 5.1.0 for the opposite reason: the fold hid the
+ * casing, so the signature stayed valid and only the library's canonical guard could catch it.
+ * Nothing here weakens the signature.
  */
 function signSceneRequestDeliveringMixedCase() {
   const request = signRequest(new Request('http://0.0.0.0/'), {
