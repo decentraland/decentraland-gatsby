@@ -227,9 +227,14 @@ export default class API {
         const pathname = new URL(this.url(path), 'https://localhost').pathname
         const method = options.getMethod() || 'GET'
         const metadata = JSON.stringify(options.getMetadata())
-        const payload = [method, pathname, timestamp, metadata]
-          .join(':')
-          .toLowerCase()
+        // Method, path and timestamp are lowercased; the metadata is joined verbatim so its
+        // casing is covered by the signature. Matches @dcl/crypto-middleware 6's createPayload.
+        const payload = [
+          method.toLowerCase(),
+          pathname.toLowerCase(),
+          timestamp,
+          metadata,
+        ].join(':')
         const chain = await signPayload(identity, payload)
 
         chain.forEach((link, i) =>

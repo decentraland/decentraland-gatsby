@@ -1,15 +1,30 @@
-import { VerifyAuthChainHeadersOptions } from '@dcl/crypto-middleware'
+import {
+  VerifyAuthChainHeadersOptions,
+  rejectIfSigner,
+} from '@dcl/crypto-middleware'
 
 import RequestError from '../Route/error'
 
+const SCENE_SIGNER = 'decentraland-kernel-scene'
+const isNotSceneSigner = rejectIfSigner(SCENE_SIGNER)
+
+/**
+ * Refuses requests a scene runtime signed on a visiting player's behalf.
+ *
+ * Delegates to `rejectIfSigner`, which refuses a `signer` that is not already canonical rather than
+ * comparing it. The previous exact-match comparison could be defeated two ways while leaving the
+ * signature valid, because the pre-6.0.0 payload folded the metadata and so did not cover its
+ * casing: renaming the delivered property to `Signer` made `'signer' in authMetadata` false, and
+ * re-casing the value made the `===` false. Either way the check fell through to `return true`.
+ *
+ * @param authMetadata - Parsed `x-identity-metadata` contents, if any.
+ * @returns `true` when the request may proceed.
+ * @throws RequestError 400 when the signer is the scene runtime, or is not in canonical form.
+ */
 export function verifySigner(
   authMetadata: Record<string, any> | undefined
 ): boolean {
-  if (
-    authMetadata &&
-    'signer' in authMetadata &&
-    authMetadata.signer === 'decentraland-kernel-scene'
-  ) {
+  if (!isNotSceneSigner(authMetadata ?? {})) {
     throw new RequestError('Invalid signer', RequestError.BadRequest)
   }
   return true

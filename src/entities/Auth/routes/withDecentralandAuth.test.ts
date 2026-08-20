@@ -166,23 +166,40 @@ describe(`withAuth`, () => {
     )
   })
 
+  // Signed canonical, delivered re-cased — the in-flight variant. Two layers refuse it now and the
+  // earlier one wins: `metadataValidator` runs before signature verification, so `rejectIfSigner`
+  // answers first on the non-canonical value. The signature would refuse it a step later anyway,
+  // since 6.x binds the metadata bytes and these are not the ones that were signed. Up to 5.1.0
+  // neither applied — the fold hid the casing and the exact-match comparison missed it.
   test('should fail when the scene signer is signed but delivered in mixed case', async () => {
     const logger = new Logger({}, { disabled: true })
+    const errors = jest.spyOn(logger, 'error')
+    errors.mockImplementation(() => null)
     const request = signSceneRequestDeliveringMixedCase()
 
     await expect(() => withAuth({ request, logger })).rejects.toThrow(
-      'Invalid chain metadata'
+      'Invalid signer'
     )
   })
 
-  test.each(PADDED_SCENE_SIGNERS)(
-    'should fail when the scene signer is delivered with %s',
+  // Signed as delivered, so the signature is genuinely valid and no byte binding can refuse it.
+  // Only the gate can, and the previous exact-match comparison could not:
+  // `' decentraland-kernel-scene' === 'decentraland-kernel-scene'` is false, so the guard fell
+  // through and a scene request was served as a directly user-signed one. `rejectIfSigner` refuses
+  // a signer that is not already canonical instead of comparing it.
+  test.each([
+    ...PADDED_SCENE_SIGNERS,
+    ['mixed case', 'Decentraland-Kernel-Scene'],
+  ] as Array<[string, string]>)(
+    'should fail when the scene signer is signed with %s',
     async (_case, signer) => {
       const logger = new Logger({}, { disabled: true })
+      const errors = jest.spyOn(logger, 'error')
+      errors.mockImplementation(() => null)
       const request = signSceneRequestWithPaddedSigner(signer)
 
       await expect(() => withAuth({ request, logger })).rejects.toThrow(
-        'Invalid chain metadata'
+        'Invalid signer'
       )
     }
   )

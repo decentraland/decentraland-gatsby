@@ -58,9 +58,14 @@ export function signRequest<R extends SignableRequest>(
   const pathname = url.pathname
   const timestamp = String(options.timestamp ?? Date.now())
   const metadata = JSON.stringify(options.metadata ?? {})
-  const payload = [method, pathname, timestamp, metadata]
-    .join(':')
-    .toLowerCase()
+  // Method, path and timestamp are lowercased; the metadata is joined verbatim so its casing is
+  // covered by the signature. Matches @dcl/crypto-middleware 6's createPayload.
+  const payload = [
+    method.toLowerCase(),
+    pathname.toLowerCase(),
+    timestamp,
+    metadata,
+  ].join(':')
 
   let i = 0
   const auth = Authenticator.signPayload(identity, payload)
