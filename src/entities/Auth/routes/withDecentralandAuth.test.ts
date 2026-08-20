@@ -110,6 +110,27 @@ describe('withDecentralandAuth', () => {
     })
   })
 
+  describe('when metadataValidator is present but undefined', () => {
+    test('should keep the default scene guard rather than dropping it', async () => {
+      // Easy to hit when options are built dynamically. Before coalescing, `...rest` spread the
+      // undefined over the default and the scene guard vanished silently.
+      const logger = new Logger({}, { disabled: true })
+      const errors = jest.spyOn(logger, 'error')
+      errors.mockImplementation(() => null)
+      const request = signRequest(new Request('http://0.0.0.0/'), {
+        identity,
+        metadata: { signer: 'decentraland-kernel-scene' },
+      })
+
+      await expect(async () =>
+        withDecentralandAuth({ metadataValidator: undefined })({
+          request,
+          logger,
+        })
+      ).rejects.toThrow('Invalid signer')
+    })
+  })
+
   describe('when the legacy verifyMetadataContent alias is sent', () => {
     test('should forward it to metadataValidator and fail when it throws', async () => {
       const logger = new Logger({}, { disabled: true })

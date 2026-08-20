@@ -77,9 +77,14 @@ export type LegacyVerifyAuthChainHeadersOptions =
 export function resolveVerifyOptions(
   options: LegacyVerifyAuthChainHeadersOptions = {}
 ): VerifyAuthChainHeadersOptions {
-  const { verifyMetadataContent, ...rest } = options
+  const { verifyMetadataContent, metadataValidator, ...rest } = options
   return {
-    metadataValidator: verifyMetadataContent ?? verifySigner,
     ...rest,
+    // Coalesced rather than spread over: with `...rest` last, a caller passing
+    // `metadataValidator: undefined` — easy to do when options are built dynamically — overwrote the
+    // default with undefined and dropped the scene guard entirely. Providing an actual validator
+    // still replaces it, which is the documented contract.
+    metadataValidator:
+      verifyMetadataContent ?? metadataValidator ?? verifySigner,
   }
 }
