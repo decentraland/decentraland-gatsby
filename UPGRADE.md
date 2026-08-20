@@ -1,3 +1,40 @@
+## upgrade to decentraland-gatsby@9
+
+Two breaking changes land together: the signed-fetch payload format and the Node floor.
+
+### Node 22 is now the minimum
+
+`@dcl/crypto-middleware@6` declares `engines.node >= 22.0.0`, so this package does too. Raise your
+runtime before upgrading, or `npm ci` may fail under `engine-strict`.
+
+### The signed-fetch payload binds metadata casing
+
+Up to `@dcl/crypto-middleware@5` the signed payload was lowercased in full, so metadata casing fell
+outside the signature. It is now joined verbatim:
+
+```
+before  (method + ':' + path + ':' + timestamp + ':' + metadata).toLowerCase()
+after   method.toLowerCase() + ':' + path.toLowerCase() + ':' + timestamp + ':' + metadata
+```
+
+This library both signs and verifies, so it changes on both sides:
+
+- **As a verifier** — callers still signing the old payload are rejected whenever their metadata
+  contains an uppercase character.
+- **As a signer** — requests this library signs are rejected by services still running
+  `@dcl/crypto-middleware@5` or earlier.
+
+**Metadata that is empty or all-lowercase is unaffected**, since folding those bytes is a no-op. If
+every call you sign passes `{}` or lowercase-only metadata, nothing needs sequencing. Otherwise
+upgrade the services you call before deploying this.
+
+### `verifySigner` is stricter
+
+The default metadata validator now refuses a `signer` that is not already trimmed and lowercase, and
+refuses metadata where a key folds to `signer` without being spelled it (`Signer`, `SIGNER`, or both
+present at once). Values are never rewritten — a non-canonical one is rejected rather than folded, so
+what reaches your handlers is exactly what the client signed.
+
 ## install decentraland-gatsby@5
 
 ```bash

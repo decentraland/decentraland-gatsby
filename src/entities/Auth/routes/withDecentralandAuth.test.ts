@@ -301,6 +301,31 @@ describe(`withAuthOptional`, () => {
     }
   )
 
+  // Mirrors the required-path cases above. Under `optional` a refused request falls through
+  // unauthenticated rather than erroring, so the ambiguous key must yield null — not a partially
+  // trusted verification.
+  test.each([
+    ['a re-cased key', { Signer: 'decentraland-kernel-scene' }],
+    ['an upper-cased key', { SIGNER: 'decentraland-kernel-scene' }],
+    [
+      'duplicate keys folding to signer',
+      { signer: 'dcl:explorer', Signer: 'decentraland-kernel-scene' },
+    ],
+  ])(
+    'should return null when the scene signer is delivered under %s',
+    async (_case, metadata) => {
+      const logger = new Logger({}, { disabled: true })
+      const errors = jest.spyOn(logger, 'error')
+      errors.mockImplementation(() => null)
+      const request = signRequest(new Request('http://0.0.0.0/'), {
+        identity,
+        metadata,
+      })
+
+      expect(await withAuthOptional({ request, logger })).toBe(null)
+    }
+  )
+
   test(`should return auth data for signed request`, async () => {
     const request = signRequest(new Request('http://0.0.0.0/'), {
       identity,
