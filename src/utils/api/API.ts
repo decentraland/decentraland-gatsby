@@ -8,6 +8,7 @@ import { sleep } from 'radash'
 import Options, { RequestOptions } from './Options'
 import logger from '../../entities/Development/logger'
 import { signPayload } from '../auth/identify'
+import signedFetchPayload from '../auth/payload'
 import { getCurrentIdentity } from '../auth/storage'
 import FetchError from '../errors/FetchError'
 import RequestError from '../errors/RequestError'
@@ -227,9 +228,13 @@ export default class API {
         const pathname = new URL(this.url(path), 'https://localhost').pathname
         const method = options.getMethod() || 'GET'
         const metadata = JSON.stringify(options.getMetadata())
-        const payload = [method, pathname, timestamp, metadata]
-          .join(':')
-          .toLowerCase()
+        // Built by the middleware that verifies it, so the signer and verifier cannot drift.
+        const payload = signedFetchPayload(
+          method,
+          pathname,
+          timestamp,
+          metadata
+        )
         const chain = await signPayload(identity, payload)
 
         chain.forEach((link, i) =>

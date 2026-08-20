@@ -1,3 +1,49 @@
+## upgrade to decentraland-gatsby@9
+
+Two breaking changes land together: the signed-fetch payload format and the Node floor.
+
+### Node 22 is now the minimum
+
+`@dcl/crypto-middleware@6` declares `engines.node >= 22.0.0`, so this package does too. Raise your
+runtime before upgrading.
+
+Note a pre-existing conflict this makes visible rather than introduces: `decentraland-ui@7.x`, a peer
+of `decentraland-dapps`, declares `engines.node: "20"` — a single major rather than a range. Since
+`@dcl/crypto-middleware` has required `>= 22` since v5, no Node version satisfies both, so
+`--engine-strict` installs already failed before this release regardless of what this package
+advertised. Ordinary installs warn and succeed. Resolving it needs `decentraland-ui` to widen its
+engine, or `decentraland-dapps` to widen its peer range.
+
+### The signed-fetch payload binds metadata casing
+
+Up to `@dcl/crypto-middleware@5` the signed payload was lowercased in full, so metadata casing fell
+outside the signature. It is now joined verbatim:
+
+```
+before  (method + ':' + path + ':' + timestamp + ':' + metadata).toLowerCase()
+after   method.toLowerCase() + ':' + path.toLowerCase() + ':' + timestamp + ':' + metadata
+```
+
+This library both signs and verifies, so it changes on both sides:
+
+- **As a verifier** — callers still signing the old payload are rejected whenever their metadata
+  contains an uppercase character.
+- **As a signer** — requests this library signs are rejected by services still running
+  `@dcl/crypto-middleware@5` or earlier.
+
+**Metadata that is empty or all-lowercase is unaffected**, since folding those bytes is a no-op. If
+every call you sign passes `{}` or lowercase-only metadata, nothing needs sequencing. Otherwise
+upgrade the services you call before deploying this.
+
+### `verifySigner` is stricter
+
+The default metadata validator now refuses a `signer` that is not already trimmed and lowercase.
+Values are never rewritten — a non-canonical one is rejected rather than folded, so what reaches your
+handlers is exactly what the client signed.
+
+Key casing is left to the signature: under `@dcl/crypto-middleware@6` the metadata bytes are signed,
+so a delivered property name that differs from the one signed no longer verifies.
+
 ## install decentraland-gatsby@5
 
 ```bash

@@ -26,6 +26,7 @@ import useAsyncState from '../../hooks/useAsyncState'
 import useAsyncTask from '../../hooks/useAsyncTask'
 import useAuth from '../../hooks/useAuth'
 import useClipboardCopy from '../../hooks/useClipboardCopy'
+import signedFetchPayload from '../../utils/auth/payload'
 import { signPayload } from '../../utils/auth/identify'
 import { getCurrentIdentity } from '../../utils/auth/storage'
 import {
@@ -241,16 +242,18 @@ export function AuthChainStandar() {
     }
     if (identity && url) {
       const timestamp = Date.now()
+      // Must match what verifiers rebuild: method and path lowercased, metadata joined
+      // verbatim. This previously folded the whole payload and the metadata on top of that,
+      // so headers generated here were rejected by any @dcl/crypto-middleware 6 verifier
+      // whenever the metadata contained an uppercase character.
       const chain = await signPayload(
         getCurrentIdentity(),
-        [
+        signedFetchPayload(
           state.method,
           url.pathname,
-          timestamp,
-          (state.metadata && JSON.stringify(state.metadata) || '{}').toLowerCase(),
-        ]
-          .join(':')
-          .toLowerCase()
+          String(timestamp),
+          (state.metadata && JSON.stringify(state.metadata)) || '{}'
+        )
       )
       setValue({ ...state, timestamp, chain })
     }
@@ -347,10 +350,10 @@ export function AuthChainRaw() {
     async (payload) => {
       const identity = getCurrentIdentity()
       if (identity) {
-        const chain = await signPayload(
-          getCurrentIdentity(),
-          payload.toLowerCase()
-        )
+        // Signed exactly as typed. This helper is the raw escape hatch, so folding the input would
+        // make it impossible to reproduce a payload whose casing matters — which, since 6.x binds
+        // the metadata bytes, is now every payload carrying metadata.
+        const chain = await signPayload(getCurrentIdentity(), payload)
         setChain(chain)
       }
     },
