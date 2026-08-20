@@ -37,10 +37,12 @@ upgrade the services you call before deploying this.
 
 ### `verifySigner` is stricter
 
-The default metadata validator now refuses a `signer` that is not already trimmed and lowercase, and
-refuses metadata where a key folds to `signer` without being spelled it (`Signer`, `SIGNER`, or both
-present at once). Values are never rewritten — a non-canonical one is rejected rather than folded, so
-what reaches your handlers is exactly what the client signed.
+The default metadata validator now refuses a `signer` that is not already trimmed and lowercase.
+Values are never rewritten — a non-canonical one is rejected rather than folded, so what reaches your
+handlers is exactly what the client signed.
+
+Key casing is left to the signature: under `@dcl/crypto-middleware@6` the metadata bytes are signed,
+so a delivered property name that differs from the one signed no longer verifies.
 
 ## install decentraland-gatsby@5
 
