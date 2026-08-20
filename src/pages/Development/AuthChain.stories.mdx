@@ -26,7 +26,7 @@ import useAsyncState from '../../hooks/useAsyncState'
 import useAsyncTask from '../../hooks/useAsyncTask'
 import useAuth from '../../hooks/useAuth'
 import useClipboardCopy from '../../hooks/useClipboardCopy'
-import { createPayload } from '@dcl/crypto-middleware/dist/verify'
+import signedFetchPayload from '../../utils/auth/payload'
 import { signPayload } from '../../utils/auth/identify'
 import { getCurrentIdentity } from '../../utils/auth/storage'
 import {
@@ -248,7 +248,7 @@ export function AuthChainStandar() {
       // whenever the metadata contained an uppercase character.
       const chain = await signPayload(
         getCurrentIdentity(),
-        createPayload(
+        signedFetchPayload(
           state.method,
           url.pathname,
           String(timestamp),

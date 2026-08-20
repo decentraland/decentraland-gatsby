@@ -5,7 +5,8 @@ import {
   AUTH_METADATA_HEADER,
   AUTH_TIMESTAMP_HEADER,
 } from '@dcl/crypto-middleware'
-import { createPayload } from '@dcl/crypto-middleware/dist/verify'
+
+import signedFetchPayload from '../../utils/auth/payload'
 
 export const IdentitySigner = '0xb92702b3EeFB3c2049aEB845B0335b283e11E9c6'
 
@@ -60,10 +61,12 @@ export function signRequest<R extends SignableRequest>(
   const timestamp = String(options.timestamp ?? Date.now())
   const metadata = JSON.stringify(options.metadata ?? {})
   // Built by the middleware that verifies it, so the signer and verifier cannot drift.
-  const payload = createPayload(method, pathname, timestamp, metadata)
+  const payload = signedFetchPayload(method, pathname, timestamp, metadata)
 
   let i = 0
-  const auth = Authenticator.signPayload(identity, payload)
+  // SignRequestOptions declares `identity`, so honour it. It was previously ignored in favour of
+  // the module-level development identity, which silently discarded a caller's choice.
+  const auth = Authenticator.signPayload(options.identity ?? identity, payload)
   for (const link of auth) {
     req.headers.set(AUTH_CHAIN_HEADER_PREFIX + i++, JSON.stringify(link))
   }
