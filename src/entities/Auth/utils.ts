@@ -6,25 +6,48 @@ import {
 import RequestError from '../Route/error'
 
 const SCENE_SIGNER = 'decentraland-kernel-scene'
+const SIGNER_KEY = 'signer'
 const isNotSceneSigner = rejectIfSigner(SCENE_SIGNER)
+
+/**
+ * Whether every key folding to `signer` is spelled exactly `signer`.
+ *
+ * `rejectIfSigner` reads the own `signer` field, so metadata signed as delivered with
+ * `{"Signer": ...}` presents no `signer` at all and passes. Under 6.x a scene cannot produce that
+ * — the explorer stamps the metadata and the signature binds those bytes — but a differently-cased
+ * or duplicated key still leaves the field ambiguous, and which spelling a consumer reads would
+ * depend on nothing the guard controls. Refused rather than resolved.
+ */
+function hasOnlyCanonicalSignerKey(metadata: Record<string, any>): boolean {
+  return Object.keys(metadata)
+    .filter((key) => key.toLowerCase() === SIGNER_KEY)
+    .every((key) => key === SIGNER_KEY)
+}
 
 /**
  * Refuses requests a scene runtime signed on a visiting player's behalf.
  *
- * Delegates to `rejectIfSigner`, which refuses a `signer` that is not already canonical rather than
- * comparing it. The previous exact-match comparison could be defeated two ways while leaving the
- * signature valid, because the pre-6.0.0 payload folded the metadata and so did not cover its
- * casing: renaming the delivered property to `Signer` made `'signer' in authMetadata` false, and
- * re-casing the value made the `===` false. Either way the check fell through to `return true`.
+ * Two things are checked. `rejectIfSigner` refuses a `signer` that is not already canonical rather
+ * than comparing it, which covers what the signature cannot: a client signing
+ * `Decentraland-Kernel-Scene` itself produces a valid signature, so only a gate can refuse it. And
+ * the key spelling must be unambiguous, so the field cannot be present under a name the predicate
+ * does not read.
+ *
+ * The previous exact-match comparison could be defeated two ways while leaving the signature valid,
+ * because the pre-6.0.0 payload folded the metadata and so did not cover its casing: renaming the
+ * delivered property to `Signer` made `'signer' in authMetadata` false, and re-casing the value made
+ * the `===` false. Either way the check fell through to `return true`.
  *
  * @param authMetadata - Parsed `x-identity-metadata` contents, if any.
  * @returns `true` when the request may proceed.
- * @throws RequestError 400 when the signer is the scene runtime, or is not in canonical form.
+ * @throws RequestError 400 when the signer is the scene runtime, is not canonical, or is delivered
+ * under a non-canonical or duplicated key.
  */
 export function verifySigner(
   authMetadata: Record<string, any> | undefined
 ): boolean {
-  if (!isNotSceneSigner(authMetadata ?? {})) {
+  const metadata = authMetadata ?? {}
+  if (!hasOnlyCanonicalSignerKey(metadata) || !isNotSceneSigner(metadata)) {
     throw new RequestError('Invalid signer', RequestError.BadRequest)
   }
   return true

@@ -43,7 +43,7 @@ describe('utils/api/API', () => {
           '/Path/To/Thing',
           new Options({})
             .method('POST')
-            .metadata({ sceneId: 'QmAbC' } as never)
+            .metadata({ sceneId: 'QmAbC' })
             .authorization({ sign: true, identity: true, optional: true })
         )
       })
