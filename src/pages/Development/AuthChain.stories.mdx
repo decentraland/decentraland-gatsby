@@ -350,10 +350,10 @@ export function AuthChainRaw() {
     async (payload) => {
       const identity = getCurrentIdentity()
       if (identity) {
-        const chain = await signPayload(
-          getCurrentIdentity(),
-          payload.toLowerCase()
-        )
+        // Signed exactly as typed. This helper is the raw escape hatch, so folding the input would
+        // make it impossible to reproduce a payload whose casing matters — which, since 6.x binds
+        // the metadata bytes, is now every payload carrying metadata.
+        const chain = await signPayload(getCurrentIdentity(), payload)
         setChain(chain)
       }
     },

@@ -5,6 +5,11 @@
 //
 //   import { createPayload } from '@dcl/crypto-middleware'
 //
+// While this deep import stands, @dcl/crypto-middleware is pinned exactly in package.json rather
+// than carried on a caret: a future 6.x could add an exports map or reorganize `dist/` without
+// breaking its own semver, and a range would accept that release. Restore the caret when switching
+// to the root export.
+//
 // eslint-disable-next-line no-restricted-imports
 import { createPayload } from '@dcl/crypto-middleware/dist/verify'
 
