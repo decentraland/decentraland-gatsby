@@ -63,9 +63,11 @@ export function resolveVerifyOptions(
     ...rest,
     // Coalesced rather than spread over: with `...rest` last, a caller passing
     // `metadataValidator: undefined` — easy to do when options are built dynamically — overwrote the
-    // default with undefined and dropped the scene guard entirely. Providing an actual validator
-    // still replaces it, which is the documented contract.
+    // default with undefined and dropped the scene guard entirely.
+    //
+    // The current option is checked before the deprecated alias, matching the precedence `...rest`
+    // gave it, so a stale `verifyMetadataContent` cannot shadow an intended `metadataValidator`.
     metadataValidator:
-      verifyMetadataContent ?? metadataValidator ?? verifySigner,
+      metadataValidator ?? verifyMetadataContent ?? verifySigner,
   }
 }

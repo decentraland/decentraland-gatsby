@@ -26,6 +26,7 @@ import useAsyncState from '../../hooks/useAsyncState'
 import useAsyncTask from '../../hooks/useAsyncTask'
 import useAuth from '../../hooks/useAuth'
 import useClipboardCopy from '../../hooks/useClipboardCopy'
+import { createPayload } from '@dcl/crypto-middleware/dist/verify'
 import { signPayload } from '../../utils/auth/identify'
 import { getCurrentIdentity } from '../../utils/auth/storage'
 import {
@@ -241,16 +242,18 @@ export function AuthChainStandar() {
     }
     if (identity && url) {
       const timestamp = Date.now()
+      // Must match what verifiers rebuild: method and path lowercased, metadata joined
+      // verbatim. This previously folded the whole payload and the metadata on top of that,
+      // so headers generated here were rejected by any @dcl/crypto-middleware 6 verifier
+      // whenever the metadata contained an uppercase character.
       const chain = await signPayload(
         getCurrentIdentity(),
-        [
+        createPayload(
           state.method,
           url.pathname,
-          timestamp,
-          (state.metadata && JSON.stringify(state.metadata) || '{}').toLowerCase(),
-        ]
-          .join(':')
-          .toLowerCase()
+          String(timestamp),
+          (state.metadata && JSON.stringify(state.metadata)) || '{}'
+        )
       )
       setValue({ ...state, timestamp, chain })
     }

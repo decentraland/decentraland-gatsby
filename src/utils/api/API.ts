@@ -3,6 +3,7 @@ import {
   AUTH_METADATA_HEADER,
   AUTH_TIMESTAMP_HEADER,
 } from '@dcl/crypto-middleware'
+import { createPayload } from '@dcl/crypto-middleware/dist/verify'
 import { sleep } from 'radash'
 
 import Options, { RequestOptions } from './Options'
@@ -227,14 +228,8 @@ export default class API {
         const pathname = new URL(this.url(path), 'https://localhost').pathname
         const method = options.getMethod() || 'GET'
         const metadata = JSON.stringify(options.getMetadata())
-        // Method, path and timestamp are lowercased; the metadata is joined verbatim so its
-        // casing is covered by the signature. Matches @dcl/crypto-middleware 6's createPayload.
-        const payload = [
-          method.toLowerCase(),
-          pathname.toLowerCase(),
-          timestamp,
-          metadata,
-        ].join(':')
+        // Built by the middleware that verifies it, so the signer and verifier cannot drift.
+        const payload = createPayload(method, pathname, timestamp, metadata)
         const chain = await signPayload(identity, payload)
 
         chain.forEach((link, i) =>

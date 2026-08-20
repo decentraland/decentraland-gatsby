@@ -110,6 +110,28 @@ describe('withDecentralandAuth', () => {
     })
   })
 
+  describe('when both metadataValidator and the legacy alias are sent', () => {
+    test('should use metadataValidator, not the deprecated alias', async () => {
+      // The current option took precedence before this branch existed, because `...rest` was
+      // spread last. A stale verifyMetadataContent must not shadow it.
+      const logger = new Logger({}, { disabled: true })
+      const errors = jest.spyOn(logger, 'error')
+      errors.mockImplementation(() => null)
+      const request = signRequest(new Request('http://0.0.0.0/'), { identity })
+
+      await expect(async () =>
+        withDecentralandAuth({
+          metadataValidator: () => {
+            throw new RequestError('current', 400)
+          },
+          verifyMetadataContent: () => {
+            throw new RequestError('legacy', 400)
+          },
+        })({ request, logger })
+      ).rejects.toThrow('current')
+    })
+  })
+
   describe('when metadataValidator is present but undefined', () => {
     test('should keep the default scene guard rather than dropping it', async () => {
       // Easy to hit when options are built dynamically. Before coalescing, `...rest` spread the

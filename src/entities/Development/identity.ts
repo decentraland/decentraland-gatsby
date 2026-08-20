@@ -5,6 +5,7 @@ import {
   AUTH_METADATA_HEADER,
   AUTH_TIMESTAMP_HEADER,
 } from '@dcl/crypto-middleware'
+import { createPayload } from '@dcl/crypto-middleware/dist/verify'
 
 export const IdentitySigner = '0xb92702b3EeFB3c2049aEB845B0335b283e11E9c6'
 
@@ -58,14 +59,8 @@ export function signRequest<R extends SignableRequest>(
   const pathname = url.pathname
   const timestamp = String(options.timestamp ?? Date.now())
   const metadata = JSON.stringify(options.metadata ?? {})
-  // Method, path and timestamp are lowercased; the metadata is joined verbatim so its casing is
-  // covered by the signature. Matches @dcl/crypto-middleware 6's createPayload.
-  const payload = [
-    method.toLowerCase(),
-    pathname.toLowerCase(),
-    timestamp,
-    metadata,
-  ].join(':')
+  // Built by the middleware that verifies it, so the signer and verifier cannot drift.
+  const payload = createPayload(method, pathname, timestamp, metadata)
 
   let i = 0
   const auth = Authenticator.signPayload(identity, payload)
