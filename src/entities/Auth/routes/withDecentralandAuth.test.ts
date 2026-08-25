@@ -50,6 +50,24 @@ function signSceneRequestWithPaddedSigner(signer: string) {
   })
 }
 
+/**
+ * Signs and delivers the scene signer under a re-spelled key — `Signer`, not `signer`.
+ *
+ * Signed as delivered, so the signature is genuinely valid: re-spelling the key changes the signed
+ * bytes, and a scene-driven client can simply sign them that way. Up to @dcl/crypto-middleware 6.2.0
+ * the predicates read the exact key, so `Signer` presented no `signer` at all, every predicate read
+ * the field as absent, and `rejectIfSigner` answered "allowed" for metadata that visibly names the
+ * signer it exists to refuse. 6.3.0 treats a key that case-folds to the declared field without being
+ * spelled exactly that as a rejection rather than an absence. Nothing is folded — the value is
+ * refused, never rewritten.
+ */
+function signSceneRequestWithRecasedSignerKey() {
+  return signRequest(new Request('http://0.0.0.0/'), {
+    identity,
+    metadata: { Signer: 'decentraland-kernel-scene' },
+  })
+}
+
 const PADDED_SCENE_SIGNERS: Array<[string, string]> = [
   ['a leading space', ' decentraland-kernel-scene'],
   ['a trailing space', 'decentraland-kernel-scene '],
@@ -250,6 +268,27 @@ describe(`withAuth`, () => {
     }
   )
 
+  describe('when the scene signer is delivered under a re-spelled key', () => {
+    let logger: Logger
+    let request: Request
+
+    beforeEach(() => {
+      logger = new Logger({}, { disabled: true })
+      jest.spyOn(logger, 'error').mockImplementation(() => null)
+      request = signSceneRequestWithRecasedSignerKey()
+    })
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+
+    it('should fail instead of reading the signer as absent', async () => {
+      await expect(() => withAuth({ request, logger })).rejects.toThrow(
+        'Invalid signer'
+      )
+    })
+  })
+
   test(`should return auth data for signed request`, async () => {
     const request = signRequest(new Request('http://0.0.0.0/'), {
       identity,
@@ -316,6 +355,25 @@ describe(`withAuthOptional`, () => {
       expect(await withAuthOptional({ request, logger })).toBe(null)
     }
   )
+
+  describe('when the scene signer is delivered under a re-spelled key', () => {
+    let logger: Logger
+    let request: Request
+
+    beforeEach(() => {
+      logger = new Logger({}, { disabled: true })
+      jest.spyOn(logger, 'error').mockImplementation(() => null)
+      request = signSceneRequestWithRecasedSignerKey()
+    })
+
+    afterEach(() => {
+      jest.restoreAllMocks()
+    })
+
+    it('should return null instead of reading the signer as absent', async () => {
+      expect(await withAuthOptional({ request, logger })).toBe(null)
+    })
+  })
 
   test(`should return auth data for signed request`, async () => {
     const request = signRequest(new Request('http://0.0.0.0/'), {
