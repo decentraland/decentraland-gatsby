@@ -238,9 +238,7 @@ export default function Layout2({
 
   const handleClickBalance = useCallback(
     (eventOrNetwork?: BalanceClickEvent | Network, maybeNetwork?: Network) => {
-      // The current ui2 Navbar passes only the network; the legacy UserMenu
-      // passes the click event first. Calling preventDefault on the network
-      // string threw, and the account page never opened.
+      // ui2's Navbar passes only the network; see resolveBalanceClick.
       const { event, network } = resolveBalanceClick(
         eventOrNetwork,
         maybeNetwork

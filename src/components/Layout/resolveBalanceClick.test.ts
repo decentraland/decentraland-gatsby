@@ -5,7 +5,7 @@ import resolveBalanceClick, { BalanceClickEvent } from './resolveBalanceClick'
 describe('resolveBalanceClick', () => {
   describe('when the Navbar calls it with only the network', () => {
     it('should return the network and no event', () => {
-      expect(resolveBalanceClick(Network.MATIC)).toEqual({
+      expect(resolveBalanceClick(Network.MATIC)).toStrictEqual({
         network: Network.MATIC,
       })
     })
@@ -17,7 +17,7 @@ describe('resolveBalanceClick', () => {
         preventDefault: jest.fn(),
       } as unknown as BalanceClickEvent
 
-      expect(resolveBalanceClick(event, Network.ETHEREUM)).toEqual({
+      expect(resolveBalanceClick(event, Network.ETHEREUM)).toStrictEqual({
         event,
         network: Network.ETHEREUM,
       })
@@ -26,7 +26,7 @@ describe('resolveBalanceClick', () => {
 
   describe('when it is called with no arguments', () => {
     it('should return neither', () => {
-      expect(resolveBalanceClick()).toEqual({
+      expect(resolveBalanceClick()).toStrictEqual({
         event: undefined,
         network: undefined,
       })
