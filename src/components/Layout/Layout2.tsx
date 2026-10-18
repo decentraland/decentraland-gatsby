@@ -39,6 +39,7 @@ import {
   dclAddressUtils,
 } from 'decentraland-ui2'
 
+import resolveBalanceClick, { BalanceClickEvent } from './resolveBalanceClick'
 import useAuthContext from '../../context/Auth/useAuthContext'
 import useProfileInjected from '../../context/Auth/useProfileContext'
 import { getSupportedChainIds } from '../../context/Auth/utils'
@@ -236,14 +237,13 @@ export default function Layout2({
   }, [user, chainId])
 
   const handleClickBalance = useCallback(
-    (
-      event: React.MouseEvent<
-        HTMLButtonElement | HTMLAnchorElement,
-        MouseEvent
-      >,
-      network?: Network
-    ) => {
-      event.preventDefault()
+    (eventOrNetwork?: BalanceClickEvent | Network, maybeNetwork?: Network) => {
+      // ui2's Navbar passes only the network; see resolveBalanceClick.
+      const { event, network } = resolveBalanceClick(
+        eventOrNetwork,
+        maybeNetwork
+      )
+      event?.preventDefault()
 
       if (network) {
         segment((analytics) => {
