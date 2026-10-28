@@ -11,39 +11,30 @@ import type { PageProps } from 'gatsby'
 import { AuthIdentity } from '@dcl/crypto'
 import { ChainId } from '@dcl/schemas/dist/dapps/chain-id'
 import { Network } from '@dcl/schemas/dist/dapps/network'
-import { Avatar } from '@dcl/schemas/dist/platform/profile/avatar'
 import { localStorageGetIdentity } from '@dcl/single-sign-on-client'
 import {
   DROPDOWN_MENU_BALANCE_CLICK_EVENT,
   DROPDOWN_MENU_DISPLAY_EVENT,
-  DROPDOWN_MENU_ITEM_CLICK_EVENT,
   DROPDOWN_MENU_SIGN_OUT_EVENT,
 } from 'decentraland-dapps/dist/containers/Navbar/constants'
 import useNotifications from 'decentraland-dapps/dist/hooks/useNotifications'
-import { getIdentityId } from 'decentraland-dapps/dist/modules/identityId'
 import {
   Footer,
   FooterProps,
 } from 'decentraland-ui/dist/components/Footer/Footer'
 import { Locale } from 'decentraland-ui/dist/components/LanguageIcon/LanguageIcon'
-import { config } from 'decentraland-ui2-legacy/dist/config'
-
+import { shorten } from 'decentraland-ui2/dist/components/AddressField/utils'
+import { Navbar, NavbarProps } from 'decentraland-ui2/dist/components/Navbar'
 import {
-  ManaBalancesProps,
-  Navbar,
-  NavbarProps,
   NotificationActiveTab,
-  NotificationLocale,
-  dclAddressUtils,
-} from 'decentraland-ui2-legacy'
+  Notifications,
+} from 'decentraland-ui2/dist/components/Notifications'
+import { config } from 'decentraland-ui2/dist/config'
 
 import useAuthContext from '../../context/Auth/useAuthContext'
 import useProfileInjected from '../../context/Auth/useProfileContext'
 import { getSupportedChainIds } from '../../context/Auth/utils'
-import { useFeatureFlagContext } from '../../context/FeatureFlag'
-import { DappsFeatureFlags } from '../../context/FeatureFlag/types'
 import useShareContext from '../../context/Share/useShareContext'
-import useTrackLinkContext from '../../context/Track/useTrackLinkContext'
 import useAsyncState from '../../hooks/useAsyncState'
 import useChainId from '../../hooks/useChainId'
 import { DecentralandIntlContext } from '../../plugins/intl/types'
@@ -61,18 +52,33 @@ import type { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Drop
 
 import './Layout2.css'
 
-// Keep the existing download analytics contract after dapps removed these constants.
-const NAVBAR_DOWNLOAD_EVENT = 'Download'
-const NAVBAR_DOWNLOAD_EVENT_PLACE = 'Navbar'
+// Authentication, balances, chains and notifications are supplied by Gatsby contexts.
+type NavbarOptions = Omit<
+  NavbarProps,
+  | 'isSignedIn'
+  | 'isSigningIn'
+  | 'isLoadingProfile'
+  | 'address'
+  | 'avatar'
+  | 'activePage'
+  | 'onClickSignIn'
+  | 'onClickSignOut'
+  | 'notificationSlot'
+  | 'selectedChain'
+  | 'chains'
+  | 'onSelectChain'
+  | 'manaBalances'
+  | 'onClickBalance'
+  | 'onToggleUserCard'
+>
 
-// Layout2 retains the UI2 v2 navbar contract; UI2 v3 is required separately by dapps.
-
-export type LayoutProps = Omit<PageProps, 'children'> &
-  NavbarProps &
+export type LayoutProps = Omit<PageProps, 'children' | 'pageContext'> &
   FooterProps & {
+    activePage?: NavbarProps['activePage']
+    /** Navbar-specific options, including its translations; footer i18n stays separate. */
+    navbarProps?: NavbarOptions
     hideNavbar?: boolean
     hideFooter?: boolean
-    hideDownloadButton?: boolean
     pageContext?: {
       intl?: DecentralandIntlContext
     }
@@ -85,8 +91,7 @@ export default function Layout2({
   pageContext,
   hideNavbar,
   hideFooter,
-  hideDownloadButton,
-  hideSignInButton,
+  navbarProps,
   ...props
 }: LayoutProps) {
   const locale = pageContext?.intl?.locale || 'en'
@@ -100,55 +105,37 @@ export default function Layout2({
     return undefined
   }, [user])
 
-  const [ff] = useFeatureFlagContext()
-  const shouldDownloadBeforeRedirect = !ff.enabled(
-    DappsFeatureFlags.DownloadInSuccessPage
-  )
-
   const {
     isModalOpen,
-    isNotificationsOnboarding,
-    modalActiveTab,
     isLoading,
     notifications,
     handleNotificationsOpen,
+    isNotificationsOnboarding,
+    modalActiveTab,
     handleOnBegin,
     handleOnChangeModalTab,
   } = useNotifications(identity, true)
 
-  const notificationProps = useMemo(
-    () => ({
-      locale: locale as NotificationLocale,
-      isLoading,
-      isOnboarding: isNotificationsOnboarding,
-      isOpen: isModalOpen,
-      items: notifications,
-      activeTab: modalActiveTab,
-      identity,
-      onClick: handleNotificationsOpen,
-      onClose: handleNotificationsOpen,
-      onBegin: handleOnBegin,
-      onChangeTab: (_: unknown, tab: NotificationActiveTab) =>
-        handleOnChangeModalTab(tab),
-      renderProfile: (address: string) => (
+  const notificationSlot = (
+    <Notifications
+      locale={locale === 'es' || locale === 'zh' ? locale : 'en'}
+      isLoading={isLoading}
+      isOpen={isModalOpen}
+      items={notifications}
+      isOnboarding={isNotificationsOnboarding}
+      activeTab={modalActiveTab}
+      onClick={handleNotificationsOpen}
+      onClose={handleNotificationsOpen}
+      onBegin={handleOnBegin}
+      onChangeTab={(_, tab: NotificationActiveTab) =>
+        handleOnChangeModalTab(tab)
+      }
+      renderProfile={(address: string) => (
         <div className="layout__notifications-profile">
-          <Profile address={address} size="tiny" />{' '}
-          {dclAddressUtils.shorten(address)}
+          <Profile address={address} size="tiny" /> {shorten(address)}
         </div>
-      ),
-    }),
-    [
-      locale,
-      isLoading,
-      isNotificationsOnboarding,
-      isModalOpen,
-      notifications,
-      modalActiveTab,
-      handleNotificationsOpen,
-      handleNotificationsOpen,
-      handleOnBegin,
-      handleOnChangeModalTab,
-    ]
+      )}
+    />
   )
 
   const handleChangeLocal = function (
@@ -157,66 +144,6 @@ export default function Layout2({
   ) {
     changeLocale(data.value as string)
   }
-
-  const handleClickUserMenuOption = useTrackLinkContext(
-    function (
-      event: React.MouseEvent<HTMLElement, MouseEvent>,
-      options: {
-        type: string
-        url?: string
-        track_uuid?: string
-      }
-    ) {
-      event.preventDefault()
-      segment((analytics) => {
-        analytics.track(DROPDOWN_MENU_ITEM_CLICK_EVENT, options)
-      })
-
-      if (props.onClickUserMenuItem) {
-        props.onClickUserMenuItem(event, options)
-      }
-
-      return null
-    },
-    [props.onClickUserMenuItem]
-  )
-
-  const handleClickDownload = useCallback(function (
-    event: React.MouseEvent<HTMLElement, MouseEvent>,
-    options: {
-      href?: string
-    }
-  ) {
-    event.preventDefault()
-    segment((analytics) => {
-      analytics.track(NAVBAR_DOWNLOAD_EVENT, {
-        ...options,
-        place: NAVBAR_DOWNLOAD_EVENT_PLACE,
-      })
-    })
-    return null
-  }, [])
-
-  const handleClickNavbarOption = useTrackLinkContext(
-    function (
-      event: React.MouseEvent<HTMLElement, MouseEvent>,
-      options: {
-        eventTrackingName: string
-        url?: string
-        isExternal?: boolean
-      }
-    ) {
-      segment((analytics) => {
-        analytics.track('Click on Navbar', options)
-      })
-      if (props.onClickNavbarItem) {
-        props.onClickNavbarItem(event, options)
-      }
-
-      return null
-    },
-    [props.onClickNavbarItem]
-  )
 
   const handleSwitchNetwork = useCallback(
     (chainId: ChainId) => userState.switchTo(chainId),
@@ -228,7 +155,7 @@ export default function Layout2({
   const loading = userState.loading || profileState.loading
 
   const [manaBalances] = useAsyncState<
-    ManaBalancesProps['manaBalances']
+    NavbarProps['manaBalances']
   >(async () => {
     if (!user) {
       return {}
@@ -239,88 +166,57 @@ export default function Layout2({
     return manaBalance
   }, [user, chainId])
 
-  const handleClickBalance = useCallback(
-    (
-      event: React.MouseEvent<
-        HTMLButtonElement | HTMLAnchorElement,
-        MouseEvent
-      >,
-      network?: Network
-    ) => {
-      event.preventDefault()
+  const handleClickBalance = useCallback((network: Network) => {
+    segment((analytics) => {
+      analytics.track(DROPDOWN_MENU_BALANCE_CLICK_EVENT, { network })
+    })
+    setTimeout(() => {
+      window.open(config.get('ACCOUNT_URL'), '_blank', 'noopener')
+    }, 300)
+  }, [])
 
-      if (network) {
+  const handleToggleUserCard = useCallback(
+    (isOpen: boolean) => {
+      if (isOpen) {
         segment((analytics) => {
-          analytics.track(DROPDOWN_MENU_BALANCE_CLICK_EVENT, { network })
+          analytics.track(DROPDOWN_MENU_DISPLAY_EVENT, {})
         })
+        if (isModalOpen) handleNotificationsOpen()
       }
-
-      setTimeout(() => {
-        window.open(config.get('ACCOUNT_URL'), '_blank', 'noopener')
-      }, 300)
     },
-    []
+    [isModalOpen, handleNotificationsOpen]
   )
 
-  const handleOpen = useCallback(
-    (e: React.MouseEvent<HTMLElement, MouseEvent>, track_uuid: string) => {
-      segment((analytics) => {
-        analytics.track(DROPDOWN_MENU_DISPLAY_EVENT, { track_uuid })
-      })
-    },
-    []
-  )
-
-  const handleSignOut = useCallback(
-    (e: React.MouseEvent<HTMLElement, MouseEvent>, track_uuid: string) => {
-      segment((analytics) => {
-        analytics.track(DROPDOWN_MENU_SIGN_OUT_EVENT, { track_uuid })
-      })
-      setTimeout(() => {
-        userState.disconnect()
-      }, 300)
-    },
-    [userState.disconnect]
-  )
-
-  const handleGetIdentityId = useCallback(async (): Promise<
-    string | undefined
-  > => {
-    if (identity?.authChain && identity?.ephemeralIdentity) {
-      try {
-        const response = await getIdentityId(identity)
-        return response
-      } catch (error) {
-        console.error('Failed to create identity ID:', error)
-        return undefined
-      }
-    }
-
-    return undefined
-  }, [identity])
+  const handleSignOut = useCallback(() => {
+    segment((analytics) => {
+      analytics.track(DROPDOWN_MENU_SIGN_OUT_EVENT, {})
+    })
+    setTimeout(() => userState.disconnect(), 300)
+  }, [userState.disconnect])
 
   return (
     <>
       {!hideNavbar && (
         <Navbar
-          manaBalances={manaBalances as ManaBalancesProps['manaBalances']}
+          {...navbarProps}
+          manaBalances={manaBalances ?? undefined}
           address={user || undefined}
-          avatar={(profile as Avatar) || undefined}
+          avatar={
+            profile
+              ? { name: profile.name ?? undefined, avatar: profile.avatar }
+              : undefined
+          }
           activePage={props.activePage}
           isSignedIn={!!profile}
           isSigningIn={loading || (!!user && !profile)}
           onClickBalance={handleClickBalance}
-          onClickNavbarItem={handleClickNavbarOption}
-          onClickUserMenuItem={handleClickUserMenuOption}
-          onClickOpen={handleOpen}
+          onToggleUserCard={handleToggleUserCard}
+          selectedChain={chainId}
+          chains={getSupportedChainIds()}
+          onSelectChain={handleSwitchNetwork}
           onClickSignIn={userState.authorize}
           onClickSignOut={handleSignOut}
-          notifications={notificationProps}
-          onClickDownload={handleClickDownload}
-          getIdentityId={handleGetIdentityId}
-          hideSignInButton={hideSignInButton}
-          hideDownloadButton={hideDownloadButton}
-          shouldDownloadBeforeRedirect={shouldDownloadBeforeRedirect}
+          notificationSlot={notificationSlot}
         />
       )}
 

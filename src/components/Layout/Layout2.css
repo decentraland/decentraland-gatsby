@@ -1,3 +1,10 @@
-.layout__main-container:not(.hide-navbar) {
-  margin-top: 66px;
+/* Match UI2 Navbar's fixed height and 992px desktop breakpoint. */
+.layout__main-container.layout2__main-container:not(.hide-navbar) {
+  margin-top: 64px;
+}
+
+@media (min-width: 992px) {
+  .layout__main-container.layout2__main-container:not(.hide-navbar) {
+    margin-top: 92px;
+  }
 }

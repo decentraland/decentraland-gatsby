@@ -139,7 +139,7 @@
     "decentraland-connect": "^12.0.0",
     "decentraland-dapps": "^29.9.2",
     "decentraland-server": "^3.0.0",
-    "decentraland-ui2-legacy": "npm:decentraland-ui2@^2.5.3",
+    "decentraland-ui2": "^3.23.8",
     "eth-sig-util": "^3.0.1",
     "express": "^4.17.1",
     "flat": "^5.0.2",
