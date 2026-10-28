@@ -1,3 +1,38 @@
+## Upcoming major release: UI2 v3
+
+For development and builds, use `.nvmrc` (Node 24.18.0 with bundled npm 11.16.0).
+Cloudflare and GitHub Actions use this same pin. npm 10 reconstructs the locked TypeScript
+peer dependencies differently and rejects the lockfile during `npm ci`; do not regenerate it
+with a different npm major. The library's runtime minimum remains Node 22.
+
+The dapps dependency now requires `decentraland-ui >=7.3.0 <8`, whose Node requirement is
+`>=20`. This removes the previous conflict with older UI releases that required Node 20 exactly.
+
+### Dapps resolver fixes and UI2 v3
+
+This update requires `decentraland-dapps ^29.9.2` and `@dcl/schemas ^26.0.0`. Update consumer
+lockfiles together with Gatsby so older direct UI or schemas dependencies do not conflict with
+the new dapps peer requirements.
+
+Gatsby now depends directly on `decentraland-ui2 ^3.23.8`. The legacy alias is removed.
+`Layout2` uses the new Navbar, including chain selection and its notification slot. Authentication,
+balances and notifications remain connected to Gatsby's contexts. Notification onboarding and tabs
+are preserved through UI2's `Notifications` component.
+
+`Layout2` no longer accepts the old Navbar's `hideSignInButton`, `hideDownloadButton`,
+`onClickNavbarItem` or `onClickUserMenuItem` props: those controls/callbacks do not exist in UI2 v3.
+Use `hideNavbar` to hide navigation entirely. `activePage` now accepts `discover`, `shop`, `create`
+or `learn`. Pass optional Navbar presentation/credit options through `navbarProps`, including
+`navbarProps.i18n`; the top-level `i18n` still configures the Footer. Gatsby supplies auth state,
+chain selection, balance actions and notification state internally.
+
+`DownloadModal` now accepts the current UI2 props. Supply `os`, `downloadUrl`, `epicUrl` and
+`googlePlayUrl` along with `open` and `onClose`; `appStoreUrl` is optional. The old `title` and
+`buttonLabel` props become `i18n.title` and `i18n.download`; the old description is no longer
+displayed by UI2. Gatsby's translated title and download label remain defaults. Download and Epic
+callbacks no longer receive a mouse event. For platform detection and official URLs, UI2 exports
+`detectDownloadOS`, `getDownloadUrl` and `DOWNLOAD_URLS` from `decentraland-ui2/dist/modules/downloadUrls`.
+
 ## upgrade to decentraland-gatsby@9
 
 Two breaking changes land together: the signed-fetch payload format and the Node floor.
@@ -6,13 +41,6 @@ Two breaking changes land together: the signed-fetch payload format and the Node
 
 `@dcl/crypto-middleware@6` declares `engines.node >= 22.0.0`, so this package does too. Raise your
 runtime before upgrading.
-
-Note a pre-existing conflict this makes visible rather than introduces: `decentraland-ui@7.x`, a peer
-of `decentraland-dapps`, declares `engines.node: "20"` — a single major rather than a range. Since
-`@dcl/crypto-middleware` has required `>= 22` since v5, no Node version satisfies both, so
-`--engine-strict` installs already failed before this release regardless of what this package
-advertised. Ordinary installs warn and succeed. Resolving it needs `decentraland-ui` to widen its
-engine, or `decentraland-dapps` to widen its peer range.
 
 ### The signed-fetch payload binds metadata casing
 

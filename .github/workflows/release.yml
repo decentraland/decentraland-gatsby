@@ -28,11 +28,8 @@ jobs:
       - name: node.js 24
         uses: actions/setup-node@v6
         with:
-          node-version: 24
+          node-version-file: '.nvmrc'
           cache: 'npm'
-
-      - name: installing npm
-        run: npm i -g npm@11
 
       - name: installing
         run: npm ci --audit false --fund false

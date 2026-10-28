@@ -311,6 +311,16 @@ describe('utils/api/API', () => {
 })
 
 describe('timeout', () => {
+  beforeEach(() => {
+    jest.useFakeTimers()
+  })
+
+  afterEach(() => {
+    jest.clearAllTimers()
+    jest.useRealTimers()
+    jest.restoreAllMocks()
+  })
+
   test(`should automatically return a request timeout if timeout is 0 `, async () => {
     const random = Math.random()
     const mock = jest.fn(((): any => {}) as typeof fetch)
@@ -354,9 +364,13 @@ describe('timeout', () => {
     )
 
     const api = new API('https://decentraland.org/api').setFetcher(mock)
-    await expect(
+    const assertion = expect(
       api.fetch('/timeout/20', api.options().timeout(10))
     ).rejects.toThrowError('Request Timeout')
+
+    // Advance the timeout and response deadlines in order, independent of host scheduling.
+    await jest.advanceTimersByTimeAsync(20)
+    await assertion
 
     expect(mock).toHaveBeenCalledTimes(1)
 
@@ -376,12 +390,15 @@ describe('timeout', () => {
     )
 
     const api = new API('https://decentraland.org/api').setFetcher(mock)
-    await expect(
+    const assertion = expect(
       api.fetch(
         '/timeout/20',
         api.options().timeoutWithFallback(10, { fallback: true })
       )
     ).resolves.toEqual({ fallback: true })
+
+    await jest.advanceTimersByTimeAsync(20)
+    await assertion
 
     expect(mock).toHaveBeenCalledTimes(1)
 
@@ -401,12 +418,15 @@ describe('timeout', () => {
     )
 
     const api = new API('https://decentraland.org/api').setFetcher(mock)
-    await expect(
+    const assertion = expect(
       api.fetch(
         '/timeout/10',
         api.options().timeoutWithFallback(20, { fallback: true })
       )
     ).resolves.toEqual({ random })
+
+    await jest.advanceTimersByTimeAsync(20)
+    await assertion
 
     expect(mock).toHaveBeenCalledTimes(1)
 
@@ -442,12 +462,15 @@ describe('timeout', () => {
     mock.mockImplementation(() => sleep(20).then(() => late))
 
     const api = new API('https://decentraland.org/api').setFetcher(mock)
-    await expect(
+    const assertion = expect(
       api.fetch(
         '/timeout/20',
         api.options().timeoutWithFallback(10, { fallback: true })
       )
     ).resolves.toEqual({ fallback: true })
+
+    await jest.advanceTimersByTimeAsync(20)
+    await assertion
 
     // the in-flight request settles after the timeout won the race; await the
     // release directly so the assertion doesn't depend on timing margins
@@ -463,9 +486,12 @@ describe('timeout', () => {
     const api = new API('https://decentraland.org/api').setFetcher(mock)
     // the non-fallback path rejects with a 408, but the discarded body must
     // still be released
-    await expect(
+    const assertion = expect(
       api.fetch('/timeout/20', api.options().timeout(10))
     ).rejects.toThrowError('Request Timeout')
+
+    await jest.advanceTimersByTimeAsync(20)
+    await assertion
 
     await cancelled
     expect(cancel).toHaveBeenCalledTimes(1)
