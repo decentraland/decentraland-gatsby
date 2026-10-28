@@ -7,12 +7,21 @@ Two breaking changes land together: the signed-fetch payload format and the Node
 `@dcl/crypto-middleware@6` declares `engines.node >= 22.0.0`, so this package does too. Raise your
 runtime before upgrading.
 
-Note a pre-existing conflict this makes visible rather than introduces: `decentraland-ui@7.x`, a peer
-of `decentraland-dapps`, declares `engines.node: "20"` — a single major rather than a range. Since
-`@dcl/crypto-middleware` has required `>= 22` since v5, no Node version satisfies both, so
-`--engine-strict` installs already failed before this release regardless of what this package
-advertised. Ordinary installs warn and succeed. Resolving it needs `decentraland-ui` to widen its
-engine, or `decentraland-dapps` to widen its peer range.
+The dapps dependency now requires `decentraland-ui >=7.3.0 <8`, whose Node requirement is
+`>=20`. This removes the previous conflict with older UI releases that required Node 20 exactly.
+
+### Dapps resolver fixes and UI compatibility
+
+This update requires `decentraland-dapps ^29.9.2` and `@dcl/schemas ^26.0.0`. Update consumer
+lockfiles together with Gatsby so older direct UI or schemas dependencies do not conflict with
+the new dapps peer requirements.
+
+Dapps uses UI2 v3. Gatsby's `Layout2` and `DownloadModal` retain their existing APIs through the
+explicit `decentraland-ui2-legacy` alias for UI2 2.5.3. Those component implementations and types
+match the previously installed UI2 1.3.10, while 2.5.3 supports schemas v26. This adds a separate
+UI2 package; migrating Gatsby's navigation and download flows to UI2 v3 is a separate change.
+MUI and Emotion remain deduplicated, preserving the shared theme context. Custom configuration
+for these legacy wrappers must target `decentraland-ui2-legacy/dist/config`, not UI2 v3's config.
 
 ### The signed-fetch payload binds metadata casing
 

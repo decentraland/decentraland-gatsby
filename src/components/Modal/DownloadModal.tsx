@@ -3,7 +3,7 @@ import React from 'react'
 import {
   DownloadModal as BaseDownloadModal,
   DownloadModalProps,
-} from 'decentraland-ui2'
+} from 'decentraland-ui2-legacy'
 
 import useFormatMessage from '../../hooks/useFormatMessage'
 

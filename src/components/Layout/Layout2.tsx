@@ -18,8 +18,6 @@ import {
   DROPDOWN_MENU_DISPLAY_EVENT,
   DROPDOWN_MENU_ITEM_CLICK_EVENT,
   DROPDOWN_MENU_SIGN_OUT_EVENT,
-  NAVBAR_DOWNLOAD_EVENT,
-  NAVBAR_DOWNLOAD_EVENT_PLACE,
 } from 'decentraland-dapps/dist/containers/Navbar/constants'
 import useNotifications from 'decentraland-dapps/dist/hooks/useNotifications'
 import { getIdentityId } from 'decentraland-dapps/dist/modules/identityId'
@@ -28,7 +26,7 @@ import {
   FooterProps,
 } from 'decentraland-ui/dist/components/Footer/Footer'
 import { Locale } from 'decentraland-ui/dist/components/LanguageIcon/LanguageIcon'
-import { config } from 'decentraland-ui2/dist/config'
+import { config } from 'decentraland-ui2-legacy/dist/config'
 
 import {
   ManaBalancesProps,
@@ -37,7 +35,7 @@ import {
   NotificationActiveTab,
   NotificationLocale,
   dclAddressUtils,
-} from 'decentraland-ui2'
+} from 'decentraland-ui2-legacy'
 
 import useAuthContext from '../../context/Auth/useAuthContext'
 import useProfileInjected from '../../context/Auth/useProfileContext'
@@ -62,6 +60,12 @@ import type { ProviderType } from '@dcl/schemas/dist/dapps/provider-type'
 import type { DropdownProps } from 'semantic-ui-react/dist/commonjs/modules/Dropdown'
 
 import './Layout2.css'
+
+// Keep the existing download analytics contract after dapps removed these constants.
+const NAVBAR_DOWNLOAD_EVENT = 'Download'
+const NAVBAR_DOWNLOAD_EVENT_PLACE = 'Navbar'
+
+// Layout2 retains the UI2 v2 navbar contract; UI2 v3 is required separately by dapps.
 
 export type LayoutProps = Omit<PageProps, 'children'> &
   NavbarProps &
