@@ -7,6 +7,11 @@ Two breaking changes land together: the signed-fetch payload format and the Node
 `@dcl/crypto-middleware@6` declares `engines.node >= 22.0.0`, so this package does too. Raise your
 runtime before upgrading.
 
+For development and builds, use `.nvmrc` (Node 24.18.0 with bundled npm 11.16.0).
+Cloudflare and GitHub Actions use this same pin. npm 10 reconstructs the locked TypeScript
+peer dependencies differently and rejects the lockfile during `npm ci`; do not regenerate it
+with a different npm major. The library's runtime minimum remains Node 22.
+
 The dapps dependency now requires `decentraland-ui >=7.3.0 <8`, whose Node requirement is
 `>=20`. This removes the previous conflict with older UI releases that required Node 20 exactly.
 
